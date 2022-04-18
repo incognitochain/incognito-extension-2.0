@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from "react"
-import { useHistory } from "react-router-dom"
-import { generateMnemonicAndSeed } from "../utils/wallet-seed"
-import Container from "@material-ui/core/Container"
-import { LoadingIndicator } from "../components/loading-indicator"
-import Card from "@material-ui/core/Card"
-import CardContent from "@material-ui/core/CardContent"
-import { Typography } from "@material-ui/core"
-import TextField from "@material-ui/core/TextField"
-import Checkbox from "@material-ui/core/Checkbox"
-import FormControlLabel from "@material-ui/core/FormControlLabel"
-import CardActions from "@material-ui/core/CardActions"
-import Button from "@material-ui/core/Button"
-import { useCallAsync } from "../utils/notifications"
-import Link from "@material-ui/core/Link"
-import { MnemonicAndSeed } from "../types"
-import { useBackground } from "../context/background"
-import { withLayout } from "../components/layout"
-import { Links } from "../components/routes/paths"
+import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { generateMnemonicAndSeed } from '../utils/wallet-seed'
+import Container from '@material-ui/core/Container'
+import { LoadingIndicator } from '../components/loading-indicator'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import { Typography } from '@material-ui/core'
+import TextField from '@material-ui/core/TextField'
+import Checkbox from '@material-ui/core/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import CardActions from '@material-ui/core/CardActions'
+import Button from '@material-ui/core/Button'
+import { useCallAsync } from '../utils/notifications'
+import Link from '@material-ui/core/Link'
+import { MnemonicAndSeed } from '../types'
+import { useBackground } from '../context/background'
+import { withLayout } from '../components/layout'
+import { Links } from '../components/routes/paths'
 
 const CreateWalletPageBase: React.FC = () => {
   const history = useHistory()
@@ -29,7 +29,7 @@ const CreateWalletPageBase: React.FC = () => {
       <>
         <CreateWalletForm />
         <br />
-        <Link style={{ cursor: "pointer" }} onClick={handleRestoreClick}>
+        <Link style={{ cursor: 'pointer' }} onClick={handleRestoreClick}>
           Restore existing wallet
         </Link>
       </>
@@ -55,9 +55,9 @@ const CreateWalletForm: React.FC = () => {
     }
 
     const { mnemonic, seed } = mnemonicAndSeed
-    callAsync(request("popup_createWallet", { mnemonic, seed, password }), {
-      progress: { message: "Creating wallet..." },
-      success: { message: "Wallet created" },
+    callAsync(request('popup_createWallet', { mnemonic, seed, password }), {
+      progress: { message: 'Creating wallet...' },
+      success: { message: 'Wallet created' },
     })
   }
 
@@ -84,9 +84,9 @@ const SeedWordsForm: React.FC<SeedWordsFormProps> = ({ mnemonicAndSeed, goForwar
     <Card>
       <CardContent>
         <Typography variant="h5" gutterBottom>
-          Create New Wallet
+          EEE11
         </Typography>
-        <Typography paragraph>Create a new wallet to hold Solana and SPL tokens.</Typography>
+        <Typography paragraph>Create new wallet to hold Solana and SPL tokens.</Typography>
         <Typography>
           Please write down the following twelve words and keep them in a safe place:
         </Typography>
@@ -118,7 +118,7 @@ const SeedWordsForm: React.FC<SeedWordsFormProps> = ({ mnemonicAndSeed, goForwar
           label="I have saved these words in a safe place."
         />
       </CardContent>
-      <CardActions style={{ justifyContent: "flex-end" }}>
+      <CardActions style={{ justifyContent: 'flex-end' }}>
         <Button color="primary" disabled={!confirmed} onClick={goForward}>
           Continue
         </Button>
@@ -133,8 +133,8 @@ interface ChoosePasswordFormProps {
 }
 
 const ChoosePasswordForm: React.FC<ChoosePasswordFormProps> = ({ goBack, onSubmit }) => {
-  const [password, setPassword] = useState("")
-  const [passwordConfirm, setPasswordConfirm] = useState("")
+  const [password, setPassword] = useState('')
+  const [passwordConfirm, setPasswordConfirm] = useState('')
 
   return (
     <Card>
@@ -167,7 +167,7 @@ const ChoosePasswordForm: React.FC<ChoosePasswordFormProps> = ({ goBack, onSubmi
           If you forget your password you will need to restore your wallet using your seed words.
         </Typography>
       </CardContent>
-      <CardActions style={{ justifyContent: "space-between" }}>
+      <CardActions style={{ justifyContent: 'space-between' }}>
         <Button onClick={goBack}>Back</Button>
         <Button
           color="primary"

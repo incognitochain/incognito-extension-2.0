@@ -8,6 +8,7 @@ import {
 } from '../core/types'
 import LocalStore from './lib/local-store'
 import initialState from './first-time-state'
+import { enableLogger } from '../core/utils'
 const { gomobileServices } = require('incognito-chain-web-js/build/wallet')
 
 const PortStream = require('extension-port-stream')
@@ -17,11 +18,14 @@ const log = createLogger('sol:bg')
 const localStore = new LocalStore()
 let versionedData: VersionedData
 
+console.log('Background running ... ', Math.random().toFixed(1))
+
 initialize().catch((err) => {
   log('Background initialization failed: %O', err)
 })
 
 async function initialize() {
+  enableLogger()
   await loadWasmConfig()
   const versionedData = await loadStateFromPersistence()
   await setupController(versionedData)

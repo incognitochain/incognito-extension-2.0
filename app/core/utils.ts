@@ -1,19 +1,25 @@
-import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP, Token } from "./types"
-import { CompiledInstruction, Connection, Message, PublicKey } from "@solana/web3.js"
-import * as shortvec from "./shortvec-encoding"
-import bs58 from "bs58"
+import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP, Token } from './types'
+import { CompiledInstruction, Connection, Message, PublicKey } from '@solana/web3.js'
+import * as shortvec from './shortvec-encoding'
+import bs58 from 'bs58'
 // @ts-ignore FIXME We need to add a mock definition of this library to the overall project
-import BufferLayout from "buffer-layout"
-import { Buffer } from "buffer"
-import { MintInfo, Token as SPLToken } from "@solana/spl-token"
-import { TOKEN_PROGRAM_ID } from "./program-plugin/plugins/spl"
+import BufferLayout from 'buffer-layout'
+import { Buffer } from 'buffer'
+import { MintInfo, Token as SPLToken } from '@solana/spl-token'
+import { TOKEN_PROGRAM_ID } from './program-plugin/plugins/spl'
 
-const debug = require("debug")
-const ObjectMultiplex = require("obj-multiplex")
+const debug = require('debug')
+const ObjectMultiplex = require('obj-multiplex')
 export const createLogger = (module: string): any => {
   return debug(module)
 }
-const log = createLogger("sol:util")
+const log = createLogger('sol:util')
+
+export async function enableLogger(): Promise<void> {
+  if (process.env.NODE_ENV === 'development') {
+    localStorage.setItem('debug', '*')
+  }
+}
 
 export const createObjectMultiplex = (name: string): any => {
   return new ObjectMultiplex(name)
@@ -40,7 +46,7 @@ export const checkForError = () => {
 const PUBKEY_LENGTH = 32
 
 export const decodeSerializedMessage = (buffer: Buffer): Message => {
-  log("Decoding serialized message: %O", buffer)
+  log('Decoding serialized message: %O', buffer)
   let byteArray = [...buffer]
 
   const numRequiredSignatures = byteArray.shift() as number
@@ -88,12 +94,12 @@ export const decodeSerializedMessage = (buffer: Buffer): Message => {
 
 export const getMintInfo = async (
   connection: Connection,
-  publicKey: PublicKey
+  publicKey: PublicKey,
 ): Promise<MintInfo> => {
   const splToken = new SPLToken(connection, publicKey, TOKEN_PROGRAM_ID, {
-    displayName: "string",
-    id: "string",
-    rpDisplayName: "string",
+    displayName: 'string',
+    id: 'string',
+    rpDisplayName: 'string',
   })
 
   try {
@@ -106,21 +112,21 @@ export const getMintInfo = async (
 export const getSPLToken = async (
   publicKey: PublicKey,
   connection: Connection,
-  getToken: (address: string) => Token | undefined
+  getToken: (address: string) => Token | undefined,
 ): Promise<Token | undefined> => {
-  log("Retrieving SPL token at mint address %s", publicKey.toBase58())
+  log('Retrieving SPL token at mint address %s', publicKey.toBase58())
   const token = getToken(publicKey.toBase58())
   if (token) {
     return token
   }
 
-  log("SPL token at mint address %s not in cache... retrieving mint data", publicKey.toBase58())
+  log('SPL token at mint address %s not in cache... retrieving mint data', publicKey.toBase58())
   try {
     const mintInfo = await getMintInfo(connection, publicKey)
     return {
       mintAddress: publicKey.toBase58(),
-      name: "",
-      symbol: "",
+      name: '',
+      symbol: '',
       decimals: mintInfo.decimals,
     }
   } catch (e) {

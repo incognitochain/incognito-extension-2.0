@@ -1,14 +1,14 @@
-import React from "react"
-import ReactDOM from "react-dom"
-import "./index.css"
-import { App } from "./pages/app"
-import { unregisterServiceWorker } from "./core/service-worker"
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import { App } from './pages/app'
+import { unregisterServiceWorker } from './core/service-worker'
 
 ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root'),
 )
 
 // If you want your app to work offline and load faster, you can change

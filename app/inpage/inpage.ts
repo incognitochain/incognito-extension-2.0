@@ -1,19 +1,21 @@
-import pump from "pump"
-import { createLogger, createObjectMultiplex } from "../core/utils"
+import pump from 'pump'
+import { createLogger, createObjectMultiplex } from '../core/utils'
 import {
   CONTENT_MESSAGE_STREAM,
   INPAGE_MESSAGE_STREAM,
   MUX_PROVIDER_SUBSTREAM,
   Notification,
   WallActions,
-} from "../core/types"
-import { EventEmitter } from "events"
+} from '../core/types'
+import { EventEmitter } from 'events'
+import { enableLogger } from '../core/utils'
+const LocalMessageDuplexStream = require('post-message-stream')
+const RpcEngine = require('json-rpc-engine')
+const createJsonRpcStream = require('json-rpc-middleware-stream')
+const { duplex: isDuplex } = require('is-stream')
+const log = createLogger('sol:inPage')
 
-const LocalMessageDuplexStream = require("post-message-stream")
-const RpcEngine = require("json-rpc-engine")
-const createJsonRpcStream = require("json-rpc-middleware-stream")
-const { duplex: isDuplex } = require("is-stream")
-const log = createLogger("sol:inPage")
+enableLogger()
 
 export interface RequestArgs {
   method: WallActions
@@ -33,19 +35,19 @@ class Provider extends EventEmitter {
     this._csStream = csStream
 
     if (!isDuplex(csStream)) {
-      throw new Error("Must provide a Node.js-style duplex stream.")
+      throw new Error('Must provide a Node.js-style duplex stream.')
     }
 
     // setup connectionStream multiplexing
-    const mux = createObjectMultiplex("inpage-cs-mux")
-    pump(csStream, mux, csStream, this._handleDisconnect.bind(this, "Solana content"))
+    const mux = createObjectMultiplex('inpage-cs-mux')
+    pump(csStream, mux, csStream, this._handleDisconnect.bind(this, 'Solana content'))
 
     const jsonRpcConnection = createJsonRpcStream()
     pump(
       jsonRpcConnection.stream,
       mux.createStream(MUX_PROVIDER_SUBSTREAM),
       jsonRpcConnection.stream,
-      this._handleDisconnect.bind(this, "Solana RpcProvider")
+      this._handleDisconnect.bind(this, 'Solana RpcProvider'),
     )
 
     // handle RPC requests via dapp-side rpc engine
@@ -57,9 +59,9 @@ class Provider extends EventEmitter {
 
     // json rpc notification listener
     const that = this
-    jsonRpcConnection.events.on("notification", (resp: Notification) => {
-      log("Notification : %O", resp)
-      log("Received notification [%s] : %O", resp.type, resp.data)
+    jsonRpcConnection.events.on('notification', (resp: Notification) => {
+      log('Notification : %O', resp)
+      log('Received notification [%s] : %O', resp.type, resp.data)
       that.emit(resp.type, resp.data)
     })
   }
@@ -68,18 +70,18 @@ class Provider extends EventEmitter {
     const that = this
     const requestId = this._nextRequestId
     ++this._nextRequestId
-    log("inpage requesting %s with params: %O", args.method, args.params)
+    log('inpage requesting %s with params: %O', args.method, args.params)
     return new Promise<any>(function (resolve, reject) {
-      let req = { id: requestId, jsonrpc: "2.0", method: args.method }
+      let req = { id: requestId, jsonrpc: '2.0', method: args.method }
       if (args.params) {
         req = Object.assign(req, { params: args.params })
       }
       that._rpcEngine.handle(req, function (err: any, response: any) {
         if (err) {
-          log("rpc engine [%s] failed: %O ", err)
+          log('rpc engine [%s] failed: %O ', err)
           reject(err)
         } else {
-          log("rpc engine [%s] responded: %O ", response)
+          log('rpc engine [%s] responded: %O ', response)
           resolve(response)
         }
       })
@@ -89,12 +91,12 @@ class Provider extends EventEmitter {
   // Called when connection is lost to critical streams.
   _handleDisconnect = (streamName: any, err: any) => {
     log(
-      "Solana Inpage Provider lost connection to %s: %s with stack %O",
+      'Solana Inpage Provider lost connection to %s: %s with stack %O',
       streamName,
       err,
-      err.stack
+      err.stack,
     )
-    this.emit("disconnected")
+    this.emit('disconnected')
   }
 }
 
@@ -105,12 +107,12 @@ const csStream = new LocalMessageDuplexStream({
 })
 
 function initProvider() {
-  log("initializing provider")
+  log('initializing provider')
   const provider = new Provider(csStream)
   // @ts-ignore
-  window.solana = provider
-  log("dispatching window event 'solana#initialized'")
-  window.dispatchEvent(new Event("solana#initialized"))
+  window.incognito = provider
+  log("dispatching window event 'incognito#initialized'")
+  window.dispatchEvent(new Event('incognito#initialized'))
 }
 
 ;(function () {

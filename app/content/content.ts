@@ -1,32 +1,34 @@
-import pump from "pump"
-import { createLogger, createObjectMultiplex } from "../core/utils"
+import pump from 'pump'
+import { createLogger, createObjectMultiplex } from '../core/utils'
 import {
   CHROME_CONN_CS,
   CONTENT_MESSAGE_STREAM,
   INPAGE_MESSAGE_STREAM,
   MUX_PROVIDER_SUBSTREAM,
-} from "../core/types"
+} from '../core/types'
+import { enableLogger } from '../core/utils'
+const log = createLogger('sol:cntPage')
+const LocalMessageDuplexStream = require('post-message-stream')
+const PortStream = require('extension-port-stream')
 
-const log = createLogger("sol:cntPage")
-const LocalMessageDuplexStream = require("post-message-stream")
-const PortStream = require("extension-port-stream")
+enableLogger()
 
 if (shouldInjectProvider()) {
-  injectScript(chrome.runtime.getURL("static/js/inpage.js")) //"inpage.js")
+  injectScript(chrome.runtime.getURL('static/js/inpage.js')) //"inpage.js")
   start()
 }
 
 function injectScript(url: string) {
   try {
     const container = document.head || document.documentElement
-    const scriptTag = document.createElement("script")
-    scriptTag.setAttribute("src", url)
-    scriptTag.setAttribute("async", "false")
+    const scriptTag = document.createElement('script')
+    scriptTag.setAttribute('src', url)
+    scriptTag.setAttribute('async', 'false')
     container.insertBefore(scriptTag, container.children[0])
     //container.removeChild(scriptTag)
-    log("inject page data")
+    log('inject page data')
   } catch (e) {
-    log("solana provider injection failed: %s", e)
+    log('solana provider injection failed: %s', e)
   }
 }
 
@@ -50,16 +52,16 @@ async function setupStreams() {
 
   // create and connect channel muxers
   // so we can handle the channels individually
-  const pageMux = createObjectMultiplex("cs-inpage-mux")
+  const pageMux = createObjectMultiplex('cs-inpage-mux')
   pageMux.setMaxListeners(25)
-  const extensionMux = createObjectMultiplex("cs-ext-mux")
+  const extensionMux = createObjectMultiplex('cs-ext-mux')
   extensionMux.setMaxListeners(25)
 
   pump(pageMux, pageStream, pageMux, (err) =>
-    logStreamDisconnectWarning("Solana Inpage Multiplex", err)
+    logStreamDisconnectWarning('Solana Inpage Multiplex', err),
   )
   pump(extensionMux, extensionStream, extensionMux, (err) =>
-    logStreamDisconnectWarning("Solana Background Multiplex", err)
+    logStreamDisconnectWarning('Solana Background Multiplex', err),
   )
 
   // forward communication across inpage-background for these channels only
@@ -83,7 +85,7 @@ function forwardTrafficBetweenMuxers(channelName: any, muxA: any, muxB: any) {
   const channelA = muxA.createStream(channelName)
   const channelB = muxB.createStream(channelName)
   pump(channelA, channelB, channelA, (err: any) => {
-    log("solana muxed traffic for channel %s failed: %O", channelName, err)
+    log('solana muxed traffic for channel %s failed: %O', channelName, err)
   })
 }
 
@@ -122,7 +124,7 @@ function shouldInjectProvider() {
 function logStreamDisconnectWarning(remoteLabel: string, err: Error) {
   let warningMsg = `SolanaContentscript - lost connection to ${remoteLabel}`
   if (err) {
-    warningMsg += "\n" + err.stack
+    warningMsg += '\n' + err.stack
   }
   console.warn(warningMsg)
 }
