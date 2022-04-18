@@ -1,28 +1,41 @@
-import SolanaController from "./solana-controller"
-import { createLogger, isInternalProcess } from "../core/utils"
+import SolanaController from './solana-controller'
+import { createLogger, isInternalProcess } from '../core/utils'
 import {
   ENVIRONMENT_TYPE_NOTIFICATION,
   ENVIRONMENT_TYPE_POPUP,
   StoredData,
   VersionedData,
-} from "../core/types"
-import LocalStore from "./lib/local-store"
-import initialState from "./first-time-state"
+} from '../core/types'
+import LocalStore from './lib/local-store'
+import initialState from './first-time-state'
+const { gomobileServices } = require('incognito-chain-web-js/build/wallet')
 
-const PortStream = require("extension-port-stream")
-const endOfStream = require("end-of-stream")
-const log = createLogger("sol:bg")
+const PortStream = require('extension-port-stream')
+const endOfStream = require('end-of-stream')
+const log = createLogger('sol:bg')
 
 const localStore = new LocalStore()
 let versionedData: VersionedData
 
 initialize().catch((err) => {
-  log("Background initialization failed: %O", err)
+  log('Background initialization failed: %O', err)
 })
 
 async function initialize() {
+  await loadWasmConfig()
   const versionedData = await loadStateFromPersistence()
   await setupController(versionedData)
+}
+
+async function loadWasmConfig(): Promise<void> {
+  try {
+    const wasmUrl = chrome.runtime.getURL('assets/privacy.wasm')
+    if (typeof gomobileServices.loadWasm === 'function') {
+      await gomobileServices.loadWasm(wasmUrl)
+    }
+  } catch (error) {
+    log('loadWasmConfig Error ', error)
+  }
 }
 
 async function loadStateFromPersistence(): Promise<VersionedData> {
@@ -34,10 +47,10 @@ async function loadStateFromPersistence(): Promise<VersionedData> {
   // first from preferred, async API:
   const data = await localStore.get()
   if (!data) {
-    versionedData = { version: "1.0", data: initialState }
-    log("Solana Empty vault found defaulting to initial state")
+    versionedData = { version: '1.0', data: initialState }
+    log('Solana Empty vault found defaulting to initial state')
   } else {
-    log("Solana restoring vault")
+    log('Solana restoring vault')
     versionedData = data
   }
 
@@ -72,11 +85,11 @@ async function loadStateFromPersistence(): Promise<VersionedData> {
 }
 
 function setupController(versionedData: VersionedData) {
-  log("Setting up controller initial state: %O", versionedData)
+  log('Setting up controller initial state: %O', versionedData)
 
   const persistData = async (data: StoredData): Promise<boolean> => {
     if (!data) {
-      throw new Error("Solana - updated state does not have data")
+      throw new Error('Solana - updated state does not have data')
     }
     versionedData.data = data
 
@@ -85,7 +98,7 @@ function setupController(versionedData: VersionedData) {
         await localStore.set(versionedData)
         return true
       } catch (err) {
-        log("error setting state in local store:", err)
+        log('error setting state in local store:', err)
         return false
       }
     }
@@ -100,7 +113,7 @@ function setupController(versionedData: VersionedData) {
   function connectRemote(remotePort: chrome.runtime.Port) {
     const processName = remotePort.name
     const tabId = remotePort.sender?.tab?.id
-    const url = new URL(remotePort.sender?.url || "")
+    const url = new URL(remotePort.sender?.url || '')
     const { origin } = url
 
     if (isInternalProcess(processName)) {
@@ -116,13 +129,13 @@ function setupController(versionedData: VersionedData) {
         solanaController.setPopupOpen()
         endOfStream(portStream, () => {
           solanaController.setPopupClose()
-          log("Popup remote stream has ended")
+          log('Popup remote stream has ended')
         })
       }
 
       if (processName === ENVIRONMENT_TYPE_NOTIFICATION) {
         endOfStream(portStream, () => {
-          log("Notification remote stream has ended")
+          log('Notification remote stream has ended')
         })
       }
     } else if (remotePort.sender && remotePort.sender.tab && remotePort.sender.url) {
@@ -136,7 +149,7 @@ function setupController(versionedData: VersionedData) {
         origin: origin,
       })
       remotePort.onMessage.addListener((msg) => {
-        log("received message from remote port [%s]: %O}", remotePort.name, msg)
+        log('received message from remote port [%s]: %O}', remotePort.name, msg)
       })
       connectExternal(remotePort)
     }

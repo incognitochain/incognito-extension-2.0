@@ -5,7 +5,9 @@
       "es6",
       "dom",
       "dom.iterable",
-      "esnext"
+      "esnext",
+      "es2016",
+      "es2017"
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -19,14 +21,14 @@
     "isolatedModules": true,
     "noEmit": true,
     "noImplicitAny": true,
-    "noImplicitAny": true,
     "strictNullChecks": true,
     "jsx": "react",
     "sourceMap": true,
     "declaration": true,
     "declarationDir": "dist/types",
     "outDir": "dist/lib",
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "baseUrl": "."
   },
   "files": [
     "app/popup/index.tsx"
@@ -36,5 +38,7 @@
   ],
   "include": [
     "app"
-  ]
+  ],
+  "exclude": ["bin", "build", "node_modules"],
+  "compileOnSave": false
 }

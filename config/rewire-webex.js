@@ -1,14 +1,14 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin")
-const paths = require("react-scripts/config/paths")
-const ManifestPlugin = require("webpack-manifest-plugin")
-const MiniCssExtractPlugin = require("mini-css-extract-plugin")
-const WebpackExtensionManifestPlugin = require("webpack-extension-manifest-plugin")
-const CopyPlugin = require("copy-webpack-plugin")
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const paths = require('react-scripts/config/paths')
+const ManifestPlugin = require('webpack-manifest-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const WebpackExtensionManifestPlugin = require('webpack-extension-manifest-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 
 const appPackageJson = require(paths.appPackageJson)
 
 function capitalize(str) {
-  return str ? str[0].toUpperCase() + str.substr(1, str.length) : ""
+  return str ? str[0].toUpperCase() + str.substr(1, str.length) : ''
 }
 
 const defaultMinify = {
@@ -47,9 +47,9 @@ function createWebexRewire(params) {
   const entries = [].concat(params.entry)
 
   const bundles = entries.map((entry) => {
-    const ext = entry.split(".").pop()
-    let cleanEntry = entry.replace("." + ext, "")
-    cleanEntry = cleanEntry.split("/")[0]
+    const ext = entry.split('.').pop()
+    let cleanEntry = entry.replace('.' + ext, '')
+    cleanEntry = cleanEntry.split('/')[0]
     return cleanEntry
   })
 
@@ -64,7 +64,7 @@ function createWebexRewire(params) {
         template: paths.appHtml,
         chunks: [bundle],
       },
-      isProd ? { minify: Object.assign(defaultMinify, params.minify) } : {}
+      isProd ? { minify: Object.assign(defaultMinify, params.minify) } : {},
     )
 
     return new HtmlWebpackPlugin(opts)
@@ -72,7 +72,7 @@ function createWebexRewire(params) {
 
   function getManifestPlugin(bundle, isProd) {
     const opts = {
-      fileName: "asset-manifest.json",
+      fileName: 'asset-manifest.json',
       publicPath: paths.publicUrlOrPath,
       generate: (seed, files, entrypoints) => {
         const manifestFiles = files.reduce((manifest, file) => {
@@ -82,7 +82,7 @@ function createWebexRewire(params) {
         const entrypointFiles = {}
         Object.keys(entrypoints).forEach((entrypoint) => {
           entrypointFiles[entrypoint] = entrypoints[entrypoint].filter(
-            (fileName) => !fileName.endsWith(".map")
+            (fileName) => !fileName.endsWith('.map'),
           )
         })
         return {
@@ -96,8 +96,8 @@ function createWebexRewire(params) {
 
   function getMiniCssExtractPlugin() {
     const opts = {
-      filename: "static/css/[name].css",
-      chunkFilename: "static/css/[name].css",
+      filename: 'static/css/[name].css',
+      chunkFilename: 'static/css/[name].css',
     }
     return new MiniCssExtractPlugin(opts)
   }
@@ -116,20 +116,20 @@ function createWebexRewire(params) {
 
   return {
     webpack: (config, env) => {
-      const isProd = env !== "development"
+      const isProd = env !== 'development'
 
       // modify the entry points
       let i = 0
       config.entry = bundles.reduce((acc, bundle) => {
         acc[bundle] = [].concat(
-          isProd ? [] : i == 0 ? "react-hot-loader/patch" : [],
-          paths[`app${capitalize(bundle)}Js`]
+          isProd ? [] : i == 0 ? 'react-hot-loader/patch' : [],
+          paths[`app${capitalize(bundle)}Js`],
         )
         i += 1
         return acc
       }, {})
 
-      config.output.filename = "static/js/[name].js"
+      config.output.filename = 'static/js/[name].js'
       // we do not want any chunking when it comes to web extensions
       delete config.optimization.runtimeChunk
       delete config.optimization.splitChunks
@@ -138,7 +138,7 @@ function createWebexRewire(params) {
       config.plugins = replacePlugin(
         config.plugins,
         (name) => /HtmlWebpackPlugin/i.test(name),
-        getHtmlPlugin(bundles[0], isProd)
+        getHtmlPlugin(bundles[0], isProd),
       )
 
       // if production lets override CSS files name chunking
@@ -146,7 +146,7 @@ function createWebexRewire(params) {
         config.plugins = replacePlugin(
           config.plugins,
           (name) => /MiniCssExtractPlugin/i.test(name),
-          getMiniCssExtractPlugin()
+          getMiniCssExtractPlugin(),
         )
       }
 
@@ -154,7 +154,7 @@ function createWebexRewire(params) {
       config.plugins = replacePlugin(
         config.plugins,
         (name) => /ManifestPlugin/i.test(name),
-        getManifestPlugin(bundles[0], isProd)
+        getManifestPlugin(bundles[0], isProd),
       )
 
       // add web extention manifest plugin
@@ -164,8 +164,12 @@ function createWebexRewire(params) {
         new CopyPlugin({
           patterns: [
             {
-              from: "icons",
-              to: "icons",
+              from: 'icons',
+              to: 'icons',
+            },
+            {
+              from: 'assets',
+              to: 'assets',
             },
           ],
         }),
