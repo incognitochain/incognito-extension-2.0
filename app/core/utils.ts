@@ -13,10 +13,11 @@ export const createLogger = (module: string): any => {
 };
 const log = createLogger('sol:util');
 
-export function enableLogger(): Promise<void> {
+export function enableLogger() {
   if (process.env.NODE_ENV === 'development') {
     localStorage.setItem('debug', '*');
   }
+  return;
 }
 
 export const createObjectMultiplex = (name: string): any => {

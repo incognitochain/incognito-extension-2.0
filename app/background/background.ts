@@ -1,5 +1,5 @@
-import { enableLogger } from '@/core/utils';
 // import { Wallet } from '@/background/lib/wallet';
+import { enableLogger } from '@core/utils';
 import {
   ENVIRONMENT_TYPE_NOTIFICATION,
   ENVIRONMENT_TYPE_POPUP,

@@ -1,6 +1,7 @@
-const helper = require('./config/helper')
-const createRewireWebex = require('./config/rewire-webex')
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
+const helper = require('./config/helper');
+const createRewireWebex = require('./config/rewire-webex');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const { alias, configPaths } = require('react-app-rewire-alias');
 
 module.exports = {
   // The Webpack config to use whena compiling your react app for development or production.
@@ -16,33 +17,33 @@ module.exports = {
         'content/content.ts',
         'inpage/inpage.ts',
       ],
-    })
-    config = rewireWebEx.webpack(config, env)
-    return config
+    });
+    config = rewireWebEx.webpack(config, env);
+    alias(configPaths('./tsconfig.paths.json'))(config);
+    return config;
   },
 
   devServer: function (craGenerateDevServerConfig) {
     return function (proxy, allowedHost) {
       // Generate the base dev server config via CRA
-      const config = craGenerateDevServerConfig(proxy, allowedHost)
-      console.log(config)
+      const config = craGenerateDevServerConfig(proxy, allowedHost);
       // Enable writing files to the destination so we can easily reload the extension once build is done
-      config.allowedHosts = ['http://localhost:3000/']
-      config.writeToDisk = true
-      return config
-    }
+      config.allowedHosts = ['http://localhost:3000/'];
+      config.writeToDisk = true;
+      return config;
+    };
   },
   // plugins: [isDevelopment && new ReactRefreshWebpackPlugin()].filter(Boolean),
 
   // The paths config to use when compiling your react app for development or production.
   paths: function (paths, env) {
-    paths['appSrc'] = helper.resolveApp('app')
-    paths['proxySetup'] = helper.resolveApp('app/popup/setupProxy.js')
-    paths['appPath'] = helper.resolveApp('')
-    paths['appPublic'] = helper.resolveApp('app/popup/public')
-    paths['appHtml'] = helper.resolveApp('app/popup/public/index.html')
-    paths['appIndexJs'] = helper.resolveApp('app/popup/index.tsx')
-    paths['appTypeDeclarations'] = helper.resolveApp('app/popup/react-app-env.d.ts')
-    return paths
+    paths['appSrc'] = helper.resolveApp('app');
+    paths['proxySetup'] = helper.resolveApp('app/popup/setupProxy.js');
+    paths['appPath'] = helper.resolveApp('');
+    paths['appPublic'] = helper.resolveApp('app/popup/public');
+    paths['appHtml'] = helper.resolveApp('app/popup/public/index.html');
+    paths['appIndexJs'] = helper.resolveApp('app/popup/index.tsx');
+    paths['appTypeDeclarations'] = helper.resolveApp('app/popup/react-app-env.d.ts');
+    return paths;
   },
-}
+};
