@@ -14,6 +14,7 @@ module.exports = {
     sourceType: 'module',
     project: ['tsconfig.json'],
   },
+  extends: 'eslint:recommended',
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', '@typescript-eslint/eslint-plugin'],
   ignorePatterns: ['webpack.config.js'],
@@ -48,7 +49,7 @@ module.exports = {
     '@typescript-eslint/ban-ts-ignore': 0,
     '@typescript-eslint/no-empty-function': 'off',
 
-    '@typescript-eslint/require-await': 2,
-    '@typescript-eslint/no-misused-new': 2,
+    '@typescript-eslint/require-await': 0,
+    '@typescript-eslint/no-misused-new': 0,
   },
 };
