@@ -1,26 +1,27 @@
-import React, { useState } from "react"
-import { Link as RouterLink, useHistory } from "react-router-dom"
-import Toolbar from "@material-ui/core/Toolbar"
-import AppBar from "@material-ui/core/AppBar"
-import Typography from "@material-ui/core/Typography"
-import { makeStyles } from "@material-ui/core/styles"
-import Button from "@material-ui/core/Button"
-import Menu from "@material-ui/core/Menu"
-import MenuItem from "@material-ui/core/MenuItem"
-import ListItemIcon from "@material-ui/core/ListItemIcon"
-import CheckIcon from "@material-ui/icons/Check"
-import AddIcon from "@material-ui/icons/Add"
-import AccountIcon from "@material-ui/icons/AccountCircle"
-import MenuIcon from "@material-ui/icons/Menu"
-import Divider from "@material-ui/core/Divider"
-import Hidden from "@material-ui/core/Hidden"
-import IconButton from "@material-ui/core/IconButton"
-import { SolanaIcon } from "./solana-icon"
-import Tooltip from "@material-ui/core/Tooltip"
-import { useCallAsync } from "../utils/notifications"
-import { useBackground } from "../context/background"
-import { Network } from "../../core/types"
-import { Links } from "./routes/paths"
+import AppBar from "@material-ui/core/AppBar";
+import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
+import Hidden from "@material-ui/core/Hidden";
+import IconButton from "@material-ui/core/IconButton";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import { makeStyles } from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
+import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
+import AccountIcon from "@material-ui/icons/AccountCircle";
+import AddIcon from "@material-ui/icons/Add";
+import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
+import CheckIcon from "@material-ui/icons/Check";
+import MenuIcon from "@material-ui/icons/Menu";
+import React, { useState } from "react";
+import { Link as RouterLink, useHistory } from "react-router-dom";
+import { Network } from "../../core/types";
+import { useBackground } from "../context/background";
+import { useCallAsync } from "../utils/notifications";
+import { Links, PathsKey } from "./routes/paths";
+import { SolanaIcon } from "./solana-icon";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -30,11 +31,11 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(1),
   },
   bar: {
-    backgroundColor: "black",
-    color: theme.palette.primary.main,
+    // backgroundColor: 'black',
+    // color: theme.palette.primary.main,
   },
   title: {
-    flexGrow: 1,
+    // flexGrow: 1,
   },
   button: {
     marginLeft: theme.spacing(1),
@@ -42,43 +43,43 @@ const useStyles = makeStyles((theme) => ({
   menuItemIcon: {
     minWidth: 32,
   },
-}))
+}));
 
 export const NavigationFrame: React.FC = () => {
-  const classes = useStyles()
-  const history = useHistory()
-  const callAsync = useCallAsync()
-  const { request, popupState, changeNetwork, changeAccount, isNotification } = useBackground()
-  const account = popupState?.selectedAccount || ""
+  const classes = useStyles();
+  const history = useHistory();
+  const callAsync = useCallAsync();
+  const { request, popupState, changeNetwork, changeAccount, isNotification } = useBackground();
+  const account = popupState?.selectedAccount || "";
 
   const handleSelectAccount = (account: string) => {
-    changeAccount(account)
-    history.push(Links.accounts())
-  }
+    changeAccount(account);
+    history.push(Links.accounts());
+  };
 
   const handleCreateAccount = () => {
     callAsync(request("popup_addWalletAccount", {}), {
       progress: { message: "Creating a new account" },
       success: { message: "Account created!" },
-    })
-  }
+    });
+  };
 
   const handleLogout = () => {
     callAsync(request("popup_lockWallet", {}), {
       progress: { message: "locking wallet..." },
       success: { message: "Wallet locked" },
       onSuccess: (result) => {
-        history.push(Links.login())
+        history.push(Links.login());
       },
-    })
-  }
+    });
+  };
 
   return (
     <>
       <AppBar className={classes.bar} position="sticky">
         <Toolbar>
-          <Typography variant="h5" className={classes.title} component="h1">
-            Solana Wallet
+          <Typography variant="h5" color="inherit" className={classes.title} component="h1">
+            {PathsKey[history?.location?.pathname] || "Incognito Wallet"}
           </Typography>
           {!isNotification && popupState && popupState.walletState === "unlocked" && (
             <NetworkSelector
@@ -102,19 +103,19 @@ export const NavigationFrame: React.FC = () => {
         </Toolbar>
       </AppBar>
     </>
-  )
-}
+  );
+};
 
 const MenuSelector: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
   const menuItems: {
-    title: string
-    path: string
+    title: string;
+    path: string;
   }[] = [
     { title: "Account details", path: Links.accounts() },
     { title: "Authorized websites", path: Links.authorizedWebsites() },
     { title: "Known Tokens", path: Links.tokens() },
-  ]
-  const [anchorEl, setAnchorEl] = useState<any>()
+  ];
+  const [anchorEl, setAnchorEl] = useState<any>();
 
   return (
     <>
@@ -141,20 +142,20 @@ const MenuSelector: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
             <MenuItem key={`menu-${idx}`} component={RouterLink} to={item.path}>
               <Typography>{item.title}</Typography>
             </MenuItem>
-          )
+          );
         })}
         <MenuItem key={`menu-lock-wallet`} onClick={onLogout}>
           <Typography>Lock Wallet</Typography>
         </MenuItem>
       </Menu>
     </>
-  )
-}
+  );
+};
 
 interface NetworkSelectorProps {
-  availableNetworks: Network[]
-  selectedNetwork: Network
-  changeNetwork: (network: Network) => void
+  availableNetworks: Network[];
+  selectedNetwork: Network;
+  changeNetwork: (network: Network) => void;
 }
 
 const NetworkSelector: React.FC<NetworkSelectorProps> = ({
@@ -162,8 +163,8 @@ const NetworkSelector: React.FC<NetworkSelectorProps> = ({
   selectedNetwork,
   changeNetwork,
 }) => {
-  const [anchorEl, setAnchorEl] = useState<any>()
-  const classes = useStyles()
+  const [anchorEl, setAnchorEl] = useState<any>();
+  const classes = useStyles();
   return (
     <>
       <Hidden xsDown>
@@ -192,8 +193,8 @@ const NetworkSelector: React.FC<NetworkSelectorProps> = ({
           <MenuItem
             key={network.endpoint}
             onClick={() => {
-              setAnchorEl(null)
-              changeNetwork(network)
+              setAnchorEl(null);
+              changeNetwork(network);
             }}
             selected={network.endpoint === selectedNetwork.endpoint}
           >
@@ -207,14 +208,14 @@ const NetworkSelector: React.FC<NetworkSelectorProps> = ({
         ))}
       </Menu>
     </>
-  )
-}
+  );
+};
 
 interface WalletSelectorProps {
-  accounts: string[]
-  selectedAccount: string
-  addAccount: () => void
-  selectAccount: (account: string) => void
+  accounts: string[];
+  selectedAccount: string;
+  addAccount: () => void;
+  selectAccount: (account: string) => void;
 }
 
 const WalletSelector: React.FC<WalletSelectorProps> = ({
@@ -223,11 +224,11 @@ const WalletSelector: React.FC<WalletSelectorProps> = ({
   addAccount,
   selectAccount,
 }) => {
-  const [anchorEl, setAnchorEl] = useState<any>()
-  const classes = useStyles()
+  const [anchorEl, setAnchorEl] = useState<any>();
+  const classes = useStyles();
 
   if (accounts.length === 0) {
-    return null
+    return null;
   }
 
   return (
@@ -258,8 +259,8 @@ const WalletSelector: React.FC<WalletSelectorProps> = ({
           <MenuItem
             key={account}
             onClick={() => {
-              setAnchorEl(null)
-              selectAccount(account)
+              setAnchorEl(null);
+              selectAccount(account);
             }}
             selected={selectedAccount === account}
           >
@@ -272,8 +273,8 @@ const WalletSelector: React.FC<WalletSelectorProps> = ({
         <Divider />
         <MenuItem
           onClick={() => {
-            setAnchorEl(null)
-            addAccount()
+            setAnchorEl(null);
+            addAccount();
           }}
         >
           <ListItemIcon className={classes.menuItemIcon}>
@@ -283,5 +284,5 @@ const WalletSelector: React.FC<WalletSelectorProps> = ({
         </MenuItem>
       </Menu>
     </>
-  )
-}
+  );
+};

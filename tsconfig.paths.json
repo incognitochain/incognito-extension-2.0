@@ -7,7 +7,9 @@
       "@core/*": ["app/core/*"],
       "@content/*": ["app/content/*"],
       "@inpage/*": ["app/inpage/*"],
-      "@popup/*": ["app/popup/*"]
+      "@popup/*": ["app/popup/*"],
+      "@model/*": ["app/model/*"],
+      "@services/*": ["app/services/*"]
     }
   }
 }

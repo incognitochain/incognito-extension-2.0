@@ -1,5 +1,5 @@
-import React from "react"
-import { Layout } from "./layout"
+import React from "react";
+import { Layout } from "./layout";
 
 export function withLayout<T>(Component: React.ComponentType<T>): React.ComponentType<T> {
   return (props: T) => {
@@ -7,6 +7,6 @@ export function withLayout<T>(Component: React.ComponentType<T>): React.Componen
       <Layout>
         <Component {...props} />
       </Layout>
-    )
-  }
+    );
+  };
 }

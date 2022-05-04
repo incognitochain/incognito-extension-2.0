@@ -1,67 +1,43 @@
-import React, { Suspense, useMemo } from 'react'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
-import {
-  makeStyles,
-  ThemeProvider,
-  unstable_createMuiStrictModeTheme as createMuiTheme,
-} from '@material-ui/core/styles'
-import { ConnectionProvider } from '../context/connection'
-import { LoadingIndicator } from '../components/loading-indicator'
-import { SnackbarProvider } from 'notistack'
-import { BackgroundProvider } from '../context/background'
-import { Router } from 'react-router-dom'
-import { history } from '../utils/history'
-import { Routes } from '../components/routes/routes'
-import { ProgramPluginsManagerProvider } from '../context/plugins'
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { SnackbarProvider } from "notistack";
+import React, { Suspense, useEffect, useMemo } from "react";
+import { BrowserRouter, Router } from "react-router-dom";
+import { LoadingIndicator } from "../components/loading-indicator";
+import { Routes } from "../components/routes/routes";
+import { BackgroundProvider } from "../context/background";
+import { ConnectionProvider } from "../context/connection";
+import { ProgramPluginsManagerProvider } from "../context/plugins";
+import { themeHelper } from "../helper/index";
+import { history } from "../utils/history";
 
 const useStyles = makeStyles({
-  success: { backgroundColor: '#25c2a0' },
-  error: { backgroundColor: '#B45BDC' },
-  warning: { backgroundColor: '#fa62fc' },
-  info: { backgroundColor: '#43b5c5' },
-})
+  success: { backgroundColor: "#25c2a0" },
+  error: { backgroundColor: "#B45BDC" },
+  warning: { backgroundColor: "#fa62fc" },
+  info: { backgroundColor: "#43b5c5" },
+});
 
 export const App: React.FC = () => {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
-  const theme = useMemo(
-    () =>
-      createMuiTheme({
-        palette: {
-          type: prefersDarkMode ? 'dark' : 'light',
-          primary: {
-            main: '#25c2a0',
-            contrastText: '#fff',
-          },
-          secondary: {
-            main: '#86b8b6',
-            contrastText: '#fff',
-          },
-          success: {
-            main: '#25c2a0',
-            contrastText: '#fff',
-          },
-          info: {
-            main: '#43b5c5',
-            contrastText: '#fff',
-          },
-          error: {
-            main: '#fa62fc',
-            contrastText: '#fff',
-          },
-        },
-        typography: {
-          fontSize: 13,
-        },
-        spacing: 6,
-      }),
-    [prefersDarkMode],
-  )
-  const classes = useStyles()
+  console.log(" App Render");
+
+  // const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  const prefersDarkMode = true;
+  console.log("prefersDarkMode : ", prefersDarkMode);
+  const theme = useMemo(() => {
+    console.log("theme thay doi");
+    return themeHelper(prefersDarkMode);
+  }, []);
+  const classes = useStyles();
+
+  useEffect(() => {
+    console.log(" App Render Done");
+  }, []);
 
   // Disallow rendering inside an iframe to prevent clickjacking.
   if (window.self !== window.top) {
-    return null
+    return null;
   }
 
   return (
@@ -81,14 +57,14 @@ export const App: React.FC = () => {
                   variantInfo: classes.info,
                 }}
               >
-                <Router history={history}>
+                <BrowserRouter>
                   <Routes />
-                </Router>
+                </BrowserRouter>
               </SnackbarProvider>
             </ProgramPluginsManagerProvider>
           </ConnectionProvider>
         </BackgroundProvider>
       </ThemeProvider>
     </Suspense>
-  )
-}
+  );
+};

@@ -1,26 +1,26 @@
-import React, { useState } from "react"
-import { CardActions, makeStyles, Typography } from "@material-ui/core"
-import Card from "@material-ui/core/Card"
-import CardContent from "@material-ui/core/CardContent"
-import Button from "@material-ui/core/Button"
-import Grid from "@material-ui/core/Grid"
-import Container from "@material-ui/core/Container"
-import { withLayout } from "../components/layout"
-import { useBackground } from "../context/background"
-import { useCallAsync } from "../utils/notifications"
-import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos"
-import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos"
+import React, { useState } from "react";
+import { CardActions, makeStyles, Typography } from "@material-ui/core";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import Container from "@material-ui/core/Container";
+import { withLayout } from "../components/layout";
+import { useBackground } from "../context/background";
+import { useCallAsync } from "../utils/notifications";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import {
   ActionKey,
   ActionRequestAccounts,
   ActionSignTransaction,
   OrderedAction,
-} from "../../core/types"
-import TextField from "@material-ui/core/TextField"
-import ReactMarkdown from "react-markdown"
-import { LoadingIndicator } from "../components/loading-indicator"
-import { Paths } from "../components/routes/paths"
-import { Redirect } from "react-router"
+} from "../../core/types";
+import TextField from "@material-ui/core/TextField";
+import ReactMarkdown from "react-markdown";
+import { LoadingIndicator } from "../components/loading-indicator";
+import { Paths } from "../components/routes/paths";
+import { Redirect } from "react-router";
 // @ts-ignore FIXME We need to add a mock definition of this library to the overall project
 
 const useStyles = makeStyles({
@@ -41,35 +41,36 @@ const useStyles = makeStyles({
     // Required for big addresses to break otherwise it overflows, works great for addresses but might not be the case for other words...
     wordBreak: "break-all",
   },
-})
+});
 
 interface NotificationPageProps {
-  opener: any
+  opener: any;
 }
 
 const NotificationPageBase: React.FC<NotificationPageProps> = (opts: NotificationPageProps) => {
-  const { popupState, isNotification } = useBackground()
-  const [currentNotificationIndex, setCurrentNotificationIndex] = useState(0)
+  const { popupState, isNotification } = useBackground();
+  const [currentNotificationIndex, setCurrentNotificationIndex] = useState(0);
 
   if (!popupState) {
-    return <LoadingIndicator />
+    return <LoadingIndicator />;
   }
 
-  const notifications = popupState.actions
+  const notifications = popupState.actions;
 
   if (notifications.length === 0 && isNotification) {
-    window.close()
+    window.close();
   } else if (notifications.length === 0 && !isNotification) {
-    return <Redirect to={{ pathname: Paths.accounts }} />
+    return <Redirect to={{ pathname: Paths.accounts }} />;
+    // return <Navigate to={{ pathname: Paths.accounts }} replace />;
   }
 
   const handleNotificationPage = (page: number) => {
-    setCurrentNotificationIndex(page)
-  }
+    setCurrentNotificationIndex(page);
+  };
 
   const onCloseNotification = (index: number) => {
-    console.log("Closing notification with index: ", index)
-  }
+    console.log("Closing notification with index: ", index);
+  };
 
   const renderNotification = (idx: number, action: OrderedAction) => {
     switch (action.action.type) {
@@ -79,22 +80,22 @@ const NotificationPageBase: React.FC<NotificationPageProps> = (opts: Notificatio
             actionKey={action.key}
             action={action.action}
             onClose={() => {
-              onCloseNotification(idx)
+              onCloseNotification(idx);
             }}
           />
-        )
+        );
       case "sign_transaction":
         return (
           <AuthorizeTransaction
             actionKey={action.key}
             action={action.action}
             onClose={() => {
-              onCloseNotification(idx)
+              onCloseNotification(idx);
             }}
           />
-        )
+        );
     }
-  }
+  };
 
   return (
     <Container fixed maxWidth="md">
@@ -113,13 +114,13 @@ const NotificationPageBase: React.FC<NotificationPageProps> = (opts: Notificatio
         </Grid>
       </Grid>
     </Container>
-  )
-}
+  );
+};
 
 interface NotificationPaginationProps {
-  currentIndex: number
-  total: number
-  onPageChange: (index: number) => void
+  currentIndex: number;
+  total: number;
+  onPageChange: (index: number) => void;
 }
 
 const NotificationPagination: React.FC<NotificationPaginationProps> = ({
@@ -127,9 +128,9 @@ const NotificationPagination: React.FC<NotificationPaginationProps> = ({
   total,
   onPageChange,
 }) => {
-  const classes = useStyles()
-  const hasPrevious = currentIndex > 0 && total > 1
-  const hasNext = currentIndex < total - 1 && total > 1
+  const classes = useStyles();
+  const hasPrevious = currentIndex > 0 && total > 1;
+  const hasNext = currentIndex < total - 1 && total > 1;
   return (
     <Grid container spacing={3} className={classes.pagination}>
       <Grid item xs={4}>
@@ -150,19 +151,19 @@ const NotificationPagination: React.FC<NotificationPaginationProps> = ({
         )}
       </Grid>
     </Grid>
-  )
-}
+  );
+};
 
-export const NotificationPage = withLayout(NotificationPageBase)
+export const NotificationPage = withLayout(NotificationPageBase);
 
 export const AuthorizeRequestAccounts: React.FC<{
-  actionKey: ActionKey
-  action: ActionRequestAccounts
-  onClose: () => void
+  actionKey: ActionKey;
+  action: ActionRequestAccounts;
+  onClose: () => void;
 }> = ({ actionKey, action, onClose }) => {
-  const classes = useStyles()
-  const { request } = useBackground()
-  const callAsync = useCallAsync()
+  const classes = useStyles();
+  const { request } = useBackground();
+  const callAsync = useCallAsync();
 
   const handleAuthorize = () => {
     callAsync(
@@ -173,11 +174,11 @@ export const AuthorizeRequestAccounts: React.FC<{
         progress: { message: "Authorizing Request Account..." },
         success: { message: "Success!" },
         onFinish: () => {
-          onClose()
+          onClose();
         },
-      }
-    )
-  }
+      },
+    );
+  };
 
   const handleDecline = () => {
     callAsync(
@@ -188,11 +189,11 @@ export const AuthorizeRequestAccounts: React.FC<{
         progress: { message: "Declining Request Account..." },
         success: { message: "Success!" },
         onFinish: () => {
-          onClose()
+          onClose();
         },
-      }
-    )
-  }
+      },
+    );
+  };
 
   return (
     <Card className={classes.notification}>
@@ -218,17 +219,17 @@ export const AuthorizeRequestAccounts: React.FC<{
         </Button>
       </CardActions>
     </Card>
-  )
-}
+  );
+};
 
 export const AuthorizeTransaction: React.FC<{
-  actionKey: ActionKey
-  action: ActionSignTransaction
-  onClose: () => void
+  actionKey: ActionKey;
+  action: ActionSignTransaction;
+  onClose: () => void;
 }> = ({ actionKey, action, onClose }) => {
-  const classes = useStyles()
-  const { request } = useBackground()
-  const callAsync = useCallAsync()
+  const classes = useStyles();
+  const { request } = useBackground();
+  const callAsync = useCallAsync();
 
   const handleAuthorize = () => {
     callAsync(
@@ -239,11 +240,11 @@ export const AuthorizeTransaction: React.FC<{
         progress: { message: "Authorizing Transaction..." },
         success: { message: "Success!" },
         onFinish: () => {
-          onClose()
+          onClose();
         },
-      }
-    )
-  }
+      },
+    );
+  };
 
   const handleDecline = () => {
     callAsync(
@@ -254,11 +255,11 @@ export const AuthorizeTransaction: React.FC<{
         progress: { message: "Declining Transaction..." },
         success: { message: "Declined", variant: "error" },
         onFinish: () => {
-          onClose()
+          onClose();
         },
-      }
-    )
-  }
+      },
+    );
+  };
 
   return (
     <Card className={classes.notification}>
@@ -292,18 +293,18 @@ export const AuthorizeTransaction: React.FC<{
         </Button>
       </CardActions>
     </Card>
-  )
-}
+  );
+};
 
 function renderTransactionDetails(transaction: ActionSignTransaction) {
   if (!transaction.details?.length) {
-    return <ReactMarkdown key={0} source={undecodedTransactionMessage()} />
+    return <ReactMarkdown key={0} source={undecodedTransactionMessage()} />;
   }
   return transaction.details.map((detail, idx) => {
-    return <ReactMarkdown key={idx} source={detail} />
-  })
+    return <ReactMarkdown key={idx} source={detail} />;
+  });
 }
 
 function undecodedTransactionMessage(): string {
-  return `You are about to sign transaction that we were not able to decode`
+  return `You are about to sign transaction that we were not able to decode`;
 }

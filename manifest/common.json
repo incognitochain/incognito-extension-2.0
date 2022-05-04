@@ -1,5 +1,5 @@
 {
-  "name": "solana extension",
+  "name": "incognito extension",
   "version": "1.0",
   "manifest_version": 2,
   "icons": {
@@ -7,36 +7,22 @@
     "48": "icons/incognito-48.png",
     "128": "icons/incognito-128.png"
   },
-  "permissions": [
-    "storage",
-    "activeTab",
-    "<all_urls>"
-  ],
+  "permissions": ["storage", "activeTab", "<all_urls>"],
   "browser_action": {
     "default_title": "Incognito Wallet",
     "default_popup": "index.html"
   },
   "background": {
-    "scripts": [
-      "assets/wasm_exec.js",
-      "static/js/background.js"
-    ],
+    "scripts": ["assets/wasm_exec.js", "static/js/background.js"],
     "persistent": true
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "static/js/content.js"
-      ],
+      "matches": ["<all_urls>"],
+      "js": ["static/js/content.js"],
       "run_at": "document_start"
     }
   ],
-  "web_accessible_resources": [
-    "/static/js/inpage.js",
-    "/assets/privacy.wasm"
-  ],
+  "web_accessible_resources": ["/static/js/inpage.js", "/assets/privacy.wasm"],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }
