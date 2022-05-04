@@ -40,22 +40,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const GetStartedPageBase: React.FC = () => {
-  console.log(" 11 GetStartedPageBase Render");
-
   const history = useHistory();
   const styles = useStyles();
   const createNewKeyOnClick = () => {
-    console.log(" TO DO");
     history.push(Links.createNewKeyPage());
   };
 
   const importPharseOnClick = () => {
     alert("comming soon!");
   };
-
-  useEffect(() => {
-    console.log(" GetStartedPageBase DONE");
-  }, []);
 
   return (
     <>

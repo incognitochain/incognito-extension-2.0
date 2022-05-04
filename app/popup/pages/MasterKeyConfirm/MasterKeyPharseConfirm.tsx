@@ -50,8 +50,6 @@ interface MasterKeyPharseConfirmPageBaseProps {
 const MasterKeyPharseConfirmPageBase: React.FC<MasterKeyPharseConfirmPageBaseProps> = (
   props: MasterKeyPharseConfirmPageBaseProps,
 ) => {
-  console.log(" ... MasterKeyPharseConfirmPageBase ");
-
   const styles = useStyles();
 
   const [phraseListSelected, setPhraseListSelected] = useState<string[]>([]);

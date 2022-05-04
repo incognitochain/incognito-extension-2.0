@@ -43,8 +43,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SignInPageBase: React.FC = () => {
-  console.log(" SignInPageBase Render");
-
   const history = useHistory();
   const styles = useStyles();
 

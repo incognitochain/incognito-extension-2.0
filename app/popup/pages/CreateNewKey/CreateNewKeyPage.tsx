@@ -40,6 +40,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const NAME_PATTERN = /^[A-Za-z0-9]*$/;
+
 interface CreateNewKeyPageProps {
   masterKeyName?: string;
   onBack?: () => void;
@@ -59,6 +61,7 @@ const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateNewKeyPa
 
   const [masterKeyNameLocal, setMasterKeyNameLocal] = useState("");
   const [checkBoxAcceptLocal, setCheckBoxAcceptLocal] = useState(false);
+  const [errorVisible, setErrorVisible] = useState(false);
 
   useLayoutEffect(() => {
     setMasterKeyNameLocal(masterKeyName);
@@ -66,22 +69,20 @@ const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateNewKeyPa
   }, []);
 
   const readyOnClick = () => {
+    if (!NAME_PATTERN.test(masterKeyNameLocal)) {
+      return setErrorVisible(true);
+    }
     onReadyClick && onReadyClick(masterKeyNameLocal, checkBoxAcceptLocal);
   };
 
   const masterKeyOnChange = useCallback((e: any) => {
+    setErrorVisible(false);
     setMasterKeyNameLocal(e.target.value);
   }, []);
-
-  console.log("readyButtonDisable ", {
-    checkBoxAccept,
-    masterKeyNameLocal,
-  });
 
   const readyButtonDisable: boolean =
     !checkBoxAcceptLocal || !masterKeyNameLocal || masterKeyNameLocal.length < 0;
 
-  console.log("readyButtonDisable ", readyButtonDisable);
   return (
     <>
       <NavigationBar goBack={onBack} title={"Create new key"} />
@@ -105,6 +106,12 @@ const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateNewKeyPa
                 autoComplete="off"
                 value={masterKeyNameLocal}
                 onChange={masterKeyOnChange}
+                error={errorVisible}
+                helperText={
+                  errorVisible
+                    ? "Master key names must be alphanumeric. Please choose another."
+                    : ""
+                }
               />
               <Typography variant="subtitle1">
                 The next screen will contain 12 special words that will allow you to recover your
