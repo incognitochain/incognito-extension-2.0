@@ -31,7 +31,8 @@
     "declaration": true,
     "declarationDir": "dist/types",
     "outDir": "dist/lib",
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "noFallthroughCasesInSwitch": true
   },
   "files": [
     "app/popup/index.tsx"

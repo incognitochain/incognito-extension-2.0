@@ -57,12 +57,16 @@ async function setupStreams() {
   const extensionMux = createObjectMultiplex('cs-ext-mux')
   extensionMux.setMaxListeners(25)
 
-  pump(pageMux, pageStream, pageMux, (err) =>
-    logStreamDisconnectWarning('Solana Inpage Multiplex', err),
-  )
-  pump(extensionMux, extensionStream, extensionMux, (err) =>
-    logStreamDisconnectWarning('Solana Background Multiplex', err),
-  )
+  pump(pageMux, pageStream, pageMux, (err) => {
+    if (err) {
+      return logStreamDisconnectWarning('Solana Inpage Multiplex', err);
+    }
+  })
+  pump(extensionMux, extensionStream, extensionMux, (err) => {
+    if (err) {
+      return logStreamDisconnectWarning('Solana Background Multiplex', err)
+    }
+  })
 
   // forward communication across inpage-background for these channels only
   forwardTrafficBetweenMuxers(MUX_PROVIDER_SUBSTREAM, pageMux, extensionMux)

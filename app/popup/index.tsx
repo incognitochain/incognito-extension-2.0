@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import { App } from "./pages/app";
+import App from "@popup/app";
 import { unregisterServiceWorker } from "./core/service-worker";
 
 ReactDOM.render(
