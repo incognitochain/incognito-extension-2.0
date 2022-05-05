@@ -1,0 +1,52 @@
+{
+  "extends": "./tsconfig.paths.json",
+  "compilerOptions": {
+    "target": "es6",
+    "lib": [
+      "es5",
+      "es6",
+      "dom",
+      "dom.iterable",
+      "esnext",
+      "es2016",
+      "es2017",
+      "es2018"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "jsx": "react",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationDir": "dist/types",
+    "outDir": "dist/lib",
+    "downlevelIteration": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "files": [
+    "app/popup/index.tsx"
+  ],
+  "includes": [
+    "./app/**/*.ts"
+  ],
+  "include": [
+    "app"
+  ],
+  "exclude": [
+    "bin",
+    "build",
+    "node_modules"
+  ],
+  "compileOnSave": true
+}

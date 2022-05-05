@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+}
+
+#root {
+  width: 375px;
+  height: 600px;
+  /* overflow-y: auto; */
+  display: flex;
+  flex-direction: column;
+  background-color: black;
+  flex: 1;
+}

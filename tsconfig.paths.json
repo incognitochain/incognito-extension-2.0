@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["app/*"],
+      "@background/*": ["app/background/*"],
+      "@core/*": ["app/core/*"],
+      "@content/*": ["app/content/*"],
+      "@inpage/*": ["app/inpage/*"],
+      "@popup/*": ["app/popup/*"],
+      "@model/*": ["app/model/*"],
+      "@services/*": ["app/services/*"],
+      "@module/*": ["app/popup/module/*"],
+      "@theme/*": ["app/popup/theme/*"],
+      "@components/*": ["app/popup/components/*"]
+    }
+  }
+}
