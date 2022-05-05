@@ -14,10 +14,7 @@ const MainRoute = () => {
     React.useEffect(() => {
         handleGetRoutes();
     }, []);
-
-
-    console.log('routes:::: ', routes)
-
+    
     return (
         <Switch>
             <Suspense fallback="loading">
