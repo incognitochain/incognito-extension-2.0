@@ -1,17 +1,19 @@
 import { withBlankLayout } from "@/popup/components/layout/blank-layout";
 import NavigationBar from "@/popup/components/layout/navigation-bar";
-import { Typography } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import { makeStyles } from "@material-ui/core/styles";
+import { Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import { makeStyles } from "@mui/styles";
 import { Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 import { shuffle } from "lodash";
 import React, { useMemo, useState } from "react";
 import { MainLayout } from "../../components/layout/main-layout";
 import { PhraseItem } from "../../components/pharse-item";
-const useStyles = makeStyles((theme) => ({
+import { Theme } from "@mui/material";
+
+const useStyles = makeStyles((theme: Theme) => ({
   box: {
     flex: 1,
     display: "flex",

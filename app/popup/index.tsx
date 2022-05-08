@@ -3,10 +3,11 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "@popup/app";
 import { unregisterServiceWorker } from "./core/service-worker";
+import { App as AppTest } from "@popup/pages/app";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AppTest />
   </React.StrictMode>,
   document.getElementById("root"),
 );

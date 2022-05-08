@@ -1,5 +1,5 @@
-// import { unstable_createMuiStrictModeTheme } from "@material-ui/core";
-// import { Palette, PaletteOptions } from "@material-ui/core/styles/createPalette";
+// import { unstable_createMuiStrictModeTheme } from "@mui/material";
+// import { Palette, PaletteOptions } from "@mui/material/styles/createPalette";
 
 import {
   createTheme,
@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { TypographyOptions } from "@mui/material/styles/createTypography";
 
-// import { TypographyOptions } from "@material-ui/core/styles/createTypography";
+// import { TypographyOptions } from "@mui/material/styles/createTypography";
 const paletteBuilder = (prefersDarkMode: boolean): PaletteOptions | undefined => {
   console.log(prefersDarkMode);
   return (

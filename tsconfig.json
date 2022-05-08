@@ -25,6 +25,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "noImplicitAny": true,
+    "noImplicitThis": false,
     "strictNullChecks": true,
     "jsx": "react",
     "sourceMap": true,
@@ -32,7 +33,11 @@
     "declarationDir": "dist/types",
     "outDir": "dist/lib",
     "downlevelIteration": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "global.d.ts"
+    ]
   },
   "files": [
     "app/popup/index.tsx"
@@ -41,7 +46,8 @@
     "./app/**/*.ts"
   ],
   "include": [
-    "app"
+    "app",
+    "global.d.ts"
   ],
   "exclude": [
     "bin",

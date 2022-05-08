@@ -1,6 +1,5 @@
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+import CssBaseline from "@mui/material/CssBaseline";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { SnackbarProvider } from "notistack";
 import React, { Suspense, useEffect, useMemo } from "react";
 import { BrowserRouter, Router } from "react-router-dom";
@@ -11,6 +10,8 @@ import { ConnectionProvider } from "../context/connection";
 import { ProgramPluginsManagerProvider } from "../context/plugins";
 import { themeHelper } from "../helper/index";
 import { history } from "../utils/history";
+import { makeStyles } from "@mui/styles";
+import { ThemeProvider } from "@mui/system";
 
 const useStyles = makeStyles({
   success: { backgroundColor: "#25c2a0" },
@@ -29,7 +30,7 @@ export const App: React.FC = () => {
     console.log("theme thay doi");
     return themeHelper(prefersDarkMode);
   }, []);
-  const classes = useStyles();
+  const classes: any = useStyles();
 
   useEffect(() => {
     console.log(" App Render Done");

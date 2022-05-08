@@ -1,48 +1,48 @@
-import React, { useState } from "react"
-import { useHistory } from "react-router-dom"
-import { mnemonicToSeed } from "../utils/wallet-seed"
-import Container from "@material-ui/core/Container"
-import Card from "@material-ui/core/Card"
-import CardContent from "@material-ui/core/CardContent"
-import { Typography } from "@material-ui/core"
-import TextField from "@material-ui/core/TextField"
-import CardActions from "@material-ui/core/CardActions"
-import Button from "@material-ui/core/Button"
-import { useCallAsync } from "../utils/notifications"
-import { useBackground } from "../context/background"
-import { withLayout } from "../components/layout"
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { mnemonicToSeed } from "../utils/wallet-seed";
+import Container from "@mui/material/Container";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import { Typography } from "@mui/material";
+import TextField from "@mui/material/TextField";
+import CardActions from "@mui/material/CardActions";
+import Button from "@mui/material/Button";
+import { useCallAsync } from "../utils/notifications";
+import { useBackground } from "../context/background";
+import { withLayout } from "../components/layout";
 
 const RestoreWalletPageBase: React.FC = () => {
-  const history = useHistory()
+  const history = useHistory();
 
   const handBackButton = () => {
-    history.goBack()
-  }
+    history.goBack();
+  };
   return (
     <Container maxWidth="sm">
       <RestoreWalletForm goBack={handBackButton} />
     </Container>
-  )
-}
+  );
+};
 
 interface RestoreWalletFormProps {
-  goBack: () => void
+  goBack: () => void;
 }
 
 const RestoreWalletForm: React.FC<RestoreWalletFormProps> = ({ goBack }) => {
-  const { request } = useBackground()
-  const [mnemonic, setMnemonic] = useState("")
-  const [password, setPassword] = useState("")
-  const [passwordConfirm, setPasswordConfirm] = useState("")
-  const callAsync = useCallAsync()
+  const { request } = useBackground();
+  const [mnemonic, setMnemonic] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const callAsync = useCallAsync();
 
   function submit() {
     callAsync(
       mnemonicToSeed(mnemonic).then((seed) => {
-        return request("popup_createWallet", { mnemonic, seed, password })
+        return request("popup_createWallet", { mnemonic, seed, password });
       }),
-      {}
-    )
+      {},
+    );
   }
 
   return (
@@ -93,7 +93,7 @@ const RestoreWalletForm: React.FC<RestoreWalletFormProps> = ({ goBack }) => {
         </Button>
       </CardActions>
     </Card>
-  )
-}
+  );
+};
 
-export const RestoreWalletPage = withLayout(RestoreWalletPageBase)
+export const RestoreWalletPage = withLayout(RestoreWalletPageBase);

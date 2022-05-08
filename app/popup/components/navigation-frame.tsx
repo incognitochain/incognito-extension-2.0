@@ -1,17 +1,17 @@
-import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
-import Hidden from "@material-ui/core/Hidden";
-import IconButton from "@material-ui/core/IconButton";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import { makeStyles } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
+import AppBar from "@mui/material/AppBar";
+import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
+import Hidden from "@mui/material/Hidden";
+import IconButton from "@mui/material/IconButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import AccountIcon from "@material-ui/icons/AccountCircle";
 import AddIcon from "@material-ui/icons/Add";
+
 import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
 import CheckIcon from "@material-ui/icons/Check";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -22,8 +22,10 @@ import { useBackground } from "../context/background";
 import { useCallAsync } from "../utils/notifications";
 import { Links, PathsKey } from "./routes/paths";
 import { SolanaIcon } from "./solana-icon";
+import { Theme } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   content: {
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
@@ -46,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const NavigationFrame: React.FC = () => {
-  const classes = useStyles();
+  const classes: any = useStyles();
   const history = useHistory();
   const callAsync = useCallAsync();
   const { request, popupState, changeNetwork, changeAccount, isNotification } = useBackground();
@@ -135,7 +137,6 @@ const MenuSelector: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
           vertical: "bottom",
           horizontal: "right",
         }}
-        getContentAnchorEl={null}
       >
         {menuItems.map((item, idx) => {
           return (
@@ -164,7 +165,7 @@ const NetworkSelector: React.FC<NetworkSelectorProps> = ({
   changeNetwork,
 }) => {
   const [anchorEl, setAnchorEl] = useState<any>();
-  const classes = useStyles();
+  const classes: any = useStyles();
   return (
     <>
       <Hidden xsDown>
@@ -187,7 +188,6 @@ const NetworkSelector: React.FC<NetworkSelectorProps> = ({
           vertical: "bottom",
           horizontal: "right",
         }}
-        getContentAnchorEl={null}
       >
         {availableNetworks.map((network) => (
           <MenuItem
@@ -225,7 +225,7 @@ const WalletSelector: React.FC<WalletSelectorProps> = ({
   selectAccount,
 }) => {
   const [anchorEl, setAnchorEl] = useState<any>();
-  const classes = useStyles();
+  const classes: any = useStyles();
 
   if (accounts.length === 0) {
     return null;
@@ -253,7 +253,6 @@ const WalletSelector: React.FC<WalletSelectorProps> = ({
           vertical: "bottom",
           horizontal: "right",
         }}
-        getContentAnchorEl={null}
       >
         {accounts.map((account) => (
           <MenuItem

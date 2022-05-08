@@ -1,16 +1,17 @@
 import { withBlankLayout } from "@/popup/components/layout/blank-layout";
 import NavigationBar from "@/popup/components/layout/navigation-bar";
-import { Typography } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import CardContent from "@material-ui/core/CardContent";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { makeStyles } from "@material-ui/core/styles";
+import { Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import CardContent from "@mui/material/CardContent";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import { makeStyles } from "@mui/styles";
 import TextField from "@mui/material/TextField";
 import React, { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { MainLayout } from "../../components/layout/main-layout";
+import { Theme } from "@mui/material";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   textInputStyle: {
     color: "#ffffff",
     backgroundColor: "#404040",

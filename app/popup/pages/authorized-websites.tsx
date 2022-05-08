@@ -1,33 +1,33 @@
-import React from "react"
-import { withLayout } from "../components/layout"
-import { useBackground } from "../context/background"
-import { LoadingIndicator } from "../components/loading-indicator"
-import DeleteIcon from "@material-ui/icons/Delete"
-import IconButton from "@material-ui/core/IconButton"
-import List from "@material-ui/core/List"
-import ListItem from "@material-ui/core/ListItem"
-import ListItemText from "@material-ui/core/ListItemText"
-import Paper from "@material-ui/core/Paper"
-import { Typography } from "@material-ui/core"
-import AppBar from "@material-ui/core/AppBar"
-import Toolbar from "@material-ui/core/Toolbar"
-import Container from "@material-ui/core/Container"
-import Grid from "@material-ui/core/Grid"
-import { useCallAsync } from "../utils/notifications"
-import { Empty } from "../components/empty"
+import React from "react";
+import { withLayout } from "../components/layout";
+import { useBackground } from "../context/background";
+import { LoadingIndicator } from "../components/loading-indicator";
+import DeleteIcon from "@material-ui/icons/Delete";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Paper from "@mui/material/Paper";
+import { Typography } from "@mui/material";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import { useCallAsync } from "../utils/notifications";
+import { Empty } from "../components/empty";
 
 const AuthorizedWebsitesPageBase: React.FC = () => {
-  const { popupState, request } = useBackground()
-  const callAsync = useCallAsync()
+  const { popupState, request } = useBackground();
+  const callAsync = useCallAsync();
 
   if (!popupState) {
-    return <LoadingIndicator />
+    return <LoadingIndicator />;
   }
 
-  const origins = popupState.authorizedOrigins
+  const origins = popupState.authorizedOrigins;
 
   const deleteWebsite = (origin: string) => {
-    console.log("delete item:", origin)
+    console.log("delete item:", origin);
     callAsync(
       request("popup_deleteAuthorizedWebsite", {
         origin: origin,
@@ -35,9 +35,9 @@ const AuthorizedWebsitesPageBase: React.FC = () => {
       {
         progress: { message: "Deleting website..." },
         success: { message: "Success!" },
-      }
-    )
-  }
+      },
+    );
+  };
 
   return (
     <>
@@ -74,7 +74,7 @@ const AuthorizedWebsitesPageBase: React.FC = () => {
         </Grid>
       </Container>
     </>
-  )
-}
+  );
+};
 
-export const AuthorizedWebsitesPage = withLayout(AuthorizedWebsitesPageBase)
+export const AuthorizedWebsitesPage = withLayout(AuthorizedWebsitesPageBase);

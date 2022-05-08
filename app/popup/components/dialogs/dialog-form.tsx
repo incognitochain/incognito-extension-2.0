@@ -1,5 +1,5 @@
-import React from "react"
-import Dialog, { DialogProps } from "@material-ui/core/Dialog"
+import React from "react";
+import Dialog, { DialogProps } from "@mui/material/Dialog";
 
 export const DialogForm: React.FC<DialogProps> = ({
   open,
@@ -11,17 +11,15 @@ export const DialogForm: React.FC<DialogProps> = ({
   <Dialog
     open={open}
     PaperProps={{
-      component: "form",
       onSubmit: (e) => {
-        e.preventDefault()
+        e.preventDefault();
         if (onSubmit) {
-          onSubmit(e)
+          onSubmit(e);
         }
       },
     }}
     onClose={onClose}
-    {...rest}
   >
     {children}
   </Dialog>
-)
+);

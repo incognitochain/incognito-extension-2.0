@@ -1,10 +1,12 @@
 import React from "react";
 import { NavigationFrame } from "../navigation-frame";
-import { makeStyles } from "@material-ui/core/styles";
 import { useBackground } from "../../context/background";
 import { Helmet } from "react-helmet";
+import BaseComponent from "@components/BaseComponent/BaseComponent";
+import { Theme } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   content: {
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
@@ -17,9 +19,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const Layout: React.FC = ({ children }) => {
+export const Layout: BaseComponent = ({ children }) => {
   const { isNotification } = useBackground();
-  const classes = useStyles();
+  const classes: any = useStyles();
   return (
     <>
       {/* <Helmet>

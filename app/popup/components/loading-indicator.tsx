@@ -1,9 +1,10 @@
-import React, { useState } from "react"
-import CircularProgress from "@material-ui/core/CircularProgress"
-import { useEffectAfterTimeout } from "../utils/utils"
-import { makeStyles } from "@material-ui/core/styles"
+import React, { useState } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useEffectAfterTimeout } from "../utils/utils";
+import { makeStyles } from "@mui/styles";
+import { Theme } from "@mui/material";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     display: "flex",
     alignItems: "center",
@@ -12,11 +13,11 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
     padding: theme.spacing(2),
   },
-}))
+}));
 
 export interface Props {
-  height?: number
-  delay?: number
+  height?: number;
+  delay?: number;
 }
 
 export const LoadingIndicator: React.FC<Props & React.ComponentProps<"div">> = ({
@@ -24,23 +25,23 @@ export const LoadingIndicator: React.FC<Props & React.ComponentProps<"div">> = (
   delay = 500,
   ...rest
 }) => {
-  const classes = useStyles()
-  const [visible, setVisible] = useState(false)
+  const classes: any = useStyles();
+  const [visible, setVisible] = useState(false);
 
-  useEffectAfterTimeout(() => setVisible(true), delay)
+  useEffectAfterTimeout(() => setVisible(true), delay);
 
-  let style: React.CSSProperties = {}
+  let style: React.CSSProperties = {};
   if (height) {
-    style.height = height
+    style.height = height;
   }
 
   if (!visible) {
-    return height ? <div style={style} /> : null
+    return height ? <div style={style} /> : null;
   }
 
   return (
     <div className={classes.root} style={style} {...rest}>
       <CircularProgress />
     </div>
-  )
-}
+  );
+};

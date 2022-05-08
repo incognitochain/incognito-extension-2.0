@@ -1,24 +1,24 @@
-import React, { useState } from "react"
-import DialogActions from "@material-ui/core/DialogActions"
-import Button from "@material-ui/core/Button"
-import DialogTitle from "@material-ui/core/DialogTitle"
-import DialogContent from "@material-ui/core/DialogContent"
-import TextField from "@material-ui/core/TextField"
-import { DialogForm } from "./dialog-form"
-import InputAdornment from "@material-ui/core/InputAdornment"
-import { useCallAsync, useSendTransaction } from "../../utils/notifications"
-import { DialogProps } from "@material-ui/core"
-import { BalanceInfo } from "../../types"
-import { useBackground } from "../../context/background"
-import { PublicKey } from "@solana/web3.js"
-import { formatAddress } from "../../utils/format"
+import React, { useState } from "react";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import TextField from "@mui/material/TextField";
+import { DialogForm } from "./dialog-form";
+import InputAdornment from "@mui/material/InputAdornment";
+import { useCallAsync, useSendTransaction } from "../../utils/notifications";
+import { DialogProps } from "@mui/material";
+import { BalanceInfo } from "../../types";
+import { useBackground } from "../../context/background";
+import { PublicKey } from "@solana/web3.js";
+import { formatAddress } from "../../utils/format";
 
 export type Props = Omit<DialogProps, "onClose"> & {
-  onClose: () => void
-  signer: PublicKey
-  fromPublicKey: PublicKey
-  balanceInfo: BalanceInfo
-}
+  onClose: () => void;
+  signer: PublicKey;
+  fromPublicKey: PublicKey;
+  balanceInfo: BalanceInfo;
+};
 
 export const SendSplDialog: React.FC<Props> = ({
   open,
@@ -27,19 +27,19 @@ export const SendSplDialog: React.FC<Props> = ({
   fromPublicKey,
   balanceInfo,
 }) => {
-  const { request } = useBackground()
-  const callAsync = useCallAsync()
-  const [destinationAddress, setDestinationAddress] = useState("")
-  const [transferAmountString, setTransferAmountString] = useState("")
-  const [, sending] = useSendTransaction()
+  const { request } = useBackground();
+  const callAsync = useCallAsync();
+  const [destinationAddress, setDestinationAddress] = useState("");
+  const [transferAmountString, setTransferAmountString] = useState("");
+  const [, sending] = useSendTransaction();
 
-  let { amount, token } = balanceInfo
+  let { amount, token } = balanceInfo;
 
   function onSubmit() {
     // let amount = Math.round(parseFloat(transferAmountString) * Math.pow(10, decimals))
-    let amount = parseFloat(transferAmountString) * Math.pow(10, 9) //todo: need to get decimal from mint ...
+    let amount = parseFloat(transferAmountString) * Math.pow(10, 9); //todo: need to get decimal from mint ...
     if (!amount || amount <= 0) {
-      throw new Error("Invalid amount")
+      throw new Error("Invalid amount");
     }
     callAsync(
       request("popup_sendSplToken", {
@@ -54,18 +54,18 @@ export const SendSplDialog: React.FC<Props> = ({
         progress: { message: "Transferring..." },
         success: { message: "Success!" },
         onFinish: () => {
-          onClose()
+          onClose();
         },
-      }
-    )
+      },
+    );
   }
 
   // FIXME: Was using `balanceFormat` before, need to convert it so its support BigInt!
-  let formattedTokenName = "Unkown"
+  let formattedTokenName = "Unkown";
   if (token.name) {
-    formattedTokenName = token.name
+    formattedTokenName = token.name;
   } else if (token.mintAddress !== "") {
-    formattedTokenName = formatAddress(token.mintAddress)
+    formattedTokenName = formatAddress(token.mintAddress);
   }
 
   return (
@@ -109,5 +109,5 @@ export const SendSplDialog: React.FC<Props> = ({
         </Button>
       </DialogActions>
     </DialogForm>
-  )
-}
+  );
+};

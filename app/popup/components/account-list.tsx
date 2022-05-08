@@ -1,29 +1,30 @@
-import React, { useEffect, useState } from "react"
-import List from "@material-ui/core/List"
-import ListItem from "@material-ui/core/ListItem"
-import ListItemText from "@material-ui/core/ListItemText"
-import Paper from "@material-ui/core/Paper"
-import { useAllAccountsForPublicKey, useTokenAccountsByOwner } from "../hooks"
-import { Button, Chip, Typography } from "@material-ui/core"
-import { makeStyles } from "@material-ui/core/styles"
-import AppBar from "@material-ui/core/AppBar"
-import Toolbar from "@material-ui/core/Toolbar"
-import RefreshIcon from "@material-ui/icons/Refresh"
-import IconButton from "@material-ui/core/IconButton"
-import Tooltip from "@material-ui/core/Tooltip"
-import { AccountInfo, PublicKey } from "@solana/web3.js"
-import { useBackground } from "../context/background"
-import { Attachment, MoreVert } from "@material-ui/icons"
-import { Links } from "./routes/paths"
-import { useHistory } from "react-router-dom"
-import { TokenBalance } from "./token-balance"
-import { LoadingIndicator } from "./loading-indicator"
-import { BalanceInfo, OwnedAccount } from "../types"
-import { getBalanceInfo } from "../utils/account-data"
-import { useConnection } from "../context/connection"
-import CopyToClipboard from "react-copy-to-clipboard"
+import React, { useEffect, useState } from "react";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Paper from "@mui/material/Paper";
+import { useAllAccountsForPublicKey, useTokenAccountsByOwner } from "../hooks";
+import { Button, Chip, Theme, Typography, styled } from "@mui/material";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import RefreshIcon from "@material-ui/icons/Refresh";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import { AccountInfo, PublicKey } from "@solana/web3.js";
+import { useBackground } from "../context/background";
+import { Attachment, MoreVert } from "@material-ui/icons";
+import { Links } from "./routes/paths";
+import { useHistory } from "react-router-dom";
+import { TokenBalance } from "./token-balance";
+import { LoadingIndicator } from "./loading-indicator";
+import { BalanceInfo, OwnedAccount } from "../types";
+import { getBalanceInfo } from "../utils/account-data";
+import { useConnection } from "../context/connection";
+import CopyToClipboard from "react-copy-to-clipboard";
+import { createStyles } from "@mui/styles";
+import { makeStyles } from "@mui/styles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   address: {
     textOverflow: "ellipsis",
     overflowX: "hidden",
@@ -43,22 +44,22 @@ const useStyles = makeStyles((theme) => ({
   detailButton: {
     margin: theme.spacing(1),
   },
-}))
+}));
 
 interface AccountListProp {
-  account: string
+  account: string;
 }
 
 export const AccountList: React.FC<AccountListProp> = ({ account }) => {
-  const classes = useStyles()
-  const { popupState } = useBackground()
-  const [, updateState] = React.useState()
-  const forceUpdate = React.useCallback(() => updateState({}), [])
+  const classes: any = useStyles();
+  const { popupState } = useBackground();
+  const [, updateState] = React.useState<object>();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
 
-  const publicKey = new PublicKey(account)
+  const publicKey = new PublicKey(account);
 
-  const [externallyOwnedAccount, initialized] = useAllAccountsForPublicKey(publicKey)
-  const [otherAccounts, otherAccountLoaded] = useTokenAccountsByOwner(publicKey)
+  const [externallyOwnedAccount, initialized] = useAllAccountsForPublicKey(publicKey);
+  const [otherAccounts, otherAccountLoaded] = useTokenAccountsByOwner(publicKey);
 
   const renderExternOwnedAccount = (eoa: OwnedAccount<Buffer>, initialized: boolean) => {
     return (
@@ -72,8 +73,8 @@ export const AccountList: React.FC<AccountListProp> = ({ account }) => {
           />
         }
       </List>
-    )
-  }
+    );
+  };
 
   const renderSPLAccounts = (eoa: OwnedAccount<Buffer>, otherAccounts: OwnedAccount<Buffer>[]) => {
     return otherAccounts.map((account) => (
@@ -83,8 +84,8 @@ export const AccountList: React.FC<AccountListProp> = ({ account }) => {
         ownedAccount={account}
         signer={eoa.publicKey}
       />
-    ))
-  }
+    ));
+  };
   return (
     <Paper>
       <AppBar position="static" color="default" elevation={1}>
@@ -98,7 +99,7 @@ export const AccountList: React.FC<AccountListProp> = ({ account }) => {
           <Tooltip title="Refresh" arrow>
             <IconButton
               onClick={() => {
-                forceUpdate()
+                forceUpdate();
               }}
               style={{ marginRight: -12 }}
             >
@@ -114,13 +115,13 @@ export const AccountList: React.FC<AccountListProp> = ({ account }) => {
         <List disablePadding>{renderSPLAccounts(externallyOwnedAccount, otherAccounts)}</List>
       )}
     </Paper>
-  )
-}
+  );
+};
 
 interface AccountListItemProps {
-  initializeAccount: boolean
-  signer: PublicKey // this should be the external owned account for SPL accounts
-  ownedAccount: OwnedAccount<Buffer>
+  initializeAccount: boolean;
+  signer: PublicKey; // this should be the external owned account for SPL accounts
+  ownedAccount: OwnedAccount<Buffer>;
 }
 
 const AccountListItem: React.FC<AccountListItemProps> = ({
@@ -128,30 +129,30 @@ const AccountListItem: React.FC<AccountListItemProps> = ({
   signer,
   ownedAccount,
 }) => {
-  const history = useHistory()
-  const classes = useStyles()
-  const { connection } = useConnection()
-  const { getToken } = useBackground()
-  const [balanceInfo, setBalanceInfo] = useState<BalanceInfo>()
+  const history = useHistory();
+  const classes: any = useStyles();
+  const { connection } = useConnection();
+  const { getToken } = useBackground();
+  const [balanceInfo, setBalanceInfo] = useState<BalanceInfo>();
 
   useEffect(() => {
     getBalanceInfo(connection, getToken, ownedAccount)
       .then((balanceInfo) => {
-        setBalanceInfo(balanceInfo)
+        setBalanceInfo(balanceInfo);
       })
       .catch((e) => {
-        console.log("Error getting balance information: ", e)
-      })
-  }, [ownedAccount])
+        console.log("Error getting balance information: ", e);
+      });
+  }, [ownedAccount]);
 
   const accountDetail = (account: PublicKey, signer: PublicKey) => {
     history.push(
-      Links.accountDetail({ accountAddress: account.toBase58(), signerAddress: signer.toBase58() })
-    )
-  }
+      Links.accountDetail({ accountAddress: account.toBase58(), signerAddress: signer.toBase58() }),
+    );
+  };
 
   if (!balanceInfo) {
-    return <LoadingIndicator />
+    return <LoadingIndicator />;
   }
 
   return (
@@ -193,5 +194,5 @@ const AccountListItem: React.FC<AccountListItemProps> = ({
         )}
       </ListItem>
     </>
-  )
-}
+  );
+};

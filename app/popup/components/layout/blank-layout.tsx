@@ -1,7 +1,9 @@
-import { makeStyles } from "@material-ui/core";
 import React from "react";
+import BaseComponent from "@components/BaseComponent/BaseComponent";
+import { Theme } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   container: {
     flex: 1,
     display: "flex",
@@ -10,8 +12,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const BlankLayout: React.FC = ({ children }) => {
-  const classes = useStyles();
+export const BlankLayout: BaseComponent = ({ children }) => {
+  const classes: any = useStyles();
   return <div className={classes.container}>{children}</div>;
 };
 

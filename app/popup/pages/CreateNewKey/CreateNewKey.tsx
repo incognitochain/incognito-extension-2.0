@@ -1,13 +1,14 @@
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 // import { makeStyles } from "@mui/material";
-// import { makeStyles } from "@material-ui/core/styles";
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@mui/styles";
+import { makeStyles } from "@mui/styles";
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { withBlankLayout } from "../../components/layout/blank-layout";
 import { Links } from "../../components/routes/paths";
+import { Theme } from "@mui/material";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   logoContainer: {
     flex: 3,
     display: "flex",

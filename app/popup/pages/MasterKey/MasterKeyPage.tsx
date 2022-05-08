@@ -1,9 +1,9 @@
-import { IconButton, Typography } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { makeStyles } from "@material-ui/core/styles";
+import { IconButton, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import { makeStyles } from "@mui/styles";
 import { Bookmark } from "@material-ui/icons";
 import { Grid } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -12,10 +12,11 @@ import { MainLayout } from "@popup/components/layout/main-layout";
 import { PhraseItem } from "@popup/components/pharse-item";
 import { withBlankLayout } from "@/popup/components/layout/blank-layout";
 import NavigationBar from "@/popup/components/layout/navigation-bar";
+import { Theme } from "@mui/material";
 
 const { newMnemonic } = require("incognito-chain-web-js/build/wallet");
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   box: {
     flex: 1,
     display: "flex",

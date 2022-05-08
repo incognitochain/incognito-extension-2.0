@@ -1,37 +1,37 @@
-import React, { useState } from "react"
-import DialogActions from "@material-ui/core/DialogActions"
-import Button from "@material-ui/core/Button"
-import DialogTitle from "@material-ui/core/DialogTitle"
-import DialogContent from "@material-ui/core/DialogContent"
-import TextField from "@material-ui/core/TextField"
-import { DialogForm } from "./dialog-form"
-import InputAdornment from "@material-ui/core/InputAdornment"
-import { useCallAsync, useSendTransaction } from "../../utils/notifications"
-import { DialogProps } from "@material-ui/core"
-import { BalanceInfo } from "../../types"
-import { useBackground } from "../../context/background"
-import { PublicKey } from "@solana/web3.js"
-import { formatAddress } from "../../utils/format"
+import React, { useState } from "react";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import TextField from "@mui/material/TextField";
+import { DialogForm } from "./dialog-form";
+import InputAdornment from "@mui/material/InputAdornment";
+import { useCallAsync, useSendTransaction } from "../../utils/notifications";
+import { DialogProps } from "@mui/material";
+import { BalanceInfo } from "../../types";
+import { useBackground } from "../../context/background";
+import { PublicKey } from "@solana/web3.js";
+import { formatAddress } from "../../utils/format";
 
 export type Props = Omit<DialogProps, "onClose"> & {
-  onClose: () => void
-  fromPublicKey: PublicKey
-  balanceInfo: BalanceInfo
-}
+  onClose: () => void;
+  fromPublicKey: PublicKey;
+  balanceInfo: BalanceInfo;
+};
 
 export const SendSolDialog: React.FC<Props> = ({ open, onClose, fromPublicKey, balanceInfo }) => {
-  const { request } = useBackground()
-  const callAsync = useCallAsync()
-  const [destinationAddress, setDestinationAddress] = useState("")
-  const [transferAmountString, setTransferAmountString] = useState("")
-  const [, sending] = useSendTransaction()
+  const { request } = useBackground();
+  const callAsync = useCallAsync();
+  const [destinationAddress, setDestinationAddress] = useState("");
+  const [transferAmountString, setTransferAmountString] = useState("");
+  const [, sending] = useSendTransaction();
 
-  let { amount, token } = balanceInfo
+  let { amount, token } = balanceInfo;
 
   function onSubmit() {
-    let lamports = Math.round(parseFloat(transferAmountString) * Math.pow(10, token.decimals))
+    let lamports = Math.round(parseFloat(transferAmountString) * Math.pow(10, token.decimals));
     if (!lamports || lamports <= 0) {
-      throw new Error("Invalid amount")
+      throw new Error("Invalid amount");
     }
 
     callAsync(
@@ -46,10 +46,10 @@ export const SendSolDialog: React.FC<Props> = ({ open, onClose, fromPublicKey, b
         progress: { message: "Transferring..." },
         success: { message: "Success!" },
         onFinish: () => {
-          onClose()
+          onClose();
         },
-      }
-    )
+      },
+    );
   }
 
   return (
@@ -90,5 +90,5 @@ export const SendSolDialog: React.FC<Props> = ({ open, onClose, fromPublicKey, b
         </Button>
       </DialogActions>
     </DialogForm>
-  )
-}
+  );
+};

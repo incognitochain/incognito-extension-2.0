@@ -13,6 +13,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: "module",
     project: ["tsconfig.json"],
+    createDefaultProgram: true,
   },
   extends: "eslint:recommended",
   parser: "@typescript-eslint/parser",

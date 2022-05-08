@@ -1,35 +1,35 @@
-import React, { useState } from "react"
-import DialogActions from "@material-ui/core/DialogActions"
-import Button from "@material-ui/core/Button"
-import DialogTitle from "@material-ui/core/DialogTitle"
-import DialogContent from "@material-ui/core/DialogContent"
-import TextField from "@material-ui/core/TextField"
-import { DialogForm } from "./dialog-form"
-import { useCallAsync } from "../../utils/notifications"
-import { DialogProps } from "@material-ui/core"
-import { useBackground } from "../../context/background"
-import { Token } from "../../../core/types"
+import React, { useState } from "react";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import TextField from "@mui/material/TextField";
+import { DialogForm } from "./dialog-form";
+import { useCallAsync } from "../../utils/notifications";
+import { DialogProps } from "@mui/material";
+import { useBackground } from "../../context/background";
+import { Token } from "../../../core/types";
 
 export type Props = Omit<DialogProps, "onClose"> & {
-  token: Token
-  onClose: () => void
-}
+  token: Token;
+  onClose: () => void;
+};
 
 export const UpdateTokenDialog: React.FC<Props> = ({ token, open, onClose, children, ...rest }) => {
-  const callAsync = useCallAsync()
-  const { request } = useBackground()
-  const oldMint = token.mintAddress
-  let [mintAddress, setMintAddress] = useState(oldMint)
-  let [tokenName, setTokenName] = useState(token.name)
-  let [tokenSymbol, setTokenSymbol] = useState(token.symbol)
-  let [sending, setSending] = useState(false)
+  const callAsync = useCallAsync();
+  const { request } = useBackground();
+  const oldMint = token.mintAddress;
+  let [mintAddress, setMintAddress] = useState(oldMint);
+  let [tokenName, setTokenName] = useState(token.name);
+  let [tokenSymbol, setTokenSymbol] = useState(token.symbol);
+  let [sending, setSending] = useState(false);
 
   const canSend = (): boolean => {
-    return mintAddress !== "" && tokenName !== "" && tokenSymbol !== ""
-  }
+    return mintAddress !== "" && tokenName !== "" && tokenSymbol !== "";
+  };
 
   const onSubmit = () => {
-    setSending(true)
+    setSending(true);
     callAsync(
       request("popup_updateToken", {
         mintAddress: oldMint,
@@ -43,15 +43,15 @@ export const UpdateTokenDialog: React.FC<Props> = ({ token, open, onClose, child
         progress: { message: "Updating token..." },
         success: { message: "Success!" },
         onFinish: () => {
-          setSending(false)
-          onClose()
+          setSending(false);
+          onClose();
         },
-      }
-    )
-  }
+      },
+    );
+  };
 
   return (
-    <DialogForm open={open} onClose={onClose} onSubmit={onSubmit} {...rest}>
+    <DialogForm open={open} onClose={onClose} onSubmit={onSubmit}>
       <DialogTitle>Add Token</DialogTitle>
       <DialogContent>
         <TextField
@@ -86,5 +86,5 @@ export const UpdateTokenDialog: React.FC<Props> = ({ token, open, onClose, child
         </Button>
       </DialogActions>
     </DialogForm>
-  )
-}
+  );
+};

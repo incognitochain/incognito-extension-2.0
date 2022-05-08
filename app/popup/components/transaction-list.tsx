@@ -1,45 +1,46 @@
-import { createLogger } from "../../core/utils"
-import { ConfirmedSignatureInfo, PublicKey } from "@solana/web3.js"
-import { useConnection } from "../context/connection"
-import React, { useEffect, useState } from "react"
-import ListItem from "@material-ui/core/ListItem"
-import ListItemText from "@material-ui/core/ListItemText"
-import List from "@material-ui/core/List"
-import { Paper, Typography } from "@material-ui/core"
-import IconButton from "@material-ui/core/IconButton"
-import { MoreVert } from "@material-ui/icons"
-import { makeStyles } from "@material-ui/core/styles"
-import { Links } from "./routes/paths"
-import { useHistory } from "react-router-dom"
+import { createLogger } from "../../core/utils";
+import { ConfirmedSignatureInfo, PublicKey } from "@solana/web3.js";
+import { useConnection } from "../context/connection";
+import React, { useEffect, useState } from "react";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import List from "@mui/material/List";
+import { Paper, Typography } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import { MoreVert } from "@material-ui/icons";
+import { makeStyles } from "@mui/styles";
+import { Links } from "./routes/paths";
+import { useHistory } from "react-router-dom";
+import { Theme } from "@mui/material";
 
-const log = createLogger("sol:trxlist")
+const log = createLogger("sol:trxlist");
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   detailButton: {
     margin: theme.spacing(1),
   },
-}))
+}));
 
 interface TransactionListProp {
-  accountKey: PublicKey
-  signerKey: PublicKey
+  accountKey: PublicKey;
+  signerKey: PublicKey;
 }
 
 export const TransactionList: React.FC<TransactionListProp> = ({ accountKey, signerKey }) => {
-  const { connection } = useConnection()
+  const { connection } = useConnection();
   const [confirmedSignatureInfos, setConfirmedSignatureInfos] = useState<ConfirmedSignatureInfo[]>(
-    []
-  )
+    [],
+  );
 
   useEffect(() => {
-    log("fetching transaction for account: ", accountKey.toBase58())
+    log("fetching transaction for account: ", accountKey.toBase58());
     connection
       .getConfirmedSignaturesForAddress2(accountKey, { limit: 10 })
       .then((confirmedSignatureInfos) => {
-        log("got transaction: ", confirmedSignatureInfos)
-        setConfirmedSignatureInfos(confirmedSignatureInfos)
-      })
-  }, [accountKey, connection])
+        log("got transaction: ", confirmedSignatureInfos);
+        setConfirmedSignatureInfos(confirmedSignatureInfos);
+      });
+  }, [accountKey, connection]);
 
   return (
     <Paper>
@@ -70,13 +71,13 @@ export const TransactionList: React.FC<TransactionListProp> = ({ accountKey, sig
         ))}
       </List>
     </Paper>
-  )
-}
+  );
+};
 
 interface TransactionListItemProps {
-  confirmedSignatureInfo: ConfirmedSignatureInfo
-  accountKey: PublicKey
-  signerKey: PublicKey
+  confirmedSignatureInfo: ConfirmedSignatureInfo;
+  accountKey: PublicKey;
+  signerKey: PublicKey;
 }
 
 const TransactionListItem: React.FC<TransactionListItemProps> = ({
@@ -84,22 +85,22 @@ const TransactionListItem: React.FC<TransactionListItemProps> = ({
   accountKey,
   signerKey,
 }) => {
-  const classes = useStyles()
-  const history = useHistory()
+  const classes: any = useStyles();
+  const history = useHistory();
 
   const transactionDetail = (
     transactionID: string,
     accountKey: PublicKey,
-    signerKey: PublicKey
+    signerKey: PublicKey,
   ) => {
     history.push(
       Links.transactionDetail({
         transactionID,
         accountAddress: accountKey.toBase58(),
         signerAddress: signerKey.toBase58(),
-      })
-    )
-  }
+      }),
+    );
+  };
 
   return (
     <>
@@ -122,5 +123,5 @@ const TransactionListItem: React.FC<TransactionListItemProps> = ({
         </IconButton>
       </ListItem>
     </>
-  )
-}
+  );
+};

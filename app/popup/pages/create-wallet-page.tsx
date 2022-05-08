@@ -1,10 +1,10 @@
-import { Checkbox, FormControlLabel, Link, makeStyles, Typography } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Container from "@material-ui/core/Container";
-import TextField from "@material-ui/core/TextField";
+import { Checkbox, FormControlLabel, Link, makeStyles, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Container from "@mui/material/Container";
+import TextField from "@mui/material/TextField";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { withLayout } from "../components/layout";
@@ -17,7 +17,9 @@ import { withBlankLayout } from "../components/layout/blank-layout";
 import { LoadingIndicator } from "../components/loading-indicator";
 import { CheckBox } from "@material-ui/icons";
 import { withMainLayout } from "../components/layout/main-layout";
-const useStyles = makeStyles((theme) => ({
+import { Theme } from "@mui/material";
+
+const useStyles = makeStyles((theme: Theme) => ({
   logoContainer: {
     flex: 3,
     display: "flex",

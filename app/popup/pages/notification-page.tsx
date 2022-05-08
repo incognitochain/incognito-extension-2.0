@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { CardActions, makeStyles, Typography } from "@material-ui/core";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import Container from "@material-ui/core/Container";
+import { CardActions, Typography } from "@mui/material";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Container from "@mui/material/Container";
 import { withLayout } from "../components/layout";
 import { useBackground } from "../context/background";
 import { useCallAsync } from "../utils/notifications";
@@ -16,11 +16,13 @@ import {
   ActionSignTransaction,
   OrderedAction,
 } from "../../core/types";
-import TextField from "@material-ui/core/TextField";
+import TextField from "@mui/material/TextField";
 import ReactMarkdown from "react-markdown";
 import { LoadingIndicator } from "../components/loading-indicator";
 import { Paths } from "../components/routes/paths";
 import { Redirect } from "react-router";
+import { makeStyles } from "@mui/styles";
+
 // @ts-ignore FIXME We need to add a mock definition of this library to the overall project
 
 const useStyles = makeStyles({
@@ -128,7 +130,7 @@ const NotificationPagination: React.FC<NotificationPaginationProps> = ({
   total,
   onPageChange,
 }) => {
-  const classes = useStyles();
+  const classes: any = useStyles();
   const hasPrevious = currentIndex > 0 && total > 1;
   const hasNext = currentIndex < total - 1 && total > 1;
   return (
@@ -161,7 +163,7 @@ export const AuthorizeRequestAccounts: React.FC<{
   action: ActionRequestAccounts;
   onClose: () => void;
 }> = ({ actionKey, action, onClose }) => {
-  const classes = useStyles();
+  const classes: any = useStyles();
   const { request } = useBackground();
   const callAsync = useCallAsync();
 
@@ -227,7 +229,7 @@ export const AuthorizeTransaction: React.FC<{
   action: ActionSignTransaction;
   onClose: () => void;
 }> = ({ actionKey, action, onClose }) => {
-  const classes = useStyles();
+  const classes: any = useStyles();
   const { request } = useBackground();
   const callAsync = useCallAsync();
 

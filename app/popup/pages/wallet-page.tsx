@@ -1,18 +1,18 @@
-import React from "react"
-import Container from "@material-ui/core/Container"
-import { AccountList } from "../components/account-list"
-import Grid from "@material-ui/core/Grid"
-import { DebugButtons } from "../components/debug-buttons"
-import { LoadingIndicator } from "../components/loading-indicator"
-import { usePopupState } from "../context/background"
-import { withLayout } from "../components/layout"
+import React from "react";
+import Container from "@mui/material/Container";
+import { AccountList } from "../components/account-list";
+import Grid from "@mui/material/Grid";
+import { DebugButtons } from "../components/debug-buttons";
+import { LoadingIndicator } from "../components/loading-indicator";
+import { usePopupState } from "../context/background";
+import { withLayout } from "../components/layout";
 
 export const WalletPageBase: React.FC = () => {
-  const popupState = usePopupState()
-  const isProdNetwork = popupState.selectedNetwork.cluster === "mainnet-beta"
+  const popupState = usePopupState();
+  const isProdNetwork = popupState.selectedNetwork.cluster === "mainnet-beta";
 
   if (!popupState?.selectedAccount) {
-    return <LoadingIndicator />
+    return <LoadingIndicator />;
   }
 
   return (
@@ -28,7 +28,7 @@ export const WalletPageBase: React.FC = () => {
         )}
       </Grid>
     </Container>
-  )
-}
+  );
+};
 
-export const WalletPage = withLayout(WalletPageBase)
+export const WalletPage = withLayout(WalletPageBase);

@@ -1,14 +1,15 @@
-import React from "react"
-import { makeStyles } from "@material-ui/core/styles"
-import MenuIcon from "@material-ui/icons/Menu"
-import { Typography } from "@material-ui/core"
+import React from "react";
+import { makeStyles } from "@mui/styles";
+import MenuIcon from "@material-ui/icons/Menu";
+import { Typography } from "@mui/material";
+import { Theme } from "@mui/material";
 
 export interface EmptyProps {
-  title: string
-  description: string
+  title: string;
+  description: string;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   empty: {
     textAlign: "center",
   },
@@ -17,10 +18,10 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {},
   description: {},
-}))
+}));
 
 export const Empty: React.FC<EmptyProps> = ({ title, description }) => {
-  const classes = useStyles()
+  const classes: any = useStyles();
 
   return (
     <div className={classes.empty}>
@@ -32,5 +33,5 @@ export const Empty: React.FC<EmptyProps> = ({ title, description }) => {
         {description}
       </Typography>
     </div>
-  )
-}
+  );
+};

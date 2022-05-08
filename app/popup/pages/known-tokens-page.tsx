@@ -1,39 +1,39 @@
-import React, { useState } from "react"
-import { withLayout } from "../components/layout"
-import { useBackground } from "../context/background"
-import { LoadingIndicator } from "../components/loading-indicator"
-import DeleteIcon from "@material-ui/icons/Delete"
-import EditIcon from "@material-ui/icons/Edit"
-import IconButton from "@material-ui/core/IconButton"
-import List from "@material-ui/core/List"
-import ListItem from "@material-ui/core/ListItem"
-import ListItemText from "@material-ui/core/ListItemText"
-import Paper from "@material-ui/core/Paper"
-import { Typography } from "@material-ui/core"
-import AppBar from "@material-ui/core/AppBar"
-import Toolbar from "@material-ui/core/Toolbar"
-import Container from "@material-ui/core/Container"
-import Grid from "@material-ui/core/Grid"
-import { useCallAsync } from "../utils/notifications"
-import { Token } from "../../core/types"
-import { Empty } from "../components/empty"
-import AddIcon from "@material-ui/icons/Add"
-import Tooltip from "@material-ui/core/Tooltip"
-import { AddTokenDialog } from "../components/dialogs/add-token-dialog"
-import { UpdateTokenDialog } from "../components/dialogs/update-token-dialog"
+import React, { useState } from "react";
+import { withLayout } from "../components/layout";
+import { useBackground } from "../context/background";
+import { LoadingIndicator } from "../components/loading-indicator";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Paper from "@mui/material/Paper";
+import { Typography } from "@mui/material";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import { useCallAsync } from "../utils/notifications";
+import { Token } from "../../core/types";
+import { Empty } from "../components/empty";
+import AddIcon from "@material-ui/icons/Add";
+import Tooltip from "@mui/material/Tooltip";
+import { AddTokenDialog } from "../components/dialogs/add-token-dialog";
+import { UpdateTokenDialog } from "../components/dialogs/update-token-dialog";
 
 const KnownTokensPageBase: React.FC = () => {
-  const { popupState, request } = useBackground()
-  const [showAddTokenDialog, setShowAddTokenDialog] = useState(false)
-  const [editToken, setEditToken] = useState<Token>()
+  const { popupState, request } = useBackground();
+  const [showAddTokenDialog, setShowAddTokenDialog] = useState(false);
+  const [editToken, setEditToken] = useState<Token>();
 
-  const callAsync = useCallAsync()
+  const callAsync = useCallAsync();
 
   if (!popupState) {
-    return <LoadingIndicator />
+    return <LoadingIndicator />;
   }
 
-  const tokens = popupState.tokens
+  const tokens = popupState.tokens;
 
   const deleteToken = (token: Token) => {
     callAsync(
@@ -43,9 +43,9 @@ const KnownTokensPageBase: React.FC = () => {
       {
         progress: { message: "Deleting token..." },
         success: { message: "Success!" },
-      }
-    )
-  }
+      },
+    );
+  };
 
   return (
     <>
@@ -106,7 +106,7 @@ const KnownTokensPageBase: React.FC = () => {
         )}
       </Container>
     </>
-  )
-}
+  );
+};
 
-export const KnownTokensPage = withLayout(KnownTokensPageBase)
+export const KnownTokensPage = withLayout(KnownTokensPageBase);

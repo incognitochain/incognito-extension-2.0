@@ -1,32 +1,33 @@
-import React from "react"
-import { Typography } from "@material-ui/core"
-import Card from "@material-ui/core/Card"
-import CardContent from "@material-ui/core/CardContent"
-import CardActions from "@material-ui/core/CardActions"
-import Button from "@material-ui/core/Button"
-import ImportExportIcon from "@material-ui/icons/ImportExport"
-import { makeStyles } from "@material-ui/core/styles"
+import React from "react";
+import { Typography } from "@mui/material";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import Button from "@mui/material/Button";
+import ImportExportIcon from "@material-ui/icons/ImportExport";
+import { makeStyles } from "@mui/styles";
 // @ts-ignore FIXME We need to add a mock definition of this library to the overall project
-import bs58 from "bs58"
-import { useBackground } from "../context/background"
+import bs58 from "bs58";
+import { useBackground } from "../context/background";
+import { Theme } from "@mui/material";
 
 interface PopupPageProps {
-  opener: any
+  opener: any;
 }
 
 export const PopupPage: React.FC<PopupPageProps> = (opts: PopupPageProps) => {
-  return <Typography>Please keep this window open in the background.</Typography>
-}
+  return <Typography>Please keep this window open in the background.</Typography>;
+};
 
 /**
  * Switch focus to the parent window. This requires that the parent runs
  * `window.name = 'parent'` before opening the popup.
  */
 function focusParent() {
-  window.open("", "parent")
+  window.open("", "parent");
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   connection: {
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
@@ -38,19 +39,19 @@ const useStyles = makeStyles((theme) => ({
   actions: {
     justifyContent: "space-between",
   },
-}))
+}));
 
 interface ApproveConnectionFormProps {
-  origin: string | null
-  onApprove: () => void
+  origin: string | null;
+  onApprove: () => void;
 }
 
 const ApproveConnectionForm: React.FC<ApproveConnectionFormProps> = ({ origin, onApprove }) => {
-  const { popupState } = useBackground()
-  const account = popupState?.accounts || ""
-  const classes = useStyles()
+  const { popupState } = useBackground();
+  const account = popupState?.accounts || "";
+  const classes: any = useStyles();
   if (!account) {
-    return null
+    return null;
   }
   return (
     <Card>
@@ -72,14 +73,14 @@ const ApproveConnectionForm: React.FC<ApproveConnectionFormProps> = ({ origin, o
         </Button>
       </CardActions>
     </Card>
-  )
-}
+  );
+};
 
 interface ApproveSignatureFormProp {
-  origin: string | null
-  message: string
-  onApprove: () => void
-  onReject: () => void
+  origin: string | null;
+  message: string;
+  onApprove: () => void;
+  onReject: () => void;
 }
 
 const ApproveSignatureForm: React.FC<ApproveSignatureFormProp> = ({
@@ -88,7 +89,7 @@ const ApproveSignatureForm: React.FC<ApproveSignatureFormProp> = ({
   onApprove,
   onReject,
 }) => {
-  const classes = useStyles()
+  const classes: any = useStyles();
 
   // TODO: decode message
 
@@ -107,5 +108,5 @@ const ApproveSignatureForm: React.FC<ApproveSignatureFormProp> = ({
         </Button>
       </CardActions>
     </Card>
-  )
-}
+  );
+};

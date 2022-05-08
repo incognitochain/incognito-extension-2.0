@@ -1,35 +1,36 @@
-import React, { useEffect, useState } from "react"
-import { useAccountInfo, useSolanaExplorerUrlSuffix } from "../hooks"
-import Paper from "@material-ui/core/Paper"
-import { PublicKey } from "@solana/web3.js"
-import { Button, Typography } from "@material-ui/core"
-import { withLayout } from "../components/layout"
-import { useParams } from "react-router"
-import { ArrowBackIos, Attachment, Send } from "@material-ui/icons"
-import CopyToClipboard from "react-copy-to-clipboard"
-import { SendSolDialog } from "../components/dialogs/send-sol-dialog"
-import { SendSplDialog } from "../components/dialogs/send-spl-dialog"
-import { useHistory } from "react-router-dom"
-import { Paths } from "../components/routes/paths"
-import { TokenBalance } from "../components/token-balance"
-import { makeStyles } from "@material-ui/core/styles"
-import AppBar from "@material-ui/core/AppBar"
-import Toolbar from "@material-ui/core/Toolbar"
-import Tooltip from "@material-ui/core/Tooltip"
-import IconButton from "@material-ui/core/IconButton"
-import RefreshIcon from "@material-ui/icons/Refresh"
-import { SolanaIcon } from "../components/solana-icon"
-import { TransactionList } from "../components/transaction-list"
-import Container from "@material-ui/core/Container"
-import Grid from "@material-ui/core/Grid"
-import { LoadingIndicator } from "../components/loading-indicator"
-import { Buffer } from "buffer"
-import { getBalanceInfo } from "../utils/account-data"
-import { useConnection } from "../context/connection"
-import { useBackground } from "../context/background"
-import { BalanceInfo, OwnedAccount } from "../types"
+import React, { useEffect, useState } from "react";
+import { useAccountInfo, useSolanaExplorerUrlSuffix } from "../hooks";
+import Paper from "@mui/material/Paper";
+import { PublicKey } from "@solana/web3.js";
+import { Button, Typography } from "@mui/material";
+import { withLayout } from "../components/layout";
+import { useParams } from "react-router";
+import { ArrowBackIos, Attachment, Send } from "@material-ui/icons";
+import CopyToClipboard from "react-copy-to-clipboard";
+import { SendSolDialog } from "../components/dialogs/send-sol-dialog";
+import { SendSplDialog } from "../components/dialogs/send-spl-dialog";
+import { useHistory } from "react-router-dom";
+import { Paths } from "../components/routes/paths";
+import { TokenBalance } from "../components/token-balance";
+import { makeStyles } from "@mui/styles";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import RefreshIcon from "@material-ui/icons/Refresh";
+import { SolanaIcon } from "../components/solana-icon";
+import { TransactionList } from "../components/transaction-list";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import { LoadingIndicator } from "../components/loading-indicator";
+import { Buffer } from "buffer";
+import { getBalanceInfo } from "../utils/account-data";
+import { useConnection } from "../context/connection";
+import { useBackground } from "../context/background";
+import { BalanceInfo, OwnedAccount } from "../types";
+import { Theme } from "@mui/material";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   itemDetails: {
     marginLeft: theme.spacing(3),
     marginRight: theme.spacing(3),
@@ -43,28 +44,28 @@ const useStyles = makeStyles((theme) => ({
   buttonItem: {
     textAlign: "center",
   },
-}))
+}));
 
 const AccountDetailBaseWrapper: React.FC = () => {
-  const { accountAddress, signerAddress } = useParams()
-  const publicKey = new PublicKey(accountAddress)
-  const signerKey = new PublicKey(signerAddress)
+  const { accountAddress, signerAddress } = useParams();
+  const publicKey = new PublicKey(accountAddress);
+  const signerKey = new PublicKey(signerAddress);
 
-  const { connection } = useConnection()
-  const { getToken } = useBackground()
-  const [accountInfo, accountInfoLoaded] = useAccountInfo(publicKey)
-  const [balanceInfo, setBalanceInfo] = useState<BalanceInfo>()
+  const { connection } = useConnection();
+  const { getToken } = useBackground();
+  const [accountInfo, accountInfoLoaded] = useAccountInfo(publicKey);
+  const [balanceInfo, setBalanceInfo] = useState<BalanceInfo>();
 
   useEffect(() => {
-    const ownedAccount = { publicKey: publicKey, accountInfo: accountInfo } as OwnedAccount<Buffer>
+    const ownedAccount = { publicKey: publicKey, accountInfo: accountInfo } as OwnedAccount<Buffer>;
     getBalanceInfo(connection, getToken, ownedAccount)
       .then((balanceInfo) => {
-        setBalanceInfo(balanceInfo)
+        setBalanceInfo(balanceInfo);
       })
       .catch((e) => {
-        console.log("error getting a balance information")
-      })
-  }, [accountInfo])
+        console.log("error getting a balance information");
+      });
+  }, [accountInfo]);
 
   if (!accountInfoLoaded || !accountInfo || !balanceInfo) {
     return (
@@ -75,7 +76,7 @@ const AccountDetailBaseWrapper: React.FC = () => {
           </Grid>
         </Grid>
       </Container>
-    )
+    );
   }
 
   return (
@@ -84,13 +85,13 @@ const AccountDetailBaseWrapper: React.FC = () => {
       balanceInfo={balanceInfo}
       ownedAccount={{ publicKey: publicKey, accountInfo: accountInfo } as OwnedAccount<Buffer>}
     />
-  )
-}
+  );
+};
 
 interface AccountDetailBaseProp {
-  signerKey: PublicKey
-  ownedAccount: OwnedAccount<Buffer>
-  balanceInfo: BalanceInfo
+  signerKey: PublicKey;
+  ownedAccount: OwnedAccount<Buffer>;
+  balanceInfo: BalanceInfo;
 }
 
 const AccountDetailBase: React.FC<AccountDetailBaseProp> = ({
@@ -98,22 +99,22 @@ const AccountDetailBase: React.FC<AccountDetailBaseProp> = ({
   ownedAccount,
   balanceInfo,
 }) => {
-  const classes = useStyles()
-  const [sendDialogOpen, setSendDialogOpen] = useState(false)
+  const classes: any = useStyles();
+  const [sendDialogOpen, setSendDialogOpen] = useState(false);
 
-  const urlSuffix = useSolanaExplorerUrlSuffix()
-  const history = useHistory()
+  const urlSuffix = useSolanaExplorerUrlSuffix();
+  const history = useHistory();
 
   const goBack = () => {
-    history.push(Paths.accounts)
-  }
+    history.push(Paths.accounts);
+  };
 
   const refresh = () => {
     // refreshWalletPublicKeys(wallet)
     // publicKeys.map((publicKey) =>
     //   refreshAccountInfo(wallet.connection, publicKey, true)
     // )
-  }
+  };
 
   return (
     <Container fixed maxWidth="md">
@@ -147,13 +148,7 @@ const AccountDetailBase: React.FC<AccountDetailBaseProp> = ({
                 </Typography>
               )}
 
-              <Grid
-                container
-                direction="row"
-                justify="space-evenly"
-                alignItems="center"
-                spacing={0}
-              >
+              <Grid direction="row" spacing={0}>
                 <Grid key={`btn-copy`} item xs={4} className={classes.buttonItem}>
                   <CopyToClipboard text={ownedAccount.publicKey.toBase58()}>
                     <Button variant="outlined" color="primary" startIcon={<Attachment />}>
@@ -214,7 +209,7 @@ const AccountDetailBase: React.FC<AccountDetailBaseProp> = ({
         </Grid>
       </Grid>
     </Container>
-  )
-}
+  );
+};
 
-export const AccountDetail = withLayout(AccountDetailBaseWrapper)
+export const AccountDetail = withLayout(AccountDetailBaseWrapper);

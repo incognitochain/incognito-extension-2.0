@@ -1,34 +1,34 @@
-import React, { useState } from "react"
-import { useHistory } from "react-router-dom"
-import Container from "@material-ui/core/Container"
-import Card from "@material-ui/core/Card"
-import CardContent from "@material-ui/core/CardContent"
-import { Typography } from "@material-ui/core"
-import TextField from "@material-ui/core/TextField"
-import Checkbox from "@material-ui/core/Checkbox"
-import FormControlLabel from "@material-ui/core/FormControlLabel"
-import CardActions from "@material-ui/core/CardActions"
-import Button from "@material-ui/core/Button"
-import { useCallAsync } from "../utils/notifications"
-import Link from "@material-ui/core/Link"
-import { useBackground } from "../context/background"
-import { withLayout } from "../components/layout"
-import { Links } from "../components/routes/paths"
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import Container from "@mui/material/Container";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import { Typography } from "@mui/material";
+import TextField from "@mui/material/TextField";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import CardActions from "@mui/material/CardActions";
+import Button from "@mui/material/Button";
+import { useCallAsync } from "../utils/notifications";
+import Link from "@mui/material/Link";
+import { useBackground } from "../context/background";
+import { withLayout } from "../components/layout";
+import { Links } from "../components/routes/paths";
 
 const LoginPageBase: React.FC = () => {
-  const { isNotification } = useBackground()
-  const history = useHistory()
+  const { isNotification } = useBackground();
+  const history = useHistory();
   const goToRestore = () => {
-    history.push(Links.restore())
-  }
+    history.push(Links.restore());
+  };
 
   const handleSuccess = () => {
     if (isNotification) {
-      history.push(Links.notifications())
+      history.push(Links.notifications());
     } else {
-      history.push(Links.accounts())
+      history.push(Links.accounts());
     }
-  }
+  };
 
   return (
     <Container maxWidth="sm">
@@ -40,21 +40,21 @@ const LoginPageBase: React.FC = () => {
         </Link>
       </>
     </Container>
-  )
-}
+  );
+};
 
 const LoginForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
-  const [password, setPassword] = useState("")
-  const [stayLoggedIn, setStayLoggedIn] = useState(false)
-  const callAsync = useCallAsync()
-  const { request } = useBackground()
+  const [password, setPassword] = useState("");
+  const [stayLoggedIn, setStayLoggedIn] = useState(false);
+  const callAsync = useCallAsync();
+  const { request } = useBackground();
 
   function submit() {
     callAsync(request("popup_unlockWallet", { password }), {
       progress: { message: "Unlocking wallet..." },
       success: { message: "Wallet unlocked" },
       onSuccess: onSuccess,
-    })
+    });
   }
 
   return (
@@ -76,7 +76,7 @@ const LoginForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
           InputProps={{
             onKeyPress: (event: React.KeyboardEvent<HTMLInputElement>) => {
               if (event.key === "Enter") {
-                submit()
+                submit();
               }
             },
           }}
@@ -94,7 +94,7 @@ const LoginForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
         </Button>
       </CardActions>
     </Card>
-  )
-}
+  );
+};
 
-export const LoginPage = withLayout(LoginPageBase)
+export const LoginPage = withLayout(LoginPageBase);

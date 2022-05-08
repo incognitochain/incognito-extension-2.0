@@ -1,4 +1,4 @@
-// declare module "@material-ui/core/styles" {
+// declare module "@mui/material/styles" {
 //   interface Palette {
 //     neutral: Palette["primary"];
 //   }
@@ -10,7 +10,7 @@
 // }
 
 // // Update the Button's color prop options
-// declare module "@material-ui/core/Button" {
+// declare module "@mui/material/Button" {
 //   interface ButtonPropsColorOverrides {
 //     neutral: true;
 //   }
