@@ -12,7 +12,11 @@
       "@services/*": ["app/services/*"],
       "@module/*": ["app/popup/module/*"],
       "@theme/*": ["app/popup/theme/*"],
-      "@components/*": ["app/popup/components/*"]
+      "@components/*": ["app/popup/components/*"],
+      "@redux/*": ["app/redux/*"],
+      "@utils/*": ["app/utils/*"],
+      "@constants/*": ["app/constants/*"],
+      "@resources/*": ["app/resources/*"]
     }
   }
 }

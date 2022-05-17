@@ -1,178 +1,167 @@
-// /* eslint-disable import/no-cycle */
-// import { CONSTANT_CONFIGS, CONSTANT_KEYS } from "@src/constants";
-// import { cachePromise } from "@src/services/cache";
-// import storage from "@src/services/storage";
-// import { getItemAsync, setItemAsync } from "expo-secure-store";
-// import { byteToHexString, Validator } from "incognito-chain-web-js/build/wallet";
-// import { codec, misc } from "incognito-chain-web-js/lib/privacy/sjcl";
-// import isEqual from "lodash/isEqual";
-// import { randomBytes } from "react-native-randombytes";
+import { APP_PASSWORD_KEY, APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@/constants/common";
+import { CONSTANT_CONFIGS } from "@constants/index";
+import { cachePromise, clearCache, getCache } from "@services/cache";
+import Storage from "@services/storage";
+import { cache } from "../cache";
+const { Validator } = require("incognito-chain-web-js/build/wallet");
+const sjcl = require("incognito-chain-web-js/lib/privacy/sjcl");
+const { codec, misc } = require("incognito-chain-web-js/lib/privacy/sjcl");
+const crypto = require("crypto");
 
-// const PASSWORD_DURATION_IN_MS = 7 * 24 * 3600 * 1000; // 7 days
-// const SUPPORT_EXPORT_SECURE_STORAGE_KEY = "SUPPORT_EXPORT_SECURE_STORAGE_KEY";
+/**
+ * Definition interface for Passphrase.
+ */
+interface PassphraseProps {
+  aesKey: string;
+  password?: string;
+}
 
-// export function clearPassword() {
-//   storage.removeItem(CONSTANT_KEYS.PASSPHRASE_KEY);
-// }
+/**
+ * Clear Passpharse from Cache in the Runtime mode
+ * @returns {void}
+ */
+const clearPasspharse = (): void => {
+  clearCache(CONSTANT_CONFIGS.PASSPHRASE_WALLET_DEFAULT);
+};
 
-// export const getAesKeyFromSalt = ({ salt, password }) => {
-//   try {
-//     new Validator("getAesKeyFromSalt-salt", salt).string();
-//     new Validator("getAesKeyFromSalt-password", password).required().string();
-//     console.log("[getAesKeyFromSalt] ", {
-//       salt,
-//       password,
-//     });
+/**
+ * Get Passpharse from Storage has been ecrypted with sjcl algorithm
+ * @returns {string} - JSON
+ */
+const getPasspharseFromStorage = async (): Promise<void> => {
+  return await Storage.getItem(APP_PASS_PHRASE_CIPHER);
+};
 
-//     console.info("[getAesKeyFromSalt] SIZe Bits salt ", new Blob([salt]).size);
+/**
+ * save Passpharse to LocalStorage by using sjcl algorithms with hash aeskey
+ * decrypt the cipherText using the symmetric algorithm with the aeskey
+ * @param aesKeyString string
+ * @param mnemonic string
+ * @param password string
+ * @returns {Promise<boolean | Error>}
+ */
+const savePasspharseToStorage = async (aesKeyString: string, mnemonic: string, password: string): Promise<boolean> => {
+  try {
+    const passpharseJSON = JSON.stringify({
+      mnemonic,
+      password,
+    });
+    const passpharseCipherText = sjcl.encrypt(sjcl.codec.hex.toBits(aesKeyString), passpharseJSON);
+    await Storage.setItem(APP_PASS_PHRASE_CIPHER, passpharseCipherText);
+    return Promise.resolve(true);
+  } catch (error) {
+    return Promise.resolve(false);
+  }
+};
 
-//     let aesKey = misc.pbkdf2(password, salt, null, 128);
-//     console.info("[getAesKeyFromSalt] aesKey ", typeof aesKey);
-//     console.info("[getAesKeyFromSalt] SIZe aesKey ", new Blob([aesKey]).size);
-//     console.log("[getAesKeyFromSalt] before aesKey ", Object.assign({}, aesKey));
+/**
+ * Cache Password in the Runtime mode.
+ * @returns {void}
+ */
+const cachePassword = (password: string): void => {
+  try {
+    new Validator("cachePassword-password", password).required().string();
+    cache(APP_PASSWORD_KEY, password);
+  } catch (error) {
+    throw error;
+  }
+};
 
-//     aesKey = codec.hex.fromBits(aesKey);
+/**
+ * Create a new salt from random byte
+ * @param {number} bytes can be 16, 32, 64 bytes... Default value: 16
+ * @returns - string -  random string based on Bytes in hex
+ */
+const createNewSalt = (bytes: number = 16): string => {
+  return crypto.randomBytes(bytes).toString("hex");
+};
+/**
+ *
+ * @returns Promise<string | undefined>
+ */
+const getSaltFromStorage = async (): Promise<string | undefined> => {
+  return await Storage.getItem(APP_SALT_KEY);
+};
 
-//     console.log("[getAesKeyFromSalt] after aesKey ", aesKey);
+/**
+ * Get aes key from salt with pbkdf2 algorithm
+ * @returns string
+ */
+const getAesKeyFromSalt = ({ salt, password }: { salt: string; password: string }): string => {
+  try {
+    new Validator("getAesKeyFromSalt-salt", salt).string();
+    new Validator("getAesKeyFromSalt-password", password).required().string();
+    let aesKey = misc.pbkdf2(password, salt, null, 128);
+    aesKey = codec.hex.fromBits(aesKey);
+    return aesKey;
+  } catch (error) {
+    throw error;
+  }
+};
 
-//     return aesKey;
-//   } catch (error) {
-//     console.log("getAesKeyFromSalt error", error);
-//     throw error;
-//   }
-// };
+/**
+ * Get Passphrase with Password
+ * @param {string | undefined} password
+ * @returns  Promise<PassphraseProps>
+ */
+const getPassphraseNoCache = async (): Promise<PassphraseProps> => {
+  try {
+    let salt = await getSaltFromStorage();
+    if (!salt) {
+      salt = createNewSalt();
 
-// export const checkSupportExpoSecureStore = async ({ accessKey, password }) => {
-//   console.log("[checkSupportExpoSecureStore] .... ");
-//   console.log("[checkSupportExpoSecureStore] ", { accessKey, password });
+      //save Salt to Local Storage
+      Storage.setItem(APP_SALT_KEY, salt);
+    }
+    const password = await getCache(APP_PASSWORD_KEY);
+    const aesKey = getAesKeyFromSalt({ salt, password });
 
-//   let isSupportSecure = false;
-//   try {
-//     isSupportSecure = await storage.getItem(SUPPORT_EXPORT_SECURE_STORAGE_KEY);
+    return {
+      aesKey,
+      password,
+    };
+  } catch (e) {
+    console.log("[ERROR] getPassphrase ", e);
+    throw e;
+  }
+};
 
-//     console.log("[checkSupportExpoSecureStore][A] isSupportSecure ", isSupportSecure);
+/**
+ * Check if the password is valid or not by
+ * decrypt the cipherText using the symmetric algorithm with the aeskey
+ * @param password string
+ * @returns {Promise<boolean | Error>}
+ */
+const checkPasswordValid = async (password: string): Promise<boolean | Error> => {
+  try {
+    const salt = await getSaltFromStorage();
+    const passPhraseEcrypted = await getPasspharseFromStorage();
+    const aesKeyBuffer = misc.pbkdf2(password, salt, null, 128);
+    const aesKeyString = codec.hex.fromBits(aesKeyBuffer) as string;
+    sjcl.decrypt(sjcl.codec.hex.toBits(aesKeyString), passPhraseEcrypted);
+    return Promise.resolve(true);
+  } catch (e) {
+    console.log("checkPasswordValid ERROR ", e);
+    return Promise.reject(new Error("Password Invalid!"));
+  }
+};
 
-//     new Validator("checkSupportExpoSecureStore-accessKey", accessKey).required().string();
-//     new Validator("checkSupportExpoSecureStore-password", password).required().string();
-//     if (typeof isSupportSecure === "undefined" || isSupportSecure === null) {
-//       let salt = await getItemAsync(accessKey);
-//       const AAA = randomBytes(32);
-//       console.info("[getAesKeyFromSalt]AAA ", new Blob([AAA]).size);
-//       console.log("[checkSupportExpoSecureStore] typeof salt ", typeof salt);
-//       console.log("[checkSupportExpoSecureStore] salt ", salt);
+/**
+ *
+ * @param password string | undefined
+ * @returns
+ */
+const getPassphrase = (): Promise<PassphraseProps> =>
+  cachePromise(CONSTANT_CONFIGS.PASSPHRASE_WALLET_DEFAULT, () => getPassphraseNoCache(), 1e9);
 
-//       if (!salt) {
-//         // generate a new wallet encryption key
-//         const raw = randomBytes(16);
-
-//         console.log("[checkSupportExpoSecureStore] raw ", raw);
-
-//         salt = byteToHexString(raw);
-
-//         console.log("[checkSupportExpoSecureStore][T] salt ", salt);
-
-//         await setItemAsync(accessKey, salt);
-//       }
-//       let aesKey = getAesKeyFromSalt({ salt, password });
-//       let reCheckSalt = await getItemAsync(accessKey);
-//       let reCheckAesKey = getAesKeyFromSalt({ salt: reCheckSalt, password });
-
-//       console.log("[checkSupportExpoSecureStore] aesKey ", aesKey);
-//       console.log("[checkSupportExpoSecureStore] reCheckSalt ", reCheckSalt);
-//       console.log("[checkSupportExpoSecureStore] reCheckAesKey ", reCheckAesKey);
-
-//       isSupportSecure = isEqual(aesKey, reCheckAesKey);
-//       console.log("[checkSupportExpoSecureStore] isSupportSecure ", isSupportSecure);
-//       await storage.setItem(SUPPORT_EXPORT_SECURE_STORAGE_KEY, JSON.stringify(isSupportSecure));
-
-//       console.log("[checkSupportExpoSecureStore][B] ===> ", isSupportSecure);
-
-//       return isSupportSecure;
-//     }
-//   } catch (error) {
-//     console.log("error accessing SecureStorage", error);
-//   }
-
-//   console.log("[checkSupportExpoSecureStore][C] ===> ", isSupportSecure);
-//   return isSupportSecure;
-// };
-
-// export const getPassphraseNoCache = async () => {
-//   console.log("[getPassphraseNoCache] .... ");
-//   // TODO : password expiry
-//   let password = CONSTANT_CONFIGS.PASSPHRASE_WALLET_DEFAULT;
-
-//   console.log("[getPassphraseNoCache] password ", typeof password);
-//   console.log("[getPassphraseNoCache] password ", password);
-
-//   if (password === "undefined") {
-//     console.log("AAAAAAAAAA");
-//   }
-
-//   if (password === undefined) {
-//     console.log("BBBBBBBBB");
-//   }
-
-//   const accessKey = CONSTANT_KEYS.SALT_KEY || "default-wallet-salt";
-
-//   console.log("[getPassphraseNoCache] accessKey ", accessKey);
-
-//   try {
-//     const checkSupport = await checkSupportExpoSecureStore({
-//       accessKey,
-//       password,
-//     });
-
-//     console.log("[getPassphraseNoCache] checkSupport ", checkSupport);
-
-//     if (checkSupport) {
-//       const salt = await getItemAsync(accessKey);
-
-//       console.log("[getPassphraseNoCache] salt ", salt);
-
-//       const aesKey = getAesKeyFromSalt({ salt, password });
-
-//       console.log("[getPassphraseNoCache] aesKey ", aesKey);
-
-//       return {
-//         aesKey,
-//         password,
-//       };
-//     } else {
-//       let salt = await storage.getItem(accessKey);
-
-//       console.log("[getPassphraseNoCache][2] salt ", salt);
-
-//       if (!salt) {
-//         // generate a new wallet encryption key
-//         const raw = randomBytes(16);
-//         salt = byteToHexString(raw);
-
-//         console.log("[getPassphraseNoCache][2] raw ", raw);
-//         console.log("[getPassphraseNoCache][3] salt ", salt);
-//         await storage.setItem(accessKey, salt);
-//       }
-//       const aesKey = getAesKeyFromSalt({ salt, password });
-
-//       console.log("[getPassphraseNoCache][2] aesKey ", aesKey);
-
-//       console.log("[getPassphraseNoCache] Result ", {
-//         aesKey,
-//         password,
-//       });
-
-//       return {
-//         aesKey,
-//         password,
-//       };
-//     }
-//   } catch (e) {
-//     console.log("error getPassphrase ", e);
-//     throw e;
-//   }
-// };
-
-// export const getPassphrase = () =>
-//   cachePromise("PASSPHRASE_WALLET_DEFAULT", () => getPassphraseNoCache(), 1e9);
-
-export default {};
+export {
+  cachePassword,
+  savePasspharseToStorage,
+  checkPasswordValid,
+  getPasspharseFromStorage,
+  getPassphrase,
+  getPassphraseNoCache,
+  getSaltFromStorage,
+  clearPasspharse,
+  createNewSalt,
+};

@@ -2,7 +2,7 @@ type CachesType = {
   [key: string]: any;
 };
 
-export const caches: CachesType = {};
+export const CacheObject: CachesType = {};
 
 export const KEYS = {
   PoolConfig: "pool-configs",
@@ -22,8 +22,8 @@ export const KEYS = {
  * @param data
  * @param expiredTime
  */
-export function cache(key: string, data: any, expiredTime: number) {
-  caches[key] = {
+export function cache(key: string, data: any, expiredTime: number = EXPIRED_TIME) {
+  CacheObject[key] = {
     data,
     expiredTime: new Date().getTime() + expiredTime,
   };
@@ -42,7 +42,7 @@ export async function cachePromise(key: string, promiseFunc: Function, expiredTi
   if (cachedData !== null) {
     return cachedData;
   }
-  const data = await promiseFunc();
+  const data = (promiseFunc && (await promiseFunc())) || null;
   if (data) {
     cache(key, data, expiredTime);
   }
@@ -55,7 +55,7 @@ export async function cachePromise(key: string, promiseFunc: Function, expiredTi
  * @returns {null|*}
  */
 export function getCache(key: string) {
-  const cacheData = caches[key];
+  const cacheData = CacheObject[key];
   if (cacheData && cacheData.expiredTime > new Date().getTime()) {
     return cacheData.data;
   }
@@ -67,20 +67,20 @@ export function getCache(key: string) {
  */
 
 export const clearCache = (key: string) => {
-  if (!caches[key]) {
+  if (!CacheObject[key]) {
     return;
   }
-  return delete caches[key];
+  return delete CacheObject[key];
 };
 
 export const clearAllCaches = () => {
-  Object.keys(caches).forEach((key) => delete caches[key]);
+  Object.keys(caches).forEach((key) => delete CacheObject[key]);
 };
 
 export const clearWalletCaches = () => {
   Object.keys(caches).forEach((key) => {
     if (key.includes(KEYS.PDEX_HISTORY)) {
-      delete caches[key];
+      delete CacheObject[key];
     }
   });
 };

@@ -1,13 +1,8 @@
 import { withBlankLayout } from "@/popup/components/layout/blank-layout";
 import NavigationBar from "@/popup/components/layout/navigation-bar";
-import { Typography } from "@mui/material";
-import Button from "@mui/material/Button";
-import CardContent from "@mui/material/CardContent";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
+import { Typography, Button, CardContent, Checkbox, FormControlLabel, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import TextField from "@mui/material/TextField";
-import React, { useCallback, useLayoutEffect, useMemo, useState } from "react";
+import React, { useCallback, useLayoutEffect, useState } from "react";
 import { MainLayout } from "../../components/layout/main-layout";
 import { Theme } from "@mui/material";
 
@@ -53,12 +48,7 @@ interface CreateNewKeyPageProps {
 const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateNewKeyPageProps) => {
   const styles = useStyles();
 
-  const {
-    masterKeyName = "",
-    checkBoxAccept = false,
-    onBack = () => {},
-    onReadyClick = () => {},
-  } = props;
+  const { masterKeyName = "", checkBoxAccept = false, onBack = () => {}, onReadyClick = () => {} } = props;
 
   const [masterKeyNameLocal, setMasterKeyNameLocal] = useState("");
   const [checkBoxAcceptLocal, setCheckBoxAcceptLocal] = useState(false);
@@ -81,8 +71,7 @@ const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateNewKeyPa
     setMasterKeyNameLocal(e.target.value);
   }, []);
 
-  const readyButtonDisable: boolean =
-    !checkBoxAcceptLocal || !masterKeyNameLocal || masterKeyNameLocal.length < 0;
+  const readyButtonDisable: boolean = !checkBoxAcceptLocal || !masterKeyNameLocal || masterKeyNameLocal.length < 0;
 
   return (
     <>
@@ -108,20 +97,15 @@ const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateNewKeyPa
                 value={masterKeyNameLocal}
                 onChange={masterKeyOnChange}
                 error={errorVisible}
-                helperText={
-                  errorVisible
-                    ? "Master key names must be alphanumeric. Please choose another."
-                    : ""
-                }
+                helperText={errorVisible ? "Master key names must be alphanumeric. Please choose another." : ""}
               />
               <Typography variant="subtitle1">
-                The next screen will contain 12 special words that will allow you to recover your
-                funds.
+                The next screen will contain 12 special words that will allow you to recover your funds.
               </Typography>
               <div style={{ height: 10 }}></div>
               <Typography variant="subtitle1">
-                Be prepared to record them in a safe place. If anyone gains access to them, they
-                will gain access to your funds.
+                Be prepared to record them in a safe place. If anyone gains access to them, they will gain access to
+                your funds.
               </Typography>
             </CardContent>
           </div>
@@ -135,10 +119,7 @@ const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateNewKeyPa
                 />
               }
               label={
-                <Typography
-                  variant="subtitle1"
-                  style={{ color: checkBoxAcceptLocal ? "white" : "grey" }}
-                >
+                <Typography variant="subtitle1" style={{ color: checkBoxAcceptLocal ? "white" : "grey" }}>
                   I accept that if I lose these words I will lose access to my funds.
                 </Typography>
               }

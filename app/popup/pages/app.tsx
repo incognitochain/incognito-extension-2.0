@@ -9,7 +9,7 @@ import { BackgroundProvider } from "../context/background";
 import { ConnectionProvider } from "../context/connection";
 import { ProgramPluginsManagerProvider } from "../context/plugins";
 import { themeHelper } from "../helper/index";
-import { history } from "../utils/history";
+// import { history } from "../utils/history";
 import { makeStyles } from "@mui/styles";
 import { ThemeProvider } from "@mui/system";
 
@@ -21,17 +21,12 @@ const useStyles = makeStyles({
 });
 
 export const App: React.FC = () => {
-  console.log(" App Render");
-
   // const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const prefersDarkMode = true;
-  console.log("prefersDarkMode : ", prefersDarkMode);
   const theme = useMemo(() => {
-    console.log("theme thay doi");
     return themeHelper(prefersDarkMode);
   }, []);
   const classes: any = useStyles();
-
   useEffect(() => {
     console.log(" App Render Done");
   }, []);
@@ -50,7 +45,7 @@ export const App: React.FC = () => {
             <ProgramPluginsManagerProvider>
               <SnackbarProvider
                 maxSnack={5}
-                autoHideDuration={8000}
+                autoHideDuration={2000}
                 classes={{
                   variantSuccess: classes.success,
                   variantError: classes.error,

@@ -1,18 +1,11 @@
-import { IconButton, Typography } from "@mui/material";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import { makeStyles } from "@mui/styles";
-import { Bookmark } from "@material-ui/icons";
-import { Grid } from "@mui/material";
-import Box from "@mui/material/Box";
-import React, { useLayoutEffect, useState } from "react";
-import { MainLayout } from "@popup/components/layout/main-layout";
-import { PhraseItem } from "@popup/components/pharse-item";
 import { withBlankLayout } from "@/popup/components/layout/blank-layout";
 import NavigationBar from "@/popup/components/layout/navigation-bar";
-import { Theme } from "@mui/material";
+import { Bookmark } from "@material-ui/icons";
+import { Grid, IconButton, Theme, Typography, Box, Button, Card, CardContent, FormControlLabel } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import { MainLayout } from "@popup/components/layout/main-layout";
+import { PhraseItem } from "@popup/components/pharse-item";
+import React, { useLayoutEffect, useState } from "react";
 
 const { newMnemonic } = require("incognito-chain-web-js/build/wallet");
 
@@ -53,18 +46,11 @@ interface MasterKeyPharsePageBaseProps {
   saveMyPhraseOnClick?: (mnemonic: string, phraseList: string[]) => void;
 }
 
-const MasterKeyPharsePageBase: React.FC<MasterKeyPharsePageBaseProps> = (
-  props: MasterKeyPharsePageBaseProps,
-) => {
+const MasterKeyPharsePageBase: React.FC<MasterKeyPharsePageBaseProps> = (props: MasterKeyPharsePageBaseProps) => {
   const styles = useStyles();
   const [mnemonic, setMnemonic] = useState("");
   const [phraseListLocal, setPhraseListLocal] = useState<string[]>([]);
-  const {
-    onBack = () => {},
-    masterKeyName = "",
-    phraseList = [],
-    saveMyPhraseOnClick = () => {},
-  } = props;
+  const { onBack = () => {}, masterKeyName = "", phraseList = [], saveMyPhraseOnClick = () => {} } = props;
 
   useLayoutEffect(() => {
     if (!phraseList || phraseList.length < 1) {
@@ -152,12 +138,7 @@ const MasterKeyPharsePageBase: React.FC<MasterKeyPharsePageBaseProps> = (
           </div>
 
           <div className={styles.box2}>
-            <Button
-              variant="contained"
-              color="secondary"
-              style={{ height: 50 }}
-              onClick={saveMyPhrase}
-            >
+            <Button variant="contained" color="secondary" style={{ height: 50 }} onClick={saveMyPhrase}>
               I'm saved my phrase
             </Button>
           </div>

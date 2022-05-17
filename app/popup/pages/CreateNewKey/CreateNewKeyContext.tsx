@@ -14,14 +14,10 @@ export type MasterKeyPhrasePageType = {
   setPhraseList?: (phraseList: string[]) => void;
 };
 
-export type CreateNewKeyRouteContextType = CreateNewKeyBaseType &
-  CreateNewKeyPageType &
-  MasterKeyPhrasePageType;
+export type CreateNewKeyRouteContextType = CreateNewKeyBaseType & CreateNewKeyPageType & MasterKeyPhrasePageType;
 
 export const CreateNewKeyContextInit: CreateNewKeyRouteContextType = {};
 
-export const CreateNewKeyContext = createContext<CreateNewKeyRouteContextType | null>(
-  CreateNewKeyContextInit,
-);
+export const CreateNewKeyContext = createContext<CreateNewKeyRouteContextType | null>(CreateNewKeyContextInit);
 export const useCreateNewKeyContext = (): CreateNewKeyRouteContextType =>
   useContext(CreateNewKeyContext) as CreateNewKeyRouteContextType;

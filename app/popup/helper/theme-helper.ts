@@ -1,17 +1,12 @@
 // import { unstable_createMuiStrictModeTheme } from "@mui/material";
 // import { Palette, PaletteOptions } from "@mui/material/styles/createPalette";
 
-import {
-  createTheme,
-  Palette,
-  PaletteOptions,
-  unstable_createMuiStrictModeTheme,
-} from "@mui/material";
+import { createTheme, Palette, PaletteOptions, unstable_createMuiStrictModeTheme } from "@mui/material";
 import { TypographyOptions } from "@mui/material/styles/createTypography";
 
 // import { TypographyOptions } from "@mui/material/styles/createTypography";
 const paletteBuilder = (prefersDarkMode: boolean): PaletteOptions | undefined => {
-  console.log(prefersDarkMode);
+  // console.log(prefersDarkMode);
   return (
     {
       mode: prefersDarkMode ? "dark" : "light",

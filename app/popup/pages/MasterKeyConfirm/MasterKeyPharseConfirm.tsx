@@ -1,19 +1,14 @@
 import { withBlankLayout } from "@/popup/components/layout/blank-layout";
 import NavigationBar from "@/popup/components/layout/navigation-bar";
-import { Typography } from "@mui/material";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
+import { isDebugMode } from "@/utils/env";
+import { Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { Grid } from "@mui/material";
-import Box from "@mui/material/Box";
 import { shuffle } from "lodash";
 import React, { useMemo, useState } from "react";
 import { MainLayout } from "../../components/layout/main-layout";
 import { PhraseItem } from "../../components/pharse-item";
-import { Theme } from "@mui/material";
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles((theme: any) => ({
   box: {
     flex: 1,
     display: "flex",
@@ -46,6 +41,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface MasterKeyPharseConfirmPageBaseProps {
   onBack?: () => void;
   createMasterKeySucess?: () => void;
+  continueOnPress?: () => void;
   phraseList?: string[];
 }
 
@@ -55,7 +51,7 @@ const MasterKeyPharseConfirmPageBase: React.FC<MasterKeyPharseConfirmPageBasePro
   const styles = useStyles();
 
   const [phraseListSelected, setPhraseListSelected] = useState<string[]>([]);
-  const { onBack = () => {}, createMasterKeySucess = () => {}, phraseList = [] } = props;
+  const { onBack = () => {}, createMasterKeySucess = () => {}, continueOnPress = () => {}, phraseList = [] } = props;
 
   const mnemonicCorrect = useMemo(() => phraseList.join(" "), []);
   const phraseListShuffle = useMemo(() => shuffle(phraseList), []);
@@ -66,9 +62,7 @@ const MasterKeyPharseConfirmPageBase: React.FC<MasterKeyPharseConfirmPageBasePro
   }, [phraseListSelected]) as [boolean, string];
 
   const createMasterKeyOnClick = () => {
-    console.log("createMasterKeyOnClick TO DO");
-    // history.push(Links.masterKeyPhraseCreatedPage());
-    createMasterKeySucess();
+    continueOnPress();
   };
 
   const renderPhraseItem = (name: string, index: number) => {
@@ -78,7 +72,7 @@ const MasterKeyPharseConfirmPageBase: React.FC<MasterKeyPharseConfirmPageBasePro
         index={index}
         isHover={true}
         enable={true}
-        onClick={(title?: string, index?: number) => {
+        onClick={(title?: string) => {
           const newPhraseListSelected = [...phraseListSelected];
           const findIndex = newPhraseListSelected.findIndex((item) => item === title);
           if (findIndex != -1) {
@@ -123,10 +117,11 @@ const MasterKeyPharseConfirmPageBase: React.FC<MasterKeyPharseConfirmPageBasePro
               variant="contained"
               color="secondary"
               style={{ height: 50 }}
-              disabled={!isPhraseCorrect}
+              disabled={!isDebugMode && !isPhraseCorrect}
+              // disabled={false}
               onClick={createMasterKeyOnClick}
             >
-              {isPhraseCorrect ? "Let's Go" : "That's not quite right"}
+              {isPhraseCorrect ? "Continue" : "That's not quite right"}
             </Button>
           </div>
         </div>

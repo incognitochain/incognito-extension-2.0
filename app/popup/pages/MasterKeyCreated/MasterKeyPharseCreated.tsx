@@ -1,9 +1,8 @@
-import { Typography } from "@mui/material";
+import { Theme, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import { withBlankLayout } from "../../components/layout/blank-layout";
-import { Theme } from "@mui/material";
 
 const useStyles = makeStyles((theme: Theme) => ({
   logoContainer: {

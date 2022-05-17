@@ -55,21 +55,11 @@ const GetStartedPageBase: React.FC = () => {
     <>
       <div className={styles.logoContainer}>
         <img src="./icons/ic_circle.png" width="75" height="75" />
-        <img
-          src="./icons/label_incognito.png"
-          width="160"
-          height="40"
-          style={{ marginTop: 10, marginBottom: 10 }}
-        />
+        <img src="./icons/label_incognito.png" width="160" height="40" style={{ marginTop: 10, marginBottom: 10 }} />
         <img src="./icons/label_extention.png" width="70" height="14" />
       </div>
       <div className={styles.buttonsContainer}>
-        <Button
-          variant="contained"
-          color="secondary"
-          style={{ height: 50 }}
-          onClick={createNewKeyOnClick}
-        >
+        <Button variant="contained" color="secondary" style={{ height: 50 }} onClick={createNewKeyOnClick}>
           Create new key
         </Button>
         <div style={{ height: 20 }}></div>

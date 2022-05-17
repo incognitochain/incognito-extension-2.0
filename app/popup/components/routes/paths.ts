@@ -24,6 +24,12 @@ export const Paths = {
   createNewKeyStack: "/create-new-key-stack",
   signInPage: "/signin-page",
   passwordPage: "/password-page",
+
+  importMasterKeyPage: "/import-master-key",
+  importMasterKeyStack: "/import-master-key-stack",
+
+  homeRouteStack: "/home-stack",
+  unlockPage: "/unlock-page",
 };
 
 export const PathsKey: PathsKeyMap = {
@@ -52,4 +58,8 @@ export const Links = {
   signInPage: compile(Paths.signInPage),
   createNewKeyStack: compile(Paths.createNewKeyStack),
   passwordPage: compile(Paths.passwordPage),
+  importMasterKeyStack: compile(Paths.importMasterKeyStack),
+  importMasterKeyPage: compile(Paths.importMasterKeyPage),
+  homeRouteStack: compile(Paths.homeRouteStack),
+  unlockPage: compile(Paths.unlockPage),
 };

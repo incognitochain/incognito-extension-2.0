@@ -53,5 +53,7 @@ module.exports = {
     "@typescript-eslint/require-await": 0,
     "@typescript-eslint/no-misused-new": 0,
     "no-unused-vars": 1,
+    "no-case-declarations": 0,
+    "no-useless-catch": 0,
   },
 };

@@ -1,9 +1,9 @@
-import { camelCase } from 'lodash';
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import logger from 'redux-logger';
-import { persistReducer, persistStore } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
-import thunk from 'redux-thunk';
+import { camelCase } from "lodash";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import logger from "redux-logger";
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
+import thunk from "redux-thunk";
 
 export interface IConfigStore {
   store: any;
@@ -13,7 +13,7 @@ export interface IConfigStore {
 const isMainnet = true;
 
 export const configStore = (preloadedState: any = {}) => {
-  const requireModule = require.context('../../popup', true, /\.reducer.ts/); // extract [reducerName].reducer.ts files inside redux folder
+  const requireModule = require.context("../../popup", true, /\.reducer.ts/); // extract [reducerName].reducer.ts files inside redux folder
   const reducers: any = {};
   requireModule.keys().forEach((fileName: any) => {
     try {
@@ -27,20 +27,18 @@ export const configStore = (preloadedState: any = {}) => {
     ...reducers,
   });
   const persistConfig = {
-    key: 'root',
+    key: "root",
     storage,
     whitelist: [],
-    blacklist: ['config'],
+    blacklist: ["config"],
   };
   const persistedReducer = persistReducer(persistConfig, rootReducers);
-  const middlewareEnhancer = isMainnet
-    ? [thunk]
-    : [thunk, logger];
+  const middlewareEnhancer = isMainnet ? [thunk] : [thunk, logger];
   const store: any = configureStore({
     reducer: persistedReducer,
     middleware: middlewareEnhancer,
-    preloadedState
-  })
+    preloadedState,
+  });
   const persistor = persistStore(store);
   return { store, persistor };
 };

@@ -19,6 +19,6 @@ export abstract class BaseModel implements BaseModelAction {
   }
 
   toJSON?(): string {
-    return '';
+    return "";
   }
 }

@@ -1,1 +1,1 @@
-export * from './master-key/master-key-model';
+export * from "./MasterKeyModel";

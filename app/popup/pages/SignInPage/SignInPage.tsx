@@ -1,17 +1,21 @@
 import { withBlankLayout } from "@/popup/components/layout/blank-layout";
 import NavigationBar from "@/popup/components/layout/navigation-bar";
-import { Typography } from "@mui/material";
-import Button from "@mui/material/Button";
-import { makeStyles } from "@mui/styles";
-import { Box, IconButton, InputAdornment, OutlinedInput } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import { Theme } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  IconButton,
+  InputAdornment,
+  OutlinedInput,
+  Theme,
+  Typography,
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) => ({
   logoContainer: {
@@ -69,14 +73,8 @@ const SignInPageBase: React.FC = () => {
 
   return (
     <>
-      <NavigationBar goBack={() => history.goBack()} title={""} />
       <div className={styles.logoContainer}>
-        <img
-          src="./icons/label_incognito.png"
-          width="160"
-          height="40"
-          style={{ marginTop: 10, marginBottom: 10 }}
-        />
+        <img src="./icons/label_incognito.png" width="160" height="40" style={{ marginTop: 10, marginBottom: 10 }} />
         <Typography variant="h5" color="inherit" component="h1">
           {"Welcome back"}
         </Typography>

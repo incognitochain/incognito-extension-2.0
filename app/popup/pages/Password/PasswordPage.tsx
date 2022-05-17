@@ -1,19 +1,31 @@
 import { withBlankLayout } from "@/popup/components/layout/blank-layout";
 import NavigationBar from "@/popup/components/layout/navigation-bar";
-import { IconButton, Typography } from "@mui/material";
-import Button from "@mui/material/Button";
-import { makeStyles } from "@mui/styles";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { InputAdornment, OutlinedInput } from "@mui/material";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
+import {
+  InputAdornment,
+  OutlinedInput,
+  FormControl,
+  InputLabel,
+  FormHelperText,
+  IconButton,
+  Typography,
+  Button,
+} from "@mui/material";
+import { MainLayout } from "@popup/components/layout/main-layout";
 import React, { useLayoutEffect, useState } from "react";
-import { MainLayout } from "../../components/layout/main-layout";
+import { makeStyles } from "@mui/styles";
 
-const { newMnemonic } = require("incognito-chain-web-js/build/wallet");
+let passwordValidator = require("password-validator");
+let schema = new passwordValidator();
+schema
+  .is()
+  .min(8, "password requires 8 characters minimum")
+  .has()
+  .not()
+  .spaces(0, "The password should not have spaces");
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: any) => ({
   bodyView: {
     flex: 1,
     display: "flex",
@@ -28,7 +40,8 @@ const useStyles = makeStyles((theme) => ({
 interface PasswordPageBaseProps {
   onBack?: () => void;
   passwordInitValue?: string;
-  continuePressed: (password: string) => void;
+  continuePressed?: (password: string) => void;
+  buttonTitle?: string;
 }
 
 const PasswordPageBase: React.FC<PasswordPageBaseProps> = (props: PasswordPageBaseProps) => {
@@ -36,11 +49,13 @@ const PasswordPageBase: React.FC<PasswordPageBaseProps> = (props: PasswordPageBa
 
   const [password, setPassword] = useState<string>("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
 
   const [verify, setVerify] = useState<string>("");
   const [verifyVisible, setVerifyVisible] = useState(false);
+  const [verifyPassword, setVerifyError] = useState("");
 
-  const { onBack = () => {}, continuePressed = () => {}, passwordInitValue = "ABCD" } = props;
+  const { onBack = () => {}, continuePressed = () => {}, passwordInitValue = "", buttonTitle = "Continue" } = props;
 
   useLayoutEffect(() => {
     setPassword(passwordInitValue);
@@ -52,6 +67,7 @@ const PasswordPageBase: React.FC<PasswordPageBaseProps> = (props: PasswordPageBa
   };
 
   const passwordOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswordError("");
     setPassword(event.target.value);
   };
 
@@ -64,6 +80,7 @@ const PasswordPageBase: React.FC<PasswordPageBaseProps> = (props: PasswordPageBa
   };
 
   const verifyOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setVerifyError("");
     setVerify(event.target.value);
   };
 
@@ -72,12 +89,38 @@ const PasswordPageBase: React.FC<PasswordPageBaseProps> = (props: PasswordPageBa
   };
 
   const continueOnClick = () => {
-    console.log(" TO DO ");
-
-    const checkValid = true;
-    if (checkValid) {
+    if (checkValid()) {
       continuePressed(password);
     }
+  };
+
+  const checkValid = (): boolean => {
+    let checkValid = true;
+
+    const passwordErrorList: any[] = schema.validate(password, { details: true }) || [];
+    const verifyErrorList: any[] = schema.validate(verify, { details: true }) || [];
+
+    // console.log("ERROR: ", {
+    //   passwordErrorList,
+    //   verifyErrorList,
+    // });
+
+    if (passwordErrorList.length > 0) {
+      checkValid = false;
+      setPasswordError(passwordErrorList[0].message);
+    }
+
+    if (verifyErrorList.length > 0) {
+      checkValid = false;
+      setVerifyError(verifyErrorList[0].message);
+    }
+
+    if (password.length !== verify.length || password !== verify) {
+      checkValid = false;
+      setVerifyError("Password and verify password does not match!");
+    }
+
+    return checkValid;
   };
 
   return (
@@ -86,24 +129,20 @@ const PasswordPageBase: React.FC<PasswordPageBaseProps> = (props: PasswordPageBa
       <MainLayout>
         <div className={styles.bodyView}>
           <Typography variant="subtitle1">
-            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-            unknown printer took a galley.
+            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+            galley.
           </Typography>
 
-          <Typography variant="subtitle1" style={{ marginTop: 25, marginBottom: 12 }}>
+          <Typography variant="h6" style={{ marginTop: 25, marginBottom: 12 }}>
             Password
           </Typography>
           <FormControl fullWidth variant="outlined" color="info">
-            <InputLabel
-              htmlFor="outlined-adornment-password"
-              color="info"
-              sx={{ color: "#9C9C9C" }}
-            >
+            <InputLabel htmlFor="outlined-adornment-password" color="info" sx={{ color: "#9C9C9C" }}>
               Create password(min 10 chars)
             </InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"
-              sx={{ backgroundColor: "#404040", marginBottom: 2 }}
+              sx={{ backgroundColor: "#404040" }}
               type={passwordVisible ? "text" : "password"}
               value={password}
               onChange={passwordOnChange}
@@ -125,9 +164,15 @@ const PasswordPageBase: React.FC<PasswordPageBaseProps> = (props: PasswordPageBa
               }}
               label="Create password(min 10 chars)"
             />
+
+            {passwordError.length > 0 && (
+              <FormHelperText error style={{ color: "red", fontSize: 13 }}>
+                {passwordError}
+              </FormHelperText>
+            )}
           </FormControl>
 
-          <Typography variant="subtitle1" style={{ marginTop: 5, marginBottom: 12 }}>
+          <Typography variant="h6" style={{ marginTop: 5, marginBottom: 12 }}>
             Verify
           </Typography>
           <FormControl fullWidth variant="outlined" color="info">
@@ -158,18 +203,17 @@ const PasswordPageBase: React.FC<PasswordPageBaseProps> = (props: PasswordPageBa
               }}
               label="Enter the password again"
             />
+
+            {verifyPassword.length > 0 && (
+              <FormHelperText error style={{ color: "red", fontSize: 13 }}>
+                {verifyPassword}
+              </FormHelperText>
+            )}
           </FormControl>
         </div>
         <div className={styles.bottomView}>
-          <Button
-            fullWidth
-            variant="contained"
-            color="secondary"
-            disabled={false}
-            style={{ height: 50 }}
-            onClick={continueOnClick}
-          >
-            Continue
+          <Button fullWidth variant="contained" color="secondary" style={{ height: 50 }} onClick={continueOnClick}>
+            {buttonTitle}
           </Button>
         </div>
       </MainLayout>

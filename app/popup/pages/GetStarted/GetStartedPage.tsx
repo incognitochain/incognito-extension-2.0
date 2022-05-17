@@ -1,12 +1,11 @@
 import { withBlankLayout } from "@/popup/components/layout/blank-layout";
-import Button from "@mui/material/Button";
+import { Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import React from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Paths } from "../../components/routes/paths";
-import { Theme } from "@mui/material";
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles((theme: any) => ({
   logoContainer: {
     flex: 3,
     display: "flex",
@@ -41,16 +40,14 @@ const useStyles = makeStyles((theme: Theme) => ({
 const GetStartedPageBase: React.FC = () => {
   const styles = useStyles();
   const history = useHistory();
+
+  useEffect(() => {}, []);
+
   return (
     <>
       <div className={styles.logoContainer}>
         <img src="./icons/ic_circle.png" width="75" height="75" />
-        <img
-          src="./icons/label_incognito.png"
-          width="160"
-          height="40"
-          style={{ marginTop: 10, marginBottom: 10 }}
-        />
+        <img src="./icons/label_incognito.png" width="160" height="40" style={{ marginTop: 10, marginBottom: 10 }} />
         <img src="./icons/label_extention.png" width="70" height="14" />
       </div>
       <div className={styles.buttonsContainer}>
@@ -70,7 +67,7 @@ const GetStartedPageBase: React.FC = () => {
           color="secondary"
           style={{ height: 50, backgroundColor: "#ffffff", color: "#1A73E8" }}
           onClick={() => {
-            history.push(Paths.signInPage);
+            history.push(Paths.importMasterKeyStack);
           }}
         >
           Import pharse
