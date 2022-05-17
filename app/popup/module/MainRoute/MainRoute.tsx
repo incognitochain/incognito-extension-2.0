@@ -16,13 +16,11 @@ const MainRoute = () => {
     }, []);
     
     return (
+      <Suspense fallback="loading">
         <Switch>
-            <Suspense fallback="loading">
-                {routes.map((route: IRouteProps) => (
-                    <Route {...route} key={route.path} />
-                ))}
-            </Suspense>
+          {routes.map(route => <Route {...route}/>)}
         </Switch>
+      </Suspense>
     );
 };
 

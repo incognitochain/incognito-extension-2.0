@@ -1,4 +1,4 @@
-import styled, { ITheme } from 'styled-components';
+import styled from 'styled-components';
 
 export const Styled = styled.div`
     width: 200px;
