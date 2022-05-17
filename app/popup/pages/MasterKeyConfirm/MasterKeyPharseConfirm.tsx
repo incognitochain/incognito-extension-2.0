@@ -1,6 +1,6 @@
-import { withBlankLayout } from "@/popup/components/layout/blank-layout";
-import NavigationBar from "@/popup/components/layout/navigation-bar";
-import { isDebugMode } from "@/utils/env";
+import { withBlankLayout } from "@popup/components/layout/blank-layout";
+import NavigationBar from "@popup/components/layout/navigation-bar";
+import { isDebugMode } from "@utils/env";
 import { Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { shuffle } from "lodash";

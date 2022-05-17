@@ -1,4 +1,4 @@
-import { withBlankLayout } from "@/popup/components/layout/blank-layout";
+import { withBlankLayout } from "@popup/components/layout/blank-layout";
 import { Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect } from "react";

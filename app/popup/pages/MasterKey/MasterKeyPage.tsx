@@ -1,5 +1,5 @@
-import { withBlankLayout } from "@/popup/components/layout/blank-layout";
-import NavigationBar from "@/popup/components/layout/navigation-bar";
+import { withBlankLayout } from "@popup/components/layout/blank-layout";
+import NavigationBar from "@popup/components/layout/navigation-bar";
 import { Bookmark } from "@material-ui/icons";
 import { Grid, IconButton, Theme, Typography, Box, Button, Card, CardContent, FormControlLabel } from "@mui/material";
 import { makeStyles } from "@mui/styles";

@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
-import { withLayout } from "@/popup/components/layout";
-import { Paths } from "@/popup/components/routes/paths";
-import { useBackground } from "@/popup/context/background";
-import { useCallAsync } from "@/popup/utils/notifications";
+import { withLayout } from "@popup/components/layout";
+import { Paths } from "@popup/components/routes/paths";
+import { useBackground } from "@popup/context/background";
+import { useCallAsync } from "@popup/utils/notifications";
 import { PasswordPage } from "@popup/pages/Password/PasswordPage";
 import React, { ReactElement, useCallback, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";

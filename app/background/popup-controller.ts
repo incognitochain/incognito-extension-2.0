@@ -21,8 +21,8 @@ import BufferLayout from "buffer-layout";
 import { ActionManager } from "./lib/action-manager";
 import { PopupStateResolver } from "./lib/popup-state-resolver";
 import { TOKEN_PROGRAM_ID } from "../core/program-plugin/plugins/spl";
-import { importMasterKey, ImportMasterKeyPayload, initMasterKey, InitMasterKeyPayload } from "@/redux/masterKey";
-import { dispatch, store } from "@/redux/store/store";
+import { importMasterKey, ImportMasterKeyPayload, initMasterKey, InitMasterKeyPayload } from "@redux/masterKey";
+import { dispatch, store } from "@redux/store/store";
 import Storage from "@services/storage";
 import { APP_SALT_KEY } from "../constants/common";
 

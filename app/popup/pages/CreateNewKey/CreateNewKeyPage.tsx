@@ -1,5 +1,5 @@
-import { withBlankLayout } from "@/popup/components/layout/blank-layout";
-import NavigationBar from "@/popup/components/layout/navigation-bar";
+import { withBlankLayout } from "@popup/components/layout/blank-layout";
+import NavigationBar from "@popup/components/layout/navigation-bar";
 import { Typography, Button, CardContent, Checkbox, FormControlLabel, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useCallback, useLayoutEffect, useState } from "react";

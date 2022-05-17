@@ -1,5 +1,5 @@
 // import { getStorageLoadWalletError, setStorageLoadWalletError } from '@models/storageError';
-import { loadWallet } from "@/services/wallet/walletService";
+import { loadWallet } from "@services/wallet/walletService";
 import { getWalletInstanceByImportMasterKey } from "@redux/masterKey";
 import storage from "@services/storage";
 import { getPassphrase } from "@services/wallet/passwordService";

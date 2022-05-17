@@ -1,6 +1,5 @@
-import { withBlankLayout } from "@/popup/components/layout/blank-layout";
-import { Paths } from "@/popup/components/routes/paths";
-import { checkPasswordValid } from "@/services/wallet/passwordService";
+import { withBlankLayout } from "@popup/components/layout/blank-layout";
+import { Paths } from "@popup/components/routes/paths";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {
@@ -19,6 +18,7 @@ import { makeStyles } from "@mui/styles";
 import { debounce } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { checkPasswordValid } from "@services/wallet/passwordService";
 
 const useStyles = makeStyles((theme: Theme) => ({
   logoContainer: {

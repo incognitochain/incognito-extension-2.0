@@ -6,7 +6,7 @@ import { unregisterServiceWorker } from "./core/service-worker";
 import { App as AppTest } from "@popup/pages/app";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { store, persistor } from "@/popup/popup-preprocessor";
+import { store, persistor } from "@popup/popup-preprocessor";
 
 if (store && persistor)
   ReactDOM.render(

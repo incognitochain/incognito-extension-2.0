@@ -4,13 +4,13 @@ import {
   getPassphrase,
   getPassphraseNoCache,
   savePasspharseToStorage,
-} from "@/services/wallet/passwordService";
+} from "@services/wallet/passwordService";
 import MasterKeyModel, { DEFAULT_MASTER_KEY } from "@model/MasterKeyModel";
 import { getWalletAccounts } from "@services/api/masterKey";
 import { importWallet, loadListAccount, saveWallet, storeWalletAccountIdsOnAPI } from "@services/wallet/walletService";
 import { AppGetState, AppThunk, AppThunkDispatch } from "../store";
 import { InitMasterKeyPayload, ImportMasterKeyPayload } from "./masterKey.types";
-import { login } from "@/services/authService";
+import { login } from "@services/authService";
 
 const updateNetwork = async () => {
   // const serverJSONString = await storage.getItem('$servers');

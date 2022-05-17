@@ -1,7 +1,7 @@
-import CreateNewKeyRouteStack from "@/popup/pages/CreateNewKey/CreateNewKeyRouteStack";
-import { GetStartedPage } from "@/popup/pages/GetStarted/GetStartedPage";
-import HomeRouteStack from "@/popup/pages/Home/HomeRouteStack";
-import ImportMasterKeyRouteStack from "@/popup/pages/Import/ImportMasterKeyRouteStack";
+import CreateNewKeyRouteStack from "@popup/pages/CreateNewKey/CreateNewKeyRouteStack";
+import { GetStartedPage } from "@popup/pages/GetStarted/GetStartedPage";
+import HomeRouteStack from "@popup/pages/Home/HomeRouteStack";
+import ImportMasterKeyRouteStack from "@popup/pages/Import/ImportMasterKeyRouteStack";
 import { UnlockPage } from "@popup/pages/Unlock/UnlockPage";
 import React from "react";
 import { RouteProps } from "react-router";

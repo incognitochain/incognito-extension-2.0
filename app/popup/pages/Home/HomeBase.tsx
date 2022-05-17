@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
-import { Paths } from "@/popup/components/routes/paths";
-import { useBackground } from "@/popup/context/background";
-import { useCallAsync } from "@/popup/utils/notifications";
+import { Paths } from "@popup/components/routes/paths";
+import { useBackground } from "@popup/context/background";
+import { useCallAsync } from "@popup/utils/notifications";
 import HomeBasePage from "@popup/pages/Home/HomeBasePage";
 import React, { ReactElement, useCallback, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";

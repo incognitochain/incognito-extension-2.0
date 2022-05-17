@@ -1,5 +1,5 @@
-import { withBlankLayout } from "@/popup/components/layout/blank-layout";
-import NavigationBar from "@/popup/components/layout/navigation-bar";
+import { withBlankLayout } from "@popup/components/layout/blank-layout";
+import NavigationBar from "@popup/components/layout/navigation-bar";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {

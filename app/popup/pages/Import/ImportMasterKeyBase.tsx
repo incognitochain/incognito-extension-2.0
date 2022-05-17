@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
-import { Paths } from "@/popup/components/routes/paths";
-import { useBackground } from "@/popup/context/background";
-import { useCallAsync } from "@/popup/utils/notifications";
+import { Paths } from "@popup/components/routes/paths";
+import { useBackground } from "@popup/context/background";
+import { useCallAsync } from "@popup/utils/notifications";
 import ImportMasterKeyPage from "@popup/pages/Import/ImportMasterKeyPage";
 import { PasswordPage } from "@popup/pages/Password/PasswordPage";
 import React, { ReactElement, useCallback, useRef, useState } from "react";

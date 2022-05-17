@@ -2,7 +2,7 @@
 import AccountModel from "@model/account";
 import { getStorageLoadWalletError, setStorageLoadWalletError } from "@model/storageError";
 import { updateWalletAccounts } from "@services/api/masterKey";
-import { getToken } from "@/services/authService";
+import { getToken } from "@services/authService";
 import storage from "@services/storage";
 import accountService from "@services/wallet/accountService";
 import { DEX } from "@utils/dex";

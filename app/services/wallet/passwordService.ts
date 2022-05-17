@@ -1,4 +1,4 @@
-import { APP_PASSWORD_KEY, APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@/constants/common";
+import { APP_PASSWORD_KEY, APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@constants/common";
 import { CONSTANT_CONFIGS } from "@constants/index";
 import { cachePromise, clearCache, getCache } from "@services/cache";
 import Storage from "@services/storage";
