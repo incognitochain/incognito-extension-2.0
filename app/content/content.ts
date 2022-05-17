@@ -59,12 +59,12 @@ async function setupStreams() {
 
   pump(pageMux, pageStream, pageMux, (err) => {
     if (err) {
-      return logStreamDisconnectWarning('Solana Inpage Multiplex', err);
+      return logStreamDisconnectWarning('Incognito Inpage Multiplex', err);
     }
   })
   pump(extensionMux, extensionStream, extensionMux, (err) => {
     if (err) {
-      return logStreamDisconnectWarning('Solana Background Multiplex', err)
+      return logStreamDisconnectWarning('Incognito Background Multiplex', err)
     }
   })
 
@@ -126,7 +126,7 @@ function shouldInjectProvider() {
  * @param {Error} err - Stream connection error
  */
 function logStreamDisconnectWarning(remoteLabel: string, err: Error) {
-  let warningMsg = `SolanaContentscript - lost connection to ${remoteLabel}`
+  let warningMsg = `IncognitoContentscript - lost connection to ${remoteLabel}`
   if (err) {
     warningMsg += '\n' + err.stack
   }

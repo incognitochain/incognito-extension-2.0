@@ -21,7 +21,7 @@ import { Network } from "../../core/types";
 import { useBackground } from "../context/background";
 import { useCallAsync } from "../utils/notifications";
 import { Links, PathsKey } from "./routes/paths";
-import { SolanaIcon } from "./solana-icon";
+import { IncognitoIcon } from "./solana-icon";
 import { Theme } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
@@ -176,7 +176,7 @@ const NetworkSelector: React.FC<NetworkSelectorProps> = ({
       <Hidden smUp>
         <Tooltip title="Select Network" arrow>
           <IconButton color="inherit" onClick={(e) => setAnchorEl(e.target)}>
-            <SolanaIcon />
+            <IncognitoIcon />
           </IconButton>
         </Tooltip>
       </Hidden>

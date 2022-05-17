@@ -30,7 +30,7 @@ export class Wallet {
   addAccount() {
     const accountIndex = this.accounts.length;
     log("Adding account to wallet with index %s", accountIndex);
-    // We align on BIP44 like the Ledger support in Solana
+    // We align on BIP44 like the Ledger support in Incognito
     // All path components are hardened (i.e with ')
     // https://github.com/solana-labs/ledger-app-solana/blob/c66543976aa8171be6ea0c0771b1e9447a857c40/examples/example-sign.js#L57-L83v
     //

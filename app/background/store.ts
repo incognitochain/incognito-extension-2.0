@@ -1,23 +1,18 @@
-import { createLogger } from "../core/utils";
+import { createLogger } from "@core/utils";
 import { Wallet } from "./lib/wallet";
 import { randomBytes, secretbox } from "tweetnacl";
 import bs58 from "bs58";
 import { pbkdf2 } from "crypto";
-import Storage from "@services/storage";
-import MasterKeyModel from "@model/MasterKeyModel";
 
 import {
   DEFAULT_NETWORK,
-  MintAddressTokens,
   Network,
-  NetworkTokens,
   SecretBox,
   StoredData,
-  Token,
   WalletState,
-} from "../core/types";
+} from "@core/types";
 
-const log = createLogger("sol:bg:store");
+const log = createLogger("incognito:bg:store");
 
 export class Store {
   public popIsOpen: boolean;
@@ -30,11 +25,10 @@ export class Store {
   public selectedNetwork: Network;
   public selectedAccount: string;
   public authorizedOrigins: string[];
-  public tokens: NetworkTokens;
   public salt: string | null;
 
   constructor(initialStore: StoredData) {
-    const { secretBox, accountCount, selectedNetwork, selectedAccount, authorizedOrigins, tokens, salt } = initialStore;
+    const { secretBox, accountCount, selectedNetwork, selectedAccount, authorizedOrigins, salt } = initialStore;
     this.popIsOpen = false;
 
     // We should always have at-least 1 account at all time
@@ -54,21 +48,14 @@ export class Store {
     }
 
     this.authorizedOrigins = authorizedOrigins || [];
-    this.tokens = tokens || {};
   }
 
   isLocked(): boolean {
-    if (this.secretBox) {
-      return true;
-    }
-    return false;
+    return !!this.secretBox;
   }
 
   isUnlocked(): boolean {
-    if (this.wallet) {
-      return true;
-    }
-    return false;
+    return !!this.wallet;
   }
 
   getWalletState = (): WalletState => {
@@ -96,24 +83,15 @@ export class Store {
   }
 
   hasSalt() {
-    if (this.salt) {
-      return true;
-    }
-    return false;
+    return !!this.salt;
   }
 
   hasSecretBox() {
-    if (this.secretBox) {
-      return true;
-    }
-    return false;
+    return !!this.secretBox;
   }
 
   hasWallet() {
-    if (this.wallet) {
-      return true;
-    }
-    return false;
+    return !!this.wallet;
   }
 
   unlockSecretBox(password: string) {
@@ -205,110 +183,6 @@ export class Store {
 
     log("origin not authorized", origin);
     return false;
-  }
-
-  addToken(token: Token): boolean {
-    log("Adding Token [%s] %s to network %s", token.mintAddress, token.name, this.selectedNetwork.endpoint);
-    if (!token.mintAddress) {
-      log(
-        "Unable to add mint [%s] %s to network %s: Mint does not have a public key",
-        token.mintAddress,
-        token.name,
-        this.selectedNetwork.endpoint,
-      );
-      return false;
-    }
-
-    const networkTokens = this.tokens[this.selectedNetwork.endpoint];
-    if (!networkTokens) {
-      log(
-        "Unable to add mint [%s] %s to network %s: network not found",
-        token.mintAddress,
-        token.name,
-        this.selectedNetwork.endpoint,
-      );
-      return false;
-    }
-
-    networkTokens[token.mintAddress] = token;
-    return true;
-  }
-
-  updateToken(oldPublicKey: string, token: Token): boolean {
-    log(
-      "Updating mint with public key: %s to:  [%s] %s to network %s",
-      oldPublicKey,
-      token.mintAddress,
-      token.name,
-      this.selectedNetwork.endpoint,
-    );
-
-    if (!token.mintAddress) {
-      log("Unable to update mint: Mint %s does not have a public key", token.name);
-      return false;
-    }
-
-    const networkTokens = this.tokens[this.selectedNetwork.endpoint];
-    if (!networkTokens) {
-      log(
-        "Unable to update mint [%s] %s to network %s: network not found",
-        token.mintAddress,
-        token.name,
-        this.selectedNetwork.endpoint,
-      );
-      return false;
-    }
-
-    if (!networkTokens[oldPublicKey]) {
-      log(
-        "Unable to update mint [%s] %s to network %s: mint not found",
-        token.mintAddress,
-        token.name,
-        this.selectedNetwork.endpoint,
-      );
-      return false;
-    }
-
-    if (token.mintAddress !== oldPublicKey) {
-      log("Mint public key is changing removing old mint and adding new one");
-      delete networkTokens[oldPublicKey];
-    }
-
-    log("Updating mint");
-    networkTokens[token.mintAddress] = token;
-    return true;
-  }
-
-  removeToken(publicKey: string): boolean {
-    log("Removing mint with public key %s: %s", publicKey, this.selectedNetwork.endpoint);
-
-    const networkTokens = this.tokens[this.selectedNetwork.endpoint];
-    if (!networkTokens) {
-      log("Unable to remove mint %s to network %s: network not found", publicKey, this.selectedNetwork.endpoint);
-      return false;
-    }
-
-    if (!networkTokens[publicKey]) {
-      log("Unable to remove mint %s from network %s: mint not found", publicKey, this.selectedNetwork.endpoint);
-      return false;
-    }
-
-    delete networkTokens[publicKey];
-    return true;
-  }
-
-  getTokens(network: Network): MintAddressTokens {
-    log("getTokens with network: %O, tokens: %O", network, this.tokens);
-    return this.tokens[network.endpoint] || {};
-  }
-
-  getToken(network: Network, accountAddress: string): Token | undefined {
-    const networkTokens = this.tokens[network.endpoint];
-    log("token for network: %O, %O", network, networkTokens);
-    if (networkTokens) {
-      return networkTokens[accountAddress];
-    }
-    return undefined;
   }
 }
 

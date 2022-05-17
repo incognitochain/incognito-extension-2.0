@@ -7,12 +7,10 @@ import { OwnedAccount } from "../types"
 import { tuple } from "immutable-tuple"
 import { useBackground } from "../context/background"
 import { Buffer } from "buffer"
-import { TOKEN_PROGRAM_ID } from "../../core/program-plugin/plugins/spl"
-import { MintInfo, Token } from "@solana/spl-token"
 
 const log = require("debug")("sol:hooks")
 
-export const useSolanaExplorerUrlSuffix = (): string => {
+export const useIncognitoExplorerUrlSuffix = (): string => {
   const { popupState } = useBackground()
   if (popupState?.selectedNetwork.cluster === "devnet") {
     return "?cluster=devnet"
@@ -87,7 +85,6 @@ export const useAccountInfo = (
     }
     const id = connection.onAccountChange(publicKey, () => refreshCache(cacheKey))
     return () => connection.removeAccountChangeListener(id)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connection, publicKey?.toBase58(), cacheKey])
 
   return [accountInfo, loaded]
@@ -103,6 +100,8 @@ export const useTokenAccountsByOwner = (
     Array<{ pubkey: PublicKey; account: AccountInfo<Buffer> }>
   >(
     () => {
+      // Todo: remove TOKEN_PROGRAM_ID
+      const TOKEN_PROGRAM_ID = "test" as any
       log("getting get token account by owner %s", publicKey.toBase58())
       return connection
         .getTokenAccountsByOwner(publicKey, {

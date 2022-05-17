@@ -1,5 +1,5 @@
 import { Store } from "./store";
-import { createLogger, getMintInfo } from "../core/utils";
+import { createLogger } from "@core/utils";
 import { Buffer } from "buffer";
 import bs58 from "bs58";
 import nacl from "tweetnacl";
@@ -12,19 +12,16 @@ import {
   Notification,
   PopupActions,
   SignatureResult,
-} from "../core/types";
-import { Account, Connection, PublicKey, SystemProgram, Transaction, TransactionInstruction } from "@solana/web3.js";
-import { Web3Connection } from "../core/connection";
+} from "@core/types";
+import { Account, Connection, PublicKey, SystemProgram } from "@solana/web3.js";
+import { Web3Connection } from "@core/connection";
 import { ExtensionManager } from "./lib/extension-manager";
-// @ts-ignore FIXME We need to add a mock definition of this library to the overall project
-import BufferLayout from "buffer-layout";
 import { ActionManager } from "./lib/action-manager";
 import { PopupStateResolver } from "./lib/popup-state-resolver";
-import { TOKEN_PROGRAM_ID } from "../core/program-plugin/plugins/spl";
 import { importMasterKey, ImportMasterKeyPayload, initMasterKey, InitMasterKeyPayload } from "@redux/masterKey";
-import { dispatch, store } from "@redux/store/store";
+import { dispatch } from "@redux/store/store";
 import Storage from "@services/storage";
-import { APP_SALT_KEY } from "../constants/common";
+import { APP_SALT_KEY } from "@constants/common";
 
 const log = createLogger("sol:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -173,31 +170,6 @@ export class PopupController {
             res.error = err;
           }
           break;
-        case "popup_sendSplToken":
-          try {
-            await this.sendSplToken(req);
-          } catch (err) {
-            log("popup_sendSolToken failed with error: %s", err);
-            res.error = err;
-          }
-          break;
-        case "popup_addToken":
-          try {
-            await this.addToken(req);
-          } catch (err) {
-            log("popup_addToken failed with error: %s", err);
-            res.error = err;
-          }
-          break;
-        case "popup_removeToken":
-          log(`remove token for req %O`, req);
-          const { mintAddress } = req.params;
-          this.store.removeToken(mintAddress);
-          break;
-        case "popup_updateToken":
-          log(`update token for req %O`, req);
-          this.store.updateToken(req.params["mintAddress"], req.params["token"]);
-          break;
         case "popup_addWalletAccount":
           this.addAccount();
           break;
@@ -250,24 +222,6 @@ export class PopupController {
 
   async lockWalletAction() {
     this.store.setWallet(null);
-  }
-
-  async addToken(req: any) {
-    log(`adding token for req %O`, req);
-    const { token } = req.params;
-
-    try {
-      log("Retrieving mint data: %s", token.mintAddress);
-      const mintInfo = await getMintInfo(this.connection.conn, new PublicKey(token.mintAddress));
-      this.store.addToken({
-        mintAddress: token.mintAddress,
-        name: token.name,
-        symbol: token.symbol,
-        decimals: mintInfo.decimals,
-      });
-    } catch (e) {
-      throw new Error(`Could not add token: ${e}`);
-    }
   }
 
   async deleteAuthorizedWebsite(req: any) {
@@ -468,65 +422,6 @@ export class PopupController {
 
     log("sending transaction %O", transaction);
 
-    try {
-      const signature = await connection.sendTransaction(transaction, [signingAccount]);
-      log("Got signature:", signature);
-    } catch (e) {
-      throw new Error("Failed to send transaction: " + e);
-    }
-  }
-
-  async sendSplToken(req: any) {
-    log(`send spl token for req %O`, req);
-    const transfer = req.params.transfer;
-
-    if (!this.store.wallet) {
-      throw new Error(`Unable sign and send transaction with out a wallet`);
-    }
-
-    let signingAccount: Account | undefined;
-    this.store.wallet.accounts.forEach((a: Account) => {
-      if (a.publicKey.toBase58() === req.params.transfer.signer) {
-        signingAccount = a;
-      }
-    });
-
-    if (!signingAccount) {
-      throw new Error(`no account found in wallet for pubkey: ${req.params.transfer}`);
-    }
-
-    const amount = req.params.transfer.amount;
-    log("amount for transaction: %O", amount);
-
-    const bufferLayout = BufferLayout.union(BufferLayout.u8("instruction"));
-    bufferLayout.addVariant(3, BufferLayout.struct([BufferLayout.nu64("amount")]), "transfer");
-    const instructionMaxSpan = Math.max(...Object.values(bufferLayout.registry).map((r: any) => r.span));
-    let b = Buffer.alloc(instructionMaxSpan);
-    let span = bufferLayout.encode(
-      {
-        transfer: { amount: amount },
-      },
-      b,
-    );
-
-    const encodedData = b.slice(0, span);
-    const transaction = new Transaction();
-    transaction.add(
-      new TransactionInstruction({
-        keys: [
-          { pubkey: new PublicKey(transfer.fromPubkey), isSigner: false, isWritable: true },
-          { pubkey: new PublicKey(transfer.toPubkey), isSigner: false, isWritable: true },
-          { pubkey: signingAccount.publicKey, isSigner: false, isWritable: false },
-        ],
-        data: encodedData,
-        programId: TOKEN_PROGRAM_ID,
-      }),
-    );
-
-    log("creating connection with address: ", this.store.selectedNetwork.endpoint);
-    const connection = new Connection(this.store.selectedNetwork.endpoint);
-
-    log("sending transaction %O", transaction);
     try {
       const signature = await connection.sendTransaction(transaction, [signingAccount]);
       log("Got signature:", signature);

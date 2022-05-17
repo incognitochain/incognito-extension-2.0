@@ -1,22 +1,18 @@
 import {
   Connection,
   PublicKey,
-  SystemProgram,
   Transaction,
   TransactionInstruction,
 } from "@solana/web3.js"
 import { ProgramPlugin } from "./types"
 import { createLogger } from "../utils"
-import { SplPlugin, TOKEN_PROGRAM_ID } from "./plugins/spl"
 import { DecodedInstruction, Markdown, Token } from "../types"
-import { SolanaPlugin } from "./plugins/system"
 import base58 from "bs58"
 
 const log = createLogger("sol:decoder")
 
 interface ProgramPluginManagerOpt {
   getConnection: () => Connection
-  getSPLToken: (publicKey: PublicKey, connection: Connection) => Promise<Token | undefined>
 }
 
 export class ProgramPluginManager {
@@ -26,7 +22,6 @@ export class ProgramPluginManager {
   constructor(opts: ProgramPluginManagerOpt) {
     this.supportedProgramId = {}
     this.opts = opts
-    this._setupPlugins()
   }
 
   renderTransactionItemMarkdown = async (transaction: Transaction): Promise<Markdown[]> => {
@@ -99,8 +94,7 @@ export class ProgramPluginManager {
       log("Decorating transaction instruction for program [%s]", programId)
       try {
         decodedInstruction = await plugin.decorate(decodedInstruction, {
-          getConnection: this.opts.getConnection,
-          getSPLToken: this.opts.getSPLToken,
+          getConnection: this.opts.getConnection
         })
       } catch (error) {
         log("An error occurred when decorating instruction for program [%s] %o", programId, error)
@@ -121,12 +115,6 @@ export class ProgramPluginManager {
         decodeInstructionFunc(index, instruction)
       )
     )
-  }
-
-  _setupPlugins = (): void => {
-    this._registerProgramPlugin(TOKEN_PROGRAM_ID, new SplPlugin())
-    this._registerProgramPlugin(SystemProgram.programId, new SolanaPlugin())
-    // this._registerProgramPlugin(DEX_PROGRAM_ID, new SerumDecoder())
   }
 
   _registerProgramPlugin = (programId: PublicKey, plugin: ProgramPlugin): void => {

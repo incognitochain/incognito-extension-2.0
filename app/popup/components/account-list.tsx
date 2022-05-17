@@ -132,17 +132,16 @@ const AccountListItem: React.FC<AccountListItemProps> = ({
   const history = useHistory();
   const classes: any = useStyles();
   const { connection } = useConnection();
-  const { getToken } = useBackground();
   const [balanceInfo, setBalanceInfo] = useState<BalanceInfo>();
 
   useEffect(() => {
-    getBalanceInfo(connection, getToken, ownedAccount)
-      .then((balanceInfo) => {
-        setBalanceInfo(balanceInfo);
-      })
-      .catch((e) => {
-        console.log("Error getting balance information: ", e);
-      });
+    // getBalanceInfo(connection, getToken, ownedAccount)
+    //   .then((balanceInfo) => {
+    //     setBalanceInfo(balanceInfo);
+    //   })
+    //   .catch((e) => {
+    //     console.log("Error getting balance information: ", e);
+    //   });
   }, [ownedAccount]);
 
   const accountDetail = (account: PublicKey, signer: PublicKey) => {

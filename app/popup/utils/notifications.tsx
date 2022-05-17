@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useConnection } from "../context/connection";
-import { useSolanaExplorerUrlSuffix } from "../hooks";
+import { useIncognitoExplorerUrlSuffix } from "../hooks";
 import Button from "@mui/material/Button";
 import { TransactionSignature } from "@solana/web3.js";
 import { OptionsObject, useSnackbar } from "notistack";
@@ -66,7 +66,7 @@ export const useSendTransaction = (): [SendTransaction, boolean] => {
 
 const ViewTransactionOnExplorerButton = (opts: { signature: TransactionSignature }) => {
   const { signature } = opts;
-  const urlSuffix = useSolanaExplorerUrlSuffix();
+  const urlSuffix = useIncognitoExplorerUrlSuffix();
   return (
     <Button
       color="inherit"
@@ -75,7 +75,7 @@ const ViewTransactionOnExplorerButton = (opts: { signature: TransactionSignature
       rel="noopener"
       href={`https://explorer.solana.com/tx/${signature}` + urlSuffix}
     >
-      View on Solana Explorer
+      View on Incognito Explorer
     </Button>
   );
 };

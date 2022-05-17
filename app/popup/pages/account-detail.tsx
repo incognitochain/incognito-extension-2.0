@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAccountInfo, useSolanaExplorerUrlSuffix } from "../hooks";
+import { useAccountInfo, useIncognitoExplorerUrlSuffix } from "../hooks";
 import Paper from "@mui/material/Paper";
 import { PublicKey } from "@solana/web3.js";
 import { Button, Typography } from "@mui/material";
@@ -18,7 +18,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import RefreshIcon from "@material-ui/icons/Refresh";
-import { SolanaIcon } from "../components/solana-icon";
+import { IncognitoIcon } from "../components/solana-icon";
 import { TransactionList } from "../components/transaction-list";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
@@ -52,20 +52,20 @@ const AccountDetailBaseWrapper: React.FC = () => {
   const signerKey = new PublicKey(signerAddress);
 
   const { connection } = useConnection();
-  const { getToken } = useBackground();
+  // const { getToken } = useBackground();
   const [accountInfo, accountInfoLoaded] = useAccountInfo(publicKey);
   const [balanceInfo, setBalanceInfo] = useState<BalanceInfo>();
 
-  useEffect(() => {
-    const ownedAccount = { publicKey: publicKey, accountInfo: accountInfo } as OwnedAccount<Buffer>;
-    getBalanceInfo(connection, getToken, ownedAccount)
-      .then((balanceInfo) => {
-        setBalanceInfo(balanceInfo);
-      })
-      .catch((e) => {
-        console.log("error getting a balance information");
-      });
-  }, [accountInfo]);
+  // useEffect(() => {
+  //   const ownedAccount = { publicKey: publicKey, accountInfo: accountInfo } as OwnedAccount<Buffer>;
+  //   getBalanceInfo(connection, getToken, ownedAccount)
+  //     .then((balanceInfo) => {
+  //       setBalanceInfo(balanceInfo);
+  //     })
+  //     .catch((e) => {
+  //       console.log("error getting a balance information");
+  //     });
+  // }, [accountInfo]);
 
   if (!accountInfoLoaded || !accountInfo || !balanceInfo) {
     return (
@@ -102,7 +102,7 @@ const AccountDetailBase: React.FC<AccountDetailBaseProp> = ({
   const classes: any = useStyles();
   const [sendDialogOpen, setSendDialogOpen] = useState(false);
 
-  const urlSuffix = useSolanaExplorerUrlSuffix();
+  const urlSuffix = useIncognitoExplorerUrlSuffix();
   const history = useHistory();
 
   const goBack = () => {
@@ -166,7 +166,7 @@ const AccountDetailBase: React.FC<AccountDetailBaseProp> = ({
                     }
                     target="_blank"
                     rel="noopener"
-                    startIcon={<SolanaIcon />}
+                    startIcon={<IncognitoIcon />}
                   >
                     Explorer
                   </Button>

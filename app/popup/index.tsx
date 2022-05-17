@@ -6,7 +6,7 @@ import { unregisterServiceWorker } from "./core/service-worker";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
-const useHotReload = true;
+const useHotReload = false;
 
 if (useHotReload) {
   // Hot reload support implement UI

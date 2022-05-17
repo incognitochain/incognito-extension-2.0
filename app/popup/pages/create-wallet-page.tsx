@@ -119,7 +119,7 @@ const SeedWordsForm: React.FC<SeedWordsFormProps> = ({ mnemonicAndSeed, goForwar
         <Typography variant="h5" gutterBottom>
           EEE11
         </Typography>
-        <Typography paragraph>Create new wallet to hold Solana and SPL tokens.</Typography>
+        <Typography paragraph>Create new wallet to hold Incognito and SPL tokens.</Typography>
         <Typography>
           Please write down the following twelve words and keep them in a safe place:
         </Typography>

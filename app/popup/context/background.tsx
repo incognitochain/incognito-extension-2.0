@@ -32,7 +32,6 @@ interface RPCResp<T> {
 interface BackgroundContextType {
   isNotification: boolean;
   popupState: PopupState | undefined;
-  getToken: (mintAddress: string) => Token | undefined;
   request: (method: PopupActions, params: any) => Promise<RPCResp<PopupState>>;
   changeNetwork: (network: Network) => void;
   changeAccount: (account: string) => void;
@@ -96,16 +95,8 @@ export function BackgroundProvider(props: React.PropsWithChildren<{}>) {
     });
   };
 
-  const getToken: BackgroundContextType["getToken"] = (mintAddress: string): Token | undefined => {
-    if (!state) {
-      return undefined;
-    }
-    return state.tokens[mintAddress];
-  };
-
   useEffect(() => {
     setupStreams();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const request: BackgroundContextType["request"] = (method: PopupActions, params: any) => {
@@ -155,7 +146,6 @@ export function BackgroundProvider(props: React.PropsWithChildren<{}>) {
       value={{
         request,
         isNotification,
-        getToken: getToken,
         popupState: state,
         changeNetwork,
         changeAccount,

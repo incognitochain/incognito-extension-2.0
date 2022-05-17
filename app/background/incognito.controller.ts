@@ -4,10 +4,10 @@ import createLoggerMiddleware from "./lib/createLoggerMiddleware";
 import createOriginMiddleware from "./lib/createOriginMiddleware";
 import createTabIdMiddleware from "./lib/createTabIdMiddleware";
 import { WalletController } from "./wallet-controller";
-import { PopupController } from "./popup-controller";
+import { PopupController } from "./popup.controller";
 import { nanoid } from "nanoid";
 import { JsonRpcEngine } from "json-rpc-engine";
-import { createLogger, createObjectMultiplex, getSPLToken } from "../core/utils";
+import { createLogger, createObjectMultiplex } from "@core/utils";
 import {
   ENVIRONMENT_TYPE_NOTIFICATION,
   ENVIRONMENT_TYPE_POPUP,
@@ -32,7 +32,7 @@ const PortStream = require("extension-port-stream");
 const RpcEngine = require("json-rpc-engine");
 const log = createLogger("sol:ctr");
 
-interface SolanaControllerOpts {
+interface IncognitoControllerOpts {
   storedData: StoredData;
   persistData: (data: StoredData) => Promise<boolean>;
 }
@@ -42,7 +42,7 @@ interface RemoteConnection {
   tabId: string;
 }
 
-export default class SolanaController {
+export default class IncognitoController {
   public store: Store;
   // TODO: Figure out the typing for RpcEngine
   private connections: { [origin: string]: { [id: string]: RemoteConnection } };
@@ -54,7 +54,7 @@ export default class SolanaController {
   private persistData: (data: StoredData) => Promise<boolean>;
   private connection: Web3Connection;
 
-  constructor(opts: SolanaControllerOpts) {
+  constructor(opts: IncognitoControllerOpts) {
     const { storedData, persistData } = opts;
     const store = new Store(storedData);
     const connection = new Web3Connection(store.selectedNetwork);
@@ -69,7 +69,6 @@ export default class SolanaController {
 
     const pluginManager = new ProgramPluginManager({
       getConnection: this.getWeb3Connection.bind(this),
-      getSPLToken: this.resolveSPLToken.bind(this),
     });
 
     this.walletController = new WalletController({
@@ -265,14 +264,6 @@ export default class SolanaController {
     return this.connection.conn;
   }
 
-  resolveSPLToken(publicKey: PublicKey, connection: Connection): Promise<Token | undefined> {
-    return getSPLToken(publicKey, connection, this.getToken.bind(this).bind(this));
-  }
-
-  getToken(address: string): Token | undefined {
-    return this.store.getToken(this.connection.network, address);
-  }
-
   getNetwork(): Network {
     return this.connection.network;
   }
@@ -283,7 +274,7 @@ export default class SolanaController {
     };
     await this.extensionManager.showNotification(notify);
     // const tabs = await platform.getActiveTabs()
-    // const currentlyActiveMetamaskTab = Boolean(tabs.find((tab) => openSolanaTabsIDs[tab.id]))
+    // const currentlyActiveMetamaskTab = Boolean(tabs.find((tab) => openIncognitoTabsIDs[tab.id]))
     // if (!popupIsOpen && !currentlyActiveMetamaskTab) {
     // }
   }
@@ -302,7 +293,6 @@ export default class SolanaController {
       selectedNetwork: this.store.selectedNetwork,
       selectedAccount: this.store.selectedAccount,
       authorizedOrigins: this.store.authorizedOrigins,
-      tokens: this.store.tokens,
       salt: this.store.salt || undefined,
     } as StoredData);
   }

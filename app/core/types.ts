@@ -54,7 +54,6 @@ export type StoredData = {
   selectedNetwork: Network;
   selectedAccount: string;
   authorizedOrigins: string[];
-  tokens: NetworkTokens;
   salt?: string;
 };
 
@@ -68,7 +67,6 @@ export type PopupState = {
   availableNetworks: Network[];
   authorizedOrigins: string[];
   actions: OrderedAction[];
-  tokens: MintAddressTokens;
   storeData?: any;
 };
 

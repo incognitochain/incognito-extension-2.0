@@ -1,4 +1,4 @@
-import { checkForError } from "../../core/utils"
+import { checkForError } from "@core/utils"
 
 export default class ExtensionPlatform {
   openWindow(options: chrome.windows.CreateData) {

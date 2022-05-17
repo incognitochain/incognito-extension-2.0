@@ -5,7 +5,6 @@ import MainRoute from "@module/MainRoute/MainRoute";
 import withApp from '@popup/app/App.enhance';
 import { BackgroundProvider } from "@popup/context/background";
 import { ConnectionProvider } from "@popup/context/connection";
-import { ProgramPluginsManagerProvider } from "@popup/context/plugins";
 
 const App: React.FunctionComponent = () => {
     return (
@@ -13,11 +12,9 @@ const App: React.FunctionComponent = () => {
           <ThemedGlobalStyle />
           <BackgroundProvider>
             <ConnectionProvider>
-              <ProgramPluginsManagerProvider>
-                <Router>
-                  <MainRoute />
-                </Router>
-              </ProgramPluginsManagerProvider>
+              <Router>
+                <MainRoute />
+              </Router>
             </ConnectionProvider>
           </BackgroundProvider>
         </ThemeProvider>

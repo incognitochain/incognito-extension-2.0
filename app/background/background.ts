@@ -1,10 +1,10 @@
 import { store, persistor } from "@redux/store/store";
 import { enableLogger } from "@core/utils";
-import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP, StoredData, VersionedData } from "../core/types";
-import { createLogger, isInternalProcess } from "../core/utils";
+import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP, StoredData, VersionedData } from "@core/types";
+import { createLogger, isInternalProcess } from "@core/utils";
 import initialState from "./first-time-state";
 import LocalStore from "./lib/local-store";
-import SolanaController from "./solana-controller";
+import IncognitoController from "./incognito.controller";
 
 window.store = store;
 window.persistor = persistor;
@@ -64,9 +64,9 @@ async function loadStateFromPersistence(): Promise<any> {
   const data = await localStore.get();
   if (!data) {
     versionedData = { version: "1.0", data: initialState };
-    log("Solana Empty vault found defaulting to initial state");
+    log("Incognito Empty vault found defaulting to initial state");
   } else {
-    log("Solana restoring vault");
+    log("Incognito restoring vault");
     versionedData = data;
   }
 
@@ -92,7 +92,7 @@ async function loadStateFromPersistence(): Promise<any> {
   // } else {
   //   // throw in setTimeout so as to not block boot
   //   setTimeout(() => {
-  //     throw new Error("Solana Localstore not supported")
+  //     throw new Error("Incognito Localstore not supported")
   //   })
   // }
 
@@ -105,7 +105,7 @@ function setupController(versionedData: VersionedData) {
 
   const persistData = async (data: StoredData): Promise<boolean> => {
     if (!data) {
-      throw new Error("Solana - updated state does not have data");
+      throw new Error("Incognito - updated state does not have data");
     }
     versionedData.data = data;
 
@@ -121,7 +121,7 @@ function setupController(versionedData: VersionedData) {
     return false;
   };
 
-  const solanaController = new SolanaController({
+  const solanaController = new IncognitoController({
     storedData: versionedData.data,
     persistData: persistData,
   });

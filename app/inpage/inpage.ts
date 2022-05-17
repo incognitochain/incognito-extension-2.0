@@ -40,14 +40,14 @@ class Provider extends EventEmitter {
 
     // setup connectionStream multiplexing
     const mux = createObjectMultiplex('inpage-cs-mux')
-    pump(csStream, mux, csStream, this._handleDisconnect.bind(this, 'Solana content'))
+    pump(csStream, mux, csStream, this._handleDisconnect.bind(this, 'Incognito content'))
 
     const jsonRpcConnection = createJsonRpcStream()
     pump(
       jsonRpcConnection.stream,
       mux.createStream(MUX_PROVIDER_SUBSTREAM),
       jsonRpcConnection.stream,
-      this._handleDisconnect.bind(this, 'Solana RpcProvider'),
+      this._handleDisconnect.bind(this, 'Incognito RpcProvider'),
     )
 
     // handle RPC requests via dapp-side rpc engine
@@ -91,7 +91,7 @@ class Provider extends EventEmitter {
   // Called when connection is lost to critical streams.
   _handleDisconnect = (streamName: any, err: any) => {
     log(
-      'Solana Inpage Provider lost connection to %s: %s with stack %O',
+      'Incognito Inpage Provider lost connection to %s: %s with stack %O',
       streamName,
       err,
       err.stack,

@@ -3,7 +3,6 @@ import { DecodedInstruction, Markdown, Token } from "../types"
 
 export interface PluginContext {
   getConnection: () => Connection
-  getSPLToken: (publicKey: PublicKey, connection: Connection) => Promise<Token | undefined>
 }
 
 export interface ProgramPlugin {

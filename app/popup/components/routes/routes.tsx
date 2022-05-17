@@ -10,7 +10,6 @@ import { PopupState } from "../../../core/types";
 import { useBackground } from "../../context/background";
 import { AccountDetail } from "../../pages/account-detail";
 import { AuthorizedWebsitesPage } from "../../pages/authorized-websites";
-import { KnownTokensPage } from "../../pages/known-tokens-page";
 import { LoginPage } from "../../pages/login-page";
 import { NotificationPage } from "../../pages/notification-page";
 import { RestoreWalletPage } from "../../pages/restore-wallet-page";
@@ -23,7 +22,6 @@ const routes: {
   [path: string]: React.ComponentType<any>;
 } = {
   [Paths.authorizedWebsites]: AuthorizedWebsitesPage,
-  [Paths.tokens]: KnownTokensPage,
   [Paths.accounts]: WalletPage,
   [Paths.notifications]: NotificationPage,
   [Paths.accountDetail]: AccountDetail,
