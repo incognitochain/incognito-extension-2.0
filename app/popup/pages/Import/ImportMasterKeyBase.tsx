@@ -26,7 +26,7 @@ const ImportMasterKeyBase: React.FC = () => {
     const { mnemonic = "", masterKeyName = "", password = "" } = routeData.current;
     callAsync(request("popup_importWallet", { mnemonic, masterKeyName, password }), {
       progress: { message: "Import wallet..." },
-      success: { message: "Wallet Imported" },
+      success: { message: "Assets Imported" },
       onSuccess: (result: any) => {
         console.log(" TO DO ");
         history.push(Paths.homeRouteStack);

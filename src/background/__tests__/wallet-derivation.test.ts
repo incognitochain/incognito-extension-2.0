@@ -7,7 +7,7 @@ const bip32 = require("bip32")
 const MNEMONIC_001 =
   "iron language purpose cargo access peanut insane pencil still burst sing nurse"
 
-describe("Wallet", () => {
+describe("Assets", () => {
   it("should derive the same seed from the mnemonic", async () => {
     await mnemonicToSeed(MNEMONIC_001).then((seed) => {
       expect(seed).toEqual(

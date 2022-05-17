@@ -69,7 +69,7 @@ export const NavigationFrame: React.FC = () => {
   const handleLogout = () => {
     callAsync(request("popup_lockWallet", {}), {
       progress: { message: "locking wallet..." },
-      success: { message: "Wallet locked" },
+      success: { message: "Assets locked" },
       onSuccess: (result) => {
         history.push(Links.login());
       },
@@ -81,7 +81,7 @@ export const NavigationFrame: React.FC = () => {
       <AppBar className={classes.bar} position="sticky">
         <Toolbar>
           <Typography variant="h5" color="inherit" className={classes.title} component="h1">
-            {PathsKey[history?.location?.pathname] || "Incognito Wallet"}
+            {PathsKey[history?.location?.pathname] || "Incognito Assets"}
           </Typography>
           {!isNotification && popupState && popupState.walletState === "unlocked" && (
             <NetworkSelector

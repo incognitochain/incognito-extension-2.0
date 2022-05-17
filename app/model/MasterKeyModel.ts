@@ -154,7 +154,7 @@ class MasterKeyModel extends BaseModel {
 
     //   for (const account of this.wallet.MasterAccount.child) {
     //     const accountInfo = await account.getDeserializeInformation();
-    //     accountInfo.Wallet = this.wallet;
+    //     accountInfo.Assets = this.wallet;
     //     accountInfo.MasterKey = this;
     //     accountInfo.FullName = `${this.name}-${accountInfo.AccountName}`;
     //     accountInfos.push(accountInfo);

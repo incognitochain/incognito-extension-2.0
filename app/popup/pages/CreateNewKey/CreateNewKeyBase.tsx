@@ -32,7 +32,7 @@ const CreateNewKeyBase: React.FC = () => {
     const { mnemonic = "", masterKeyName = "", password = "" } = routeData.current;
     callAsync(request("popup_createWallet", { mnemonic, masterKeyName, password }), {
       progress: { message: "Creating wallet..." },
-      success: { message: "Wallet created" },
+      success: { message: "Assets created" },
       onSuccess: (result) => {
         history.push(Paths.homeRouteStack);
       },

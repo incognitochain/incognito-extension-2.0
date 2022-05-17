@@ -122,7 +122,7 @@ export class Store {
     }
 
     if (this.wallet) {
-      log("Wallet already exists in memory.. don't do anything");
+      log("Assets already exists in memory.. don't do anything");
       return;
     }
 

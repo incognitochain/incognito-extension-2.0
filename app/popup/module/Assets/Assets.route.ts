@@ -3,9 +3,9 @@ import { IRouteProps } from "@popup/module";
 
 export const route = '/';
 
-const walletRoute: IRouteProps = {
+const assetsRoute: IRouteProps = {
     path: route,
-    component: lazy(() => import('./Wallet')),
+    component: lazy(() => import('./Assets')),
 };
 
-export default walletRoute;
+export default assetsRoute;

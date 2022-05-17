@@ -25,7 +25,7 @@ export const Layout: BaseComponent = ({ children }) => {
   return (
     <>
       {/* <Helmet>
-        <title>{isNotification ? "Incognito Notification" : "Incognito Wallet"}</title>
+        <title>{isNotification ? "Incognito Notification" : "Incognito Assets"}</title>
       </Helmet>
       <NavigationFrame /> */}
       {children}

@@ -1,4 +1,4 @@
-# Incognito Wallet - Browser Extension
+# Incognito Assets - Browser Extension
 
 ## Development
 
@@ -17,7 +17,7 @@ either close it and re-open or from `Inspect` view, hit reload shortcut (same as
 
 ### Add extension to Chrome
 
-**Important** Unload any previously loaded Incognito Wallet extension, only one extension can be loaded at one time.
+**Important** Unload any previously loaded Incognito Assets extension, only one extension can be loaded at one time.
 
 - Go to chrome://extensions
 - Enable developer mode
@@ -45,7 +45,7 @@ yarn build
 
 ### Add extension to Chrome
 
-**Important** Unload any previously loaded Solana Wallet extension, only one extension can be loaded at one time.
+**Important** Unload any previously loaded Solana Assets extension, only one extension can be loaded at one time.
 
 - Go to chrome://extensions
 - Enable developer mode

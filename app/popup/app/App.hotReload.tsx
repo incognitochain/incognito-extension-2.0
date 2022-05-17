@@ -1,9 +1,9 @@
 import React from 'react';
-import Wallet from "@module/Wallet/Wallet";
+import Assets from "@module/Assets/Assets";
 
 const AppHotReload: React.FunctionComponent = () => {
   return (
-    <Wallet />
+    <Assets />
   );
 };
 

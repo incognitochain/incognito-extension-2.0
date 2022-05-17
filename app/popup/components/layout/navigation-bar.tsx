@@ -16,7 +16,7 @@ interface NavigationBarProps {
 const NavigationBar: React.FC<NavigationBarProps> = ({
   rightIconVisible = true,
   goBack,
-  title = "Incognito Wallet",
+  title = "Incognito Assets",
   rightIcon = null,
 }) => {
   return (

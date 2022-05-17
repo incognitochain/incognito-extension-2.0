@@ -17,7 +17,7 @@ if (useHotReload) {
     document.getElementById("root"),
   );
 } else {
-  const { store, persistor } = require("@popup/popup-preprocessor");
+  const { store, persistor } = require("@popup/popup.preprocessor");
   ReactDOM.render(
     <React.StrictMode>
       <Provider store={store}>
