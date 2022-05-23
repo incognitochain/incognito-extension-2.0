@@ -8,9 +8,13 @@ import {
 import MasterKeyModel, { DEFAULT_MASTER_KEY } from "@model/MasterKeyModel";
 import { getWalletAccounts } from "@services/api/masterKey";
 import { importWallet, loadListAccount, saveWallet, storeWalletAccountIdsOnAPI } from "@services/wallet/walletService";
-import { AppGetState, AppThunk, AppThunkDispatch } from "../store";
-import { InitMasterKeyPayload, ImportMasterKeyPayload } from "./masterKey.types";
+import { AppGetState, AppThunk, AppThunkDispatch } from "@redux/store";
+import { InitMasterKeyPayload, ImportMasterKeyPayload } from "@redux/masterKey/masterKey.types";
 import { login } from "@services/authService";
+import serverService from "@services/wallet/Server";
+// import remove from "lodash/remove";
+// import uniqBy from "lodash/uniqBy";
+import { setWallet } from "@redux/wallet/wallet.actions";
 
 const updateNetwork = async () => {
   // const serverJSONString = await storage.getItem('$servers');
@@ -32,7 +36,6 @@ export const initMasterKey =
     await getPassphrase();
     await updateNetwork();
     await login();
-
     const defaultMasterKey = new MasterKeyModel(DEFAULT_MASTER_KEY);
     let wallet = await importWallet(mnemonic, defaultMasterKey.getStorageName());
     defaultMasterKey.mnemonic = wallet.Mnemonic;
@@ -43,6 +46,9 @@ export const initMasterKey =
     const { aesKey } = await getPassphraseNoCache();
     await savePasspharseToStorage(aesKey, mnemonic, password);
     await storeWalletAccountIdsOnAPI(wallet);
+    await dispatch(setWallet(wallet));
+
+    console.log(getState());
     return wallet;
   };
 
@@ -94,6 +100,7 @@ export const importMasterKey =
       await saveWallet(wallet);
       const { aesKey } = await getPassphraseNoCache();
       await savePasspharseToStorage(aesKey, mnemonic, password);
+      await dispatch(setWallet(wallet));
       // batch(async () => {
       //   await dispatch(importMasterKeySuccess(newMasterKey));
       //   await dispatch(switchMasterKeySuccess(data.name));
@@ -126,4 +133,33 @@ export const getWalletInstanceByImportMasterKey = async (data: any) => {
     console.log("getWalletInstanceByImportMasterKey", error);
   }
   return { wallet, newMasterKey };
+};
+
+export const loadWallet = () => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
+  try {
+    await login();
+    const servers = await serverService.get();
+    if (!servers || servers?.length === 0) {
+      await serverService.setDefaultList();
+    }
+    await dispatch(actionLoadDefaultWallet());
+  } catch (error) {
+    console.log("getWalletInstanceByImportMasterKey", error);
+  }
+};
+
+export const actionLoadDefaultWallet = () => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
+  try {
+    // await dispatch(loadAllMasterKeys());
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const loadAllMasterKeys = () => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
+  try {
+    const abc = 1;
+  } catch (error) {
+    throw error;
+  }
 };

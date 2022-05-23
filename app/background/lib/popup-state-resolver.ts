@@ -20,13 +20,10 @@ export class PopupStateResolver {
       selectedAccount: this.store.selectedAccount,
       authorizedOrigins: [],
       actions: this.actionManager.getOrderedActions(),
+      storeData: {},
     };
 
-    // if (this.store.hasSecretBox()) {
-    //   state.walletState = "locked"
-    // }
-
-    if (this.store.hasSalt()) {
+    if (this.store.hasSecretBox()) {
       state.walletState = "locked";
     }
 

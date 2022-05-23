@@ -1,11 +1,15 @@
 import { combineReducers } from "redux";
 
-import app from "@redux/reducers/app";
+import { reducer as appReducer } from "@redux/app/app.reducer";
 import { reducer as masterKeyReducer } from "@redux/masterKey/masterKey.reducer";
+import { reducer as accountReducer } from "@redux/account/account.reducer";
+import { reducer as walletReducer } from "@redux/wallet/wallet.reducer";
 
 const rootReducers = combineReducers({
-  app,
+  appReducer,
   masterKeyReducer,
+  accountReducer,
+  walletReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducers>;

@@ -10,7 +10,7 @@ const initialState: AppStateExample = {
   test: {},
 };
 
-const reducer = (state: AppStateExample = initialState, action: any = {}): AppStateExample => {
+export const reducer = (state: AppStateExample = initialState, action: any = {}): AppStateExample => {
   switch (action.type) {
     case "TODO": {
       return { ...state, test: action.payload };
@@ -19,5 +19,3 @@ const reducer = (state: AppStateExample = initialState, action: any = {}): AppSt
       return state;
   }
 };
-
-export default reducer;

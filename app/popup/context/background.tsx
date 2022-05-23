@@ -74,6 +74,7 @@ export function BackgroundProvider(props: React.PropsWithChildren<{}>) {
     rpcEngine.push(jsonRpcConnection.middleware);
     // json rpc notification listener
     jsonRpcConnection.events.on("notification", (resp: Notification) => {
+      console.log("jsonRpcConnection resp ", resp);
       switch (resp.type) {
         case "popupStateChanged":
           log("Received state change notification %O", resp.data);
@@ -105,8 +106,10 @@ export function BackgroundProvider(props: React.PropsWithChildren<{}>) {
       if (params) {
         request = Object.assign(request, { params: params });
       }
+
       log("performing rpc request: %O", request);
       engine.handle(request, function (err: any, response: any) {
+        console.log("jsonRpcConnection response ", response);
         if (err) {
           reject(err);
         } else {

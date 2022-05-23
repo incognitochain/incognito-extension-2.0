@@ -69,7 +69,7 @@ export const NavigationFrame: React.FC = () => {
   const handleLogout = () => {
     callAsync(request("popup_lockWallet", {}), {
       progress: { message: "locking wallet..." },
-      success: { message: "Assets locked" },
+      success: { message: "Wallet locked" },
       onSuccess: (result) => {
         history.push(Links.login());
       },
@@ -159,11 +159,7 @@ interface NetworkSelectorProps {
   changeNetwork: (network: Network) => void;
 }
 
-const NetworkSelector: React.FC<NetworkSelectorProps> = ({
-  availableNetworks,
-  selectedNetwork,
-  changeNetwork,
-}) => {
+const NetworkSelector: React.FC<NetworkSelectorProps> = ({ availableNetworks, selectedNetwork, changeNetwork }) => {
   const [anchorEl, setAnchorEl] = useState<any>();
   const classes: any = useStyles();
   return (
@@ -199,9 +195,7 @@ const NetworkSelector: React.FC<NetworkSelectorProps> = ({
             selected={network.endpoint === selectedNetwork.endpoint}
           >
             <ListItemIcon className={classes.menuItemIcon}>
-              {network.endpoint === selectedNetwork.endpoint ? (
-                <CheckIcon fontSize="small" />
-              ) : null}
+              {network.endpoint === selectedNetwork.endpoint ? <CheckIcon fontSize="small" /> : null}
             </ListItemIcon>
             {network.endpoint}
           </MenuItem>
@@ -218,12 +212,7 @@ interface WalletSelectorProps {
   selectAccount: (account: string) => void;
 }
 
-const WalletSelector: React.FC<WalletSelectorProps> = ({
-  accounts,
-  selectedAccount,
-  addAccount,
-  selectAccount,
-}) => {
+const WalletSelector: React.FC<WalletSelectorProps> = ({ accounts, selectedAccount, addAccount, selectAccount }) => {
   const [anchorEl, setAnchorEl] = useState<any>();
   const classes: any = useStyles();
 

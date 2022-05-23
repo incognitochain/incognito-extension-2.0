@@ -2,9 +2,9 @@ import { store, persistor } from "@redux/store/store";
 import { enableLogger } from "@core/utils";
 import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP, StoredData, VersionedData } from "@core/types";
 import { createLogger, isInternalProcess } from "@core/utils";
-import initialState from "./first-time-state";
 import LocalStore from "./lib/local-store";
 import IncognitoController from "./incognito.controller";
+import { initialState } from "./store";
 
 window.store = store;
 window.persistor = persistor;
@@ -13,6 +13,7 @@ const { gomobileServices } = require("incognito-chain-web-js/build/wallet");
 const PortStream = require("extension-port-stream");
 const endOfStream = require("end-of-stream");
 const log = createLogger("sol:bg");
+
 const localStore = new LocalStore();
 let versionedData: VersionedData;
 
@@ -46,7 +47,7 @@ async function loadWasmConfig(): Promise<void | Error> {
 async function loadStoreRedux(): Promise<void> {
   try {
     setTimeout(() => {
-      store.getState();
+      console.log("STORE state:", store.getState());
       return Promise.resolve();
     }, 1000);
   } catch (error) {
@@ -55,13 +56,8 @@ async function loadStoreRedux(): Promise<void> {
 }
 
 async function loadStateFromPersistence(): Promise<any> {
-  // migrations
-  /*const migrator = new Migrator({ migrations })
-  migrator.on('error', console.warn)*/
-
-  // read from disk
-  // first from preferred, async API:
-  const data = await localStore.get();
+  const data = await localStore.getData();
+  console.log("data ", data);
   if (!data) {
     versionedData = { version: "1.0", data: initialState };
     log("Incognito Empty vault found defaulting to initial state");
@@ -69,34 +65,6 @@ async function loadStateFromPersistence(): Promise<any> {
     log("Incognito restoring vault");
     versionedData = data;
   }
-
-  // // report migration errors to seError in invocationntry
-  // migrator.on('error', (err) => {
-  //   // get vault structure without secrets
-  //   const vaultStructure = getObjStructure(versionedData)
-  //   sentry.captureException(err, {
-  //     // "extra" key is required by Sentry
-  //     extra: { vaultStructure },
-  //   })
-  // })
-
-  // migrate data
-  // versionedData = await migrator.migrateData(versionedData)
-  // if (!versionedData) {
-  //   throw new Error('MetaMask - migrator returned undefined')
-  // }
-
-  // // write to disk
-  // if (localStore.isSupported) {
-  //   resp = wait localStore.set(versionedData)
-  // } else {
-  //   // throw in setTimeout so as to not block boot
-  //   setTimeout(() => {
-  //     throw new Error("Incognito Localstore not supported")
-  //   })
-  // }
-
-  // return just the data
   return versionedData;
 }
 
@@ -104,11 +72,11 @@ function setupController(versionedData: VersionedData) {
   log("Setting up controller initial state: %O", versionedData);
 
   const persistData = async (data: StoredData): Promise<boolean> => {
+    console.log("backgorund persist data ", data);
     if (!data) {
       throw new Error("Incognito - updated state does not have data");
     }
     versionedData.data = data;
-
     if (localStore.isSupported) {
       try {
         await localStore.set(versionedData);
@@ -121,7 +89,7 @@ function setupController(versionedData: VersionedData) {
     return false;
   };
 
-  const solanaController = new IncognitoController({
+  const incognitoController = new IncognitoController({
     storedData: versionedData.data,
     persistData: persistData,
   });
@@ -140,11 +108,11 @@ function setupController(versionedData: VersionedData) {
         url: url,
         origin: origin,
       });
-      solanaController.setupTrustedCommunication(processName, portStream, remotePort.sender);
+      incognitoController.setupTrustedCommunication(processName, portStream, remotePort.sender);
       if (processName === ENVIRONMENT_TYPE_POPUP) {
-        solanaController.setPopupOpen();
+        incognitoController.setPopupOpen();
         endOfStream(portStream, () => {
-          solanaController.setPopupClose();
+          incognitoController.setPopupClose();
           log("Popup remote stream has ended");
         });
       }
@@ -173,7 +141,7 @@ function setupController(versionedData: VersionedData) {
 
   function connectExternal(remotePort: chrome.runtime.Port) {
     const portStream = new PortStream(remotePort);
-    solanaController.setupUntrustedCommunication(portStream, remotePort.sender);
+    incognitoController.setupUntrustedCommunication(portStream, remotePort.sender);
   }
 
   chrome.runtime.onConnect.addListener(connectRemote);

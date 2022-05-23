@@ -55,10 +55,9 @@ const HomeBasePage: React.FC<HomeBasePageProps> = (props: HomeBasePageProps) => 
   const history = useHistory();
 
   const lockWallet = () => {
-    console.log("TO DO  9999");
     callAsync(request("popup_lockWallet", {}), {
       progress: { message: "locking wallet..." },
-      success: { message: "Assets locked" },
+      success: { message: "Wallet locked" },
       onSuccess: (result) => {
         history.push(Paths.unlockPage);
       },

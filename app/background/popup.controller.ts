@@ -12,6 +12,7 @@ import {
   Notification,
   PopupActions,
   SignatureResult,
+  StoredData,
 } from "@core/types";
 import { Account, Connection, PublicKey, SystemProgram } from "@solana/web3.js";
 import { Web3Connection } from "@core/connection";
@@ -19,9 +20,9 @@ import { ExtensionManager } from "./lib/extension-manager";
 import { ActionManager } from "./lib/action-manager";
 import { PopupStateResolver } from "./lib/popup-state-resolver";
 import { importMasterKey, ImportMasterKeyPayload, initMasterKey, InitMasterKeyPayload } from "@redux/masterKey";
-import { dispatch } from "@redux/store/store";
+import { dispatch, persistor } from "@redux/store/store";
 import Storage from "@services/storage";
-import { APP_SALT_KEY } from "@constants/common";
+import { APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@constants/common";
 
 const log = createLogger("sol:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -33,6 +34,7 @@ export interface PopupControllerOpt {
   connection: Web3Connection;
   notifyAllDomains: ((payload: Notification) => Promise<void>) | null;
   extensionManager: ExtensionManager;
+  persistData: any;
 }
 
 export class PopupController {
@@ -42,15 +44,17 @@ export class PopupController {
   private connection: Web3Connection;
   private extensionManager: ExtensionManager;
   private popupState: PopupStateResolver;
+  private persistData: any;
 
   constructor(opts: PopupControllerOpt) {
-    const { store, notifyAllDomains, connection, extensionManager, actionManager, popupState } = opts;
+    const { store, notifyAllDomains, connection, extensionManager, actionManager, popupState, persistData } = opts;
     this.store = store;
     this.actionManager = actionManager;
     this.popupState = popupState;
     this.connection = connection;
     this._notifyAllDomains = notifyAllDomains;
     this.extensionManager = extensionManager;
+    this.persistData = persistData;
   }
 
   createMiddleware() {
@@ -61,18 +65,6 @@ export class PopupController {
           break;
         case "popup_createWallet":
           {
-            // const { mnemonic, seed, password } = req.params
-            // try {
-            //   await this.store.createSecretBox(mnemonic, seed, password)
-            //   this._notifyAll({
-            //     type: "stateChanged",
-            //     data: { state: "unlocked" },
-            //   })
-            // } catch (err) {
-            //   log("error: popup_createWallet failed  with error: %s", err)
-            //   res.error = err
-            // }
-
             try {
               await this.initMasterKey(req.params as InitMasterKeyPayload);
               this._notifyAll({
@@ -204,20 +196,30 @@ export class PopupController {
 
   async initMasterKey(data: InitMasterKeyPayload) {
     const { mnemonic, masterKeyName, password } = data;
-    console.log("BACKGROUND initMasterKey ... ", { mnemonic, masterKeyName, password });
+    console.log("BACKGROUND init MasterKey ... ", { mnemonic, masterKeyName, password });
     const wallet = await dispatch(initMasterKey({ mnemonic, masterKeyName, password }));
     const salt = await Storage.getItem(APP_SALT_KEY);
-    this.store.setSalt(salt);
+    const passphraseEncrypted = await Storage.getItem(APP_PASS_PHRASE_CIPHER);
+    this.store.setSecretBox({
+      salt,
+      passphraseEncrypted,
+    });
     this.store.setWallet(wallet);
+    this.persistData();
   }
 
   async importMasterKey(data: ImportMasterKeyPayload) {
     const { mnemonic, masterKeyName, password } = data;
-    console.log("BACKGROUND importMasterKey ... ", { mnemonic, masterKeyName, password });
+    console.log("BACKGROUND import MasterKey ... ", { mnemonic, masterKeyName, password });
     const wallet = await dispatch(importMasterKey({ mnemonic, masterKeyName, password }));
     const salt = await Storage.getItem(APP_SALT_KEY);
-    this.store.setSalt(salt);
+    const passphraseEncrypted = await Storage.getItem(APP_PASS_PHRASE_CIPHER);
+    this.store.setSecretBox({
+      salt,
+      passphraseEncrypted,
+    });
     this.store.setWallet(wallet);
+    this.persistData();
   }
 
   async lockWalletAction() {

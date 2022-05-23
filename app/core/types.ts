@@ -16,6 +16,7 @@ export const DEFAULT_NETWORK: Network = {
   cluster: "devnet",
   endpoint: clusterApiUrl("devnet"),
 };
+
 export const AVAILABLE_NETWORKS: Network[] = [
   { title: "Mainnet Beta", cluster: "mainnet-beta", endpoint: clusterApiUrl("mainnet-beta") },
   { title: "Devnet", cluster: "devnet", endpoint: clusterApiUrl("devnet") },
@@ -51,10 +52,9 @@ export type VersionedData = {
 export type StoredData = {
   secretBox: SecretBox | undefined;
   accountCount: number;
-  selectedNetwork: Network;
+  selectedNetwork: Network | any;
   selectedAccount: string;
   authorizedOrigins: string[];
-  salt?: string;
 };
 
 export type WalletState = "locked" | "unlocked" | "uninitialized";
@@ -150,12 +150,8 @@ export type PendingRequestAccounts = {
 };
 
 export type SecretBox = {
-  nonce: string;
-  kdf: string; // pbkdf2
-  encryptedBox: string;
+  passphraseEncrypted: string;
   salt: string;
-  iterations: number;
-  digest: string; //sha256
 };
 
 export type Notification =

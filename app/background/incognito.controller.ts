@@ -66,6 +66,7 @@ export default class IncognitoController {
     this.actionManager.on(EVENT_UPDATE_BADGE, this.updateBadge);
     this.actionManager.on(EVENT_UPDATE_ACTIONS, this.notifyNotificationStateChange.bind(this));
     this.popupState = new PopupStateResolver(this.store, this.actionManager);
+    this.persistData = persistData;
 
     const pluginManager = new ProgramPluginManager({
       getConnection: this.getWeb3Connection.bind(this),
@@ -84,11 +85,10 @@ export default class IncognitoController {
       actionManager: this.actionManager,
       notifyAllDomains: this.notifyAllConnections.bind(this),
       extensionManager: this.extensionManager,
+      persistData: this.saveStore.bind(this),
     });
     this.connections = {};
-    this.persistData = persistData;
-
-    this.saveStore();
+    // this.saveStore();
   }
 
   setPopupOpen() {
@@ -280,9 +280,10 @@ export default class IncognitoController {
   }
 
   saveStore() {
-    setInterval(() => {
-      this._save();
-    }, 2000);
+    // setInterval(() => {
+    //   this._save();
+    // }, 2000);
+    this._save();
   }
 
   _save() {
@@ -293,7 +294,6 @@ export default class IncognitoController {
       selectedNetwork: this.store.selectedNetwork,
       selectedAccount: this.store.selectedAccount,
       authorizedOrigins: this.store.authorizedOrigins,
-      salt: this.store.salt || undefined,
     } as StoredData);
   }
 
