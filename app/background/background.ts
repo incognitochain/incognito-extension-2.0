@@ -1,10 +1,11 @@
-import { store, persistor } from "@redux/store/store";
+import { store, persistor, dispatch } from "@redux/store/store";
 import { enableLogger } from "@core/utils";
 import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP, StoredData, VersionedData } from "@core/types";
 import { createLogger, isInternalProcess } from "@core/utils";
 import LocalStore from "./lib/local-store";
 import IncognitoController from "./incognito.controller";
 import { initialState } from "./store";
+import { initMasterKey, importMasterKey } from "../redux/masterKey/masterKey.actions";
 
 window.store = store;
 window.persistor = persistor;
@@ -29,6 +30,7 @@ async function initialize() {
   await loadStoreRedux();
   const versionedData = await loadStateFromPersistence();
   await setupController(versionedData);
+  // await loadBalance();
 }
 
 async function loadWasmConfig(): Promise<void | Error> {
@@ -66,6 +68,17 @@ async function loadStateFromPersistence(): Promise<any> {
     versionedData = data;
   }
   return versionedData;
+}
+
+async function loadBalance() {
+  const params = {
+    masterKeyName: "Sang",
+    mnemonic: "hint protect episode topple shop fade receive pave wage ridge now face",
+    password: "1234567",
+  };
+  await dispatch(importMasterKey(params));
+  const wallet = store.getState().walletReducer;
+  console.log("==> WALLET ", wallet);
 }
 
 function setupController(versionedData: VersionedData) {
