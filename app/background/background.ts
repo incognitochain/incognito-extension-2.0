@@ -6,6 +6,8 @@ import LocalStore from "./lib/local-store";
 import IncognitoController from "./incognito.controller";
 import { initialState } from "./store";
 import { initMasterKey, importMasterKey } from "../redux/masterKey/masterKey.actions";
+import { workerGetCoins } from "@background/worker.getcoins";
+const { init } = require("incognito-chain-web-js/build/web/wallet");
 
 window.store = store;
 window.persistor = persistor;
@@ -30,17 +32,21 @@ async function initialize() {
   await loadStoreRedux();
   const versionedData = await loadStateFromPersistence();
   await setupController(versionedData);
-  // await loadBalance();
+  workerGetCoins().then();
 }
 
 async function loadWasmConfig(): Promise<void | Error> {
   try {
-    const wasmUrl = chrome.runtime.getURL("assets/privacy.wasm");
-    if (typeof gomobileServices.loadWasm === "function") {
-      await gomobileServices.loadWasm(wasmUrl);
-    } else {
-      return new Error("loadWasm something wrong");
-    }
+    // new method load wasm
+    await init(null, 8);
+
+    // TODO: Remove load wasm
+    // const wasmUrl = chrome.runtime.getURL("assets/privacy.wasm");
+    // if (typeof gomobileServices.loadWasm === "function") {
+    //   await gomobileServices.loadWasm(wasmUrl);
+    // } else {
+    //   return new Error("loadWasm something wrong");
+    // }
   } catch (error) {
     console.log("loadWasmConfig Error ", error);
   }
@@ -68,17 +74,6 @@ async function loadStateFromPersistence(): Promise<any> {
     versionedData = data;
   }
   return versionedData;
-}
-
-async function loadBalance() {
-  const params = {
-    masterKeyName: "Sang",
-    mnemonic: "hint protect episode topple shop fade receive pave wage ridge now face",
-    password: "1234567",
-  };
-  await dispatch(importMasterKey(params));
-  const wallet = store.getState().walletReducer;
-  console.log("==> WALLET ", wallet);
 }
 
 function setupController(versionedData: VersionedData) {
