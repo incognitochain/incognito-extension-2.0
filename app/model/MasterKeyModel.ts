@@ -13,7 +13,7 @@ import { BaseModel } from "./BaseModel";
 const { loadBackupKey, parseStorageBackup } = require("incognito-chain-web-js/build/wallet");
 
 export interface MasterKeyModelProps {
-  name?: string;
+  name: string;
   isActive?: boolean;
   passphrase?: string;
   mnemonic?: string;
@@ -53,7 +53,7 @@ class MasterKeyModel extends BaseModel {
   mnemonic?: string | undefined;
   deletedAccountIds?: string[] | undefined;
   isMasterless?: boolean | undefined;
-  name: string | undefined;
+  name: string;
   wallet: any;
 
   constructor(data: MasterKeyModelProps = MasterKeyModelInit) {
@@ -162,6 +162,25 @@ class MasterKeyModel extends BaseModel {
     //   }
 
     //   return accountInfos;
+  }
+
+  async getAccounts(deserialize = true) {
+    if (!deserialize) {
+      return this.wallet.MasterAccount.child;
+    }
+
+    const accountInfos = [];
+
+    for (const account of this.wallet.MasterAccount.child) {
+      const accountInfo = await account.getDeserializeInformation();
+      accountInfo.Wallet = this.wallet;
+      accountInfo.MasterKey = this;
+      accountInfo.FullName = `${this.name}-${accountInfo.AccountName}`;
+      accountInfos.push(accountInfo);
+      accountInfo.MasterKeyName = this.name;
+    }
+
+    return accountInfos;
   }
 }
 

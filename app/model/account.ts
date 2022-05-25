@@ -30,9 +30,11 @@ class Account {
   PaymentAddressV1?: string | undefined;
   ID?: string | undefined;
   accountName?: string | undefined;
+  AccountName?: string | undefined;
 
   constructor(data: IAccount = {}) {
     this.name = data?.AccountName;
+    this.AccountName = data?.AccountName;
     this.value = data?.value;
     this.PaymentAddress = data?.PaymentAddress;
     this.ReadonlyKey = data?.ReadonlyKey;
