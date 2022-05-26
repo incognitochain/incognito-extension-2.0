@@ -46,10 +46,10 @@ export const getBalance = async () => {
         version: 3,
         tokenID: "0000000000000000000000000000000000000000000000000000000000000004",
       }).then((result) => {
-        console.log("SANG TEST:::: ", result);
+        console.log("GET BALANCE:::: ", result);
       }),
     )
     .catch((error) => {
-      console.log("SAHGGGG", error);
+      console.log("GET BALANCE ERROR: ", error);
     });
 };

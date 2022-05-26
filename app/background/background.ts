@@ -33,8 +33,8 @@ async function initialize() {
   // TODO: remove command
   // const versionedData = await loadStateFromPersistence();
   // await setupController(versionedData);
-  // workerGetCoins().then();
-  getBalance().then();
+  workerGetCoins().then();
+  // getBalance().then();
 }
 
 async function loadWasmConfig(): Promise<void | Error> {
