@@ -1,6 +1,5 @@
 const Storage = {
   /**
-   *
    * @param {string} key
    * @param {any} value
    */
@@ -15,7 +14,6 @@ const Storage = {
   },
 
   /**
-   *
    * @param { string || undefined || null} key
    */
   getItem(key?: string) {
@@ -50,7 +48,6 @@ const Storage = {
   },
 
   /**
-   *
    * @param {string} key
    */
   clear() {
