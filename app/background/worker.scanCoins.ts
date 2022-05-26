@@ -1,5 +1,7 @@
-import "regenerator-runtime/runtime";
+import { dispatch } from "@redux/store/store";
 import Storage from "@services/storage";
+import { measure } from "@utils/func";
+import { actionFetchingScanCoins, actionFistTimeScanCoins } from "@redux/scanCoins";
 const { Account } = require("incognito-chain-web-js/build/web/wallet");
 
 const testnetTokens = [
@@ -16,27 +18,27 @@ export const configAccount = async () => {
   return acc2;
 };
 
-export const measure = async (obj: any, fname: string, ...params: any) => {
-  const startTime = performance.now();
-  const result = await obj[fname].bind(obj)(...params);
-  const elapsed = performance.now() - startTime;
-  if (typeof result === "string") return { elapsed, result };
-  return { elapsed, ...result };
-};
+export const scanCoins = async () => {
+  try {
+    const accountSender = await configAccount();
+    if (!accountSender) return;
+    const otaKey = accountSender.getOTAKey();
+    const coinsStore = await accountSender.getStorageCoinsScan();
+    if (!coinsStore) {
+      dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey }));
+    }
+    dispatch(actionFetchingScanCoins({ isFetching: true }));
 
-export const workerGetCoins = async () => {
-  configAccount()
-    .then((acc) =>
-      measure(acc, "scanCoins", { tokenList: testnetTokens }).then((result) => {
-        if (alert) alert(result.elapsed);
-        console.log("scanCoins:::: ", result);
-        // globalThis.scanCoinResult = result;
-        // return result;
-      }),
-    )
-    .catch((error) => {
-      console.log("SCAN COINS ERROR: ", error);
-    });
+    // start scan coins
+    const { elapsed, result } = await measure(accountSender, "scanCoins", { tokenList: testnetTokens });
+
+    dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey }));
+    console.log("scanCoins: ", { elapsed, otaKey, coins: result });
+  } catch (error) {
+    console.log("SCAN COINS WITH ERROR: ", error);
+  } finally {
+    dispatch(actionFetchingScanCoins({ isFetching: false }));
+  }
 };
 
 export const getBalance = async () => {

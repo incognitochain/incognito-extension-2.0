@@ -6,7 +6,7 @@ import LocalStore from "./lib/local-store";
 import IncognitoController from "./incognito.controller";
 import { initialState } from "./store";
 import { initMasterKey, importMasterKey } from "../redux/masterKey/masterKey.actions";
-import { workerGetCoins, getBalance } from "@background/worker.getcoins";
+import { getBalance, scanCoins } from "@background/worker.scanCoins";
 const { init } = require("incognito-chain-web-js/build/web/wallet");
 
 window.store = store;
@@ -27,13 +27,16 @@ initialize().catch((err) => {
 });
 
 async function initialize() {
+  console.log({ store: store.getState(), persistor: persistor.getState() });
   enableLogger();
   await loadWasmConfig();
   await loadStoreRedux();
+  // console.log('SANG TEST:: ', Storage.);
+
   // TODO: remove command
   // const versionedData = await loadStateFromPersistence();
   // await setupController(versionedData);
-  workerGetCoins().then();
+  scanCoins().then();
   // getBalance().then();
 }
 

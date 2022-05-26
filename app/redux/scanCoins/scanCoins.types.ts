@@ -4,8 +4,16 @@ import { ScanCoinsActionType } from "@redux/scanCoins/scanCoins.constants";
 //----------------------------------------------
 // Reducer Payload
 //----------------------------------------------
+interface ScanStatus {
+  [key: string]: {
+    isScanning: boolean;
+    otaKey: string;
+  };
+}
+
 export interface ScanCoinsState {
   isFetching: boolean;
+  scanStatus: ScanStatus;
 }
 
 //----------------------------------------------

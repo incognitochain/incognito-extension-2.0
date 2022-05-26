@@ -1,9 +1,12 @@
 import { Reducer } from "redux";
 import { ScanCoinsActions, ScanCoinsState } from "@redux/scanCoins/scanCoins.types";
 import { ScanCoinsActionType } from "@redux/scanCoins/scanCoins.constants";
+import { persistReducer } from "redux-persist";
+import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 
 export const initialState: ScanCoinsState = {
   isFetching: false,
+  scanStatus: {},
 };
 
 export const reducer: Reducer<ScanCoinsState, ScanCoinsActions> = (state = initialState, action: ScanCoinsActions) => {
@@ -21,11 +24,25 @@ export const reducer: Reducer<ScanCoinsState, ScanCoinsActions> = (state = initi
       const { isScanning, otaKey } = action.payload;
       return {
         ...state,
-        isScanning,
-        otaKey,
+        scanStatus: {
+          ...state.scanStatus,
+          [otaKey]: {
+            isScanning,
+            otaKey,
+          },
+        },
       };
     }
     default:
       return state;
   }
 };
+
+const persistConfig: any = {
+  key: "scanCoins",
+  storage: Storage,
+  whitelist: ["scanStatus"],
+  stateReconciler: autoMergeLevel2,
+};
+
+export default persistReducer(persistConfig, reducer);
