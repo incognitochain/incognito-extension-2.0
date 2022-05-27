@@ -78,7 +78,8 @@ export const ThemedGlobalStyle = createGlobalStyle`
         color: ${({ theme }) => theme.primaryP7};
         scrollbar-color: transparent transparent; /*just hides the scrollbar for firefox */
         font-family: 'SF-Pro-Display';
-        width: 320px;
+        width: 375px;
+        height: 617px;
         font-style: normal;
         font-display: swap;
         box-sizing: border-box;
@@ -228,9 +229,15 @@ export const ThemedGlobalStyle = createGlobalStyle`
     .text-align-center {
       text-align: center;
     }
-    .full-flex {
-      flex: 1;
-      display: flex;
+    
+    .default-padding-horizontal {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .default-margin-horizontal {
+      margin-left: 24px;
+      margin-right: 24px;
     }
 `;
 

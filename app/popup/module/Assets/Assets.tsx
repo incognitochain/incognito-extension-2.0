@@ -1,11 +1,13 @@
 import React from "react";
 import Header from "@components/Header";
-import FollowTokens from "@module/Assets/features/FollowTokens/FollowTokens";
+import { AddressBar, TotalBalance, FollowTokens } from "@module/Assets/features";
 
 const Assets = React.memo(() => {
   return (
     <>
       <Header selectAccount />
+      <TotalBalance />
+      <AddressBar />
       <FollowTokens />
     </>
   );
