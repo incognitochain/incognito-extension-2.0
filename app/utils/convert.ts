@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { getDecimalSeparator } from "@resources/separator";
+import { getDecimalSeparator } from "@popup/utils/separator";
 import BigNumber from "bignumber.js";
 import format from "./format";
 
@@ -42,9 +42,7 @@ export default {
       if (!originAmount) {
         return 0;
       }
-      const amount = new BigNumber(originAmount).dividedBy(
-        new BigNumber("10").pow(Number(decimals) ? decimals : 0),
-      );
+      const amount = new BigNumber(originAmount).dividedBy(new BigNumber("10").pow(Number(decimals) ? decimals : 0));
       if (amount.isNaN()) {
         return 0;
       }
@@ -72,9 +70,7 @@ export default {
       // The result should be 500000100
       const decision_rate = Number(decimals) ? 10 ** Number(decimals) : 1;
       if (round) {
-        return Math.floor(
-          new BigNumber(amount).multipliedBy(new BigNumber(decision_rate)).toNumber(),
-        );
+        return Math.floor(new BigNumber(amount).multipliedBy(new BigNumber(decision_rate)).toNumber());
       }
       originalAmount = new BigNumber(amount).multipliedBy(new BigNumber(decision_rate)).toNumber();
     } catch (error) {

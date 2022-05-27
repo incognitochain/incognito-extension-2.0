@@ -1,13 +1,13 @@
-let decimalSeparator = '.';
-let groupSeparator = ',';
+let decimalSeparator = ".";
+let groupSeparator = ",";
 
-const getDecimalSeparator = () => {
+export function getDecimalSeparator() {
   return decimalSeparator;
-};
+}
 
-const getGroupSeparator = () => {
+export function getGroupSeparator() {
   return groupSeparator;
-};
+}
 
 export default {
   getDecimalSeparator,

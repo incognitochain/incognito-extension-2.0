@@ -11,7 +11,6 @@ import { DialogProps } from "@mui/material";
 import { BalanceInfo } from "../../types";
 import { useBackground } from "../../context/background";
 import { PublicKey } from "@solana/web3.js";
-import { formatAddress } from "../../utils/format";
 
 export type Props = Omit<DialogProps, "onClose"> & {
   onClose: () => void;
@@ -71,9 +70,7 @@ export const SendSolDialog: React.FC<Props> = ({ open, onClose, fromPublicKey, b
           margin="normal"
           type="number"
           InputProps={{
-            endAdornment: token.symbol ? (
-              <InputAdornment position="end">{token.symbol}</InputAdornment>
-            ) : null,
+            endAdornment: token.symbol ? <InputAdornment position="end">{token.symbol}</InputAdornment> : null,
             inputProps: {
               step: Math.pow(10, -token.decimals),
             },

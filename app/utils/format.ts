@@ -2,7 +2,7 @@ import moment from "moment";
 import _ from "lodash";
 import { AMOUNT_MAX_FRACTION_DIGITS } from "@constants/common";
 import { BigNumber } from "bignumber.js";
-import { getDecimalSeparator, getGroupSeparator } from "@resources/separator";
+import { getDecimalSeparator, getGroupSeparator } from "@popup/utils/separator";
 import convertUtil from "@utils/convert";
 export const SHORT_DATE_TIME_FORMAT = "DD MMM hh:mm A";
 export const LONG_DATE_TIME_FORMAT = "DD MMM YYYY hh:mm A";
@@ -11,8 +11,7 @@ const removeTrailingZeroes = (amountString: string) => {
   let formattedString = amountString;
   while (
     formattedString.length > 0 &&
-    ((formattedString.includes(getDecimalSeparator()) &&
-      formattedString[formattedString.length - 1] === "0") ||
+    ((formattedString.includes(getDecimalSeparator()) && formattedString[formattedString.length - 1] === "0") ||
       formattedString[formattedString.length - 1] === getDecimalSeparator())
   ) {
     formattedString = formattedString.slice(0, formattedString.length - 1);
@@ -21,55 +20,50 @@ const removeTrailingZeroes = (amountString: string) => {
   return formattedString;
 };
 
-const amountCreator = (maxDigits?: number) => (
-  amount = 0,
-  decimals = 9,
-  clipAmount = false,
-  decimalDigits = false,
-) => {
-  try {
-    const fmt = {
-      decimalSeparator: getDecimalSeparator(),
-      groupSeparator: getGroupSeparator(),
-      groupSize: 3,
-    };
+const amountCreator =
+  (maxDigits?: number) =>
+  (amount = 0, decimals = 9, clipAmount = false, decimalDigits = false) => {
+    try {
+      const fmt = {
+        decimalSeparator: getDecimalSeparator(),
+        groupSeparator: getGroupSeparator(),
+        groupSize: 3,
+      };
 
-    let _maxDigits = maxDigits || 9;
-    let _amount = convertUtil.toHumanAmount(amount, decimals);
-    if (clipAmount) {
-      let maxDigits = decimals;
-      if (_amount > 0 && _amount < 1 && !!decimalDigits) {
-        maxDigits = 5;
+      let _maxDigits = maxDigits || 9;
+      let _amount = convertUtil.toHumanAmount(amount, decimals);
+      if (clipAmount) {
+        let maxDigits = decimals;
+        if (_amount > 0 && _amount < 1 && !!decimalDigits) {
+          maxDigits = 5;
+        }
+        if (_amount > 1) {
+          maxDigits = 4;
+        }
+        if (_amount > 1e3) {
+          maxDigits = 2;
+        }
+        if (_amount > 1e5) {
+          maxDigits = 0;
+        }
+        if (decimals) {
+          _amount = _.floor(_amount, Math.min(decimals, maxDigits));
+        } else {
+          _amount = _.floor(_amount, maxDigits);
+        }
       }
-      if (_amount > 1) {
-        maxDigits = 4;
+
+      if (!Number.isFinite(_amount)) throw new Error("Can not format invalid amount");
+
+      // if amount is too small, do not round it
+      if (_amount > 0 && _amount < 1) {
+        _maxDigits = 0;
       }
-      if (_amount > 1e3) {
-        maxDigits = 2;
-      }
-      if (_amount > 1e5) {
-        maxDigits = 0;
-      }
-      if (decimals) {
-        _amount = _.floor(_amount, Math.min(decimals, maxDigits));
-      } else {
-        _amount = _.floor(_amount, maxDigits);
-      }
+      return _amount ? removeTrailingZeroes(new BigNumber(_amount).toFormat(_maxDigits, BigNumber.ROUND_DOWN, fmt)) : 0;
+    } catch {
+      return amount;
     }
-
-    if (!Number.isFinite(_amount)) throw new Error("Can not format invalid amount");
-
-    // if amount is too small, do not round it
-    if (_amount > 0 && _amount < 1) {
-      _maxDigits = 0;
-    }
-    return _amount
-      ? removeTrailingZeroes(new BigNumber(_amount).toFormat(_maxDigits, BigNumber.ROUND_DOWN, fmt))
-      : 0;
-  } catch {
-    return amount;
-  }
-};
+  };
 
 const amountFull = amountCreator();
 
@@ -100,9 +94,7 @@ const amountVer2 = (amount: any, decimals: any) => {
     };
     let _amount = convertUtil.toHumanAmount(amount, decimals);
     const _decimals = getDecimalsFromHumanAmount(_amount, decimals);
-    return _amount
-      ? removeTrailingZeroes(new BigNumber(_amount).toFormat(_decimals, BigNumber.ROUND_DOWN, fmt))
-      : 0;
+    return _amount ? removeTrailingZeroes(new BigNumber(_amount).toFormat(_decimals, BigNumber.ROUND_DOWN, fmt)) : 0;
   } catch (e) {
     return amount;
   }
@@ -142,11 +134,8 @@ const amountSuffix = (amount: any, decimals: any) => {
       _maxDigits = 5;
     }
     return (
-      (_amount
-        ? removeTrailingZeroes(
-            new BigNumber(_amount).toFormat(_maxDigits, BigNumber.ROUND_DOWN, fmt),
-          )
-        : 0) + _suffix
+      (_amount ? removeTrailingZeroes(new BigNumber(_amount).toFormat(_maxDigits, BigNumber.ROUND_DOWN, fmt)) : 0) +
+      _suffix
     );
   } catch {
     return amount;
@@ -211,17 +200,11 @@ const formatWithNotation = (number: any, noOfDigits = 2) => {
   const miliNotation = Math.pow(10, -3 + noOfDigits);
 
   if (number >= millionNotation) {
-    return (
-      (Math.floor(number / Math.pow(10, 6 - noOfDigits)) / Math.pow(10, noOfDigits)).toString() +
-      "M"
-    );
+    return (Math.floor(number / Math.pow(10, 6 - noOfDigits)) / Math.pow(10, noOfDigits)).toString() + "M";
   }
 
   if (number >= kiloNotation) {
-    return (
-      (Math.floor(number / Math.pow(10, 3 - noOfDigits)) / Math.pow(10, noOfDigits)).toString() +
-      "K"
-    );
+    return (Math.floor(number / Math.pow(10, 3 - noOfDigits)) / Math.pow(10, noOfDigits)).toString() + "K";
   }
 
   if (number >= miliNotation) {
@@ -234,10 +217,7 @@ const formatWithNotation = (number: any, noOfDigits = 2) => {
 const fixedNumber = (number: any, digits = 3) => {
   if (isNaN(number) || isNaN(digits)) return 0;
   return Math.trunc(
-    new BigNumber(number)
-      .multipliedBy(Math.pow(10, digits))
-      .dividedBy(Math.pow(10, digits))
-      .toNumber(),
+    new BigNumber(number).multipliedBy(Math.pow(10, digits)).dividedBy(Math.pow(10, digits)).toNumber(),
   );
 };
 

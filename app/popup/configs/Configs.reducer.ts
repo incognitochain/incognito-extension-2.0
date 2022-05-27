@@ -1,18 +1,11 @@
-import { Reducer } from '@reduxjs/toolkit';
-import { persistReducer } from 'redux-persist';
-import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
-import storage from 'redux-persist/lib/storage';
-
-export interface IConfigsState {
-  auth?: {
-    deviceId: string;
-    deviceToken: string;
-  };
-  language: string;
-}
+import { Reducer } from "@reduxjs/toolkit";
+import { persistReducer } from "redux-persist";
+import autoMergeLevel2 from "redux-persist/es/stateReconciler/autoMergeLevel2";
+import storage from "redux-persist/lib/storage";
+import { IConfigsState } from "@popup/configs";
 
 const initialState: IConfigsState = {
-  language: 'en',
+  language: "en",
 };
 
 const configReducer = (
@@ -29,9 +22,9 @@ const configReducer = (
 };
 
 const persistConfig = {
-  key: 'config',
+  key: "config",
   storage,
-  whitelist: ['auth'],
+  whitelist: ["auth"],
   stateReconciler: autoMergeLevel2,
 };
 

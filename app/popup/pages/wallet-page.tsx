@@ -1,6 +1,5 @@
 import React from "react";
 import Container from "@mui/material/Container";
-import { AccountList } from "../components/account-list";
 import Grid from "@mui/material/Grid";
 import { DebugButtons } from "../components/debug-buttons";
 import { LoadingIndicator } from "../components/loading-indicator";
@@ -18,9 +17,7 @@ export const WalletPageBase: React.FC = () => {
   return (
     <Container fixed maxWidth="md">
       <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <AccountList account={popupState?.selectedAccount} />
-        </Grid>
+        <Grid item xs={12}></Grid>
         {isProdNetwork ? null : (
           <Grid item xs={12}>
             <DebugButtons />

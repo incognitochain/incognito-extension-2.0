@@ -1,4 +1,4 @@
-import isEmpty from 'lodash/isEmpty';
+import isEmpty from "lodash/isEmpty";
 
 interface IENVS {
   REACT_APP_IS_MAINNET: boolean;
@@ -10,10 +10,10 @@ interface IENVS {
 
 const defaultEnvs = {
   REACT_APP_IS_MAINNET: false,
-  REACT_APP_VERSION: '1.0',
-  REACT_APP_DOMAIN_URL: '',
-  REACT_APP_COIN_SERVICE_URL: '',
-  REACT_APP_SERVICE_URL: '',
+  REACT_APP_VERSION: "1.0",
+  REACT_APP_DOMAIN_URL: "",
+  REACT_APP_COIN_SERVICE_URL: "",
+  REACT_APP_SERVICE_URL: "",
 };
 
 export const getEnvs = () => {
@@ -23,8 +23,8 @@ export const getEnvs = () => {
     if (!isEmpty(PROCCESS_ENV)) {
       Object.keys(PROCCESS_ENV).forEach((key: string) => {
         const value = PROCCESS_ENV[key];
-        if (value === 'true' || value === 'false') {
-          envs[key] = value === 'true';
+        if (value === "true" || value === "false") {
+          envs[key] = value === "true";
         } else {
           envs[key] = PROCCESS_ENV[key];
         }
@@ -40,6 +40,6 @@ export const getEnvs = () => {
 };
 
 export const ENVS: IENVS = getEnvs();
-
+export const isDev: boolean = !ENVS.REACT_APP_IS_MAINNET;
 export const isMainnet: boolean = ENVS.REACT_APP_IS_MAINNET;
 export const appDomain: string = ENVS.REACT_APP_DOMAIN_URL;
