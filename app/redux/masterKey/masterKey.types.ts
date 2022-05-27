@@ -1,3 +1,4 @@
+import MasterKeyModel from "@/model/MasterKeyModel";
 import { Action } from "redux";
 
 export enum MasterKeyActionType {
@@ -31,42 +32,35 @@ export interface ImportMasterKeyPayload {
   password: string;
 }
 
-export interface InitMasterKeySuccessPayload {
-  data: any;
-}
-
-export interface CreateMasterKeySuccessPayload {
-  data: any;
-}
-
 //----------------------------------------------
 // Action Definition here!
 //----------------------------------------------
 
 export interface InitMasterKeySuccessAction extends Action {
   type: MasterKeyActionType.INIT;
-  payload: InitMasterKeySuccessPayload;
+  payload: MasterKeyModel[];
 }
 
 export interface CreateMasterKeySuccessAction extends Action {
   type: MasterKeyActionType.CREATE;
-  payload: CreateMasterKeySuccessPayload;
+  payload: any;
 }
 export interface MasterKeyLoadingInitAction extends Action {
   type: MasterKeyActionType.LOADING_INITIAL;
   payload: any;
 }
+
 export interface MasterKeyLoadAllAction extends Action {
   type: MasterKeyActionType.LOAD_ALL;
   payload: any;
 }
 export interface MasterKeySwitchingAction extends Action {
   type: MasterKeyActionType.SWITCHING;
-  payload: any;
+  payload: boolean;
 }
 export interface MasterKeySwitchAction extends Action {
   type: MasterKeyActionType.SWITCH;
-  payload: any;
+  payload: string;
 }
 export interface MasterKeyRemoveAction extends Action {
   type: MasterKeyActionType.REMOVE;
@@ -84,10 +78,7 @@ export interface MasterKeyLoadAllAccoutsAction extends Action {
   type: MasterKeyActionType.LOAD_ALL_ACCOUNTS;
   payload: any;
 }
-export interface MasterKeySyncAccoutSuccesAction extends Action {
-  type: MasterKeyActionType.SYNC_ACCOUNT_SUCCESS;
-  payload: any;
-}
+
 export interface MasterKeyLoadingAllAccountAction extends Action {
   type: MasterKeyActionType.LOADING_ALL_ACCOUNTS;
   payload: any;
@@ -106,5 +97,4 @@ export type MasterKeyActions =
   | MasterKeyUpdateAction
   | MasterKeyImportAction
   | MasterKeyLoadAllAccoutsAction
-  | MasterKeySyncAccoutSuccesAction
   | MasterKeyLoadingAllAccountAction;

@@ -30,6 +30,7 @@ export const Paths = {
 
   homeRouteStack: "/home-stack",
   unlockPage: "/unlock-page",
+  createAccountPage: "/create-account-page",
 };
 
 export const PathsKey: PathsKeyMap = {

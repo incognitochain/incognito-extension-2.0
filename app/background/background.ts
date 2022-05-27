@@ -6,7 +6,11 @@ import LocalStore from "./lib/local-store";
 import IncognitoController from "./incognito.controller";
 import { initialState } from "./store";
 import { initMasterKey, importMasterKey } from "../redux/masterKey/masterKey.actions";
+
 import { getBalance, scanCoins } from "@background/worker.scanCoins";
+// import { workerGetCoins } from "@background/worker.getcoins";
+import Storage from "@services/storage";
+import { masterKeyReducerSelector } from "@redux/masterKey";
 const { init } = require("incognito-chain-web-js/build/web/wallet");
 
 window.store = store;
@@ -38,6 +42,9 @@ async function initialize() {
   // await setupController(versionedData);
   scanCoins().then();
   // getBalance().then();
+  const versionedData = await loadStateFromPersistence();
+  await setupController(versionedData);
+  // workerGetCoins().then();
 }
 
 async function loadWasmConfig(): Promise<void | Error> {
@@ -60,7 +67,6 @@ async function loadWasmConfig(): Promise<void | Error> {
 async function loadStoreRedux(): Promise<void> {
   try {
     setTimeout(() => {
-      console.log("STORE state:", store.getState());
       return Promise.resolve();
     }, 1000);
   } catch (error) {
@@ -70,7 +76,6 @@ async function loadStoreRedux(): Promise<void> {
 
 async function loadStateFromPersistence(): Promise<any> {
   const data = await localStore.getData();
-  console.log("data ", data);
   if (!data) {
     versionedData = { version: "1.0", data: initialState };
     log("Incognito Empty vault found defaulting to initial state");
@@ -85,7 +90,6 @@ function setupController(versionedData: VersionedData) {
   log("Setting up controller initial state: %O", versionedData);
 
   const persistData = async (data: StoredData): Promise<boolean> => {
-    console.log("backgorund persist data ", data);
     if (!data) {
       throw new Error("Incognito - updated state does not have data");
     }

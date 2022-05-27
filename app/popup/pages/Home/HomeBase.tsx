@@ -7,12 +7,7 @@ import React, { ReactElement, useCallback, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 const HomeBase: React.FC = () => {
-  console.log("HomeBase");
-
   const history = useHistory();
-  const { request } = useBackground();
-  const callAsync = useCallAsync();
-
   const renderContent: ReactElement | any = useCallback(() => {
     return (
       <HomeBasePage

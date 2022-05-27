@@ -81,6 +81,20 @@ export async function loadWallet(passphrase: any, name = "Wallet", rootName = ""
   }
 }
 
+export async function initWallet(walletName: string = "Wallet", rootName: string) {
+  try {
+    const { aesKey } = await getPassphrase();
+    let wallet = new Wallet();
+    wallet.RootName = rootName;
+    await configsWallet(wallet);
+    await wallet.init(aesKey, storage, walletName, "Anon");
+    await wallet.save(aesKey);
+    return wallet;
+  } catch (e) {
+    throw e;
+  }
+}
+
 export async function configsWallet(wallet: any) {
   try {
     if (!wallet) {
@@ -94,7 +108,7 @@ export async function configsWallet(wallet: any) {
     wallet.UseLegacyEncoding = true;
     wallet.PubsubService = server?.pubsubServices;
     wallet.RpcRequestService = server?.requestServices;
-    // wallet.AuthToken = await getToken();
+    wallet.AuthToken = await getToken();
     wallet.RpcApiService = server?.apiServices;
     wallet.PortalService = server?.portalServices;
     wallet.Network = server?.id;

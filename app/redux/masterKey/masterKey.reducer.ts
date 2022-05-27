@@ -1,21 +1,30 @@
-// import _ from "lodash";
-// import types from "@src/redux/types/masterKey";
+import { KEYS } from "@/constants/keys";
+import MasterKeyModel from "@/model/MasterKeyModel";
+import algorithms from "@utils/algorithms";
+import Storage from "@services/storage";
 // import typesAccount from "@src/redux/types/account";
 // import LocalDatabase from "@src/utils/LocalDatabase";
-// import storage from "@services/storage";
-// import { accountServices } from "@src/services/wallet";
+import storage from "@services/storage";
+import accountServices from "@services/wallet/accountService";
+import _ from "lodash";
 import { Reducer } from "redux";
 import { MasterKeyActions, MasterKeyActionType } from "./masterKey.types";
+import { getPassphrase } from "@services/wallet/passwordService";
+
+interface MasterKeyList {
+  mnemonic: string;
+  name: string;
+}
 
 export interface MasterKeyState {
-  list: any[];
+  list: MasterKeyModel[];
   accounts: any[];
-  switching: false;
+  switching: boolean;
   initial: {
-    loading: true;
+    loading: boolean;
     masterKeyList: any[];
   };
-  loadingAll: false;
+  loadingAll: boolean;
 }
 
 export const initialState: MasterKeyState = {
@@ -29,67 +38,81 @@ export const initialState: MasterKeyState = {
   loadingAll: false,
 };
 
-// function createMasterKey(newMasterKey, list) {
-//   const newList = _.uniqBy([...list, newMasterKey], (item) => item.name);
-//   LocalDatabase.setMasterKeyList(newList);
-//   return newList;
-// }
+function createMasterKey(newMasterKey: any, list: any[]) {
+  const newList = _.uniqBy([...list, newMasterKey], (item) => item.name);
+  // LocalDatabase.setMasterKeyList(newList);
+  saveMasterKeys(newList);
+  return newList;
+}
 
-// function updateMasterKey(newMasterKey, list) {
-//   const newList = list.map((item) => {
-//     const found = item.name === newMasterKey.name;
-//     if (found) {
-//       return newMasterKey;
-//     }
-//     return item;
-//   });
-//   LocalDatabase.setMasterKeyList(newList);
-//   return newList;
-// }
+function updateMasterKey(newMasterKey: any, list: any[]) {
+  const newList = list.map((item) => {
+    const found = item.name === newMasterKey.name;
+    if (found) {
+      return newMasterKey;
+    }
+    return item;
+  });
+  // LocalDatabase.setMasterKeyList(newList);
+  return newList;
+}
 
-// function switchMasterKey(name, list) {
-//   const newList = list.map((item) => {
-//     item.isActive = item.name === name;
-//     return item;
-//   });
+function switchMasterKey(masterKeyName: string, list: any[]) {
+  const newList = list.map((item) => {
+    item.isActive = item.name === masterKeyName;
+    return item;
+  });
+  //   LocalDatabase.setMasterKeyList(newList);
+  return newList;
+}
 
-//   LocalDatabase.setMasterKeyList(newList);
+function removeMasterKey(name: string, list: any[]) {
+  const newList = _.remove(list, (item) => item.name !== name);
+  list.forEach(async (item) => {
+    try {
+      const wallet = await item.loadWallet();
+      const measureStorageWallet = await wallet.getKeyMeasureStorage();
+      await wallet.clearWalletStorage({ key: measureStorageWallet });
+      const listAccount = await wallet.listAccount();
+      let task = listAccount.map((account: any) => accountServices.removeCacheBalance(account, wallet));
+      await Promise.all(task);
+    } catch (error) {
+      console.log("ERROR remove master key", error);
+    }
 
-//   return newList;
-// }
+    await storage.removeItem(item.getStorageName());
+  });
+  // LocalDatabase.setMasterKeyList(newList);
+  return newList;
+}
 
-// function removeMasterKey(name, list) {
-//   const newList = _.remove(list, (item) => item.name !== name);
-//   list.forEach(async (item) => {
-//     try {
-//       const wallet = await item.loadWallet();
-//       const measureStorageWallet = await wallet.getKeyMeasureStorage();
-//       await wallet.clearWalletStorage({ key: measureStorageWallet });
-//       const listAccount = await wallet.listAccount();
-//       let task = listAccount.map((account) => accountServices.removeCacheBalance(account, wallet));
-//       await Promise.all(task);
-//     } catch (error) {
-//       console.log("ERROR remove master key", error);
-//     }
+export async function saveMasterKeys(lists: MasterKeyModel[]) {
+  const masterKeyList = lists.map((item) => ({ ...item, wallet: undefined })) || [];
+  const masterKeyListJSON = JSON.stringify(masterKeyList);
+  const { aesKey } = await getPassphrase();
+  const masterKeyListEncryped = algorithms.encryptData(masterKeyListJSON, aesKey);
+  return Storage.setItem(KEYS.MASTER_KEY_LIST, masterKeyListEncryped);
+}
 
-//     await storage.removeItem(item.getStorageName());
-//   });
-//   LocalDatabase.setMasterKeyList(newList);
-//   return newList;
-// }
+export async function loadMasterKeys(): Promise<MasterKeyList[]> {
+  const { aesKey } = await getPassphrase();
+  const masterKeyListEncryped = await Storage.getItem(KEYS.MASTER_KEY_LIST);
+  const masterKeyListDecryped = await algorithms.decryptData(masterKeyListEncryped, aesKey);
+  const masterKeyList: MasterKeyList[] = JSON.parse(masterKeyListDecryped);
+  return masterKeyList;
+}
 
-// function saveMasterKeys(list) {
-//   LocalDatabase.setMasterKeyList(list);
-// }
-
-export const reducer: Reducer<MasterKeyState, MasterKeyActions> = (state = initialState, action: MasterKeyActions) => {
+export const reducer: Reducer<MasterKeyState, MasterKeyActions> = (
+  state = initialState,
+  action: MasterKeyActions,
+): MasterKeyState => {
   switch (action.type) {
     case MasterKeyActionType.LOADING_INITIAL: {
       return {
         ...state,
         initial: {
           ...state.initial,
-          // ...action.payload,
+          ...action.payload,
         },
       };
     }
@@ -99,33 +122,33 @@ export const reducer: Reducer<MasterKeyState, MasterKeyActions> = (state = initi
         list: action.payload,
       };
     case MasterKeyActionType.INIT: {
-      // saveMasterKeys(action.payload);
+      saveMasterKeys(action.payload);
       return {
         ...state,
-        // list: action.payload,
+        list: action.payload,
       };
     }
     case MasterKeyActionType.IMPORT:
     case MasterKeyActionType.CREATE: {
       return {
         ...state,
-        // list: createMasterKey(action.payload, state.list),
+        list: createMasterKey(action.payload, state.list),
       };
     }
     case MasterKeyActionType.SWITCH:
       return {
         ...state,
-        // list: switchMasterKey(action.payload, state.list),
+        list: switchMasterKey(action.payload, state.list),
       };
     case MasterKeyActionType.UPDATE:
       return {
         ...state,
-        // list: updateMasterKey(action.payload, state.list),
+        list: updateMasterKey(action.payload, state.list),
       };
     case MasterKeyActionType.REMOVE:
       return {
         ...state,
-        // list: removeMasterKey(action.payload, state.list),
+        list: removeMasterKey(action.payload, state.list),
       };
     case MasterKeyActionType.LOAD_ALL_ACCOUNTS:
       return {
@@ -135,7 +158,7 @@ export const reducer: Reducer<MasterKeyState, MasterKeyActions> = (state = initi
     case MasterKeyActionType.SWITCHING: {
       return {
         ...state,
-        // switching: action.payload,
+        switching: action.payload,
       };
     }
     case MasterKeyActionType.LOADING_ALL_ACCOUNTS: {

@@ -2,6 +2,7 @@ import { createLogger } from "@core/utils";
 // import { Wallet } from "./lib/wallet";
 
 import { DEFAULT_NETWORK, Network, SecretBox, StoredData, WalletState } from "@core/types";
+import { decryptPasspharse } from "@/services/wallet/passwordService";
 
 export const initialState: StoredData = {
   secretBox: undefined,
@@ -83,15 +84,19 @@ export class Store {
     return !!this.wallet;
   }
 
-  unlockSecretBox(password: string) {
+  async unlockSecretBox(password: string) {
     if (!this.secretBox) {
       throw new Error("Cannot find secret box in storage");
     }
-
     if (this.wallet) {
       log("Assets already exists in memory.. don't do anything");
       return;
     }
+
+    this.setSecretBox({
+      ...this.secretBox,
+      passphraseEncrypted: await decryptPasspharse(password),
+    });
   }
 
   addAuthorizedOrigin(origin: string) {

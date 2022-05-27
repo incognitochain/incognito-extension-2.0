@@ -10,6 +10,7 @@ import { PopupState } from "../../../core/types";
 import { useBackground } from "../../context/background";
 import { Paths } from "./paths";
 import { UnlockPage } from "../../pages/Unlock/UnlockPage";
+import CreateAccountPage from "@popup/pages/CreateAccount/CreateAccountPage";
 
 const defaultRoute = (key: string, props: RouteProps, popupState: PopupState, isNotification: boolean) => {
   const rest = Object.assign({}, props);
@@ -44,6 +45,7 @@ const RoutesBase: React.FC = () => {
       <Route exact path={Paths.homeRouteStack} component={HomeRouteStack} />
       <Route exact path={Paths.createNewKeyStack} component={CreateNewKeyRouteStack} />
       <Route exact path={Paths.importMasterKeyStack} component={ImportMasterKeyRouteStack} />
+      <Route exact path={Paths.createAccountPage} component={CreateAccountPage} />
       {defaultRoute(`default-route`, {}, popupState, isNotification)}
     </Switch>
   );

@@ -1,5 +1,6 @@
+import { BaseModel } from "./BaseModel";
 interface AccountProps {
-  name?: any;
+  name?: string;
   value?: any;
   PaymentAddress?: any;
   ReadonlyKey?: any;
@@ -10,14 +11,13 @@ interface AccountProps {
   BLSPublicKey?: any;
   ValidatorKey?: any;
   OTAKey?: any;
-  ID?: any;
-  accountName?: any;
-  AccountName?: any;
+  ID?: number;
+  accountName?: string;
+  AccountName?: string;
   PaymentAddressV1?: any;
 }
 
-class Account {
-  name: any;
+class Account extends BaseModel {
   value: any;
   PaymentAddress: any;
   ReadonlyKey: any;
@@ -28,11 +28,15 @@ class Account {
   BLSPublicKey: any;
   ValidatorKey: any;
   OTAKey: any;
-  ID: any;
-  accountName: any;
+  ID?: number;
+  accountName?: string;
   PaymentAddressV1: any;
+  AccountName?: string;
+
   constructor(data: AccountProps = {}) {
+    super();
     this.name = data?.AccountName;
+    this.AccountName = data?.AccountName;
     this.value = data?.value;
     this.PaymentAddress = data?.PaymentAddress;
     this.ReadonlyKey = data?.ReadonlyKey;

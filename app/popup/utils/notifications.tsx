@@ -20,10 +20,7 @@ export const useSendTransaction = (): [SendTransaction, boolean] => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [sending, setSending] = useState(false);
 
-  async function sendTransaction(
-    signaturePromise: Promise<TransactionSignature>,
-    opts: SendTransactionOpts = {},
-  ) {
+  async function sendTransaction(signaturePromise: Promise<TransactionSignature>, opts: SendTransactionOpts = {}) {
     const { onSuccess, onError } = opts;
     let id = enqueueSnackbar("Sending transaction...", {
       variant: "info",

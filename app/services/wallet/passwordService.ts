@@ -67,6 +67,14 @@ const cachePassword = (password: string): void => {
   }
 };
 
+const getPasswordFromCache = (): string => {
+  try {
+    return getCache(APP_PASSWORD_KEY);
+  } catch (error) {
+    throw error;
+  }
+};
+
 /**
  * Create a new salt from random byte
  * @param {number} bytes can be 16, 32, 64 bytes... Default value: 16
@@ -141,7 +149,19 @@ const checkPasswordValid = async (password: string): Promise<boolean | Error> =>
     sjcl.decrypt(sjcl.codec.hex.toBits(aesKeyString), passPhraseEcrypted);
     return Promise.resolve(true);
   } catch (e) {
-    console.log("checkPasswordValid ERROR ", e);
+    return Promise.reject(new Error("Password Invalid!"));
+  }
+};
+
+const decryptPasspharse = async (password: string): Promise<any | Error> => {
+  try {
+    const salt = await getSaltFromStorage();
+    const passPhraseEcrypted = await getPasspharseFromStorage();
+    const aesKeyBuffer = misc.pbkdf2(password, salt, null, 128);
+    const aesKeyString = codec.hex.fromBits(aesKeyBuffer) as string;
+    const passPhraseDecrypted = sjcl.decrypt(sjcl.codec.hex.toBits(aesKeyString), passPhraseEcrypted);
+    return Promise.resolve(passPhraseDecrypted);
+  } catch (e) {
     return Promise.reject(new Error("Password Invalid!"));
   }
 };
@@ -156,6 +176,7 @@ const getPassphrase = (): Promise<PassphraseProps> =>
 
 export {
   cachePassword,
+  getPasswordFromCache,
   savePasspharseToStorage,
   checkPasswordValid,
   getPasspharseFromStorage,
@@ -164,4 +185,5 @@ export {
   getSaltFromStorage,
   clearPasspharse,
   createNewSalt,
+  decryptPasspharse,
 };

@@ -120,7 +120,9 @@ export type PopupActions =
   | "popup_changeAccount"
   | "popup_addToken"
   | "popup_removeToken"
-  | "popup_updateToken";
+  | "popup_updateToken"
+  | "popup_createAccount"
+  | "popup_switchAccount";
 
 export type PendingSignTransaction = {
   message: string;

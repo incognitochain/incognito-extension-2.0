@@ -28,15 +28,12 @@ const ImportMasterKeyBase: React.FC = () => {
       progress: { message: "Import wallet..." },
       success: { message: "Assets Imported" },
       onSuccess: (result: any) => {
-        console.log(" TO DO ");
         history.push(Paths.homeRouteStack);
       },
     });
   };
 
   const renderContent: ReactElement | any = useCallback(() => {
-    console.log("routePath  TO DO ", routePath);
-
     switch (routePath) {
       case Paths.importMasterKeyPage:
         return (

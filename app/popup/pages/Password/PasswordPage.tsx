@@ -18,6 +18,7 @@ import { makeStyles } from "@mui/styles";
 
 let passwordValidator = require("password-validator");
 let schema = new passwordValidator();
+
 schema
   .is()
   .min(8, "password requires 8 characters minimum")
