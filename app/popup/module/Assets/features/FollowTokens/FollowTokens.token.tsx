@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Row } from "@popup/theme";
 import btcLogo from "./btc.png";
 
-interface IToken {
+export interface IToken {
   name: string;
   symbol: string;
   amount: string;
@@ -24,7 +24,7 @@ const Styled = styled(Row)`
 const Token = React.memo((props: IToken) => {
   const { name, symbol, usdAmount, amount } = props;
   return (
-    <Styled>
+    <Styled className="default-padding-horizontal">
       <img src={btcLogo} style={{ width: 40, height: 40 }} alt="logo-icon" />
       <Row className="wrap-content">
         <div>

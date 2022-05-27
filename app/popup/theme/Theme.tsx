@@ -244,8 +244,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
       position: relative;
       overflow-x: scroll;
       overflow-y: scroll;
-      max-height: 617px;
-      background-color: #cccccc;
+      max-height: 490px;
     }
 `;
 

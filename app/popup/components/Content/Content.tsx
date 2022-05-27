@@ -7,16 +7,16 @@ const Styled = styled.div`
   border-radius: 26px 26px 0 0;
   overflow: hidden;
   background: ${({ theme }: { theme: ITheme }) => theme.content};
-  padding-top: 16px;
 `;
 
 interface IProps {
   children?: React.ReactNode;
+  className?: string;
 }
 
 const WrapContent = React.memo((props: IProps) => {
-  const { children } = props;
-  return <Styled className="default-padding-horizontal">{children}</Styled>;
+  const { children, className } = props;
+  return <Styled className={`scroll-view ${className ? className : ""}`}>{children}</Styled>;
 });
 
 export default WrapContent;
