@@ -8,6 +8,7 @@ import storage from "redux-persist/lib/storage"; // defaults to localStorage for
 import thunkMiddleware from "redux-thunk";
 // import Storage from "@services/storage";
 import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
+import { RootState } from "@redux/reducers";
 
 export default function configStore(preloadedState?: any): Store {
   const middlewares = [thunkMiddleware, logger];

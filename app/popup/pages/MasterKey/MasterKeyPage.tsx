@@ -55,7 +55,6 @@ const MasterKeyPharsePageBase: React.FC<MasterKeyPharsePageBaseProps> = (props: 
   useLayoutEffect(() => {
     if (!phraseList || phraseList.length < 1) {
       const mnemonic: string = newMnemonic() || "";
-      console.log(" mnemonic: ", mnemonic);
       setMnemonic(mnemonic);
       setPhraseListLocal((mnemonic.split(" ") as string[]) || []);
     } else {

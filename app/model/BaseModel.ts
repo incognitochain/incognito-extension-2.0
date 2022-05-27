@@ -18,7 +18,7 @@ export abstract class BaseModel implements BaseModelAction {
     return this.name || this.constructor.name;
   }
 
-  toJSON?(): string {
+  toJSON?(): string | any {
     return "";
   }
 }

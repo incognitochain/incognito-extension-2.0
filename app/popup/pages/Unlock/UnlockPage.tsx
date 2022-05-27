@@ -1,5 +1,3 @@
-import { withBlankLayout } from "@popup/components/layout/blank-layout";
-import { Paths } from "@popup/components/routes/paths";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {
@@ -15,10 +13,14 @@ import {
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { withBlankLayout } from "@popup/components/layout/blank-layout";
+import { Paths } from "@popup/components/routes/paths";
+import { useBackground } from "@popup/context/background";
+import { useCallAsync } from "@popup/utils/notifications";
+import { checkPasswordValid } from "@services/wallet/passwordService";
 import { debounce } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { checkPasswordValid } from "@services/wallet/passwordService";
 
 const useStyles = makeStyles((theme: Theme) => ({
   logoContainer: {
@@ -53,7 +55,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 const UnlockPageBase: React.FC = () => {
   const history = useHistory();
   const styles = useStyles();
-
+  const callAsync = useCallAsync();
+  const { request } = useBackground();
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>("");
@@ -63,7 +66,13 @@ const UnlockPageBase: React.FC = () => {
       try {
         const passWordValid = await checkPasswordValid(password);
         if (passWordValid) {
-          history.push(Paths.homeRouteStack);
+          callAsync(request("popup_unlockWallet", { password }), {
+            progress: { message: "Unlocking wallet..." },
+            success: { message: "Wallet unlocked" },
+            onSuccess: () => {
+              history.push(Paths.homeRouteStack);
+            },
+          });
         }
       } catch (error) {
         if (typeof error === "object") {

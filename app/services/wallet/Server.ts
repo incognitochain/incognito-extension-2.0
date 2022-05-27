@@ -59,7 +59,7 @@ const MAIN_NET_SERVER = {
   coinServices: "https://api-coinservice.incognito.org",
   pubsubServices: "https://api-coinservice.incognito.org/txservice",
   requestServices: "https://api-coinservice.incognito.org",
-  apiServices: "https://api-service.incognito.org",
+  apiServices: "https://api-coinservice.incognito.org",
   shardNumber: DEFAULT_SHARD_NUMBER,
   IncContractAddress: "0x43D037A562099A4C2c95b1E2120cc43054450629",
   IncBSCContractAddress: "0x43D037A562099A4C2c95b1E2120cc43054450629",
@@ -82,7 +82,7 @@ const BETA_SERVER = {
   coinServices: "http://51.161.119.66:9005",
   pubsubServices: "http://51.161.119.66:9005/txservice",
   requestServices: "http://51.161.119.66:9005",
-  apiServices: "https://api-service.incognito.org",
+  apiServices: "https://api-coinservice.incognito.org",
   shardNumber: DEFAULT_SHARD_NUMBER,
   IncContractAddress: "0x43D037A562099A4C2c95b1E2120cc43054450629",
   IncBSCContractAddress: "0x43D037A562099A4C2c95b1E2120cc43054450629",
@@ -201,7 +201,7 @@ const BETA_66 = {
   coinServices: "http://51.161.119.66:9005",
   pubsubServices: "http://51.161.119.66:8001",
   requestServices: "http://51.161.119.66:9005",
-  apiServices: "https://api-service.incognito.org",
+  apiServices: "https://api-coinservice.incognito.org",
   shardNumber: DEFAULT_SHARD_NUMBER,
   IncContractAddress: "0x43D037A562099A4C2c95b1E2120cc43054450629",
   IncBSCContractAddress: "0x43D037A562099A4C2c95b1E2120cc43054450629",
@@ -225,7 +225,7 @@ const BETA_2 = {
   coinServices: "https://api-coinservice-beta2.incognito.org",
   pubsubServices: "https://api-coinservice-beta2.incognito.org/txservice",
   requestServices: "https://api-coinservice-beta2.incognito.org",
-  apiServices: "https://api-service.incognito.org",
+  apiServices: "https://api-coinservice.incognito.org",
   shardNumber: DEFAULT_SHARD_NUMBER,
   IncContractAddress: "0x43D037A562099A4C2c95b1E2120cc43054450629",
   IncBSCContractAddress: "0x43D037A562099A4C2c95b1E2120cc43054450629",
@@ -275,7 +275,7 @@ export default class Server {
       return Promise.resolve(servers);
     }
     return storage.getItem(KEY.SERVER).then((strData) => {
-      console.log("strData ", strData);
+      // console.log("strData ", strData);
 
       if (!strData) return DEFAULT_LIST_SERVER;
       cachedList = combineCachedListWithDefaultList(JSON.parse(strData) || []);
@@ -317,7 +317,7 @@ export default class Server {
               name: "",
             };
 
-            console.log("SERVER : ", server);
+            // console.log("SERVER : ", server);
             return {
               ...s,
               address: server?.address || "",

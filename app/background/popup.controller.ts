@@ -19,10 +19,17 @@ import { Web3Connection } from "@core/connection";
 import { ExtensionManager } from "./lib/extension-manager";
 import { ActionManager } from "./lib/action-manager";
 import { PopupStateResolver } from "./lib/popup-state-resolver";
-import { importMasterKey, ImportMasterKeyPayload, initMasterKey, InitMasterKeyPayload } from "@redux/masterKey";
+import {
+  importMasterKey,
+  ImportMasterKeyPayload,
+  initMasterKey,
+  InitMasterKeyPayload,
+  unlockMasterKey,
+} from "@redux/masterKey";
 import { dispatch, persistor } from "@redux/store/store";
 import Storage from "@services/storage";
 import { APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@constants/common";
+import { actionFetchCreateAccount, actionSwitchAccount } from "@/redux/account";
 
 const log = createLogger("sol:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -78,6 +85,28 @@ export class PopupController {
           }
 
           break;
+
+        case "popup_createAccount":
+          {
+            try {
+              await this.createAccount(req.params);
+            } catch (err) {
+              log("error: popup_createAccount failed  with error: %s", err);
+              res.error = err;
+            }
+          }
+          break;
+
+        case "popup_switchAccount":
+          {
+            try {
+              await this.switchAccount(req.params);
+            } catch (err) {
+              log("error: popup_switchAccount failed  with error: %s", err);
+              res.error = err;
+            }
+          }
+          break;
         case "popup_importWallet":
           await this.importMasterKey(req.params as InitMasterKeyPayload);
           this._notifyAll({
@@ -94,6 +123,7 @@ export class PopupController {
               //   type: "stateChanged",
               //   data: { state: "unlocked" },
               // });
+              await this.unlockWallet(req.params as InitMasterKeyPayload);
             } catch (err) {
               log("error: popup_unlockWallet failed  with error: %s", err);
               res.error = err;
@@ -194,9 +224,23 @@ export class PopupController {
     });
   }
 
+  async createAccount({ accountName }: { accountName: string }) {
+    await dispatch(actionFetchCreateAccount({ accountName }));
+  }
+
+  async switchAccount({ accountName }: { accountName: string }) {
+    await dispatch(actionSwitchAccount(accountName));
+  }
+
+  async unlockWallet({ password }: { password: string }) {
+    await this.store.unlockSecretBox(password);
+    const wallet = await dispatch(unlockMasterKey(password));
+    this.store.setWallet(wallet);
+    this.persistData();
+  }
+
   async initMasterKey(data: InitMasterKeyPayload) {
     const { mnemonic, masterKeyName, password } = data;
-    console.log("BACKGROUND init MasterKey ... ", { mnemonic, masterKeyName, password });
     const wallet = await dispatch(initMasterKey({ mnemonic, masterKeyName, password }));
     const salt = await Storage.getItem(APP_SALT_KEY);
     const passphraseEncrypted = await Storage.getItem(APP_PASS_PHRASE_CIPHER);
@@ -210,7 +254,6 @@ export class PopupController {
 
   async importMasterKey(data: ImportMasterKeyPayload) {
     const { mnemonic, masterKeyName, password } = data;
-    console.log("BACKGROUND import MasterKey ... ", { mnemonic, masterKeyName, password });
     const wallet = await dispatch(importMasterKey({ mnemonic, masterKeyName, password }));
     const salt = await Storage.getItem(APP_SALT_KEY);
     const passphraseEncrypted = await Storage.getItem(APP_PASS_PHRASE_CIPHER);

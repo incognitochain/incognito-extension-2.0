@@ -4,10 +4,7 @@ export const MAIN_WEBSITE = "https://we.incognito.org";
 const isMainnet = global.isMainnet ?? true;
 const PASSPHRASE_WALLET_DEFAULT = "PASSPHRASE_WALLET_DEFAULT";
 
-const TOKENS_URL =
-  global && global.severDefault && global.severDefault.coinServices
-    ? global.severDefault.coinServices
-    : "https://api-coinservice.incognito.org";
+const TOKENS_URL = "https://api-coinservice.incognito.org";
 
 const API_BASE_URL = isMainnet
   ? "https://api-service.incognito.org"

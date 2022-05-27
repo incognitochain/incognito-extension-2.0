@@ -61,7 +61,10 @@ const Storage = {
   },
 
   logAll() {
-    this.getItem().then((result: any) => console.log(result));
+    this.getItem().then((result: any) => {
+      console.log("ALL LOCAL DATA ....");
+      console.log(result);
+    });
   },
 };
 
