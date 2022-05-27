@@ -239,6 +239,14 @@ export const ThemedGlobalStyle = createGlobalStyle`
       margin-left: 24px;
       margin-right: 24px;
     }
+
+    .scroll-view {
+      position: relative;
+      overflow-x: scroll;
+      overflow-y: scroll;
+      max-height: 617px;
+      background-color: #cccccc;
+    }
 `;
 
 export const Row = styled.div`

@@ -7,6 +7,7 @@ const Styled = styled.div`
   border-radius: 26px 26px 0 0;
   overflow: hidden;
   background: ${({ theme }: { theme: ITheme }) => theme.content};
+  padding-top: 16px;
 `;
 
 interface IProps {
@@ -15,7 +16,7 @@ interface IProps {
 
 const WrapContent = React.memo((props: IProps) => {
   const { children } = props;
-  return <Styled>{children}</Styled>;
+  return <Styled className="default-padding-horizontal">{children}</Styled>;
 });
 
 export default WrapContent;

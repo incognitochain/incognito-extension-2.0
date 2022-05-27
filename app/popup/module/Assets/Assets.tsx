@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "@components/Header";
-import { AddressBar, TotalBalance, FollowTokens } from "@module/Assets/features";
+import { AddressBar, TotalBalance, FollowTokensList } from "@module/Assets/features";
 
 const Assets = React.memo(() => {
   return (
@@ -8,7 +8,7 @@ const Assets = React.memo(() => {
       <Header selectAccount />
       <TotalBalance />
       <AddressBar />
-      <FollowTokens />
+      <FollowTokensList />
     </>
   );
 });
