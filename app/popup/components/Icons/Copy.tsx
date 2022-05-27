@@ -71,7 +71,13 @@ const Copy = (props: IProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => 
   // });
 
   return (
-    <Styled className="icon" onClick={handleCopyText} {...props} onMouseOver={handleHover} onMouseOut={handleHoverOut}>
+    <Styled
+      className="copy-icon"
+      onClick={handleCopyText}
+      {...props}
+      onMouseOver={handleHover}
+      onMouseOut={handleHoverOut}
+    >
       <div ref={iconRef}>
         <CopyVector />
       </div>
