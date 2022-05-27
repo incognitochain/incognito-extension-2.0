@@ -6,7 +6,6 @@ interface IProps {}
 const Styled = styled.button`
   width: 9px;
   height: 100%;
-  margin-right: 15px;
 `;
 
 const ArrowLeftVector = React.memo((props: any) => {

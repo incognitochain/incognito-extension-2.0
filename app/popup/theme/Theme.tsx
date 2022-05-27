@@ -1,16 +1,17 @@
-import { darkTheme, lightTheme } from '@theme/index';
-import { FONTS } from '@theme/Theme.fonts';
-import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import {
+import { darkTheme, lightTheme } from "@theme/index";
+import { FONT_SIZES, FONTS } from "@theme/Theme.fonts";
+import React, { useMemo } from "react";
+import { useSelector } from "react-redux";
+import styled, {
   createGlobalStyle,
   css,
   ITheme,
   ThemeProvider as StyledComponentsThemeProvider,
-} from 'styled-components';
+} from "styled-components";
 
-import { darkModeSelector } from './Theme.selector';
-import { Colors } from './Theme.styled';
+import { darkModeSelector } from "./Theme.selector";
+import { Colors } from "./Theme.styled";
+import { isDev } from "@popup/configs";
 
 const MEDIA_WIDTHS = {
   upToExtraSmall: 500,
@@ -20,18 +21,20 @@ const MEDIA_WIDTHS = {
   upToSupperLarge: 1920,
 };
 
-const mediaWidthTemplates: { [width in keyof typeof MEDIA_WIDTHS]: typeof css } =
-  Object.keys(MEDIA_WIDTHS).reduce((accumulator, size) => {
+const mediaWidthTemplates: { [width in keyof typeof MEDIA_WIDTHS]: typeof css } = Object.keys(MEDIA_WIDTHS).reduce(
+  (accumulator, size) => {
     (accumulator as any)[size] = (a: any, b: any, c: any) => css`
       @media (max-width: ${(MEDIA_WIDTHS as any)[size]}px) {
         ${css(a, b, c)}
       }
     `;
     return accumulator;
-  }, {}) as any;
+  },
+  {},
+) as any;
 
-export const white = '#FFFFFF';
-export const black = '#000000';
+export const white = "#FFFFFF";
+export const black = "#000000";
 
 export function colors(darkMode: boolean): Colors {
   if (darkMode) return darkTheme();
@@ -65,20 +68,38 @@ export function appTheme(darkMode: boolean): ITheme {
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const darkMode = useSelector(darkModeSelector);
-
   const themeObject = useMemo(() => appTheme(darkMode), [darkMode]);
-
-  return (
-    <StyledComponentsThemeProvider theme={themeObject}>
-      {children}
-    </StyledComponentsThemeProvider>
-  );
+  return <StyledComponentsThemeProvider theme={themeObject}>{children}</StyledComponentsThemeProvider>;
 };
 
 export const ThemedGlobalStyle = createGlobalStyle`
+      #root {
+        background: ${({ theme }) => theme.body};
+        color: ${({ theme }) => theme.primaryP7};
+        scrollbar-color: transparent transparent; /*just hides the scrollbar for firefox */
+        font-family: 'SF-Pro-Display';
+        width: 320px;
+        font-style: normal;
+        font-display: swap;
+        box-sizing: border-box;
+        font-weight: 400;
+        border: ${isDev ? "solid 0.5px" : "none"};
+        overflow: hidden;
+        position: relative;
+        font-size: ${FONT_SIZES.regular}px;
+        line-height: ${FONT_SIZES.regular + 3}px;
+        margin: auto;
+        display: flex;
+        flex: 1;
+        * {
+             box-sizing: border-box;
+             font-family: 'SF-Pro-Display';
+        }
+    }
     body {
       min-height: 100vh;
       box-sizing: border-box;
+      background-color: #cccccc;
     }
     //@font-face {
     //  font-family: SF-Pro-Regular;
@@ -207,5 +228,17 @@ export const ThemedGlobalStyle = createGlobalStyle`
     .text-align-center {
       text-align: center;
     }
-    
+    .full-flex {
+      flex: 1;
+      display: flex;
+    }
+`;
+
+export const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  .center {
+    align-items: center;
+    justify-content: center;
+  }
 `;

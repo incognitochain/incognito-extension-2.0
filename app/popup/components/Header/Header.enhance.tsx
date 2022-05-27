@@ -13,7 +13,7 @@ export interface IProps {
   rightHeader?: any;
   selectAccount?: boolean;
   canSearch?: boolean;
-  customHeader?: React.FunctionComponent | React.ReactElement;
+  customHeader?: React.ReactNode;
 }
 
 export interface IMergeProps extends TInner, IProps {}
@@ -56,7 +56,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IProps & 
             {title}
           </Link>
         )}
-        {/*{customHeader && customHeader}*/}
+        {customHeader && customHeader}
       </div>
     );
   };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface IProps {
   children: any;
@@ -33,7 +33,7 @@ class ErrorBoundary extends React.Component<IProps, IState> {
       return <h1>Something went wrong. {error?.message || JSON.stringify(error)}</h1>;
     }
 
-    return children;
+    return <div>{children}</div>;
   }
 }
 

@@ -1,7 +1,5 @@
-import styled from "styled-components";
+import styled, { ITheme } from "styled-components";
 
 export const MainStyled = styled.div`
-  width: 200px;
-  height: 200px;
-  background-color: aqua;
+  width: 100%;
 `;

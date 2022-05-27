@@ -5,6 +5,25 @@ export interface Colors {
   // base
   white: Color;
   black: Color;
+
+  body: Color;
+  content: Color;
+
+  primaryP1: Color;
+  primaryP2: Color;
+  primaryP3: Color;
+  primaryP4: Color;
+  primaryP5: Color;
+  primaryP6: Color;
+  primaryP7: Color;
+
+  // specific color
+  colorP1: Color;
+  colorP2: Color;
+  colorP3: Color;
+  colorP4: Color;
+  colorP5: Color;
+  colorP6: Color;
 }
 
 export interface Grids {

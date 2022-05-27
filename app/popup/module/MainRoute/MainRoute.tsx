@@ -17,13 +17,15 @@ const MainRoute = () => {
   }, []);
 
   return (
-    <Suspense fallback="loading">
-      <Switch>
-        {routes.map((route) => (
-          <Route {...route} />
-        ))}
-      </Switch>
-    </Suspense>
+    <div style={{ flex: 1, display: "flex" }}>
+      <Suspense fallback="loading">
+        <Switch>
+          {routes.map((route) => (
+            <Route {...route} />
+          ))}
+        </Switch>
+      </Suspense>
+    </div>
   );
 };
 

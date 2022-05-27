@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import "./reset.css";
 import { AppHotReload } from "@popup/app";
 import { App as AppTest } from "@popup/pages/app";
 import { unregisterServiceWorker } from "./core/service-worker";

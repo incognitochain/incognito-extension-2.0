@@ -1,27 +1,31 @@
 import React from "react";
-import styled, { ITheme } from "styled-components";
-// import { BtnSelectAccount } from "@module/Account/features/SelectAccount";
+import styled from "styled-components";
 import { ArrowLeftIcon } from "@components/Icons";
 import withHeader, { IMergeProps } from "./Header.enhance";
+import { BtnSelectAccount } from "@module/Account/features/SelectAccount";
 
 const Styled = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 0 0 30px;
+  height: 55px;
+  padding-left: 24px;
+  padding-right: 24px;
+
   .left {
     display: flex;
     flex-direction: row;
     align-items: center;
     cursor: pointer;
-
     input {
+      color: blue;
     }
   }
 
-  .left p.header-title {
+  .left a.header-title {
     margin-right: 10px;
+    padding-left: 14px;
   }
 
   .right {
@@ -41,7 +45,7 @@ const Styled = styled.div`
 const Header = (props: IMergeProps & any) => {
   const { rightHeader, selectAccount, handleClick, renderHeaderTitle, title }: IMergeProps = props;
   return (
-    <Styled className="header">
+    <Styled>
       {title && (
         <div className="left">
           <ArrowLeftIcon onClick={handleClick} />
@@ -50,7 +54,7 @@ const Header = (props: IMergeProps & any) => {
       )}
       <div className="right">
         {rightHeader}
-        {/*{selectAccount && <BtnSelectAccount />}*/}
+        {selectAccount && <BtnSelectAccount />}
       </div>
     </Styled>
   );
