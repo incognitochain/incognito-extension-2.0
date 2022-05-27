@@ -6,6 +6,8 @@ const scanCoinsReducerSelector = createSelector(
   (scanCoinsReducer) => scanCoinsReducer,
 );
 
-const isFetching = createSelector(scanCoinsReducerSelector, ({ isFetching }) => isFetching);
+const statusScanCoinsSelector = createSelector(scanCoinsReducerSelector, ({ scanStatus }) => scanStatus);
 
-export { isFetching };
+const isFetchingScanCoinsSelector = createSelector(scanCoinsReducerSelector, ({ isFetching }) => isFetching);
+
+export { scanCoinsReducerSelector, isFetchingScanCoinsSelector, statusScanCoinsSelector };

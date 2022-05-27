@@ -1,15 +1,15 @@
 import { Reducer } from "redux";
-import { ScanCoinsActions, ScanCoinsState } from "@redux/scanCoins/scanCoins.types";
+import { ScanCoinsActions, IScanCoinsState } from "@redux/scanCoins/scanCoins.types";
 import { ScanCoinsActionType } from "@redux/scanCoins/scanCoins.constants";
 import { persistReducer } from "redux-persist";
 import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 
-export const initialState: ScanCoinsState = {
+export const initialState: IScanCoinsState = {
   isFetching: false,
   scanStatus: {},
 };
 
-export const reducer: Reducer<ScanCoinsState, ScanCoinsActions> = (state = initialState, action: ScanCoinsActions) => {
+export const reducer: Reducer<IScanCoinsState, ScanCoinsActions> = (state = initialState, action: ScanCoinsActions) => {
   switch (action.type) {
     case ScanCoinsActionType.FETCHING: {
       // Scanning coins

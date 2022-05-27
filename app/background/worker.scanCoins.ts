@@ -1,7 +1,7 @@
-import { dispatch } from "@redux/store/store";
+import { dispatch, store } from "@redux/store/store";
 import Storage from "@services/storage";
 import { measure } from "@utils/func";
-import { actionFetchingScanCoins, actionFistTimeScanCoins } from "@redux/scanCoins";
+import { actionFetchingScanCoins, actionFistTimeScanCoins, isFetchingScanCoinsSelector } from "@redux/scanCoins";
 const { Account } = require("incognito-chain-web-js/build/web/wallet");
 
 const testnetTokens = [
@@ -21,18 +21,27 @@ export const configAccount = async () => {
 export const scanCoins = async () => {
   try {
     const accountSender = await configAccount();
-    if (!accountSender) return;
+    const isFetching = isFetchingScanCoinsSelector(store.getState());
+
+    // Validate data
+    if (!accountSender || isFetching) return;
     const otaKey = accountSender.getOTAKey();
+
+    // Get coins scanned from storage, existed ignore and continue scan
     const coinsStore = await accountSender.getStorageCoinsScan();
     if (!coinsStore) {
       dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey }));
     }
+
     dispatch(actionFetchingScanCoins({ isFetching: true }));
 
     // start scan coins
     const { elapsed, result } = await measure(accountSender, "scanCoins", { tokenList: testnetTokens });
 
-    dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey }));
+    if (!coinsStore) {
+      dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey }));
+    }
+
     console.log("scanCoins: ", { elapsed, otaKey, coins: result });
   } catch (error) {
     console.log("SCAN COINS WITH ERROR: ", error);
