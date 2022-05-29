@@ -246,6 +246,15 @@ export const ThemedGlobalStyle = createGlobalStyle`
       overflow-y: scroll;
       max-height: 490px;
     }
+
+    .noselect {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
 `;
 
 export const Row = styled.div`

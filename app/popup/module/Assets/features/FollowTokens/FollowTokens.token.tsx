@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { ITheme } from "styled-components";
 import { Row } from "@popup/theme";
 import btcLogo from "./btc.png";
 
@@ -13,11 +13,23 @@ export interface IToken {
 const Styled = styled(Row)`
   height: 74px;
   align-items: center;
+  cursor: pointer;
   :hover {
-    background: red;
+    background: ${({ theme }: { theme: ITheme }) => theme.primaryP9};
+  }
+  .logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 14px;
   }
   .wrap-content {
     justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+  }
+  .desc-text {
+    color: ${({ theme }: { theme: ITheme }) => theme.primaryP8};
   }
 `;
 
@@ -25,15 +37,15 @@ const Token = React.memo((props: IToken) => {
   const { name, symbol, usdAmount, amount } = props;
   return (
     <Styled className="default-padding-horizontal">
-      <img src={btcLogo} style={{ width: 40, height: 40 }} alt="logo-icon" />
+      <img className="logo" src={btcLogo} alt="logo-icon" />
       <Row className="wrap-content">
         <div>
-          <p>{symbol}</p>
-          <p>{name}</p>
+          <p className="fs-medium noselect">{symbol}</p>
+          <p className="desc-text fs-small noselect">{name}</p>
         </div>
         <div>
-          <p>{usdAmount}</p>
-          <p>{amount}</p>
+          <p className="fs-medium text-align-right noselect">{usdAmount}</p>
+          <p className="text-align-right desc-text fs-small noselect">{amount}</p>
         </div>
       </Row>
     </Styled>
