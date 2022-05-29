@@ -33,11 +33,15 @@ const Styled = styled(Row)`
   }
 `;
 
-const Token = React.memo((props: IToken) => {
+interface ITokenProps extends IToken {
+  index: number;
+}
+
+const Token = React.memo((props: ITokenProps) => {
   const { name, symbol, usdAmount, amount } = props;
   return (
     <Styled className="default-padding-horizontal">
-      <img className="logo" src={btcLogo} alt="logo-icon" />
+      <img className="logo noselect" src={btcLogo} alt="logo-icon" />
       <Row className="wrap-content">
         <div>
           <p className="fs-medium noselect">{symbol}</p>

@@ -18,8 +18,8 @@ const FollowTokensList = React.memo(() => {
   return (
     <WrapContent>
       <MainStyled className="scroll-view">
-        {tokens.map((item: IToken) => (
-          <FollowTokenItem {...item} />
+        {tokens.map((item: IToken, index: number) => (
+          <FollowTokenItem {...item} index={index} key={item.symbol} />
         ))}
       </MainStyled>
     </WrapContent>
