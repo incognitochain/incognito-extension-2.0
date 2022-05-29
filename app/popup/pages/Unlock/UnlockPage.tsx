@@ -167,7 +167,7 @@ const UnlockPageBase: React.FC = () => {
         >
           <Typography
             onClick={() => {
-              console.log("TO DO");
+              history.push(Paths.restoreWalletPage);
             }}
             sx={{
               color: "#757575",

@@ -31,6 +31,7 @@ export const Paths = {
   homeRouteStack: "/home-stack",
   unlockPage: "/unlock-page",
   createAccountPage: "/create-account-page",
+  restoreWalletPage: "/restore-wallet-page",
 };
 
 export const PathsKey: PathsKeyMap = {

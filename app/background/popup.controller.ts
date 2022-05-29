@@ -114,6 +114,13 @@ export class PopupController {
             data: { state: "unlocked" },
           });
           break;
+        case "popup_restoreWallet":
+          await this.restoreWallet(req.params);
+          this._notifyAll({
+            type: "stateChanged",
+            data: { state: "unlocked" },
+          });
+          break;
 
         case "popup_unlockWallet":
           {
@@ -255,6 +262,23 @@ export class PopupController {
   async importMasterKey(data: ImportMasterKeyPayload) {
     const { mnemonic, masterKeyName, password } = data;
     const wallet = await dispatch(importMasterKey({ mnemonic, masterKeyName, password }));
+    const salt = await Storage.getItem(APP_SALT_KEY);
+    const passphraseEncrypted = await Storage.getItem(APP_PASS_PHRASE_CIPHER);
+    this.store.setSecretBox({
+      salt,
+      passphraseEncrypted,
+    });
+    this.store.setWallet(wallet);
+    this.persistData();
+  }
+
+  async restoreWallet(params: { mnemonic: string; password: string }) {
+    const { mnemonic, password } = params;
+    // Clear All Local Data
+    await Storage.clear();
+
+    // Create new wallet, the same flow import wallet
+    const wallet = await dispatch(importMasterKey({ mnemonic, masterKeyName: "Wallet", password }));
     const salt = await Storage.getItem(APP_SALT_KEY);
     const passphraseEncrypted = await Storage.getItem(APP_PASS_PHRASE_CIPHER);
     this.store.setSecretBox({
