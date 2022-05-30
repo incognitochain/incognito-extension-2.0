@@ -7,16 +7,29 @@ import storage from "redux-persist/lib/storage";
 
 export const initialState: IAssetsState = {
   isFetching: false,
+  data: {},
 };
 
 const reducer: Reducer<IAssetsState, AssetsActions> = (state = initialState, action: AssetsActions) => {
   switch (action.type) {
     case AssetsActionType.FETCHING: {
-      // Scanning coins
+      // Getting balance
       const { isFetching } = action.payload;
       return {
         ...state,
         isFetching,
+      };
+    }
+    case AssetsActionType.FETCHED: {
+      // Got balance
+      const { balance, OTAKey } = action.payload;
+      return {
+        ...state,
+        isFetching: false,
+        data: {
+          ...state.data,
+          [OTAKey]: balance,
+        },
       };
     }
     default:
@@ -25,7 +38,7 @@ const reducer: Reducer<IAssetsState, AssetsActions> = (state = initialState, act
 };
 
 const persistConfig: any = {
-  key: "assets",
+  key: "assetsReducer",
   storage: storage,
   whitelist: [""],
   stateReconciler: autoMergeLevel2,

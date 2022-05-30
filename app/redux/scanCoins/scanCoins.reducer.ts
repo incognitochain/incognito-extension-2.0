@@ -39,7 +39,7 @@ export const reducer: Reducer<IScanCoinsState, ScanCoinsActions> = (state = init
 };
 
 const persistConfig: any = {
-  key: "scanCoins",
+  key: "scanCoinsReducer",
   storage: Storage,
   whitelist: ["scanStatus"],
   stateReconciler: autoMergeLevel2,

@@ -1,3 +1,2 @@
-import MainRoute from './MainRoute';
-
-export default MainRoute;
+export { default as MainRoute } from "./MainRoute";
+export * from "./MainRoute.withGetStarted";

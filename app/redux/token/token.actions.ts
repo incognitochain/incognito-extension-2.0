@@ -38,13 +38,13 @@ export const getPTokenList =
     try {
       const state = getState();
       const accountWallet = accountSelector.defaultAccountWalletSelector(state);
-      const keyInfo = (await accountWallet.getKeyInfo({ version: PrivacyVersion.ver2 })) || {};
-      const coinsIndex = Object.keys(keyInfo.coinindex || {}) || [];
-      const [coinIndexTokens, pTokens] = await Promise.all([
-        await getTokensInfo(coinsIndex),
+      // const keyInfo = (await accountWallet.getKeyInfo({ version: PrivacyVersion.ver2 })) || {};
+      // const coinsIndex = Object.keys(keyInfo.coinindex || {}) || [];
+      const [pTokens] = await Promise.all([
+        // await getTokensInfo(coinsIndex),
         await getTokenList({ expiredTime }),
       ]);
-      const tokens = uniqBy([...(coinIndexTokens || []), ...pTokens], "tokenId");
+      const tokens = uniqBy([...pTokens], "tokenId");
       await dispatch(setListPToken(tokens));
       return tokens;
     } catch (e) {

@@ -224,7 +224,6 @@ export class PopupController {
             await this.loadFollowTokensBalance();
           } catch (err) {
             log("popup_followTokensBalance failed with error: %s", err);
-            console.log("SANG TEST");
             res.error = err;
           }
           break;

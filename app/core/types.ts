@@ -59,6 +59,12 @@ export type StoredData = {
 
 export type WalletState = "locked" | "unlocked" | "uninitialized";
 
+export type IBalance = {
+  amount: string;
+  id: string;
+  swipable: boolean;
+};
+
 export type PopupState = {
   walletState: WalletState;
   accounts: string[];

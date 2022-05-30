@@ -1,30 +1,29 @@
 import { AssetsActionType } from "@module/Assets/Assets.constant";
-import { AssetsFetchingAction, AssetsFetchingPayload } from "@module/Assets/Assets.types";
-import { AppGetState, AppThunkDispatch } from "@redux/store";
-import { createLogger } from "@core/utils";
-import { trim } from "lodash";
+import {
+  AssetsFetchedAction,
+  AssetsFetchedPayload,
+  AssetsFetchingAction,
+  AssetsFetchingPayload,
+  AssetsFreePayload,
+  AssetsFreeAction,
+} from "@module/Assets/Assets.types";
+// import { createLogger } from "@core/utils";
+// const log = createLogger("assets:actions");
 
-const log = createLogger("assets:actions");
-
-const actionFetchingBalance = (payload: AssetsFetchingPayload): AssetsFetchingAction => ({
+const actionFetchingFollowBalance = (payload: AssetsFetchingPayload): AssetsFetchingAction => ({
   type: AssetsActionType.FETCHING,
   payload,
 });
 
-const actionGetFollowTokensBalance = async (dispatch: AppThunkDispatch, getState: AppGetState) => {
-  try {
-    // callAsync(request("popup_switchAccount", { accountName: trim(accountName) }), {
-    //   progress: { message: "Switching Account..." },
-    //   success: { message: "Switch Done" },
-    //   onSuccess: (result) => {
-    //     // history.goBack();
-    //     console.log("Swtich Account Done: TO DO ");
-    //   },
-    // });
-    //
-  } catch (error) {
-    log("LOAD FOLLOW TOKENS BALANCE WITH ERROR: ", error);
-  }
-};
+const actionFetchedFollowBalance = (payload: AssetsFetchedPayload): AssetsFetchedAction => ({
+  type: AssetsActionType.FETCHED,
+  payload,
+});
 
-export { actionGetFollowTokensBalance };
+// TODO: LOGOUT CLEAR DATA
+const actionFreeFollowBalance = (payload: AssetsFreePayload): AssetsFreeAction => ({
+  type: AssetsActionType.FREE_DATA,
+  payload,
+});
+
+export { actionFetchingFollowBalance, actionFetchedFollowBalance, actionFreeFollowBalance };

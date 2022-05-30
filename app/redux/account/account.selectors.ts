@@ -120,7 +120,13 @@ export const signPublicKeyEncodeSelector = createSelector(
 
 export const burnerAddressSelector = createSelector(accountSelector, ({ burnerAddress }) => burnerAddress);
 
-export const otaKeyOfDefaultAccountSelector = createSelector(defaultAccountSelector, (account: any) => account.OTAKey);
+// TODO: REMOVE
+export const otaKeyOfDefaultAccountSelector = createSelector(
+  defaultAccountSelector,
+  (account: any) =>
+    account.OTAKey ||
+    "14yJXBcq3EZ8dGh2DbL3a78bUUhWHDN579fMFx6zGVBLhWGzr2V4ZfUgjGHXkPnbpcvpepdzqAJEKJ6m8Cfq4kYiqaeSRGu37ns87ss",
+);
 
 export const nftTokenDataSelector = createSelector(accountSelector, ({ nft }) => {
   const { initNFTToken, nftToken } = nft;

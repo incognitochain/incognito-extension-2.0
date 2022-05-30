@@ -245,6 +245,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
       overflow-x: scroll;
       overflow-y: scroll;
       max-height: 480px;
+      min-height: 480px;
     }
 
     .noselect {

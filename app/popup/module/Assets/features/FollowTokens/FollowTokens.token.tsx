@@ -2,12 +2,11 @@ import React from "react";
 import styled, { ITheme } from "styled-components";
 import { Row } from "@popup/theme";
 import btcLogo from "./btc.png";
+import { getPrivacyDataByTokenID } from "@redux/selectedPrivacy";
+import { useSelector } from "react-redux";
 
 export interface IToken {
-  name: string;
-  symbol: string;
-  amount: string;
-  usdAmount: string;
+  id: string;
 }
 
 const Styled = styled(Row)`
@@ -38,7 +37,9 @@ interface ITokenProps extends IToken {
 }
 
 const Token = React.memo((props: ITokenProps) => {
-  const { name, symbol, usdAmount, amount } = props;
+  const { id: tokenID } = props;
+  // @ts-ignore
+  const { symbol, name, amount, usdAmount }: any = useSelector(getPrivacyDataByTokenID)(tokenID);
   return (
     <Styled className="default-padding-horizontal">
       <img className="logo noselect" src={btcLogo} alt="logo-icon" />

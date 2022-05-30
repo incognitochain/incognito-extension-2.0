@@ -3,6 +3,10 @@ import Storage from "@services/storage";
 import { measure } from "@utils/func";
 import { actionFetchingScanCoins, actionFistTimeScanCoins, isFetchingScanCoinsSelector } from "@redux/scanCoins";
 import { createLogger } from "@core/utils";
+import uniqBy from "lodash/uniqBy";
+import { IBalance } from "@core/types";
+import { actionFetchedFollowBalance, actionFetchingFollowBalance } from "@module/Assets";
+import { isFetchingAssetsSelector } from "@module/Assets";
 const { Account, PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 
 const tokens = [
@@ -25,7 +29,6 @@ export const configAccount = async () => {
 export const scanCoins = async () => {
   const accountSender = await configAccount();
   const isFetching = isFetchingScanCoinsSelector(store.getState());
-
   // Validate data
   if (!accountSender || isFetching) return;
 
@@ -64,30 +67,35 @@ export const getBalance = async ({
 }): Promise<number> => {
   let balance = 0;
   try {
-    const test = await measure(accountSender, "getBalance", {
+    balance = await accountSender.getBalance({
       version: PrivacyVersion.ver3,
       tokenID: tokenID,
     });
-    console.log(test);
   } catch (error) {
-    console.log("GET BALANCE ERROR: ", error);
+    log("GET BALANCE ERROR: ", error);
   }
   return balance;
 };
 
 export const getFollowTokensBalance = async () => {
-  let result: any = [];
+  const isFetching = isFetchingAssetsSelector(store.getState());
+  const accountSender = await configAccount();
+  const otaKey = accountSender.getOTAKey();
+
+  if (!otaKey || isFetching) return;
+
   try {
-    const accountSender = await configAccount();
-    // const tasks = tokens.map((tokenID) => getBalance({ accountSender, tokenID }));
-    // result = await Promise.all(tasks);
-    result = await accountSender.getFollowTokensBalance({
+    dispatch(actionFetchingFollowBalance({ isFetching: true }));
+    // follow tokens balance
+    const { balance }: { balance: IBalance[] } = await accountSender.getFollowTokensBalance({
       defaultTokens: tokens,
       version: PrivacyVersion.ver3,
     });
-    console.log("SANG TEST::: ", result);
+    const _balance = uniqBy(balance, "id");
+    dispatch(actionFetchedFollowBalance({ balance: _balance, OTAKey: otaKey }));
   } catch (error) {
     log("LOAD FOLLOW TOKENS BALANCE ERROR: ", error);
+  } finally {
+    dispatch(actionFetchingFollowBalance({ isFetching: false }));
   }
-  return result;
 };
