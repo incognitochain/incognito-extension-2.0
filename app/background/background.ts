@@ -11,6 +11,7 @@ import { getBalance, scanCoins } from "@background/worker.scanCoins";
 // import { workerGetCoins } from "@background/worker.getcoins";
 import Storage from "@services/storage";
 import { masterKeyReducerSelector } from "@redux/masterKey";
+import { setInterval } from "timers";
 const { init } = require("incognito-chain-web-js/build/web/wallet");
 
 window.store = store;
@@ -35,16 +36,16 @@ async function initialize() {
   enableLogger();
   await loadWasmConfig();
   await loadStoreRedux();
-  // console.log('SANG TEST:: ', Storage.);
-
   // TODO: remove command
   // const versionedData = await loadStateFromPersistence();
   // await setupController(versionedData);
-  scanCoins().then();
-  // getBalance().then();
-  const versionedData = await loadStateFromPersistence();
-  await setupController(versionedData);
+  // const versionedData = await loadStateFromPersistence();
+  // await setupController(versionedData);
   // workerGetCoins().then();
+
+  setInterval(() => {
+    scanCoins().then();
+  }, 2000);
 }
 
 async function loadWasmConfig(): Promise<void | Error> {

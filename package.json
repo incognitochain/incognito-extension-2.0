@@ -45,6 +45,7 @@
     "memoize-one": "^6.0.0",
     "moment": "^2.29.3",
     "nanoid": "^3.1.12",
+    "node-schedule": "^2.1.0",
     "notistack": "^2.0.4",
     "obj-multiplex": "^1.0.0",
     "password-validator": "^5.2.1",

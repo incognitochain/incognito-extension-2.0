@@ -1,20 +1,20 @@
-import { MintInfo, Token as SPLToken } from '@solana/spl-token';
-import { CompiledInstruction, Connection, Message, PublicKey } from '@solana/web3.js';
-import bs58 from 'bs58';
-import { Buffer } from 'buffer';
-import * as shortvec from './shortvec-encoding';
-import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP, Token } from './types';
+import { MintInfo, Token as SPLToken } from "@solana/spl-token";
+import { CompiledInstruction, Connection, Message, PublicKey } from "@solana/web3.js";
+import bs58 from "bs58";
+import { Buffer } from "buffer";
+import * as shortvec from "./shortvec-encoding";
+import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP, Token } from "./types";
 
-const debug = require('debug');
-const ObjectMultiplex = require('obj-multiplex');
+const debug = require("debug");
+const ObjectMultiplex = require("obj-multiplex");
 export const createLogger = (module: string): any => {
   return debug(module);
 };
-const log = createLogger('sol:util');
+const log = createLogger("sol:util");
 
 export function enableLogger() {
-  if (process.env.NODE_ENV === 'development') {
-    localStorage.setItem('debug', '*');
+  if (process.env.NODE_ENV === "development") {
+    localStorage.setItem("debug", "*");
   }
   return;
 }
@@ -44,7 +44,7 @@ export const checkForError = () => {
 const PUBKEY_LENGTH = 32;
 
 export const decodeSerializedMessage = (buffer: Buffer): Message => {
-  log('Decoding serialized message: %O', buffer);
+  log("Decoding serialized message: %O", buffer);
   let byteArray = [...buffer];
 
   const numRequiredSignatures = byteArray.shift() as number;

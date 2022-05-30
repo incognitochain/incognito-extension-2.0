@@ -2,7 +2,6 @@ import { dispatch, store } from "@redux/store/store";
 import Storage from "@services/storage";
 import { measure } from "@utils/func";
 import { actionFetchingScanCoins, actionFistTimeScanCoins, isFetchingScanCoinsSelector } from "@redux/scanCoins";
-import account from "@model/account";
 import { createLogger } from "@core/utils";
 const { Account, PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 
@@ -24,12 +23,13 @@ export const configAccount = async () => {
 };
 
 export const scanCoins = async () => {
-  try {
-    const accountSender = await configAccount();
-    const isFetching = isFetchingScanCoinsSelector(store.getState());
+  const accountSender = await configAccount();
+  const isFetching = isFetchingScanCoinsSelector(store.getState());
 
-    // Validate data
-    if (!accountSender || isFetching) return;
+  // Validate data
+  if (!accountSender || isFetching) return;
+
+  try {
     const otaKey = accountSender.getOTAKey();
 
     // Get coins scanned from storage, existed ignore and continue scan
@@ -47,9 +47,9 @@ export const scanCoins = async () => {
       dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey }));
     }
 
-    console.log("scanCoins: ", { elapsed, otaKey, coins: result });
+    log("scanCoins: ", { elapsed, otaKey, coins: result });
   } catch (error) {
-    console.log("SCAN COINS WITH ERROR: ", error);
+    log("SCAN COINS WITH ERROR: ", error);
   } finally {
     dispatch(actionFetchingScanCoins({ isFetching: false }));
   }
@@ -76,11 +76,18 @@ export const getBalance = async ({
 };
 
 export const getFollowTokensBalance = async () => {
+  let result: any = [];
   try {
     const accountSender = await configAccount();
-    const tasks = tokens.map((tokenID) => getBalance({ accountSender, tokenID }));
-    await Promise.all(tasks);
+    // const tasks = tokens.map((tokenID) => getBalance({ accountSender, tokenID }));
+    // result = await Promise.all(tasks);
+    result = await accountSender.getFollowTokensBalance({
+      defaultTokens: tokens,
+      version: PrivacyVersion.ver3,
+    });
+    console.log("SANG TEST::: ", result);
   } catch (error) {
-    console.log("LOAD FOLLOW TOKENS BALANCE ERROR: ", error);
+    log("LOAD FOLLOW TOKENS BALANCE ERROR: ", error);
   }
+  return result;
 };
