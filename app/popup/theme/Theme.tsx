@@ -84,7 +84,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
         font-display: swap;
         box-sizing: border-box;
         font-weight: 400;
-        border: ${isDev ? "solid 0.5px" : "none"};
+        // border: ${isDev ? "solid 0.5px" : "none"};
         overflow: hidden;
         position: relative;
         font-size: ${FONT_SIZES.regular}px;
@@ -244,7 +244,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
       position: relative;
       overflow-x: scroll;
       overflow-y: scroll;
-      max-height: 490px;
+      max-height: 480px;
     }
 
     .noselect {

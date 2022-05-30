@@ -2,13 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import "./reset.css";
-import { AppHotReload } from "@popup/app";
-import { App as AppTest } from "@popup/pages/app";
+import { AppHotReload, App } from "@popup/app";
+// import { App as AppTest } from "@popup/pages/app";
 import { unregisterServiceWorker } from "./core/service-worker";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
-const useHotReload = true;
+const useHotReload = false;
 
 if (useHotReload) {
   // Hot reload support implement UI
@@ -24,7 +24,7 @@ if (useHotReload) {
     <React.StrictMode>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <AppTest />
+          <App />
         </PersistGate>
       </Provider>
     </React.StrictMode>,

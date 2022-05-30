@@ -3,9 +3,9 @@ body {
 }
 
 #root {
-  /* width: 375px;
-  height: 600px;
-  overflow-y: auto; */
+  width: 375px;
+  height: 617px;
+  /*overflow-y: auto; */
   display: flex;
   flex-direction: column;
   flex: 1;

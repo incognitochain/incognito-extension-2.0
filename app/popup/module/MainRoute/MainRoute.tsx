@@ -1,8 +1,14 @@
 import React, { Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
 import { IRouteProps } from "..";
+import styled from "styled-components";
 
 const context = require.context("@popup/module", true, /\.route.tsx?/);
+
+const Styled = styled.div`
+  position: fixed;
+  width: 100vw;
+`;
 
 const MainRoute = () => {
   const [routes, setRoutes] = React.useState<Array<IRouteProps>>([]);
@@ -16,8 +22,9 @@ const MainRoute = () => {
     handleGetRoutes();
   }, []);
 
+  console.log(routes);
   return (
-    <div style={{ flex: 1, display: "flex" }}>
+    <Styled>
       <Suspense fallback="loading">
         <Switch>
           {routes.map((route) => (
@@ -25,7 +32,7 @@ const MainRoute = () => {
           ))}
         </Switch>
       </Suspense>
-    </div>
+    </Styled>
   );
 };
 
