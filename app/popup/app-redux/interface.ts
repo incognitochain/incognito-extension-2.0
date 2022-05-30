@@ -1,5 +1,5 @@
-import { IConfigsState } from '@popup/configs';
-import { IThemeState } from '@popup/theme';
+import { IConfigsState } from "@popup/configs";
+import { IThemeState } from "@theme/Theme.reducer";
 
 export interface IAction {
   type: string;

@@ -116,7 +116,7 @@ export function useCallAsync<T>() {
     } catch (e) {
       closeSnackbar(id);
 
-      let message: string = e.message || (e != null ? e.toString() : "Unknown error");
+      let message: string = e.message || (e !== null ? e.toString() : "Unknown error");
       if (error?.message) {
         message = error.message;
       } else if (error?.errorMapper) {

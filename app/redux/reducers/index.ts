@@ -9,7 +9,8 @@ import { reducer as wallet } from "@redux/wallet/wallet.reducer";
 import { reducer as scanCoinsReducer } from "@redux/scanCoins";
 import { reducer as headerReducer } from "@components/Header";
 import { reducer as configReducer } from "@popup/configs";
-
+import { reducer as assetsReducer } from "@module/Assets";
+import { reducer as themeReducer } from "@popup/theme";
 import { $CombinedState, combineReducers } from "redux";
 
 const rootReducers = combineReducers({
@@ -24,6 +25,8 @@ const rootReducers = combineReducers({
   scanCoinsReducer,
   headerReducer,
   configReducer,
+  assetsReducer,
+  themeReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducers> & {

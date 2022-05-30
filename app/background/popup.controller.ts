@@ -30,6 +30,7 @@ import { dispatch, persistor } from "@redux/store/store";
 import Storage from "@services/storage";
 import { APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@constants/common";
 import { actionFetchCreateAccount, actionSwitchAccount } from "@/redux/account";
+import { getFollowTokensBalance } from "@background/worker.scanCoins";
 
 const log = createLogger("sol:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -218,6 +219,15 @@ export class PopupController {
             res.error = err;
           }
           break;
+        case "popup_followTokensBalance":
+          try {
+            await this.loadFollowTokensBalance();
+          } catch (err) {
+            log("popup_followTokensBalance failed with error: %s", err);
+            console.log("SANG TEST");
+            res.error = err;
+          }
+          break;
         default:
           log("popup controller middleware did not match method name %s", req.method);
           await next();
@@ -379,6 +389,10 @@ export class PopupController {
 
     pendingTransactionAction.reject("Transaction declined");
     this.actionManager.deleteAction(actionKey);
+  }
+
+  async loadFollowTokensBalance() {
+    await getFollowTokensBalance();
   }
 
   changeNetwork(req: any) {

@@ -1,6 +1,8 @@
 import React from "react";
 import Header from "@components/Header";
 import { AddressBar, TotalBalance, FollowTokensList } from "@module/Assets/features";
+import { compose } from "recompose";
+import { withBalance } from "@module/Assets/Assets.withBalance";
 
 const Assets = React.memo(() => {
   return (
@@ -13,4 +15,4 @@ const Assets = React.memo(() => {
   );
 });
 
-export default Assets;
+export default compose(withBalance)(Assets);

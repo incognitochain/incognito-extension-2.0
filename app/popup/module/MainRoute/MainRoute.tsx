@@ -28,7 +28,7 @@ const MainRoute = () => {
       <Suspense fallback="loading">
         <Switch>
           {routes.map((route) => (
-            <Route {...route} />
+            <Route {...route} key={route.path} />
           ))}
         </Switch>
       </Suspense>
