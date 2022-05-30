@@ -39,8 +39,8 @@ async function initialize() {
   // TODO: remove command
   // const versionedData = await loadStateFromPersistence();
   // await setupController(versionedData);
-  // const versionedData = await loadStateFromPersistence();
-  // await setupController(versionedData);
+  const versionedData = await loadStateFromPersistence();
+  await setupController(versionedData);
   // workerGetCoins().then();
 
   setInterval(() => {
