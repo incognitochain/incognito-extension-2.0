@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
 import { IRouteProps } from "..";
 import styled from "styled-components";
+import { withStarted } from "@module/MainRoute/MainRoute.withGetStarted";
 
 const context = require.context("@popup/module", true, /\.route.tsx?/);
 
@@ -36,4 +37,4 @@ const MainRoute = () => {
   );
 };
 
-export default React.memo(MainRoute);
+export default withStarted(React.memo(MainRoute));

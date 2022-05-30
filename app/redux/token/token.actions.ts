@@ -36,8 +36,8 @@ export const getPTokenList =
   ({ expiredTime = EXPIRED_TIME } = {}) =>
   async (dispatch: AppThunkDispatch, getState: AppGetState) => {
     try {
-      const state = getState();
-      const accountWallet = accountSelector.defaultAccountWalletSelector(state);
+      // const state = getState();
+      // const accountWallet = accountSelector.defaultAccountWalletSelector(state);
       // const keyInfo = (await accountWallet.getKeyInfo({ version: PrivacyVersion.ver2 })) || {};
       // const coinsIndex = Object.keys(keyInfo.coinindex || {}) || [];
       const [pTokens] = await Promise.all([
@@ -45,7 +45,7 @@ export const getPTokenList =
         await getTokenList({ expiredTime }),
       ]);
       const tokens = uniqBy([...pTokens], "tokenId");
-      await dispatch(setListPToken(tokens));
+      dispatch(setListPToken(tokens));
       return tokens;
     } catch (e) {
       throw e;

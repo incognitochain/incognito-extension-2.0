@@ -28,6 +28,8 @@ export const getPrivacyDataByTokenID = createSelector(
       if (!tokenID) {
         return data;
       }
+      // 880ea0787f6c1555e59e3958a595086b7802fc7a38276bcd80d4525606557fbc
+      console.log(pTokens, internalTokens);
       try {
         tokenID = toLower(tokenID);
         const internalTokenData =

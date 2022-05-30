@@ -2,7 +2,7 @@ import axios from "axios";
 import CONSTANT_CONFIGS from "@constants/config";
 import { CustomError, ErrorCode, ExHandler } from "./exception";
 
-const HEADERS = { "Content-Type": "application/json", "Accept-Encoding": "gzip" };
+const HEADERS = { "Content-Type": "application/json" };
 const TIMEOUT = 20000;
 
 const instance = axios.create({
