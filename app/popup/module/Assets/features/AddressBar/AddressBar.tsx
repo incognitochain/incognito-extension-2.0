@@ -36,7 +36,7 @@ const AddressBar = React.memo(() => {
   const onShowQrCodeModal = () => {
     dispatch(
       actionToggleModal({
-        title: "QRCode",
+        title: "Payment Address",
         data: ReactDOMServer.renderToString(<QrCodeModal value={address} />),
         closeable: true,
       }),

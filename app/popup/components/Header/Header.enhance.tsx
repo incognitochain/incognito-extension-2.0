@@ -51,7 +51,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IProps & 
           <Link
             to="#"
             onClick={onHandleToggleSearch}
-            className={`header-title fw-medium fs-medium ellipsis main-text ${canSearch ? "sub-text" : ""}`}
+            className={`header-title fw-medium fs-large ellipsis main-text ${canSearch ? "sub-text" : ""}`}
           >
             {title}
           </Link>
