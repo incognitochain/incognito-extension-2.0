@@ -1,11 +1,11 @@
-import { lazy } from 'react';
+import { lazy } from "react";
 import { IRouteProps } from "@popup/module";
 
-export const route = '/';
+export const route = "/assets";
 
 const assetsRoute: IRouteProps = {
-    path: route,
-    component: lazy(() => import('./Assets')),
+  path: route,
+  component: lazy(() => import("./Assets")),
 };
 
 export default assetsRoute;

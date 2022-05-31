@@ -1,5 +1,5 @@
 import { ThemedGlobalStyle, ThemeProvider } from "@popup/theme";
-import React from "react";
+import React, { useMemo } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { MainRoute } from "@module/MainRoute";
 import withApp from "@popup/app/App.enhance";
@@ -8,6 +8,8 @@ import { ConnectionProvider } from "@popup/context/connection";
 import { ProgramPluginsManagerProvider } from "@popup/context/plugins";
 import { makeStyles } from "@mui/styles";
 import { SnackbarProvider } from "notistack";
+import { themeHelper } from "../helper/index";
+import { ThemeProvider as ThemeProviderMUI } from "@mui/system";
 
 const App: React.FunctionComponent = () => {
   const useStyles = makeStyles({
@@ -17,30 +19,34 @@ const App: React.FunctionComponent = () => {
     info: { backgroundColor: "#43b5c5" },
   });
   const classes: any = useStyles();
-
+  const theme = useMemo(() => {
+    return themeHelper(true);
+  }, []);
   return (
     <ThemeProvider>
-      <ThemedGlobalStyle />
-      <BackgroundProvider>
-        <ConnectionProvider>
-          <ProgramPluginsManagerProvider>
-            <SnackbarProvider
-              maxSnack={5}
-              autoHideDuration={2000}
-              classes={{
-                variantSuccess: classes.success,
-                variantError: classes.error,
-                variantWarning: classes.warning,
-                variantInfo: classes.info,
-              }}
-            >
-              <Router>
-                <MainRoute />
-              </Router>
-            </SnackbarProvider>
-          </ProgramPluginsManagerProvider>
-        </ConnectionProvider>
-      </BackgroundProvider>
+      <ThemeProviderMUI theme={theme}>
+        <ThemedGlobalStyle />
+        <BackgroundProvider>
+          <ConnectionProvider>
+            <ProgramPluginsManagerProvider>
+              <SnackbarProvider
+                maxSnack={5}
+                autoHideDuration={2000}
+                classes={{
+                  variantSuccess: classes.success,
+                  variantError: classes.error,
+                  variantWarning: classes.warning,
+                  variantInfo: classes.info,
+                }}
+              >
+                <Router>
+                  <MainRoute />
+                </Router>
+              </SnackbarProvider>
+            </ProgramPluginsManagerProvider>
+          </ConnectionProvider>
+        </BackgroundProvider>
+      </ThemeProviderMUI>
     </ThemeProvider>
   );
 };
