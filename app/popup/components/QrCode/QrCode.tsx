@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import QRCodeReact from "qrcode.react";
+// import QRCodeReact from "qrcode.react";
+import QRCodeReact from "react-qr-code";
+
 import { useSelector } from "react-redux";
 // import { COLORS, ITheme } from "src/styles";
 import Copy from "@components/Copy";
@@ -47,7 +49,7 @@ const QrCode = (props: IProps) => {
     <Styled className="qrcode-container">
       <div className="label fs-medium fw-bold ellipsis">{label}</div>
       <div className="qrcode-react">
-        <QRCodeReact {...{ ...qrCodeProps, size: qrCodeProps?.size || 175 }} />
+        <QRCodeReact {...{ ...qrCodeProps, size: qrCodeProps?.size || 175 }} bgColor="transparent" fgColor="white" />
       </div>
       {hook}
       <Copy text={value} {...copyProps} />

@@ -2,14 +2,13 @@ import React from "react";
 import { useSelector } from "react-redux";
 import isEmpty from "lodash/isEmpty";
 import last from "lodash/last";
-// import { themeSelector } from 'src/module/Setting';
-// import { COLORS, IGlobalStyle } from 'src/styles';
-import styled from "styled-components";
+import styled, { ITheme } from "styled-components";
 import useOutsideRef from "@popup/hooks/useDetectClickOutside";
 import enhance from "./Modal.enhance";
 import { modalSelector } from "./Modal.selector";
 import { IProps } from "./Modal.interface";
 import Header from "@components/Header";
+import WrapContent from "@components/Content/Content";
 
 const Styled = styled.div`
   position: fixed;
@@ -20,10 +19,12 @@ const Styled = styled.div`
   z-index: 10000;
   display: flex;
   justify-content: center;
+  background-color: ${({ theme }: { theme: ITheme }) => theme.body};
   .modal-content-wrapper {
     position: absolute;
-    padding: 30px;
     overflow: hidden;
+    width: 100%;
+    height: 100%;
   }
   .close-icon {
     z-index: 2;
@@ -37,13 +38,17 @@ const Styled = styled.div`
   .header {
     margin-top: 0;
   }
+  .modal-data {
+    flex: 1;
+  }
+  .wrap-content {
+    padding-top: 24px;
+  }
+  .label {
+    margin-bottom: 30px;
+    text-align: center;
+  }
 `;
-
-// min-width: ${({ theme }: { theme: ITheme }) => theme.minWidth};
-// max-width: ${({ theme }: { theme: ITheme }) => props.theme.maxWidth};
-// width: ${(({ theme }: { theme: ITheme }) => props.theme.width};
-// height: ${(({ theme }: { theme: ITheme }) => props.theme.height};
-// background: ${(({ theme }: { theme: ITheme }) => theme.modalBg};
 
 const Modal = (props: IProps) => {
   const modalState = useSelector(modalSelector);
@@ -77,7 +82,9 @@ const Modal = (props: IProps) => {
             rightHeader={rightHeader}
           />
         )}
-        <div className="modal-data">{modalData}</div>
+        <WrapContent>
+          <div className="modal-data" dangerouslySetInnerHTML={{ __html: modalData }} />
+        </WrapContent>
       </div>
     );
   };

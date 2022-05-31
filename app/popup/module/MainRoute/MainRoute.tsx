@@ -23,6 +23,7 @@ const context = require.context("@popup/module", true, /\.route.tsx?/);
 const Styled = styled.div`
   position: fixed;
   width: 100vw;
+  height: 100vh;
 `;
 
 const defaultRoute = (key: string, props: RouteProps, popupState: PopupState, isNotification: boolean) => {

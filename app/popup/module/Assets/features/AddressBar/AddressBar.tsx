@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { paymentAddressOfDefaultAccountSelector } from "@redux/account/account.selectors";
 import { actionToggleModal } from "@module/Modal";
 import QrCodeModal from "@components/QrCodeModal";
+import ReactDOMServer from "react-dom/server";
 
 const Styled = styled.div`
   padding: 8px 16px;
@@ -31,12 +32,12 @@ const AddressBar = React.memo(() => {
     str: useSelector(paymentAddressOfDefaultAccountSelector),
     limit: 12,
   });
-
+  // QrCodeModal value={address} label="QRCode"
   const onShowQrCodeModal = () => {
     dispatch(
       actionToggleModal({
-        title: " ",
-        data: <QrCodeModal value={address} label="QRCode" />,
+        title: "QRCode",
+        data: ReactDOMServer.renderToString(<QrCodeModal value={address} />),
         closeable: true,
       }),
     );

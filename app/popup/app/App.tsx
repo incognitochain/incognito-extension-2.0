@@ -1,6 +1,6 @@
 import { ThemedGlobalStyle, ThemeProvider } from "@popup/theme";
 import React, { useMemo } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+// import { BrowserRouter as Router } from "react-router-dom";
 import { MainRoute } from "@module/MainRoute";
 import withApp from "@popup/app/App.enhance";
 import { BackgroundProvider } from "@popup/context/background";
@@ -10,6 +10,12 @@ import { makeStyles } from "@mui/styles";
 import { SnackbarProvider } from "notistack";
 import { themeHelper } from "../helper/index";
 import { ThemeProvider as ThemeProviderMUI } from "@mui/system";
+import { Modal } from "@module/Modal";
+import { Router } from "react-router";
+import { createBrowserHistory, createMemoryHistory } from "history";
+import { isDev } from "@popup/configs";
+
+const history = isDev ? createBrowserHistory() : createMemoryHistory(); // Instead of createBrowserHistory();
 
 const App: React.FunctionComponent = () => {
   const useStyles = makeStyles({
@@ -39,8 +45,9 @@ const App: React.FunctionComponent = () => {
                   variantInfo: classes.info,
                 }}
               >
-                <Router>
+                <Router history={history}>
                   <MainRoute />
+                  <Modal />
                 </Router>
               </SnackbarProvider>
             </ProgramPluginsManagerProvider>

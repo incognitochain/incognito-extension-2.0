@@ -11,12 +11,11 @@ const Styled = styled.div`
 
 interface IProps {
   children?: React.ReactNode;
-  className?: string;
 }
 
 const WrapContent = React.memo((props: IProps) => {
-  const { children, className } = props;
-  return <Styled className={`scroll-view ${className ? className : ""}`}>{children}</Styled>;
+  const { children } = props;
+  return <Styled className="scroll-view wrap-content">{children}</Styled>;
 });
 
 export default WrapContent;
