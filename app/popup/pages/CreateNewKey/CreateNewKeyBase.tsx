@@ -11,6 +11,7 @@ import { MasterKeyPharseConfirmPage } from "@popup/pages/MasterKeyConfirm/Master
 import { MasterKeyPharseCreatedPage } from "@popup/pages/MasterKeyCreated/MasterKeyPharseCreated";
 import { CreateNewKeyContext, CreateNewKeyRouteContextType } from "./CreateNewKeyContext";
 import { CreateNewKeyPage } from "./CreateNewKeyPage";
+import { route as AssetsRoute } from "@module/Assets/Assets.route";
 
 interface RouteDataProps {
   mnemonic?: string;
@@ -34,7 +35,8 @@ const CreateNewKeyBase: React.FC = () => {
       progress: { message: "Creating wallet..." },
       success: { message: "Wallet created" },
       onSuccess: (result) => {
-        history.push(Paths.homeRouteStack);
+        // history.push(Paths.homeRouteStack);
+        history.push(AssetsRoute);
       },
     });
   };

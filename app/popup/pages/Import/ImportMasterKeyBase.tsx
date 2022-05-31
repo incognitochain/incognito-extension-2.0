@@ -7,6 +7,8 @@ import { PasswordPage } from "@popup/pages/Password/PasswordPage";
 import React, { ReactElement, useCallback, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { ImportMasterKeyRouteType } from "./ImportMasterKeyContext";
+import { route as AssetsRoute } from "@module/Assets/Assets.route";
+
 interface ImportMasterKeyBaseProps {
   mnemonic?: string;
   masterKeyName?: string;
@@ -26,7 +28,8 @@ const ImportMasterKeyBase: React.FC = () => {
       progress: { message: "Import wallet..." },
       success: { message: "Assets Imported" },
       onSuccess: (result: any) => {
-        history.push(Paths.homeRouteStack);
+        // history.push(Paths.homeRouteStack);
+        history.push(AssetsRoute);
       },
     });
   };

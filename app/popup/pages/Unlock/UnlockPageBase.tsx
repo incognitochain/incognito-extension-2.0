@@ -14,6 +14,7 @@ import {
   PrimaryButtonContaniner,
   Title,
 } from "./UnlockPage.styled";
+import { route as AssetsRoute } from "@module/Assets/Assets.route";
 
 export const UnlockPageBase: React.FC = () => {
   const history = useHistory();
@@ -30,7 +31,8 @@ export const UnlockPageBase: React.FC = () => {
             progress: { message: "Unlocking wallet..." },
             success: { message: "Wallet unlocked" },
             onSuccess: () => {
-              history.push(Paths.homeRouteStack);
+              // history.push(Paths.homeRouteStack);
+              history.push(AssetsRoute);
             },
           });
         }

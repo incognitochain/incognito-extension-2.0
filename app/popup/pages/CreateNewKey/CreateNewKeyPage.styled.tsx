@@ -4,6 +4,7 @@ import { PrimaryButton } from "@popup/components/Buttons";
 
 const TextInputWraper = styled.div`
   width: 100%;
+  height: 48px;
   margin-top: 8px;
 `;
 

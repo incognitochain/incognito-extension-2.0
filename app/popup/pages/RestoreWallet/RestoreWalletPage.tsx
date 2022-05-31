@@ -15,6 +15,7 @@ import {
   PrimaryButtonContaniner,
   VerifyLabel,
 } from "./RestoreWalletPage.styled";
+import { route as AssetsRoute } from "@module/Assets/Assets.route";
 
 const { validateMnemonic } = require("incognito-chain-web-js/build/wallet");
 
@@ -48,7 +49,8 @@ const RestoreWalletPage: React.FC = () => {
       progress: { message: "Restore Wallet..." },
       success: { message: "Restore Done" },
       onSuccess: (result: any) => {
-        history.push(Paths.homeRouteStack);
+        // history.push(Paths.homeRouteStack);
+        history.push(AssetsRoute);
       },
     });
   };
