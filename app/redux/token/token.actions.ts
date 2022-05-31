@@ -45,6 +45,7 @@ export const getPTokenList =
         // await getTokensInfo(coinsIndex),
         await getTokenList({ expiredTime }),
       ]);
+      console.log(pTokens);
       const tokens = uniqBy([...pTokens], "tokenId");
       dispatch(setListPToken(tokens));
       return tokens;

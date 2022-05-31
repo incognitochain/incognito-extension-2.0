@@ -3,8 +3,10 @@ import styled, { ITheme } from "styled-components";
 import { CopyIcon, QrCodeIcon } from "@components/Icons";
 import { Row } from "@popup/theme";
 import { ellipsisCenter } from "@popup/utils";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { paymentAddressOfDefaultAccountSelector } from "@redux/account/account.selectors";
+import { actionToggleModal } from "@module/Modal";
+import QrCodeModal from "@components/QrCodeModal";
 
 const Styled = styled.div`
   padding: 8px 16px;
@@ -24,15 +26,27 @@ const Styled = styled.div`
 `;
 
 const AddressBar = React.memo(() => {
+  const dispatch = useDispatch();
   const address = ellipsisCenter({
     str: useSelector(paymentAddressOfDefaultAccountSelector),
     limit: 12,
   });
+
+  const onShowQrCodeModal = () => {
+    dispatch(
+      actionToggleModal({
+        title: " ",
+        data: <QrCodeModal value={address} label="QRCode" />,
+        closeable: true,
+      }),
+    );
+  };
+
   return (
     <Styled className="default-margin-horizontal">
       <p className="fs-regular fw-medium">{address}</p>
       <Row>
-        <QrCodeIcon />
+        <QrCodeIcon onClick={onShowQrCodeModal} />
         <CopyIcon text={address} />
       </Row>
     </Styled>

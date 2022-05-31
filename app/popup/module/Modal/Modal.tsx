@@ -4,7 +4,7 @@ import isEmpty from "lodash/isEmpty";
 import last from "lodash/last";
 // import { themeSelector } from 'src/module/Setting';
 // import { COLORS, IGlobalStyle } from 'src/styles';
-import styled, { ITheme } from "styled-components";
+import styled from "styled-components";
 import useOutsideRef from "@popup/hooks/useDetectClickOutside";
 import enhance from "./Modal.enhance";
 import { modalSelector } from "./Modal.selector";

@@ -7,7 +7,6 @@ export const withStarted = (WrappedComponent: FunctionComponent) => {
   return (props: any) => {
     const dispatch: AppThunkDispatch = useDispatch();
 
-    // TODO: REMOVE
     const getTokensList = () => dispatch(getPTokenList());
 
     React.useEffect(() => {

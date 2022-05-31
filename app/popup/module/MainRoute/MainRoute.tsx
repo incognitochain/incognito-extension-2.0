@@ -10,6 +10,7 @@ import ImportMasterKeyRouteStack from "@popup/pages/Import/ImportMasterKeyRouteS
 import RestoreWalletPage from "@popup/pages/RestoreWallet/RestoreWalletPage";
 import { UnlockPage } from "@popup/pages/Unlock/UnlockPage";
 import React, { Suspense } from "react";
+import { Modal } from "@module/Modal";
 // import NotFoundPage from "@popup/pages/NotFound/NotFoundPage";
 import { RouteProps } from "react-router";
 import { Redirect, Route, RouteComponentProps, Switch } from "react-router-dom";
