@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useConnection } from "../context/connection";
-import { useIncognitoExplorerUrlSuffix } from "../hooks";
+import { useIncognitoExplorerUrlSuffix } from "../hooks/solanaHook";
 import Button from "@mui/material/Button";
 import { TransactionSignature } from "@solana/web3.js";
 import { OptionsObject, useSnackbar } from "notistack";

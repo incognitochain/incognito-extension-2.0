@@ -53,9 +53,9 @@ export const scanCoins = async () => {
       dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey }));
     }
 
-    log("scanCoins: ", { elapsed, otaKey, coins: result });
+    console.log("scanCoins: ", { elapsed, otaKey, coins: result });
   } catch (error) {
-    log("SCAN COINS WITH ERROR: ", error);
+    console.log("SCAN COINS WITH ERROR: ", error);
   } finally {
     dispatch(actionFetchingScanCoins({ isFetching: false }));
   }

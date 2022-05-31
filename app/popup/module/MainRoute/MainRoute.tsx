@@ -60,7 +60,6 @@ const MainRoute = () => {
   if (!popupState) {
     return null;
   }
-  console.log(routes);
   return (
     <Styled>
       <Suspense fallback="loading">

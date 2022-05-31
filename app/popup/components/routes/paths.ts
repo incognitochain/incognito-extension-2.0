@@ -28,7 +28,7 @@ export const Paths = {
   importMasterKeyPage: "/import-master-key",
   importMasterKeyStack: "/import-master-key-stack",
 
-  homeRouteStack: "/home-stack",
+  homeRouteStack: "/",
   unlockPage: "/unlock-page",
   createAccountPage: "/create-account-page",
   restoreWalletPage: "/restore-wallet-page",

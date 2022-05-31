@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import { useCallAsync } from "../utils/notifications";
 import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { sleep } from "../utils/utils";
-import { refreshAccountInfo } from "../hooks";
+import { refreshAccountInfo } from "../hooks/solanaHook";
 import { useConnection } from "../context/connection";
 import { useBackground } from "../context/background";
 
@@ -24,8 +24,7 @@ export const DebugButtons: React.FC = () => {
         window.alert("HANDLE ME, THIS IS UGLY SO IT GOES NOTICED!");
       },
       success: {
-        message:
-          "Success! Please wait up to 30 seconds for the SOL tokens to appear in your wallet.",
+        message: "Success! Please wait up to 30 seconds for the SOL tokens to appear in your wallet.",
       },
     });
   }
