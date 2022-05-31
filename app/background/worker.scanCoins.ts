@@ -7,6 +7,7 @@ import uniqBy from "lodash/uniqBy";
 import { IBalance } from "@core/types";
 import { actionFetchedFollowBalance, actionFetchingFollowBalance } from "@module/Assets";
 import { isFetchingAssetsSelector } from "@module/Assets";
+import { defaultAccountSelector } from "@redux/account";
 const { Account, PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 
 const tokens = [
@@ -17,13 +18,15 @@ const tokens = [
 const log = createLogger("background:scanCoins");
 
 export const configAccount = async () => {
-  let acc2 = new Account({});
-  acc2.setRPCClient("https://testnet.incognito.org/fullnode");
-  acc2.setStorageServices(Storage);
-  await acc2.setKey(
-    "112t8rnXUbFHzsnX7zdQouzxXEWArruE4rYzeswrEtvL3iBkcgXAXsQk4kQk23XfLNU6wMknyKk8UAu8fLBfkcUVMgxTNsfrYZURAnPqhffA",
-  );
-  return acc2;
+  const accountData = defaultAccountSelector(store.getState());
+  if (!accountData && accountData.PrivateKey) return;
+  // const wallet = accountData.Wallet;
+  let accountSender = new Account({});
+  accountSender.setRPCClient("https://testnet.incognito.org/fullnode");
+  accountSender.setRPCCoinServices("https://api-coinservice-staging.incognito.org");
+  accountSender.setStorageServices(Storage);
+  await accountSender.setKey(accountData.PrivateKey);
+  return accountSender;
 };
 
 export const scanCoins = async () => {
@@ -80,9 +83,10 @@ export const getBalance = async ({
 export const getFollowTokensBalance = async () => {
   const isFetching = isFetchingAssetsSelector(store.getState());
   const accountSender = await configAccount();
-  const otaKey = accountSender.getOTAKey();
 
-  if (!otaKey || isFetching) return;
+  if (!accountSender || isFetching) return;
+  const otaKey = accountSender.getOTAKey();
+  if (!otaKey) return;
 
   try {
     dispatch(actionFetchingFollowBalance({ isFetching: true }));

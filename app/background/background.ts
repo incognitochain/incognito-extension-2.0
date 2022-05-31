@@ -40,9 +40,10 @@ async function initialize() {
 
   dispatch(actionFetchingScanCoins({ isFetching: false }));
 
-  // setInterval(() => {
-  // }, 2000);
   scanCoins().then();
+  setInterval(() => {
+    scanCoins().then();
+  }, 40000);
 
   // TODO: remove command
   // const versionedData = await loadStateFromPersistence();
