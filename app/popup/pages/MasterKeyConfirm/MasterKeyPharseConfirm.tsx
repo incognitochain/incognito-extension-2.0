@@ -7,6 +7,7 @@ import { shuffle } from "lodash";
 import React, { useMemo, useState } from "react";
 import { MainLayout } from "../../components/layout/main-layout";
 import { PhraseItem } from "../../components/pharse-item";
+import MasterKeyPharseConfirmBase from "./MasterKeyPharseConfirmBase";
 
 const useStyles = makeStyles((theme: any) => ({
   box: {
@@ -38,15 +39,15 @@ const useStyles = makeStyles((theme: any) => ({
   },
 }));
 
-interface MasterKeyPharseConfirmPageBaseProps {
+interface MasterKeyPharseConfirmPageBasePropsABC {
   onBack?: () => void;
   createMasterKeySucess?: () => void;
   continueOnPress?: () => void;
   phraseList?: string[];
 }
 
-const MasterKeyPharseConfirmPageBase: React.FC<MasterKeyPharseConfirmPageBaseProps> = (
-  props: MasterKeyPharseConfirmPageBaseProps,
+const MasterKeyPharseConfirmPageBase: React.FC<MasterKeyPharseConfirmPageBasePropsABC> = (
+  props: MasterKeyPharseConfirmPageBasePropsABC,
 ) => {
   const styles = useStyles();
 
@@ -130,4 +131,6 @@ const MasterKeyPharseConfirmPageBase: React.FC<MasterKeyPharseConfirmPageBasePro
   );
 };
 
-export const MasterKeyPharseConfirmPage = withBlankLayout(MasterKeyPharseConfirmPageBase);
+// export const MasterKeyPharseConfirmPage = withBlankLayout(MasterKeyPharseConfirmPageBase);
+
+export const MasterKeyPharseConfirmPage = MasterKeyPharseConfirmBase;

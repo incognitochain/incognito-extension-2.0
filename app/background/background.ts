@@ -51,6 +51,10 @@ async function initialize() {
   const versionedData = await loadStateFromPersistence();
   setupController(versionedData);
   // workerGetCoins().then();
+
+  // setInterval(() => {
+  //   scanCoins().then();
+  // }, 2000);
 }
 
 async function loadWasmConfig(): Promise<void | Error> {
