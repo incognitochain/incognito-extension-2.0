@@ -16,7 +16,7 @@ import { compact, fromPairs, isNaN, uniqBy } from "lodash";
 import { createSelector } from "reselect";
 import orderBy from "lodash/orderBy";
 import SelectedPrivacyModel from "@model/SelectedPrivacyModel";
-import { followsTokenAssetsSelector } from "@module/Assets";
+import { followsTokenAssetsSelector } from "@module/Assets/Assets.selector";
 const { PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
 
 export const formatPrice = (price: any, toNumber = false) => {

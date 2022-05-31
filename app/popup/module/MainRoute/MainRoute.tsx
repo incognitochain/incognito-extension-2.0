@@ -15,6 +15,7 @@ import { RouteProps } from "react-router";
 import { Redirect, Route, RouteComponentProps, Switch } from "react-router-dom";
 import styled from "styled-components";
 import { IRouteProps } from "..";
+import { route as AssetsRoute } from "@module/Assets/Assets.route";
 
 const context = require.context("@popup/module", true, /\.route.tsx?/);
 
@@ -37,7 +38,7 @@ const defaultRoute = (key: string, props: RouteProps, popupState: PopupState, is
           case "uninitialized":
             return <Redirect to={{ pathname: Paths.getStatedPage }} />;
           case "unlocked":
-            return <Redirect to={{ pathname: Paths.homeRouteStack }} />;
+            return <Redirect to={{ pathname: AssetsRoute }} />;
         }
       }}
     />

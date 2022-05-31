@@ -21,7 +21,7 @@ export const configAccount = async () => {
   acc2.setRPCClient("https://testnet.incognito.org/fullnode");
   acc2.setStorageServices(Storage);
   await acc2.setKey(
-    "112t8roafGgHL1rhAP9632Yef3sx5k8xgp8cwK4MCJsCL1UWcxXvpzg97N4dwvcD735iKf31Q2ZgrAvKfVjeSUEvnzKJyyJD2z2WHZEtrbP4",
+    "112t8rnXUbFHzsnX7zdQouzxXEWArruE4rYzeswrEtvL3iBkcgXAXsQk4kQk23XfLNU6wMknyKk8UAu8fLBfkcUVMgxTNsfrYZURAnPqhffA",
   );
   return acc2;
 };

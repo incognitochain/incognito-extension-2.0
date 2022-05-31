@@ -3,6 +3,8 @@ import styled, { ITheme } from "styled-components";
 import { CopyIcon, QrCodeIcon } from "@components/Icons";
 import { Row } from "@popup/theme";
 import { ellipsisCenter } from "@popup/utils";
+import { useSelector } from "react-redux";
+import { paymentAddressOfDefaultAccountSelector } from "@redux/account/account.selectors";
 
 const Styled = styled.div`
   padding: 8px 16px;
@@ -23,7 +25,7 @@ const Styled = styled.div`
 
 const AddressBar = React.memo(() => {
   const address = ellipsisCenter({
-    str: "12svfkP6w5UDJDSCwqH978PvqiqBxKmUnA9em9yAYWYJVRv7wuXY1qhhYpPAm4BDz2mLbFrRmdK3yRhnTqJCZXKHUmoi7NV83HCH2YFpctHNaDdkSiQshsjw2UFUuwdEvcidgaKmF3VJpY5f8RdN",
+    str: useSelector(paymentAddressOfDefaultAccountSelector),
     limit: 12,
   });
   return (

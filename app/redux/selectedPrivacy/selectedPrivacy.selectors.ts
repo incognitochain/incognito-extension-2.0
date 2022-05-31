@@ -9,7 +9,7 @@ import { ExHandler } from "@services/exception";
 import toLower from "lodash/toLower";
 import memoize from "memoize-one";
 import { createSelector } from "reselect";
-import { followsTokenAssetsSelector } from "@module/Assets";
+import { followsTokenAssetsSelector } from "@module/Assets/Assets.selector";
 const { PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
 
 export const selectedPrivacyTokenID = createSelector(
@@ -17,37 +17,33 @@ export const selectedPrivacyTokenID = createSelector(
   (tokenId) => tokenId,
 );
 
-export const getPrivacyDataByTokenID = createSelector(
-  defaultAccount,
-  pTokens,
-  followsTokenAssetsSelector,
-  (account, pTokens, followTokens) =>
-    memoize((tokenID: any): SelectedPrivacyModel => {
-      let data: any = {};
-      if (!tokenID) return data;
-      try {
-        tokenID = toLower(tokenID);
-        const pTokenData = pTokens?.find((t: any) => t?.tokenId === tokenID);
-        if (!pTokenData && tokenID !== PRVIDSTR) {
-          console.log(`Can not find coin with id ${tokenID}`);
-        }
-        const token = new SelectedPrivacyModel(pTokenData, tokenID, followTokens);
-        // const tokenUSDT = pTokens.find((token: any) => token?.tokenId === BIG_COINS.USDT);
-        // const price = getPrice({ token, tokenUSDT });
-        // let priority = PRIORITY_LIST.indexOf(tokenID) > -1 ? PRIORITY_LIST.indexOf(tokenID) : PRIORITY_LIST.length + 1;
-        // data = {
-        //   ...token,
-        //   ...price,
-        //   amount: followedTokenData.amount,
-        //   isFollowed: isExistTokenFollowInWallet,
-        //   priority,
-        // };
-        return token;
-      } catch (e) {
-        console.log("error", tokenID, e);
+export const getPrivacyDataByTokenID = createSelector(followsTokenAssetsSelector, pTokens, (followTokens, pTokens) =>
+  memoize((tokenID: any): SelectedPrivacyModel => {
+    let data: any = {};
+    if (!tokenID) return data;
+    try {
+      tokenID = toLower(tokenID);
+      const pTokenData = pTokens?.find((t: any) => t?.tokenId === tokenID);
+      if (!pTokenData && tokenID !== PRVIDSTR) {
+        console.log(`Can not find coin with id ${tokenID}`);
       }
-      return data;
-    }),
+      const token = new SelectedPrivacyModel(pTokenData, tokenID, followTokens);
+      // const tokenUSDT = pTokens.find((token: any) => token?.tokenId === BIG_COINS.USDT);
+      // const price = getPrice({ token, tokenUSDT });
+      // let priority = PRIORITY_LIST.indexOf(tokenID) > -1 ? PRIORITY_LIST.indexOf(tokenID) : PRIORITY_LIST.length + 1;
+      // data = {
+      //   ...token,
+      //   ...price,
+      //   amount: followedTokenData.amount,
+      //   isFollowed: isExistTokenFollowInWallet,
+      //   priority,
+      // };
+      return token;
+    } catch (e) {
+      console.log("error", tokenID, e);
+    }
+    return data;
+  }),
 );
 
 export const getPrivacyDataBaseOnAccount = createSelector(
