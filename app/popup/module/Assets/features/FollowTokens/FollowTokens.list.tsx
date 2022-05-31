@@ -4,16 +4,17 @@ import WrapContent from "@components/Content/Content";
 import { FollowTokenItem } from "@module/Assets/features";
 import { IToken } from "@module/Assets/features/FollowTokens/FollowTokens.token";
 import { useSelector } from "react-redux";
-import { followsTokenAssetsSelector } from "@module/Assets";
+import sharedSelectors from "@redux/shared/shared.selectors";
+import SelectedPrivacy from "@model/SelectedPrivacyModel";
 
 const FollowTokensList = React.memo(() => {
-  const followTokens = useSelector(followsTokenAssetsSelector);
+  const followTokens = useSelector(sharedSelectors.followTokensFormatedSelector);
 
   return (
     <WrapContent>
       <MainStyled className="scroll-view">
-        {followTokens.map((item: IToken, index: number) => (
-          <FollowTokenItem {...item} index={index} key={item.id} />
+        {followTokens.map((item: SelectedPrivacy) => (
+          <FollowTokenItem {...item} key={item.tokenId} />
         ))}
       </MainStyled>
     </WrapContent>

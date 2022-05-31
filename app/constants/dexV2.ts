@@ -37,8 +37,8 @@ export const MESSAGES = {
   BALANCE_INSUFFICIENT: "Insufficient balance.",
   NEGATIVE_NUMBER: "Please enter an amount greater than 0.",
   NOT_NEGATIVE_NUMBER: "Please enter a number greater than or equal to 0.",
-  GREATER_OR_EQUAL: (number: any, pDecimalsr: any) =>
-    `Please enter a number greater than or equal to ${formatUtil.amountFull(number, pDecimalsr)}.`,
+  // GREATER_OR_EQUAL: (number: any, pDecimalsr: any) =>
+  //   `Please enter a number greater than or equal to ${formatUtil.amountFull(number, pDecimalsr)}.`,
   SMALLER_THAN_100: "Please enter a number less than 100.",
   MUST_BE_NUMBER: "Must be a positive number.",
   TRADE_ERROR: "We seem to have hit a snag. Please initiate the trade again.",

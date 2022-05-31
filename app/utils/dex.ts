@@ -51,12 +51,9 @@ export default {
     }
     const inputPool = pair[inputToken.id];
     const outputPool = pair[outputToken.id];
-    const number = new BigNumber(inputValue)
-      .multipliedBy(outputPool)
-      .dividedBy(inputPool)
-      .toNumber();
+    const number = new BigNumber(inputValue).multipliedBy(outputPool).dividedBy(inputPool).toNumber();
     const outputValue = isInput ? floor(number) : ceil(number);
-    const outputText = formatUtils.amountFull(outputValue, outputToken.pDecimals);
-    return { outputValue, outputText, pair };
+    // const outputText = formatUtils.amountFull(outputValue, outputToken.pDecimals);
+    // return { outputValue, outputText, pair };
   },
 };

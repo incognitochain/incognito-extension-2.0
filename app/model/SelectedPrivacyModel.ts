@@ -2,6 +2,11 @@ import { common, CONSTANT_CONFIGS } from "@constants/index";
 import { BIG_COINS } from "@constants/dexV2";
 import { detectToken } from "@utils/misc";
 import PToken from "./pTokenModel";
+import { IBalance } from "@core/types";
+import format from "@utils/format";
+import BigNumber from "bignumber.js";
+import convert from "@utils/convert";
+const { PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
 
 function getNetworkName() {
   let name = "Unknown";
@@ -56,22 +61,14 @@ function getNetworkName() {
   };
 }
 
-function combineData(pData: any, incognitoData: any, defaultData: any) {
-  if (this.isPToken) {
-    return pData || incognitoData;
-  }
-
-  if (this.isIncognitoToken) {
-    return incognitoData || pData;
-  }
-
-  return defaultData;
+function combineData(pData: any, defaultData: any) {
+  return pData || defaultData;
 }
 
 function getIconUrl(chainTokenImageUri: any) {
   let uri;
 
-  if (this.tokenId === common.PRV_ID) {
+  if (this.tokenId === PRVIDSTR) {
     return "https://statics.incognito.org/wallet/cryptocurrency-icons/32@2x/color/prv@2x.png";
   }
 
@@ -112,18 +109,16 @@ class SelectedPrivacy {
   isCentralized: any;
   incognitoTotalSupply: any;
   isVerified: any;
-  priceUsd: any;
   externalPriceUSD: any;
-  pricePrv: any;
+
   pairWithPrv: any;
   networkName: string;
   rootNetworkName: string;
   isUSDT: boolean;
   isPRV: boolean;
-  amount: any;
   listChildToken: any;
   iconUrl: any;
-  change: any;
+
   defaultPoolPair: any;
   defaultPairToken: any;
   network: any;
@@ -134,17 +129,35 @@ class SelectedPrivacy {
   isMATIC: boolean;
   tokenId: any;
 
-  constructor(account: any = {}, token: any = {}, pTokenData: PToken | any = {}, _tokenID: any) {
-    const tokenId = pTokenData?.tokenId || token?.id;
-    const isUnknown = _tokenID !== common.PRV_ID && !tokenId;
+  priceUsd: any;
+  pricePrv: any;
+  change: any;
+
+  amount: any;
+
+  formatAmount?: string;
+  formatPriceByUsd?: string;
+  formatPriceByPrv?: string;
+  formatAmountNoClip?: string;
+  formatBalanceByUsd?: string;
+
+  constructor(pTokenData: PToken | any = {}, _tokenID: string, followTokens: IBalance[]) {
+    const tokenId = pTokenData?.tokenId;
+    const isUnknown = _tokenID !== PRVIDSTR && !tokenId;
     const unknownText = "Incognito Token";
 
     this.currencyType = pTokenData.currencyType;
-    this.isToken = tokenId !== common.PRV_TOKEN_ID && !!tokenId; // all kind of tokens (private tokens, incognito tokens)
-    this.isMainCrypto = _tokenID === common.PRV_ID; // PRV
-    this.isPrivateToken = pTokenData?.type === common.PRIVATE_TOKEN_TYPE.TOKEN; // ERC20 tokens, BEP2 tokens
-    this.isPrivateCoin = pTokenData?.type === common.PRIVATE_TOKEN_TYPE.COIN; // pETH, pBTC, pTOMO,...
-    this.isPToken = !!pTokenData.pSymbol; // pToken is private token (pETH <=> ETH, pBTC <=> BTC, ...)
+    this.isMainCrypto = _tokenID === PRVIDSTR; // PRV
+    this.isToken = tokenId !== PRVIDSTR && !!tokenId;
+    this.isPToken = !!pTokenData.pSymbol;
+
+    // ERC20 tokens, BEP2 tokens
+    this.isPrivateToken = pTokenData?.type === common.PRIVATE_TOKEN_TYPE.TOKEN;
+
+    // native coins pETH, pBTC, pTOMO,...
+    this.isPrivateCoin = pTokenData?.type === common.PRIVATE_TOKEN_TYPE.COIN;
+
+    // pToken is private token (pETH <=> ETH, pBTC <=> BTC, ...)
     this.isIncognitoToken = (!this.isPToken && !this.isMainCrypto) || detectToken.ispNEO(this?.tokenId); // is tokens were issued from users
     this.isErc20Token = this.isPrivateToken && this.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.ERC20;
     this.isBep2Token = this.isPrivateToken && this.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.BNB_BEP2;
@@ -153,21 +166,15 @@ class SelectedPrivacy {
     this.isFantomErc20Token =
       this.isPrivateToken && this.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20;
     this.isBep20Token = this.isPrivateToken && this.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20;
-    this.symbol = combineData.call(this, pTokenData?.pSymbol, token?.symbol, common.CRYPTO_SYMBOL.PRV);
-    this.name = combineData.call(this, pTokenData?.name, token?.name, isUnknown ? unknownText : "Privacy");
-    this.displayName = combineData.call(
-      this,
-      `Privacy ${pTokenData?.symbol}`,
-      token?.name,
-      isUnknown ? unknownText : "Privacy",
-    );
+    this.symbol = combineData.call(this, pTokenData?.pSymbol, PRVIDSTR);
+    this.name = combineData.call(this, pTokenData?.name, isUnknown ? unknownText : "Privacy");
+    this.displayName = combineData.call(this, `Privacy ${pTokenData?.symbol}`, isUnknown ? unknownText : "Privacy");
 
-    this.tokenId = _tokenID ? _tokenID : this.isMainCrypto ? common.PRV_TOKEN_ID : tokenId;
+    this.tokenId = _tokenID ? _tokenID : this.isMainCrypto ? PRVIDSTR : tokenId;
     this.contractId = pTokenData.contractId;
     this.decimals = this.isMainCrypto ? common.DECIMALS.MAIN_CRYPTO_CURRENCY : pTokenData.decimals;
     this.pDecimals = this.isMainCrypto ? common.DECIMALS.MAIN_CRYPTO_CURRENCY : pTokenData.pDecimals || 0;
     this.externalSymbol = pTokenData.symbol;
-    this.paymentAddress = account.PaymentAddress;
     this.isWithdrawable = this.isPToken;
     this.isDeposable = this.isPToken;
     this.isDecentralized =
@@ -180,8 +187,8 @@ class SelectedPrivacy {
       this.isFantomErc20Token ||
       (this.isToken && this.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.FTM);
     this.isCentralized = this.isToken && !this.isDecentralized;
-    this.incognitoTotalSupply = (this.isIncognitoToken && Number(token?.totalSupply)) || 0;
-    this.isVerified = combineData.call(this, pTokenData?.verified, token?.verified, !isUnknown); // PRV always is verified
+    this.incognitoTotalSupply = (this.isIncognitoToken && Number(pTokenData?.totalSupply)) || 0;
+    this.isVerified = combineData.call(this, pTokenData?.verified, !isUnknown); // PRV always is verified
     this.priceUsd = pTokenData?.priceUsd || 0;
     this.externalPriceUSD = pTokenData?.externalPriceUSD || 0;
     this.pricePrv = pTokenData?.pricePrv || 0;
@@ -195,14 +202,14 @@ class SelectedPrivacy {
     if (!this.symbol && this.isIncognitoToken && !this.isMainCrypto) {
       this.symbol = "INC";
     }
-    this.amount = token?.amount;
-    if (this.isMainCrypto) {
-      this.amount = account?.value;
-      this.symbol = common.PRV.symbol;
-    }
+    // this.amount = token?.amount;
+    // if (this.isMainCrypto) {
+    //   this.amount = account?.value;
+    //   this.symbol = common.PRV.symbol;
+    // }
     this.amount = this.amount || 0;
     this.listChildToken = pTokenData?.listChildToken;
-    this.iconUrl = getIconUrl.call(this, token?.image || pTokenData.image);
+    this.iconUrl = getIconUrl.call(this, pTokenData.image);
     this.change = pTokenData?.change;
     this.defaultPoolPair = pTokenData?.defaultPoolPair;
     this.defaultPairToken = pTokenData?.defaultPairToken;
@@ -214,6 +221,52 @@ class SelectedPrivacy {
     this.isBSC = this?.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB;
     this.isBNB = this?.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.BNB;
     this.isMATIC = this?.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.MATIC;
+
+    // amount
+    const followToken = followTokens.find(({ id }) => id === tokenId);
+    if (followToken) {
+      const { amount } = followToken;
+      this.amount = amount;
+
+      const formatPriceByUsd = format.formatAmount({
+        humanAmount: this.priceUsd,
+        decimals: this.pDecimals,
+        decimalDigits: false,
+      });
+
+      const formatPriceByPrv = format.formatAmount({
+        humanAmount: this.pricePrv,
+        decimals: this.pDecimals,
+        decimalDigits: false,
+      });
+
+      const formatAmount = format.amountVer2({
+        originalAmount: Number(amount || 0),
+        decimals: this.pDecimals,
+      });
+
+      const formatAmountNoClip = format.formatAmount({
+        originalAmount: Number(amount || 0),
+        decimals: this.pDecimals,
+        decimalDigits: true,
+        clipAmount: false,
+      });
+
+      const formatBalanceByUsd = format.amountVer2({
+        originalAmount: convert.toOriginalAmount({
+          humanAmount: new BigNumber(convert.toString({ text: formatAmount.toString() }))
+            .multipliedBy(convert.toString({ text: formatPriceByUsd }))
+            .toString(),
+          decimals: this.decimals,
+        }),
+        decimals: this.pDecimals,
+      });
+      this.formatPriceByUsd = formatPriceByUsd;
+      this.formatPriceByPrv = formatPriceByPrv;
+      this.formatAmount = formatAmount;
+      this.formatAmountNoClip = formatAmountNoClip;
+      this.formatBalanceByUsd = formatBalanceByUsd;
+    }
   }
 }
 

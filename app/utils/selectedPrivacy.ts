@@ -1,4 +1,10 @@
-export const getPrice = ({ token, tokenUSDT }: any) => {
+export interface IPrice {
+  change: string;
+  pricePrv: number;
+  priceUsd: number;
+}
+
+export const getPrice = ({ token, tokenUSDT }: any): IPrice => {
   const defaultValue = {
     pricePrv: 0,
     change: "0",

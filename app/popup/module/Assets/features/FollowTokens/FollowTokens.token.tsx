@@ -1,9 +1,7 @@
 import React from "react";
 import styled, { ITheme } from "styled-components";
 import { Row } from "@popup/theme";
-import btcLogo from "./btc.png";
-import { getPrivacyDataByTokenID } from "@redux/selectedPrivacy";
-import { useSelector } from "react-redux";
+import SelectedPrivacy from "@model/SelectedPrivacyModel";
 
 export interface IToken {
   id: string;
@@ -32,25 +30,19 @@ const Styled = styled(Row)`
   }
 `;
 
-interface ITokenProps extends IToken {
-  index: number;
-}
-
-const Token = React.memo((props: ITokenProps) => {
-  const { id: tokenID } = props;
-  // @ts-ignore
-  const { symbol, name, amount, usdAmount }: any = useSelector(getPrivacyDataByTokenID)(tokenID);
+const Token = React.memo((props: SelectedPrivacy) => {
+  const { symbol, name, formatAmount, formatBalanceByUsd, iconUrl } = props;
   return (
     <Styled className="default-padding-horizontal">
-      <img className="logo noselect" src={btcLogo} alt="logo-icon" />
+      <img className="logo noselect" src={iconUrl} alt="logo-icon" />
       <Row className="wrap-content">
         <div>
           <p className="fs-medium noselect">{symbol}</p>
           <p className="desc-text fs-small noselect">{name}</p>
         </div>
         <div>
-          <p className="fs-medium text-align-right noselect">{usdAmount}</p>
-          <p className="text-align-right desc-text fs-small noselect">{amount}</p>
+          <p className="fs-medium text-align-right noselect">{`$${formatBalanceByUsd}`}</p>
+          <p className="text-align-right desc-text fs-small noselect">{`${formatAmount} ${symbol}`}</p>
         </div>
       </Row>
     </Styled>

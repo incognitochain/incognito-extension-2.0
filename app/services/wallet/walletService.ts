@@ -70,7 +70,7 @@ export async function loadWallet(passphrase: any, name = "Wallet", rootName = ""
   } catch (error) {
     const errors = await getStorageLoadWalletError();
     errors.push({
-      time: formatUtil.formatDateTime(new Date().getTime()),
+      time: formatUtil.formatDateTime({ dateTime: new Date().getTime() }),
       name,
       rootName,
       error: JSON.stringify(error),

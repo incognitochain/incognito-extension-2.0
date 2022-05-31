@@ -9,6 +9,7 @@ import accountService from "@services/wallet/accountService";
 import { batch } from "react-redux";
 import FollowSelector from "@redux/follow/follow.selectors";
 import FollowAction from "@redux/follow/follow.actions";
+import PTokenModel from "@model/pTokenModel";
 
 const { PrivacyVersion, Validator } = require("incognito-chain-web-js/build/wallet");
 
@@ -22,13 +23,13 @@ export const getBalanceFinish = (tokenSymbol: any) => ({
   data: tokenSymbol,
 });
 
-export const setListPToken = (tokens: any[]) => {
-  if (tokens && tokens.constructor !== Array) {
+export const setListPToken = (tokens: PTokenModel[]) => {
+  if (!tokens) {
     throw new TypeError("Tokens must be an array");
   }
   return {
     type: TokenActionType.SET_PTOKEN_LIST,
-    data: tokens,
+    payload: tokens,
   };
 };
 

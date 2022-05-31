@@ -1,155 +1,107 @@
-import _ from "lodash";
-import { getDecimalSeparator } from "@popup/utils/separator";
 import BigNumber from "bignumber.js";
-import format from "./format";
+import format from "@utils/format";
+import { getDecimalSeparator } from "@popup/utils/separator";
 
-const checkAmount = (amount: any) => {
+const checkAmount = (amount: number) => {
   if (!Number.isFinite(amount)) throw new Error("Can not format invalid amount");
 };
 
-const replaceDecimals = (text: any, autoCorrect = false) => {
-  if (typeof text !== "string") {
-    return text;
+const replaceDecimals = ({ text, autoCorrect = false }: { text: string; autoCorrect?: boolean }) => {
+  let result = text;
+  const decimalSeparator = getDecimalSeparator();
+  if (typeof result !== "string") {
+    return result;
   }
-
-  if (getDecimalSeparator() === "," && !text?.includes?.("e+") && !text?.includes?.("e-")) {
-    text = text.replace(/\./g, "_");
-    text = text.replace(/,/g, ".");
-    text = text.replace(/_/g, ",");
+  if (decimalSeparator === "," && !result?.includes?.("e+") && !result?.includes?.("e-")) {
+    result = result.replace(/\./g, "_");
+    result = result.replace(/,/g, ".");
+    result = result.replace(/_/g, ",");
   }
-
   if (autoCorrect) {
-    text = text.replace(/,/g, "");
+    result = result.replace(/,/g, "");
   }
-
-  return text;
+  return result;
 };
 
-const toNumber = (text: any, autoCorrect = false) => {
-  const number = replaceDecimals(text, autoCorrect);
-  return _.toNumber(number);
+interface IHunmanAmount {
+  originalAmount?: number;
+  decimals: number;
+}
+
+const toHumanAmount = (payload: IHunmanAmount) => {
+  const { originalAmount = 0, decimals } = payload;
+  const amount = new BigNumber(originalAmount);
+  if (amount.isNaN()) {
+    return 0;
+  }
+  const indexNumber = new BigNumber(10).pow(decimals);
+  return amount.dividedBy(indexNumber).toNumber();
 };
 
-export default {
-  /**
-   *
-   * @param {number} originAmount
-   * @param {number} decimals
-   * Convert original amount (usualy get from backend) to human readable amount or display on frontend
-   */
-  toHumanAmount(originAmount: any, decimals: any) {
-    try {
-      if (!originAmount) {
-        return 0;
-      }
-      const amount = new BigNumber(originAmount).dividedBy(new BigNumber("10").pow(Number(decimals) ? decimals : 0));
-      if (amount.isNaN()) {
-        return 0;
-      }
-      return amount.toNumber();
-    } catch (error) {
-      console.log("CONVERT TO HUMAN AMOUNT ERROR", originAmount, decimals);
+const toHumanAmountString = (payload: IHunmanAmount) => {
+  return format.toFixed({
+    number: toHumanAmount({
+      originalAmount: payload.originalAmount || 0,
+      decimals: payload.decimals,
+    }),
+    decimals: payload.decimals,
+  });
+};
+
+const toOriginalAmount = ({
+  humanAmount,
+  decimals,
+  round = true,
+}: {
+  humanAmount: string;
+  decimals: number;
+  round?: boolean;
+}) => {
+  let amount = 0;
+  try {
+    const amountRepDecimals = replaceDecimals({
+      text: humanAmount,
+    });
+    const bnAmount = new BigNumber(amountRepDecimals);
+    if (bnAmount.isNaN()) {
       return 0;
     }
-    /**
-     *
-     * @param {number} humanAmount
-     * @param {number} decimals
-     * @param {boolean} round
-     * Convert human readable amount (display on frontend) to original amount
-     */
-  },
-
-  toOriginalAmount(humanAmount: any, decimals: any, round = true) {
-    let originalAmount = 0;
-    try {
-      const amount = toNumber(humanAmount);
-      checkAmount(amount);
-      // Use big number to solve float calculation problem
-      // For example: 0.5000001 * 1e9 = 500000099.99999994
-      // The result should be 500000100
-      const decision_rate = Number(decimals) ? 10 ** Number(decimals) : 1;
-      if (round) {
-        return Math.floor(new BigNumber(amount).multipliedBy(new BigNumber(decision_rate)).toNumber());
-      }
-      originalAmount = new BigNumber(amount).multipliedBy(new BigNumber(decision_rate)).toNumber();
-    } catch (error) {
-      originalAmount = 0;
-      // console.log('toOriginalAmount-error', error);
+    const indexNumber = new BigNumber(10).pow(decimals || 0).toNumber();
+    amount = bnAmount.multipliedBy(new BigNumber(indexNumber)).toNumber();
+    if (round) {
+      amount = Math.floor(amount);
     }
-    return originalAmount;
-  },
+  } catch (error) {
+    amount = 0;
+    throw error;
+  }
+  return amount;
+};
 
-  toRealTokenValue(tokens: any, tokenId: any, value: any) {
-    const token = tokens.find((item: any) => item.id === tokenId);
-    return value / Math.pow(10, token?.pDecimals || 0);
-  },
+const toNumber = ({ text, autoCorrect = true }: { text: string; autoCorrect?: boolean }) => {
+  const number = replaceDecimals({
+    text,
+    autoCorrect,
+  });
+  return new BigNumber(number).toNumber();
+};
 
+const toString = ({ text, autoCorrect = true }: { text: string; autoCorrect?: boolean }) => {
+  const number = replaceDecimals({
+    text,
+    autoCorrect,
+  });
+  return new BigNumber(number).toString();
+};
+
+const convert = {
+  checkAmount,
+  replaceDecimals,
+  toHumanAmount,
+  toHumanAmountString,
+  toOriginalAmount,
   toNumber,
-
-  toInput(text: any) {
-    if (typeof text !== "string") {
-      return text;
-    }
-
-    if (getDecimalSeparator() === ",") {
-      text = text.replace(/\./g, "");
-    }
-
-    if (getDecimalSeparator() === ".") {
-      text = text.replace(/,/g, "");
-    }
-
-    return text;
-  },
-
-  toHash(text: any) {
-    let hash = 0,
-      i,
-      chr;
-    if (text.length === 0) return "";
-    for (i = 0; i < text.length; i++) {
-      chr = text.charCodeAt(i);
-      hash = (hash << 5) - hash + chr;
-      hash |= 0; // Convert to 32bit integer
-    }
-    return hash.toString();
-  },
-
-  toPDecimals(number: any, token: any) {
-    return new BigNumber(replaceDecimals(number, true))
-      .dividedBy(new BigNumber(10).pow(token.decimals))
-      .multipliedBy(new BigNumber(10).pow(token.pDecimals))
-      .dividedToIntegerBy(1)
-      .toNumber();
-  },
-
-  toDecimals(number: any, token: any) {
-    return new BigNumber(replaceDecimals(number, true))
-      .dividedBy(new BigNumber(10).pow(token.pDecimals))
-      .multipliedBy(new BigNumber(10).pow(token.decimals))
-      .dividedToIntegerBy(1)
-      .toFixed(0);
-  },
-  toHumanAmountVer2(humanAmount: any, decimals: any) {
-    let amount = 0;
-    try {
-      const originalAmount = this.toOriginalAmount(humanAmount, decimals);
-      amount = format.amountVer2(originalAmount, decimals);
-      amount = this.toNumber(amount, true);
-    } catch (error) {
-      console.log("amountFromHumanAmountV2-error", error);
-    }
-    return amount;
-  },
+  toString,
 };
 
-export const formatTime = (seconds: any) => {
-  let h: any = Math.floor(seconds / 3600),
-    m: any = Math.floor(seconds / 60) % 60,
-    s: any = seconds % 60;
-  if (h < 10) h = "0" + h;
-  if (m < 10) m = "0" + m;
-  if (s < 10) s = "0" + s;
-  return h + ":" + m + ":" + s;
-};
+export default convert;

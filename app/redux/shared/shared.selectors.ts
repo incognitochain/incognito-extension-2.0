@@ -3,7 +3,7 @@ import { BIG_COINS } from "@constants/dexV2";
 import { defaultAccountName, defaultAccountSelector } from "@redux/account/account.selectors";
 import FollowSelector from "@redux/follow/follow.selectors";
 import { RootState } from "@redux/reducers/index";
-import selectedPrivacySelector from "@redux/selectedPrivacy/selectedPrivacy.selectors";
+import selectedPrivacySelector, { getPrivacyDataByTokenID } from "@redux/selectedPrivacy/selectedPrivacy.selectors";
 import { internalTokensSelector, pTokensSelector } from "@redux/token/token.selectors";
 import { walletSelector } from "@redux/wallet/wallet.selectors";
 // import { currencySelector, decimalDigitsSelector } from "@screens/Setting";
@@ -14,12 +14,21 @@ import convert from "@utils/convert";
 import format from "@utils/format";
 import { compact, fromPairs, isNaN, uniqBy } from "lodash";
 import { createSelector } from "reselect";
+import orderBy from "lodash/orderBy";
+import SelectedPrivacyModel from "@model/SelectedPrivacyModel";
+import { followsTokenAssetsSelector } from "@module/Assets";
+const { PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
 
 export const formatPrice = (price: any, toNumber = false) => {
-  const pDecimals = 9;
-  const originalAmount = convert.toOriginalAmount(price, pDecimals, true) || 0;
-  const result = format.amountVer2(originalAmount, pDecimals);
-  return toNumber ? convert.toNumber(result, true) : result;
+  // const pDecimals = 9;
+  // const originalAmount = convert.toOriginalAmount({ humanAmount: price, decimals: pDecimals, round: false }) || 0;
+  // const result = format.amountVer2(originalAmount, pDecimals);
+  // return toNumber
+  //   ? convert.toNumber({
+  //       text: result,
+  //       autoCorrect: true,
+  //     })
+  //   : result;
 };
 
 export const formatAmount = (
@@ -30,20 +39,20 @@ export const formatAmount = (
   decimalDigits: any,
   toNumber = false,
 ) => {
-  // format Amount to origin
-  const priceFormat = formatPrice(price, true) || 0;
-
-  // format amount with has decimalDigits
-  // const formatAmount = format.amount(amount, pDecimals, true, decimalDigits);
-  const formatAmount = format.amountVer2(amount, pDecimals);
-
-  const totalAmountNumber = convert.toNumber(formatAmount, true) * priceFormat;
-
-  const amountOriginalFormat = convert.toOriginalAmount(totalAmountNumber, togglePDecimals, true) || 0;
-
-  const amountBaseToggle = format.amount(amountOriginalFormat, togglePDecimals, true, decimalDigits);
-
-  return toNumber ? convert.toNumber(amountBaseToggle, true) : amountBaseToggle;
+  // // format Amount to origin
+  // const priceFormat = formatPrice(price, true) || 0;
+  //
+  // // format amount with has decimalDigits
+  // // const formatAmount = format.amount(amount, pDecimals, true, decimalDigits);
+  // const formatAmount = format.amountVer2(amount, pDecimals);
+  //
+  // const totalAmountNumber = convert.toNumber(formatAmount, true) * priceFormat;
+  //
+  // const amountOriginalFormat = convert.toOriginalAmount(totalAmountNumber, togglePDecimals, true) || 0;
+  //
+  // const amountBaseToggle = format.amount(amountOriginalFormat, togglePDecimals, true, decimalDigits);
+  //
+  // return toNumber ? convert.toNumber(amountBaseToggle, true) : amountBaseToggle;
 };
 
 export const currencySelector = createSelector(
@@ -140,29 +149,29 @@ export const totalShieldedTokensSelector = createSelector(
   pTokenSelector,
   decimalDigitsSelector,
   (getPrivacyDataByTokenID, followTokens, currency, decimalDigits) => {
-    const { isToggleUSD } = currency;
-    followTokens = followTokens.map(({ id, amount }: any) => {
-      const { priceUsd, pricePrv, pDecimals }: any = getPrivacyDataByTokenID(id);
-      return {
-        priceUsd,
-        pricePrv,
-        balance: amount,
-        pDecimals,
-      };
-    });
-    const totalShielded = compact([...followTokens]).reduce((prevValue, currentValue) => {
-      const totalShielded = prevValue;
-      const pDecimals = currentValue?.pDecimals || 0;
-      const amount = currentValue?.balance || 0;
-      const price = isToggleUSD ? currentValue?.priceUsd : currentValue?.pricePrv || 0;
-      let currentAmount = formatAmount(price, amount, pDecimals, pDecimals, decimalDigits, true);
-
-      if (isNaN(currentAmount)) {
-        currentAmount = 0;
-      }
-      return currentAmount + totalShielded;
-    }, 0);
-    return convert.toOriginalAmount(totalShielded, PRV.pDecimals, true);
+    // const { isToggleUSD } = currency;
+    // followTokens = followTokens.map(({ id, amount }: any) => {
+    //   const { priceUsd, pricePrv, pDecimals }: any = getPrivacyDataByTokenID(id);
+    //   return {
+    //     priceUsd,
+    //     pricePrv,
+    //     balance: amount,
+    //     pDecimals,
+    //   };
+    // });
+    // const totalShielded = compact([...followTokens]).reduce((prevValue, currentValue) => {
+    //   const totalShielded = prevValue;
+    //   const pDecimals = currentValue?.pDecimals || 0;
+    //   const amount = currentValue?.balance || 0;
+    //   const price = isToggleUSD ? currentValue?.priceUsd : currentValue?.pricePrv || 0;
+    //   let currentAmount = formatAmount(price, amount, pDecimals, pDecimals, decimalDigits, true);
+    //
+    //   if (isNaN(currentAmount)) {
+    //     currentAmount = 0;
+    //   }
+    //   return currentAmount + totalShielded;
+    // }, 0);
+    // return convert.toOriginalAmount(totalShielded, PRV.pDecimals, true);
   },
 );
 
@@ -176,7 +185,27 @@ export const getDefaultAccountWalletSelector = createSelector(
   (account, wallet) => getAccountWallet(account, wallet),
 );
 
+const followTokensFormatedSelector = createSelector(
+  getPrivacyDataByTokenID,
+  followsTokenAssetsSelector,
+  (getPrivacyDataByToken, tokens) => {
+    const _token = tokens.map(({ id: tokenID }) => getPrivacyDataByToken(tokenID));
+    return orderBy(
+      _token,
+      [
+        (c: SelectedPrivacyModel) => c.tokenId === PRVIDSTR,
+        (c) =>
+          convert.toString({
+            text: c.formatBalanceByUsd || "0",
+          }),
+      ],
+      ["desc", "desc"],
+    );
+  },
+);
+
 export default {
   isGettingBalance,
   getDefaultAccountWalletSelector,
+  followTokensFormatedSelector,
 };

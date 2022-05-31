@@ -2,13 +2,14 @@ import { unionBy, remove } from "lodash";
 // import { SelectedPrivacyActionType } from "@redux/selectedPrivacy/selectedPrivacy.types";
 import { TokenActionType, TokenActions } from "@redux/token/token.types";
 import { Reducer } from "redux";
+import PTokenModel from "@model/pTokenModel";
 
 export const LIMIT_RECEIVE_HISTORY_ITEM = 20;
 export const MAX_LIMIT_RECEIVE_HISTORY_ITEM = 50;
 
 export interface TokenState {
   followed: any[];
-  pTokens: any[];
+  pTokens: PTokenModel[];
   internalTokens: any[];
   isGettingBalance: any[];
   history: {
