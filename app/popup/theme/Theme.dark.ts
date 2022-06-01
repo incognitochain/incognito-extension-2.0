@@ -22,7 +22,7 @@ const darkTheme = (): Colors => {
     // specific color
     colorP1: "#FF9500",
     colorP2: "#34C759",
-    colorP3: "#5995F0",
+    colorP3: "#1A73E8",
     colorP4: "#FF3B30",
     colorP5: "#64A121",
     colorP6: "#00407E",
