@@ -1,6 +1,6 @@
 import { P2_Medium } from "@popup/theme/Theme";
 import styled, { ITheme } from "styled-components";
-import { PrimaryButton } from "@popup/components/Buttons";
+import { PrimaryButton } from "@popup/components/Core/Buttons";
 import React from "react";
 
 const YellowBox = styled.div`

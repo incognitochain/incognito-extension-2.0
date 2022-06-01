@@ -1,6 +1,6 @@
 import { P2_Medium, P1_Regular } from "@popup/theme/Theme";
 import styled, { ITheme } from "styled-components";
-import { PrimaryButton, SecondaryButton } from "@popup/components/Buttons";
+import { PrimaryButton, SecondaryButton } from "@popup/components/Core/Buttons";
 
 const DescriptionText = styled(P2_Medium)`
   margin-top: 24px;

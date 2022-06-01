@@ -1,7 +1,7 @@
 import React, { HTMLInputTypeAttribute, useState } from "react";
 import styled, { ITheme } from "styled-components";
 import { H4, P2_Regular, P1, H3 } from "@popup/theme/Theme";
-import { PrimaryButton, SecondaryButton } from "@popup/components/Buttons";
+import { PrimaryButton, SecondaryButton } from "@popup/components/Core/Buttons";
 
 const PrimaryButtonContaniner = styled(PrimaryButton)`
   margin-top: 120px;

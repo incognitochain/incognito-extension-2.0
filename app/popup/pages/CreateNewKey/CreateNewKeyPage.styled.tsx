@@ -1,6 +1,6 @@
 import { P2_Regular, P1_Regular } from "@popup/theme/Theme";
 import styled, { ITheme } from "styled-components";
-import { PrimaryButton } from "@popup/components/Buttons";
+import { PrimaryButton } from "@popup/components/Core/Buttons";
 
 const TextInputWraper = styled.div`
   width: 100%;

@@ -345,7 +345,7 @@ export const actionFetchCreateAccount =
       dispatch(actionFetchingCreateAccount());
       const account = await accountService.createAccount(accountName, wallet);
       serializedAccount = new AccountModel(accountService.toSerializedAccountObj(account));
-      storeWalletAccountIdsOnAPI(wallet);
+      await storeWalletAccountIdsOnAPI(wallet);
       batch(() => {
         dispatch(actionFetchedCreateAccount());
         if (serializedAccount?.name) {

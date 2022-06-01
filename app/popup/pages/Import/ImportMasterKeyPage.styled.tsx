@@ -1,7 +1,7 @@
 import React, { HTMLInputTypeAttribute, useState } from "react";
 import styled, { ITheme } from "styled-components";
 import { H4, P2_Regular, P1_Regular } from "@popup/theme/Theme";
-import { PrimaryButton } from "@popup/components/Buttons";
+import { PrimaryButton } from "@popup/components/Core/Buttons";
 
 const MasterKeyNameLabel = styled(P2_Regular)`
   width: 100%;

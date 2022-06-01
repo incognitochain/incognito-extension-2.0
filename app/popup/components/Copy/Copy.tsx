@@ -1,7 +1,7 @@
 import React from "react";
 import styled, { ITheme } from "styled-components";
 import copy from "copy-to-clipboard";
-import { Button } from "@components/Core";
+import { Button } from "@components/Core/Buttons";
 import { ellipsisCenter } from "@popup/utils";
 
 interface IProps {

@@ -1,4 +1,4 @@
-import { PrimaryButton } from "@popup/components/Buttons";
+import { PrimaryButton } from "@popup/components/Core/Buttons";
 import { P2_Regular } from "@popup/theme/Theme";
 import styled from "styled-components";
 
