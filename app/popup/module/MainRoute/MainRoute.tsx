@@ -1,6 +1,6 @@
 import CreateNewKeyRouteStack from "@/popup/pages/CreateNewKey/CreateNewKeyRouteStack";
 import { PopupState } from "@core/types";
-import { withStarted } from "@module/MainRoute/MainRoute.withGetStarted";
+import enhance from "@module/MainRoute/MainRoute.enhance";
 import { Paths } from "@popup/components/routes/paths";
 import { useBackground } from "@popup/context/background";
 import CreateAccountPage from "@popup/pages/CreateAccount/CreateAccountPage";
@@ -10,7 +10,6 @@ import ImportMasterKeyRouteStack from "@popup/pages/Import/ImportMasterKeyRouteS
 import RestoreWalletPage from "@popup/pages/RestoreWallet/RestoreWalletPage";
 import { UnlockPage } from "@popup/pages/Unlock/UnlockPage";
 import React, { Suspense } from "react";
-import { Modal } from "@module/Modal";
 // import NotFoundPage from "@popup/pages/NotFound/NotFoundPage";
 import { RouteProps } from "react-router";
 import { Redirect, Route, RouteComponentProps, Switch } from "react-router-dom";
@@ -83,4 +82,4 @@ const MainRoute = () => {
   );
 };
 
-export default withStarted(React.memo(MainRoute));
+export default enhance(React.memo(MainRoute));

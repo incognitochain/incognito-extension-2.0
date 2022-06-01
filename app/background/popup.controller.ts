@@ -29,7 +29,7 @@ import {
 import { dispatch, persistor } from "@redux/store/store";
 import Storage from "@services/storage";
 import { APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@constants/common";
-import { actionFetchCreateAccount, actionSwitchAccount } from "@/redux/account";
+import { actionFetchCreateAccount, actionSwitchAccount } from "@redux/account";
 import { getFollowTokensBalance } from "@background/worker.scanCoins";
 
 const log = createLogger("sol:popup");

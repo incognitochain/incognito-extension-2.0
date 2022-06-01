@@ -1,5 +1,6 @@
 import { createSelector } from "reselect";
 import { RootState } from "@redux/reducers";
+import { otaKeyOfDefaultAccountSelector } from "@redux/account/account.selectors";
 
 const scanCoinsReducerSelector = createSelector(
   (state: RootState) => state.scanCoinsReducer,
@@ -10,4 +11,13 @@ const statusScanCoinsSelector = createSelector(scanCoinsReducerSelector, ({ scan
 
 const isFetchingScanCoinsSelector = createSelector(scanCoinsReducerSelector, ({ isFetching }) => isFetching);
 
-export { scanCoinsReducerSelector, isFetchingScanCoinsSelector, statusScanCoinsSelector };
+const isFirstTimeScanCoinsSelector = createSelector(
+  statusScanCoinsSelector,
+  otaKeyOfDefaultAccountSelector,
+  (scanStatus, OTAKey) => {
+    if (OTAKey) return;
+    return !scanStatus[OTAKey] || scanStatus[OTAKey].isScanning;
+  },
+);
+
+export { scanCoinsReducerSelector, isFetchingScanCoinsSelector, statusScanCoinsSelector, isFirstTimeScanCoinsSelector };

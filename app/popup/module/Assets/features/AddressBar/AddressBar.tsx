@@ -34,23 +34,19 @@ const AddressBar = React.memo(() => {
   });
 
   const onShowQrCodeModal = () => {
-    try {
-      dispatch(
-        actionToggleModal({
-          title: "Payment Address",
-          data: (
-            <QrCodeModal
-              label="This is your address. Use it to receive any cryptocurrency from another Incognito address."
-              value={paymentAddress}
-              key="AddressBar"
-            />
-          ),
-          closeable: true,
-        }),
-      );
-    } catch (e) {
-      console.log("SANG TEST::: ");
-    }
+    dispatch(
+      actionToggleModal({
+        title: "Payment Address",
+        data: (
+          <QrCodeModal
+            label="This is your address. Use it to receive any cryptocurrency from another Incognito address."
+            value={paymentAddress}
+            key="AddressBar"
+          />
+        ),
+        closeable: true,
+      }),
+    );
   };
 
   return (

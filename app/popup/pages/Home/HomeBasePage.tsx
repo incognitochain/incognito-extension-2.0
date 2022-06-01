@@ -3,7 +3,7 @@ import { Typography } from "@mui/material/";
 import { makeStyles } from "@mui/styles";
 import { withBlankLayout } from "@popup/components/layout/blank-layout";
 import { MainLayout } from "@popup/components/layout/main-layout";
-import { defaultAccountSelector } from "@redux/account";
+import { defaultAccountSelector } from "@redux/account/account.selectors";
 import React from "react";
 import { useSelector } from "react-redux";
 import HomeNavigation from "./Home.NavigationBar";
