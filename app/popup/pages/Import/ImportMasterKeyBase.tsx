@@ -1,14 +1,14 @@
 /* eslint-disable no-undef */
+import { route as AssetsRoute } from "@module/Assets/Assets.route";
 import { Paths } from "@popup/components/routes/paths";
 import { useBackground } from "@popup/context/background";
-import { useCallAsync } from "@popup/utils/notifications";
+import { useLoading } from "@popup/context/loading";
 import { ImportMasterKeyPage } from "@popup/pages/Import/ImportMasterKeyPage";
 import { PasswordPage } from "@popup/pages/Password/PasswordPage";
+import { useCallAsync } from "@popup/utils/notifications";
 import React, { ReactElement, useCallback, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { ImportMasterKeyRouteType } from "./ImportMasterKeyContext";
-import { route as AssetsRoute } from "@module/Assets/Assets.route";
-
 interface ImportMasterKeyBaseProps {
   mnemonic?: string;
   masterKeyName?: string;
@@ -18,17 +18,21 @@ const ImportMasterKeyBase: React.FC = () => {
   const history = useHistory();
   const { request } = useBackground();
   const callAsync = useCallAsync();
+  const { showLoading } = useLoading();
+
   const [routePath, setRoutePath] = useState(Paths.passwordPage);
 
   const routeData = useRef<ImportMasterKeyRouteType & ImportMasterKeyBaseProps>({});
 
   const importWallet = async () => {
+    showLoading(true);
     const { mnemonic = "", masterKeyName = "", password = "" } = routeData.current;
     callAsync(request("popup_importWallet", { mnemonic, masterKeyName, password }), {
       progress: { message: "Import wallet..." },
       success: { message: "Assets Imported" },
       onSuccess: (result: any) => {
         // history.push(Paths.homeRouteStack);
+        showLoading(false);
         history.push(AssetsRoute);
       },
     });

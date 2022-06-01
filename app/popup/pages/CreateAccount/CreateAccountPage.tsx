@@ -2,12 +2,12 @@ import Header from "@components/BaseComponent/Header";
 import BodyLayout from "@components/layout/BodyLayout";
 import TextInput from "@popup/components/Inputs/TextInput";
 import { useBackground } from "@popup/context/background";
+import { useLoading } from "@popup/context/loading";
 import { useCallAsync } from "@popup/utils/notifications";
 import { trim } from "lodash";
 import React, { useCallback, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { KeyChainLabel, PrimaryButtonContaniner, TextInputWraper } from "./CreateAccountPage.styled";
-
 let accountNameValidator = require("password-validator");
 
 let schema = new accountNameValidator();
@@ -25,6 +25,7 @@ const CreateAccountPage: React.FC = () => {
   const history = useHistory();
   const callAsync = useCallAsync();
   const { request } = useBackground();
+  const { showLoading } = useLoading();
 
   const [keychainName, setKeychainName] = useState("");
   const [keychainNameError, setKeychainNameError] = useState("");
@@ -40,10 +41,12 @@ const CreateAccountPage: React.FC = () => {
 
   const createKeychainOnPressed = () => {
     if (checkValid()) {
+      showLoading(true);
       callAsync(request("popup_createAccount", { accountName: trim(keychainName) }), {
         progress: { message: "Account Creating..." },
         success: { message: "Account Created" },
         onSuccess: (result) => {
+          showLoading(false);
           history.goBack();
         },
       });

@@ -1,17 +1,18 @@
 /* eslint-disable no-undef */
+import { route as AssetsRoute } from "@module/Assets/Assets.route";
 import { withLayout } from "@popup/components/layout";
 import { Paths } from "@popup/components/routes/paths";
 import { useBackground } from "@popup/context/background";
-import { useCallAsync } from "@popup/utils/notifications";
-import { PasswordPage } from "@popup/pages/Password/PasswordPage";
-import React, { ReactElement, useCallback, useRef, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useLoading } from "@popup/context/loading";
 import { MasterKeyPharsePage } from "@popup/pages/MasterKey/MasterKeyPage";
 import { MasterKeyPharseConfirmPage } from "@popup/pages/MasterKeyConfirm/MasterKeyPharseConfirm";
 import { MasterKeyPharseCreatedPage } from "@popup/pages/MasterKeyCreated/MasterKeyPharseCreated";
+import { PasswordPage } from "@popup/pages/Password/PasswordPage";
+import { useCallAsync } from "@popup/utils/notifications";
+import React, { ReactElement, useCallback, useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { CreateNewKeyContext, CreateNewKeyRouteContextType } from "./CreateNewKeyContext";
 import { CreateNewKeyPage } from "./CreateNewKeyPage";
-import { route as AssetsRoute } from "@module/Assets/Assets.route";
 
 interface RouteDataProps {
   mnemonic?: string;
@@ -23,6 +24,7 @@ const CreateNewKeyBase: React.FC = () => {
   const history = useHistory();
   const { request } = useBackground();
   const callAsync = useCallAsync();
+  const { showLoading } = useLoading();
 
   const [routePath, setRoutePath] = useState(Paths.createNewKeyPage);
   const [phraseList, setPhraseList] = useState<string[]>([]);
@@ -31,11 +33,13 @@ const CreateNewKeyBase: React.FC = () => {
 
   const createMasterKey = async () => {
     const { mnemonic = "", masterKeyName = "", password = "" } = routeData.current;
+    showLoading(true);
     callAsync(request("popup_createWallet", { mnemonic, masterKeyName, password }), {
       progress: { message: "Creating wallet..." },
       success: { message: "Wallet created" },
       onSuccess: (result) => {
         // history.push(Paths.homeRouteStack);
+        showLoading(false);
         history.push(AssetsRoute);
       },
     });

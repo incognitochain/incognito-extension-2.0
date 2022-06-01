@@ -14,6 +14,7 @@ import { Modal } from "@module/Modal";
 import { Router } from "react-router";
 import { createBrowserHistory, createMemoryHistory } from "history";
 import { isDev } from "@popup/configs";
+import { LoadingProvider } from "@popup/context/loading";
 
 const history = isDev ? createBrowserHistory() : createMemoryHistory(); // Instead of createBrowserHistory();
 
@@ -35,21 +36,23 @@ const App: React.FunctionComponent = () => {
         <BackgroundProvider>
           <ConnectionProvider>
             <ProgramPluginsManagerProvider>
-              <SnackbarProvider
-                maxSnack={5}
-                autoHideDuration={2000}
-                classes={{
-                  variantSuccess: classes.success,
-                  variantError: classes.error,
-                  variantWarning: classes.warning,
-                  variantInfo: classes.info,
-                }}
-              >
-                <Router history={history}>
-                  <MainRoute />
-                  <Modal />
-                </Router>
-              </SnackbarProvider>
+              <LoadingProvider>
+                <SnackbarProvider
+                  maxSnack={5}
+                  autoHideDuration={2000}
+                  classes={{
+                    variantSuccess: classes.success,
+                    variantError: classes.error,
+                    variantWarning: classes.warning,
+                    variantInfo: classes.info,
+                  }}
+                >
+                  <Router history={history}>
+                    <MainRoute />
+                    <Modal />
+                  </Router>
+                </SnackbarProvider>
+              </LoadingProvider>
             </ProgramPluginsManagerProvider>
           </ConnectionProvider>
         </BackgroundProvider>
