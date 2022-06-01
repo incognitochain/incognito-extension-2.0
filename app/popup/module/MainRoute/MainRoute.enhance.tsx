@@ -10,6 +10,7 @@ import LoadingContainer from "@components/LoadingContainer";
 import styled, { ITheme } from "styled-components";
 import { otaKeyOfDefaultAccountSelector } from "@redux/account/account.selectors";
 import { useBackground } from "@popup/context/background";
+import throttle from "lodash/throttle";
 
 const LoadingScanCoins = styled.div`
   position: relative;
@@ -72,11 +73,16 @@ const withLoading = (WrappedComponent: any) => {
 export const withBalance = (WrappedComponent: FunctionComponent) => (props: any) => {
   const { request } = useBackground();
   const OTAKey = useSelector(otaKeyOfDefaultAccountSelector);
-  const loadFollowTokensBalance = () => request("popup_followTokensBalance", {});
+  const loadFollowTokensBalance = throttle(() => request("popup_followTokensBalance", {}), 1000);
 
   React.useEffect(() => {
-    loadFollowTokensBalance().then();
+    loadFollowTokensBalance();
+    // interval load balance
+    setInterval(() => {
+      loadFollowTokensBalance();
+    }, 40000);
   }, [OTAKey]);
+
   return <WrappedComponent {...props} />;
 };
 

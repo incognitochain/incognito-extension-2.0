@@ -49,13 +49,12 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IProps & 
     return (
       <div className="header-container flex">
         {!!title && (
-          <Link
-            to="#"
-            onClick={onHandleToggleSearch}
+          <a
+            onClick={handleClick}
             className={`header-title fw-medium fs-large ellipsis main-text ${canSearch ? "sub-text" : ""}`}
           >
             {title}
-          </Link>
+          </a>
         )}
         {customHeader && customHeader}
       </div>
