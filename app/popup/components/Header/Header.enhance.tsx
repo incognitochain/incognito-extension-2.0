@@ -12,6 +12,7 @@ export interface IProps {
   onGoBack?: () => void;
   rightHeader?: any;
   selectAccount?: boolean;
+  lockWallet?: boolean;
   canSearch?: boolean;
   customHeader?: React.ReactNode;
 }
