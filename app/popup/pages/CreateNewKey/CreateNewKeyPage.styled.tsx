@@ -4,7 +4,6 @@ import { PrimaryButton } from "@popup/components/Buttons";
 
 const TextInputWraper = styled.div`
   width: 100%;
-  height: 48px;
   margin-top: 8px;
 `;
 
@@ -26,7 +25,7 @@ const ContentText2 = styled(P1_Regular)`
 const RowCheckBox = styled.div`
   width: 100%;
   height: 50px;
-  margin-top: 100px;
+  margin-top: 80px;
   display: flex;
   flex-direction: row;
   align-items: center;
