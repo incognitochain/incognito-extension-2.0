@@ -6,22 +6,10 @@ import { compose } from "recompose";
 import { useHistory } from "react-router-dom";
 import { actionToggleModal } from "@module/Modal";
 import { isFirstTimeScanCoinsSelector } from "@redux/scanCoins";
-import LoadingContainer from "@components/LoadingContainer";
-import styled, { ITheme } from "styled-components";
 import { otaKeyOfDefaultAccountSelector } from "@redux/account/account.selectors";
 import { useBackground } from "@popup/context/background";
 import throttle from "lodash/throttle";
 import { useLoading } from "@popup/context/loading";
-
-const LoadingScanCoins = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  background-color: ${({ theme }: { theme: ITheme }) => theme.content};
-  display: flex;
-  flex-direction: column;
-`;
 
 const withPToken = (WrappedComponent: FunctionComponent) => {
   return (props: any) => {
@@ -61,7 +49,7 @@ const withLoading = (WrappedComponent: any) => {
     const OTAKey = useSelector(otaKeyOfDefaultAccountSelector);
     React.useEffect(() => {
       showLoading(!!isScanCoins && !!OTAKey);
-    }, [isScanCoins && OTAKey]);
+    }, [isScanCoins, OTAKey]);
     return <WrappedComponent {...props} />;
   };
 };
@@ -76,7 +64,7 @@ export const withBalance = (WrappedComponent: FunctionComponent) => (props: any)
     // interval load balance
     setInterval(() => {
       loadFollowTokensBalance();
-    }, 40000);
+    }, 2000);
   }, [OTAKey]);
 
   return <WrappedComponent {...props} />;

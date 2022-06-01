@@ -75,7 +75,6 @@ export const reloadWallet =
           dispatch(setListAccount(listAccount));
           dispatch(setAccount(defaultAccount));
           dispatch(setDefaultAccount(defaultAccount));
-          dispatch(getPTokenList());
         });
         setTimeout(() => {
           batch(() => {

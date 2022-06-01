@@ -3,8 +3,11 @@ import styled from "styled-components";
 import Header from "@components/Header";
 import { useSelector } from "react-redux";
 import { selectedPrivacyToken } from "@redux/selectedPrivacy";
+import WrapContent from "@components/Content/Content";
 
-const Styled = styled.div``;
+const Styled = styled.div`
+  height: 100%;
+`;
 
 const TokenDetail = React.memo(() => {
   const tokenSelected = useSelector(selectedPrivacyToken);
@@ -12,6 +15,7 @@ const TokenDetail = React.memo(() => {
   return (
     <Styled>
       <Header title={tokenSelected.symbol} />
+      <WrapContent />
     </Styled>
   );
 });
