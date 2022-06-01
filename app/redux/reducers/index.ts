@@ -20,7 +20,6 @@ const rootReducers = combineReducers({
   masterKey,
   account,
   wallet,
-  selectedPrivacy,
   token,
   follow,
   pDexV3,
@@ -30,6 +29,7 @@ const rootReducers = combineReducers({
   assetsReducer,
   themeReducer,
   modalReducer,
+  selectedPrivacy,
 });
 
 export type RootState = ReturnType<typeof rootReducers> & {

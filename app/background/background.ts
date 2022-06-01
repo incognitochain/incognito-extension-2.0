@@ -5,12 +5,7 @@ import { createLogger, isInternalProcess } from "@core/utils";
 import LocalStore from "./lib/local-store";
 import IncognitoController from "./incognito.controller";
 import { initialState } from "./store";
-import { initMasterKey, importMasterKey } from "../redux/masterKey/masterKey.actions";
-
-import { getBalance, scanCoins } from "@background/worker.scanCoins";
-// import { workerGetCoins } from "@background/worker.getcoins";
-import Storage from "@services/storage";
-import { masterKeyReducerSelector } from "@redux/masterKey";
+import { scanCoins } from "@background/worker.scanCoins";
 import { setInterval } from "timers";
 import { actionFetchingScanCoins } from "@redux/scanCoins";
 import { actionClearAllModal } from "@module/Modal";

@@ -165,8 +165,6 @@ export const reducer: Reducer<TokenState, TokenActions> = (state = initialState,
     case TokenActionType.SET_INTERNAL_LIST:
       return {
         ...state,
-        // TEST_REMOVE_LOGIC
-        // internalTokens: setListToken(state.followed, action.data),
         internalTokens: [],
       };
     case TokenActionType.ACTION_FETCHING_HISTORY: {
@@ -209,18 +207,6 @@ export const reducer: Reducer<TokenState, TokenActions> = (state = initialState,
         history: { ...initialState.history },
       };
     }
-    // case SelectedPrivacyActionType.SET: {
-    //   return {
-    //     ...state,
-    //     history: {
-    //       ...initialState.history,
-    //     },
-    //     receiveHistory: {
-    //       ...initialStateeHistory,
-    //       tokenId: action?.payloa.receivd,
-    //     },
-    //   };
-    // }
     case TokenActionType.ACTION_TOGGLE_UNVERIFIED_TOKEN: {
       return {
         ...state,

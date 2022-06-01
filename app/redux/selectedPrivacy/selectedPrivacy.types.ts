@@ -1,18 +1,25 @@
 import { Action } from "redux";
 
+export interface ISelectedPrivacyState {
+  tokenID: string;
+}
+
 export enum SelectedPrivacyActionType {
   SET = `SELECTED_PRIVACY/SET`,
   CLEAR = `SELECTED_PRIVACY/CLEAR`,
 }
 
-interface SelectedPrivacySetAction extends Action {
-  type: SelectedPrivacyActionType.SET;
-  payload: any;
+export interface SelectedPrivacySetPayload {
+  tokenID: string;
 }
 
-interface SelectedPrivacyClearAction extends Action {
+export interface SelectedPrivacySetAction extends Action {
+  type: SelectedPrivacyActionType.SET;
+  payload: SelectedPrivacySetPayload;
+}
+
+export interface SelectedPrivacyClearAction extends Action {
   type: SelectedPrivacyActionType.CLEAR;
-  payload: any;
 }
 
 export type SelectedPrivacyActions = SelectedPrivacySetAction | SelectedPrivacyClearAction;

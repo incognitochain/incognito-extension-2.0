@@ -40,6 +40,7 @@ export const scanCoins = async () => {
 
     // Get coins scanned from storage, existed ignore and continue scan
     const coinsStore = await accountSender.getStorageCoinsScan();
+    // const isScanned =
     if (!coinsStore) {
       dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey }));
     }
@@ -59,25 +60,6 @@ export const scanCoins = async () => {
   } finally {
     dispatch(actionFetchingScanCoins({ isFetching: false }));
   }
-};
-
-export const getBalance = async ({
-  accountSender,
-  tokenID,
-}: {
-  accountSender: any;
-  tokenID: string;
-}): Promise<number> => {
-  let balance = 0;
-  try {
-    balance = await accountSender.getBalance({
-      version: PrivacyVersion.ver3,
-      tokenID: tokenID,
-    });
-  } catch (error) {
-    log("GET BALANCE ERROR: ", error);
-  }
-  return balance;
 };
 
 export const getFollowTokensBalance = async () => {

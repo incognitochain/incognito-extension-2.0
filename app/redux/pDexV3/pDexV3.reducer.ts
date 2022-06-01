@@ -208,25 +208,12 @@ export const reducer: Reducer<TokenState, TokenActions> = (state = initialState,
         history: { ...initialState.history },
       };
     }
-    // case SelectedPrivacyActionType.SET: {
-    //   return {
-    //     ...state,
-    //     history: {
-    //       ...initialState.history,
-    //     },
-    //     receiveHistory: {
-    //       ...initialStateeHistory,
-    //       tokenId: action?.payloa.receivd,
-    //     },
-    //   };
-    // }
     case TokenActionType.ACTION_TOGGLE_UNVERIFIED_TOKEN: {
       return {
         ...state,
         toggleUnVerified: !state.toggleUnVerified,
       };
     }
-    //
     case TokenActionType.ACTION_FREE_RECEIVE_HISTORY: {
       return {
         ...state,

@@ -67,7 +67,7 @@ export const getBalance = (tokenId: any) => async (dispatch: AppThunkDispatch, g
       account,
       wallet,
       tokenID: tokenId,
-      version: PrivacyVersion.ver2,
+      version: PrivacyVersion.ver3,
     });
     const token = {
       id: tokenId,

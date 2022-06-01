@@ -1,28 +1,27 @@
 import { Reducer } from "redux";
-import { SelectedPrivacyActions, SelectedPrivacyActionType } from "./selectedPrivacy.types";
+import { SelectedPrivacyActions, SelectedPrivacyActionType, ISelectedPrivacyState } from "./selectedPrivacy.types";
+const { PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
 
-export interface SelectedPrivacyState {
-  tokenID: any;
-}
+export const initialState: ISelectedPrivacyState = {
+  tokenID: PRVIDSTR,
+};
 
-const initialState: SelectedPrivacyState = { tokenID: null };
-
-export const reducer: Reducer<SelectedPrivacyState, SelectedPrivacyActions> = (
+export const reducer: Reducer<ISelectedPrivacyState, SelectedPrivacyActions> = (
   state = initialState,
   action: SelectedPrivacyActions,
-): SelectedPrivacyState => {
+) => {
   switch (action.type) {
     case SelectedPrivacyActionType.SET:
+      const { tokenID } = action.payload;
       return {
         ...state,
-        tokenID: action.payload,
+        tokenID,
       };
     case SelectedPrivacyActionType.CLEAR:
       return {
         ...state,
-        tokenID: null,
+        tokenID: PRVIDSTR,
       };
-
     default:
       return state;
   }
