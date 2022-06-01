@@ -8,6 +8,7 @@ import { actionToggleModal } from "@module/Modal";
 import { isFirstTimeScanCoinsSelector } from "@redux/scanCoins";
 import LoadingContainer from "@components/LoadingContainer";
 import styled, { ITheme } from "styled-components";
+import { otaKeyOfDefaultAccountSelector } from "@redux/account/account.selectors";
 
 const LoadingScanCoins = styled.div`
   position: relative;
@@ -53,11 +54,11 @@ const withRouteChange = (WrappedComponent: any) => {
 const withLoading = (WrappedComponent: any) => {
   return (props: any) => {
     const isScanCoins = useSelector(isFirstTimeScanCoinsSelector);
-
+    const OTAKey = useSelector(otaKeyOfDefaultAccountSelector);
     return (
       <>
         <WrappedComponent {...props} />
-        {isScanCoins && (
+        {isScanCoins && OTAKey && (
           <LoadingScanCoins>
             <LoadingContainer message="It looks like your first time scan UTXOs. Please wait, it can take 10 minutes." />
           </LoadingScanCoins>
