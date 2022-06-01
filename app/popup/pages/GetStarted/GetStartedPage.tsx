@@ -4,6 +4,7 @@ import { makeStyles } from "@mui/styles";
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Paths } from "../../components/routes/paths";
+import { GetStartedPageBase1 } from "./GetStartedPage1";
 
 const useStyles = makeStyles((theme: any) => ({
   logoContainer: {
@@ -76,4 +77,5 @@ const GetStartedPageBase: React.FC = () => {
     </>
   );
 };
-export const GetStartedPage = withBlankLayout(GetStartedPageBase);
+// export const GetStartedPage = withBlankLayout(GetStartedPageBase);
+export const GetStartedPage = GetStartedPageBase1;

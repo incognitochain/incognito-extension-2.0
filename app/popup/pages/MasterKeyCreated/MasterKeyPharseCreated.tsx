@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import { withBlankLayout } from "../../components/layout/blank-layout";
+import MasterKeyPharseCreatedPageBase from "./MasterKeyPharseCreatedPageBase";
 
 const useStyles = makeStyles((theme: Theme) => ({
   logoContainer: {
@@ -37,37 +38,38 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface MasterKeyPharseCreatedPageBaseProps {
-  onContinue?: () => void;
-}
+// interface MasterKeyPharseCreatedPageBaseProps {
+//   onContinue?: () => void;
+// }
 
-const MasterKeyPharseCreatedPageBase: React.FC<MasterKeyPharseCreatedPageBaseProps> = (
-  props: MasterKeyPharseCreatedPageBaseProps,
-) => {
-  const styles = useStyles();
+// const MasterKeyPharseCreatedPageBase: React.FC<MasterKeyPharseCreatedPageBaseProps> = (
+//   props: MasterKeyPharseCreatedPageBaseProps,
+// ) => {
+//   const styles = useStyles();
 
-  const { onContinue = () => {} } = props;
-  return (
-    <>
-      <div className={styles.logoContainer}>
-        <img src="./icons/ic_circle.png" width="75" height="75" />
-        <Typography variant="h6" style={{ color: "white", marginTop: 10, marginBottom: 10 }}>
-          You're ready to go Incognito.
-        </Typography>
-        <Typography variant="subtitle1" style={{ color: "grey" }}>
-          Master key created.
-        </Typography>
-        <Typography variant="subtitle1" style={{ color: "grey" }}>
-          Launch the extension to continue.
-        </Typography>
-      </div>
-      <div className={styles.buttonsContainer}>
-        <Button variant="contained" color="secondary" style={{ height: 50 }} onClick={onContinue}>
-          Continue
-        </Button>
-      </div>
-    </>
-  );
-};
+//   const { onContinue = () => {} } = props;
+//   return (
+//     <>
+//       <div className={styles.logoContainer}>
+//         <img src="./icons/ic_circle.png" width="75" height="75" />
+//         <Typography variant="h6" style={{ color: "white", marginTop: 10, marginBottom: 10 }}>
+//           You're ready to go Incognito.
+//         </Typography>
+//         <Typography variant="subtitle1" style={{ color: "grey" }}>
+//           Master key created.
+//         </Typography>
+//         <Typography variant="subtitle1" style={{ color: "grey" }}>
+//           Launch the extension to continue.
+//         </Typography>
+//       </div>
+//       <div className={styles.buttonsContainer}>
+//         <Button variant="contained" color="secondary" style={{ height: 50 }} onClick={onContinue}>
+//           Continue
+//         </Button>
+//       </div>
+//     </>
+//   );
+// };
 
-export const MasterKeyPharseCreatedPage = withBlankLayout(MasterKeyPharseCreatedPageBase);
+// export const MasterKeyPharseCreatedPage = withBlankLayout(MasterKeyPharseCreatedPageBase);
+export const MasterKeyPharseCreatedPage = MasterKeyPharseCreatedPageBase;

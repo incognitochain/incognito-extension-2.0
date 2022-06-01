@@ -47,8 +47,8 @@ const defaultRoute = (key: string, props: RouteProps, popupState: PopupState, is
   );
 };
 const MainRoute = () => {
-  const [routes, setRoutes] = React.useState<Array<IRouteProps>>([]);
   const { popupState, isNotification } = useBackground();
+  const [routes, setRoutes] = React.useState<Array<IRouteProps>>([]);
   const handleGetRoutes = () => {
     const allRoutes: IRouteProps[] = [];
     context.keys().map((path: string) => allRoutes.push(context(`${path}`).default));
@@ -63,19 +63,19 @@ const MainRoute = () => {
     return null;
   }
   return (
-    <Styled>
+    <Styled className="full-screen">
       <Suspense fallback="loading">
         <Switch>
           {routes.map((route) => (
             <Route {...route} key={route.path} />
           ))}
-          <Route exact path={Paths.getStatedPage} component={GetStartedPage} />
-          <Route exact path={Paths.unlockPage} component={UnlockPage} />
           <Route exact path={Paths.homeRouteStack} component={HomeRouteStack} />
           <Route exact path={Paths.createNewKeyStack} component={CreateNewKeyRouteStack} />
           <Route exact path={Paths.importMasterKeyStack} component={ImportMasterKeyRouteStack} />
           <Route exact path={Paths.createAccountPage} component={CreateAccountPage} />
           <Route exact path={Paths.restoreWalletPage} component={RestoreWalletPage} />
+          <Route exact path={Paths.getStatedPage} component={GetStartedPage} />
+          <Route exact path={Paths.unlockPage} component={UnlockPage} />
           {defaultRoute(`default-route`, {}, popupState, isNotification)}
         </Switch>
       </Suspense>

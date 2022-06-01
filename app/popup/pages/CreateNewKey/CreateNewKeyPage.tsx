@@ -1,40 +1,19 @@
-import { withBlankLayout } from "@popup/components/layout/blank-layout";
-import NavigationBar from "@popup/components/layout/navigation-bar";
-import { Typography, Button, CardContent, Checkbox, FormControlLabel, TextField } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-import React, { useCallback, useLayoutEffect, useState } from "react";
-import { MainLayout } from "../../components/layout/main-layout";
-import { Theme } from "@mui/material";
+// import Header from "@components/Header";
+import Header from "@components/BaseComponent/Header";
+import BodyLayout from "@components/layout/BodyLayout";
+import TextInput from "@popup/components/Inputs/TextInput";
+import React, { useCallback, useLayoutEffect, useState, useEffect } from "react";
+import {
+  ContentText1,
+  ContentText2,
+  MasterKeyNameText,
+  RowCheckBox,
+  TextInputWraper,
+  CheckBoxDescription,
+  PrimaryButtonContaniner,
+} from "./CreateNewKeyPage.styled";
 
-const useStyles = makeStyles((theme: Theme) => ({
-  textInputStyle: {
-    color: "#ffffff",
-    backgroundColor: "#404040",
-  },
-
-  box: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-  },
-
-  box2: {
-    flex: 1,
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "column",
-  },
-  box3: {
-    flex: 1,
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "column",
-    marginTop: theme.spacing(3),
-    marginLeft: theme.spacing(3),
-    marginRight: theme.spacing(3),
-    marginBottom: theme.spacing(3),
-  },
-}));
+import CheckBox from "@popup/components/CheckBox/index";
 
 const NAME_PATTERN = /^[A-Za-z0-9]*$/;
 
@@ -45,9 +24,7 @@ interface CreateNewKeyPageProps {
   checkBoxAccept?: boolean;
 }
 
-const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateNewKeyPageProps) => {
-  const styles = useStyles();
-
+export const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateNewKeyPageProps) => {
   const { masterKeyName = "", checkBoxAccept = false, onBack = () => {}, onReadyClick = () => {} } = props;
 
   const [masterKeyNameLocal, setMasterKeyNameLocal] = useState("");
@@ -57,6 +34,10 @@ const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateNewKeyPa
   useLayoutEffect(() => {
     setMasterKeyNameLocal(masterKeyName);
     setCheckBoxAcceptLocal(checkBoxAccept);
+  }, []);
+
+  useEffect(() => {
+    // onReadyClick && onReadyClick("ABCDE", true);
   }, []);
 
   const readyOnClick = () => {
@@ -75,69 +56,36 @@ const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateNewKeyPa
 
   return (
     <>
-      <NavigationBar goBack={onBack} title={"Create new key"} />
-      <MainLayout>
-        <div className={styles.box}>
-          <div className={styles.box2}>
-            <CardContent>
-              <Typography variant="h6">Master key name</Typography>
-              <TextField
-                fullWidth
-                className={styles.textInputStyle}
-                variant="outlined"
-                margin="normal"
-                label="Enter a name for your master key"
-                InputProps={{
-                  style: { color: "white" },
-                }}
-                InputLabelProps={{
-                  style: { color: "grey" },
-                }}
-                autoComplete="off"
-                value={masterKeyNameLocal}
-                onChange={masterKeyOnChange}
-                error={errorVisible}
-                helperText={errorVisible ? "Master key names must be alphanumeric. Please choose another." : ""}
-              />
-              <Typography variant="subtitle1">
-                The next screen will contain 12 special words that will allow you to recover your funds.
-              </Typography>
-              <div style={{ height: 10 }}></div>
-              <Typography variant="subtitle1">
-                Be prepared to record them in a safe place. If anyone gains access to them, they will gain access to
-                your funds.
-              </Typography>
-            </CardContent>
-          </div>
-          <div className={styles.box3}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={checkBoxAcceptLocal}
-                  style={{ transform: "scale(1.2)" }}
-                  onChange={() => setCheckBoxAcceptLocal(!checkBoxAcceptLocal)}
-                />
-              }
-              label={
-                <Typography variant="subtitle1" style={{ color: checkBoxAcceptLocal ? "white" : "grey" }}>
-                  I accept that if I lose these words I will lose access to my funds.
-                </Typography>
-              }
-            />
-            <Button
-              variant="contained"
-              color="secondary"
-              disabled={readyButtonDisable}
-              style={{ height: 50, marginTop: 20 }}
-              onClick={readyOnClick}
-            >
-              I'm ready
-            </Button>
-          </div>
-        </div>
-      </MainLayout>
+      <Header title="Create new key" onBackClick={onBack} />
+      <BodyLayout>
+        <MasterKeyNameText>Master key name</MasterKeyNameText>
+        <TextInputWraper>
+          <TextInput
+            value={masterKeyNameLocal}
+            placeholder={"Enter a name for your master key"}
+            onChange={masterKeyOnChange}
+            errorEnable={errorVisible}
+            errorText={"Master key names must be alphanumeric. Please choose another."}
+          />
+        </TextInputWraper>
+        <ContentText1>
+          The next screen will contain 12 special words that will allow you to recover your funds
+        </ContentText1>
+        <br />
+        <ContentText2>
+          Be prepared to record them in a safe place. If anyone gains access to them, they will gain access to your
+          funds.
+        </ContentText2>
+
+        <RowCheckBox>
+          <CheckBox isActive={checkBoxAcceptLocal} onClicked={() => setCheckBoxAcceptLocal(!checkBoxAcceptLocal)} />
+          <CheckBoxDescription>I accept that if I lose these words I will lose access to my funds.</CheckBoxDescription>
+        </RowCheckBox>
+
+        <PrimaryButtonContaniner onClick={readyOnClick} disabled={readyButtonDisable}>
+          I'm ready
+        </PrimaryButtonContaniner>
+      </BodyLayout>
     </>
   );
 };
-
-export default withBlankLayout(CreateNewKeyPage);

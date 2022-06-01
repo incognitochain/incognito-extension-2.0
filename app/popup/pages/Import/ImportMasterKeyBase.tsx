@@ -2,23 +2,23 @@
 import { Paths } from "@popup/components/routes/paths";
 import { useBackground } from "@popup/context/background";
 import { useCallAsync } from "@popup/utils/notifications";
-import ImportMasterKeyPage from "@popup/pages/Import/ImportMasterKeyPage";
+import { ImportMasterKeyPage } from "@popup/pages/Import/ImportMasterKeyPage";
 import { PasswordPage } from "@popup/pages/Password/PasswordPage";
 import React, { ReactElement, useCallback, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { ImportMasterKeyRouteType } from "./ImportMasterKeyContext";
+import { route as AssetsRoute } from "@module/Assets/Assets.route";
+
 interface ImportMasterKeyBaseProps {
   mnemonic?: string;
   masterKeyName?: string;
 }
 
 const ImportMasterKeyBase: React.FC = () => {
-  console.log("ImportMasterKeyBase");
-
   const history = useHistory();
   const { request } = useBackground();
   const callAsync = useCallAsync();
-  const [routePath, setRoutePath] = useState(Paths.importMasterKeyPage);
+  const [routePath, setRoutePath] = useState(Paths.passwordPage);
 
   const routeData = useRef<ImportMasterKeyRouteType & ImportMasterKeyBaseProps>({});
 
@@ -28,36 +28,41 @@ const ImportMasterKeyBase: React.FC = () => {
       progress: { message: "Import wallet..." },
       success: { message: "Assets Imported" },
       onSuccess: (result: any) => {
-        history.push(Paths.homeRouteStack);
+        // history.push(Paths.homeRouteStack);
+        history.push(AssetsRoute);
       },
     });
   };
 
   const renderContent: ReactElement | any = useCallback(() => {
     switch (routePath) {
+      case Paths.passwordPage:
+        return (
+          <PasswordPage
+            headerTitle="Master key"
+            onBack={() => {
+              history.goBack();
+            }}
+            passwordInitValue={routeData.current.password}
+            descriptionText="Create a password to protect this wallet and access your transaction history. For your eyes only; no one will be able to help you recover it. Keep it safe."
+            buttonTitle="Continue"
+            continuePressed={(password: string) => {
+              routeData.current = { ...routeData.current, password };
+              setRoutePath(Paths.importMasterKeyPage);
+            }}
+          />
+        );
+
       case Paths.importMasterKeyPage:
         return (
           <ImportMasterKeyPage
             onBack={() => {
-              history.goBack();
+              setRoutePath(Paths.passwordPage);
             }}
             masterKeyName={routeData.current.masterKeyName}
             mnemonic={routeData.current.mnemonic}
             continueOnClick={(masterKeyName?: string, mnemonic?: string) => {
               routeData.current = { ...routeData.current, masterKeyName, mnemonic };
-              setRoutePath(Paths.passwordPage);
-            }}
-          />
-        );
-      case Paths.passwordPage:
-        return (
-          <PasswordPage
-            onBack={() => {
-              setRoutePath(Paths.importMasterKeyPage);
-            }}
-            buttonTitle="Import"
-            continuePressed={(password: string) => {
-              routeData.current = { ...routeData.current, password };
               importWallet();
             }}
           />

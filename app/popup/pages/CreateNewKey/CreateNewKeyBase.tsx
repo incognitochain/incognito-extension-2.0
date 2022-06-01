@@ -10,7 +10,8 @@ import { MasterKeyPharsePage } from "@popup/pages/MasterKey/MasterKeyPage";
 import { MasterKeyPharseConfirmPage } from "@popup/pages/MasterKeyConfirm/MasterKeyPharseConfirm";
 import { MasterKeyPharseCreatedPage } from "@popup/pages/MasterKeyCreated/MasterKeyPharseCreated";
 import { CreateNewKeyContext, CreateNewKeyRouteContextType } from "./CreateNewKeyContext";
-import CreateNewKeyPage from "./CreateNewKeyPage";
+import { CreateNewKeyPage } from "./CreateNewKeyPage";
+import { route as AssetsRoute } from "@module/Assets/Assets.route";
 
 interface RouteDataProps {
   mnemonic?: string;
@@ -34,7 +35,8 @@ const CreateNewKeyBase: React.FC = () => {
       progress: { message: "Creating wallet..." },
       success: { message: "Wallet created" },
       onSuccess: (result) => {
-        history.push(Paths.homeRouteStack);
+        // history.push(Paths.homeRouteStack);
+        history.push(AssetsRoute);
       },
     });
   };
@@ -87,9 +89,12 @@ const CreateNewKeyBase: React.FC = () => {
       case Paths.passwordPage:
         return (
           <PasswordPage
+            headerTitle="Create Password"
             onBack={() => {
               setRoutePath(Paths.masterKeyPhraseConfirmPage);
             }}
+            descriptionText="Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+            galley."
             buttonTitle="Create Master Key"
             continuePressed={(password: string) => {
               routeData.current = { ...routeData.current, password };

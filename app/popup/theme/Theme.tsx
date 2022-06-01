@@ -257,6 +257,26 @@ export const ThemedGlobalStyle = createGlobalStyle`
       -ms-user-select: none;
       user-select: none;
     }
+
+    .full-width {
+      width: 100%;
+    }
+
+    .full-height {
+      height: 100%;
+    }
+
+    .full-screen {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    .cursor {
+      :hover {
+    opacity: 0.8;
+    cursor: pointer;
+    }
 `;
 
 export const Row = styled.div`
@@ -266,4 +286,65 @@ export const Row = styled.div`
     align-items: center;
     justify-content: center;
   }
+`;
+
+export const H3 = styled.h2`
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 40px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+`;
+
+export const H4 = styled.h4`
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 32px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+`;
+
+export const P2_Regular = styled.p`
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+`;
+
+export const P2_Medium = styled.p`
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: -0.02em;
+  color: #000000;
+`;
+
+export const P1 = styled.p`
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.02em;
+  color: #757575;
+`;
+export const P1_Regular = styled.p`
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.02em;
+  color: #ffffff;
 `;

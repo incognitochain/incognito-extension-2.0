@@ -13,7 +13,7 @@ import { UnlockPage } from "../../pages/Unlock/UnlockPage";
 import CreateAccountPage from "@popup/pages/CreateAccount/CreateAccountPage";
 import RestoreWalletPage from "@popup/pages/RestoreWallet/RestoreWalletPage";
 
-const defaultRoute = (key: string, props: RouteProps, popupState: PopupState, isNotification: boolean) => {
+export const defaultRoute = (key: string, props: RouteProps, popupState: PopupState, isNotification: boolean) => {
   const rest = Object.assign({}, props);
   delete rest.component;
   return (
@@ -21,6 +21,7 @@ const defaultRoute = (key: string, props: RouteProps, popupState: PopupState, is
       key={key}
       {...rest}
       render={(props: RouteComponentProps) => {
+        console.log("popupState.walletState ", popupState.walletState);
         switch (popupState.walletState) {
           case "locked":
             return <Redirect to={{ pathname: Paths.unlockPage }} />;

@@ -1,3 +1,4 @@
+import { getPrivacyDataByTokenID } from "@redux/selectedPrivacy";
 import { Typography } from "@mui/material/";
 import { makeStyles } from "@mui/styles";
 import { withBlankLayout } from "@popup/components/layout/blank-layout";
