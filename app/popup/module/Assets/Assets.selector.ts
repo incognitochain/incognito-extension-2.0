@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
 import { RootState } from "@redux/reducers";
-import { otaKeyOfDefaultAccountSelector } from "@redux/account";
+import { otaKeyOfDefaultAccountSelector } from "@redux/account/account.selectors";
 
 const assetsReducerSelector = createSelector(
   (state: RootState) => state.assetsReducer,

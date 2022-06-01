@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { ArrowLeftIcon } from "@components/Icons";
 import withHeader, { IMergeProps } from "./Header.enhance";
 import { BtnSelectAccount } from "@module/Account/features/SelectAccount";
+import LockWallet from "@module/Assets/features/LockWallet/LockWallet";
 
 const Styled = styled.div`
   display: flex;
@@ -30,6 +31,10 @@ const Styled = styled.div`
 
   .right {
     margin-left: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
   }
 
   .refresh-container {
@@ -43,7 +48,7 @@ const Styled = styled.div`
 `;
 
 const Header = (props: IMergeProps & any) => {
-  const { rightHeader, selectAccount, handleClick, renderHeaderTitle, title }: IMergeProps = props;
+  const { rightHeader, selectAccount, lockWallet, handleClick, renderHeaderTitle, title }: IMergeProps = props;
   return (
     <Styled>
       {title && (
@@ -54,6 +59,7 @@ const Header = (props: IMergeProps & any) => {
       )}
       <div className="right">
         {rightHeader}
+        {lockWallet && <LockWallet />}
         {selectAccount && <BtnSelectAccount />}
       </div>
     </Styled>

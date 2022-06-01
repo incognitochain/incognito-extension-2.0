@@ -7,7 +7,7 @@ import { withBalance } from "@module/Assets/Assets.withBalance";
 const Assets = React.memo(() => {
   return (
     <>
-      <Header selectAccount />
+      <Header selectAccount lockWallet />
       <TotalBalance />
       <AddressBar />
       <FollowTokensList />

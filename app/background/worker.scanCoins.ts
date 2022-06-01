@@ -7,7 +7,7 @@ import uniqBy from "lodash/uniqBy";
 import { IBalance } from "@core/types";
 import { actionFetchedFollowBalance, actionFetchingFollowBalance } from "@module/Assets";
 import { isFetchingAssetsSelector } from "@module/Assets";
-import { defaultAccountSelector } from "@redux/account";
+import { defaultAccountSelector } from "@redux/account/account.selectors";
 const { Account, PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 
 const tokens = [

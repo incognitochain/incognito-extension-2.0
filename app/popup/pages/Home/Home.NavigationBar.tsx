@@ -8,7 +8,7 @@ import Toolbar from "@mui/material/Toolbar";
 import { Paths } from "@popup/components/routes/paths";
 import { useBackground } from "@popup/context/background";
 import { useCallAsync } from "@popup/utils/notifications";
-import { defaultAccountSelector, listAccountSelector } from "@redux/account";
+import { defaultAccountSelector, listAccountSelector } from "@redux/account/account.selectors";
 import { throttle, trim } from "lodash";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
