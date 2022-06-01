@@ -77,7 +77,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
         background: ${({ theme }) => theme.body};
         color: ${({ theme }) => theme.primaryP7};
         scrollbar-color: transparent transparent; /*just hides the scrollbar for firefox */
-        font-family: 'SF-Pro-Display';
+        font-family: "Inter-Regular";
         width: 375px;
         height: 617px;
         font-style: normal;
@@ -94,7 +94,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
         flex: 1;
         * {
              box-sizing: border-box;
-             font-family: 'SF-Pro-Display';
+             font-family: 'Inter-Regular';
         }
     }
     body {
@@ -102,29 +102,30 @@ export const ThemedGlobalStyle = createGlobalStyle`
       box-sizing: border-box;
       background-color: #cccccc;
     }
-    //@font-face {
-    //  font-family: SF-Pro-Regular;
-    //  src: url('../assets/fonts/SF-Pro-Display/SF-Pro-Display-Bold.otf');
-    //  font-style: normal;
-    //  font-display: swap;
-    //  font-weight: 400;
-    //}
-    //
-    //@font-face {
-    //  font-family: SF-Pro-Medium;
-    //  src: url('../assets/fonts/SF-Pro-Display/SF-Pro-Display-Medium.otf');
-    //  font-style: normal;
-    //  font-display: swap;
-    //  font-weight: 500;
-    //}
-    //
-    //@font-face {
-    //  font-family: SF-Pro-Bold;
-    //  src: url('../assets/fonts/SF-Pro-Display/SF-Pro-Display-Regular.otf');
-    //  font-style: normal;
-    //  font-display: swap;
-    //  font-weight: 700;
-    //}
+    @font-face {
+      font-family: Inter-Regular;
+      src: url('../../../assets/fonts/Inter/Inter-Regular.ttf');
+      font-style: normal;
+      font-display: swap;
+      font-weight: 400;
+    }
+
+    @font-face {
+      font-family: Inter-Medium;
+      src: url('../../../assets/fonts/Inter/Inter-Medium.ttf');
+      font-style: normal;
+      font-display: swap;
+      font-weight: 500;
+    }
+
+    @font-face {
+      font-family: Inter-Bold;
+      src: url('../../../assets/fonts/Inter/Inter-Bold.ttf');
+      font-style: normal;
+      font-display: swap;
+      font-weight: 700;
+    }
+      
     .fw-regular {
         font-weight: 400;
     }

@@ -30,7 +30,7 @@ const AddressBar = React.memo(() => {
   const paymentAddress = useSelector(paymentAddressOfDefaultAccountSelector);
   const addressEllipsis = ellipsisCenter({
     str: paymentAddress,
-    limit: 12,
+    limit: 11,
   });
 
   const onShowQrCode = () => {

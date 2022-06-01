@@ -40,7 +40,7 @@ const Copy: React.FunctionComponent<IProps> = (props) => {
   return (
     <Styled className="default-margin-horizontal">
       <p className={`text ${!ellipsis ? "ellipsis" : ""}`}>
-        {ellipsis ? ellipsisCenter({ str: text, limit: 14 }) : text}{" "}
+        {ellipsis ? ellipsisCenter({ str: text, limit: 12 }) : text}{" "}
       </p>
       <div className="btn-copy-container">
         <CopyIcon text={text} />
