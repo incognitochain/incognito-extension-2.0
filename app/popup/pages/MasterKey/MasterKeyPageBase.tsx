@@ -34,6 +34,7 @@ const MasterKeyPageBase: React.FC<MasterKeyPharsePageBaseProps> = (props: Master
       setPhraseListLocal((mnemonic.split(" ") as string[]) || []);
     } else {
       setPhraseListLocal(phraseList);
+      setMnemonic(phraseList.join(" "));
     }
   }, []);
 

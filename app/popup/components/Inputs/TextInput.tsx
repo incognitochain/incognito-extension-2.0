@@ -14,6 +14,7 @@ const TextInputStyled = styled.input`
   padding-right: 50px;
   width: 100%;
   height: 100%;
+  min-height: 48px;
   background: #404040;
   border-radius: 8px;
   border-width: 1;
