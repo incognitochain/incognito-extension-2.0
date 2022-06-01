@@ -1,5 +1,7 @@
 import React from "react";
 import styled, { ITheme } from "styled-components";
+import { useSelector } from "react-redux";
+import sharedSelectors from "@redux/shared/shared.selectors";
 
 const Styled = styled.p`
   color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
@@ -8,7 +10,8 @@ const Styled = styled.p`
 `;
 
 const TotalBalance = React.memo(() => {
-  return <Styled className="fs-avglarge fw-medium">$100,000,05</Styled>;
+  const totalShield = useSelector(sharedSelectors.followTokensUSDAmountSelector);
+  return <Styled className="fs-avglarge fw-medium">{`$${totalShield}`}</Styled>;
 });
 
 export default TotalBalance;
