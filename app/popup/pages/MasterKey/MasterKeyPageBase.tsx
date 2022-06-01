@@ -1,6 +1,7 @@
 import Header from "@components/BaseComponent/Header";
 import BodyLayout from "@components/layout/BodyLayout";
 import MnemonicItem from "@components/Mnemonic/MnemonicItem";
+import { useSnackbar } from "notistack";
 import React, { useLayoutEffect, useState } from "react";
 import {
   BookMarkImg,
@@ -23,8 +24,10 @@ export interface MasterKeyPharsePageBaseProps {
 }
 
 const MasterKeyPageBase: React.FC<MasterKeyPharsePageBaseProps> = (props: MasterKeyPharsePageBaseProps) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [mnemonic, setMnemonic] = useState("");
   const [phraseListLocal, setPhraseListLocal] = useState<string[]>([]);
+
   const { onBack = () => {}, masterKeyName = "", phraseList = [], saveMyPhraseOnClick = () => {} } = props;
 
   useLayoutEffect(() => {
@@ -44,11 +47,11 @@ const MasterKeyPageBase: React.FC<MasterKeyPharsePageBaseProps> = (props: Master
       navigator.clipboard.writeText(mnemonic).then(
         function () {
           console.log("Copying to clipboard was successful!");
-          alert("Copying to clipboard was successful!");
+          enqueueSnackbar("Copying to clipboard was successful!", { variant: "success" });
         },
         function (err) {
           console.error("Async: Could not copy text: ", err);
-          alert("Could not copy text: ");
+          enqueueSnackbar(" Could not copy text", { variant: "error" });
         },
       );
   };

@@ -8,6 +8,7 @@ import { useCallAsync } from "@popup/utils/notifications";
 import { trim } from "lodash";
 import React, { useCallback, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useLoading } from "@popup/context/loading";
 import {
   DescriptionText,
   MnemonicTextArea,
@@ -34,6 +35,7 @@ const RestoreWalletPage: React.FC = () => {
   const history = useHistory();
   const callAsync = useCallAsync();
   const { request } = useBackground();
+  const { showLoading } = useLoading();
 
   const [mnemonic, setMnemonic] = useState("");
   const [mnemonicError, setMnemonicError] = useState(false);
@@ -45,11 +47,13 @@ const RestoreWalletPage: React.FC = () => {
   const [verifyErrorMessage, setVerifyErrorMessage] = useState("");
 
   const restoreWallet = async () => {
+    showLoading(true);
     callAsync(request("popup_importWallet", { mnemonic, password }), {
       progress: { message: "Restore Wallet..." },
       success: { message: "Restore Done" },
       onSuccess: (result: any) => {
         // history.push(Paths.homeRouteStack);
+        showLoading(false);
         history.push(AssetsRoute);
       },
     });

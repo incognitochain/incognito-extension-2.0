@@ -7,6 +7,8 @@ import { checkPasswordValid } from "@services/wallet/passwordService";
 import { throttle } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useLoading } from "@popup/context/loading";
+
 import {
   CircleImageStyled,
   ForgotYourPasswordStyled,
@@ -20,6 +22,8 @@ export const UnlockPageBase: React.FC = () => {
   const history = useHistory();
   const callAsync = useCallAsync();
   const { request } = useBackground();
+  const { showLoading } = useLoading();
+
   const [password, setPassword] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>("");
   const unLockOnClick = useCallback(
@@ -27,11 +31,13 @@ export const UnlockPageBase: React.FC = () => {
       try {
         const passWordValid = await checkPasswordValid(password);
         if (passWordValid) {
+          showLoading(true);
           callAsync(request("popup_unlockWallet", { password }), {
             progress: { message: "Unlocking wallet..." },
             success: { message: "Wallet unlocked" },
             onSuccess: () => {
               // history.push(Paths.homeRouteStack);
+              showLoading(false);
               history.push(AssetsRoute);
             },
           });
