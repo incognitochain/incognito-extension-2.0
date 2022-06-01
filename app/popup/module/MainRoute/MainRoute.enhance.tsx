@@ -11,6 +11,7 @@ import styled, { ITheme } from "styled-components";
 import { otaKeyOfDefaultAccountSelector } from "@redux/account/account.selectors";
 import { useBackground } from "@popup/context/background";
 import throttle from "lodash/throttle";
+import { useLoading } from "@popup/context/loading";
 
 const LoadingScanCoins = styled.div`
   position: relative;
@@ -55,18 +56,13 @@ const withRouteChange = (WrappedComponent: any) => {
 
 const withLoading = (WrappedComponent: any) => {
   return (props: any) => {
+    const { showLoading } = useLoading();
     const isScanCoins = useSelector(isFirstTimeScanCoinsSelector);
     const OTAKey = useSelector(otaKeyOfDefaultAccountSelector);
-    return (
-      <>
-        <WrappedComponent {...props} />
-        {isScanCoins && OTAKey && (
-          <LoadingScanCoins>
-            <LoadingContainer message="It looks like your first time scan UTXOs. Please wait, it can take 10 minutes." />
-          </LoadingScanCoins>
-        )}
-      </>
-    );
+    React.useEffect(() => {
+      showLoading(!!isScanCoins && !!OTAKey);
+    }, [isScanCoins && OTAKey]);
+    return <WrappedComponent {...props} />;
   };
 };
 
