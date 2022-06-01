@@ -8,8 +8,8 @@ interface IProps {
 }
 
 const Styled = styled.button`
-  width: 19px;
-  height: 19px;
+  width: 24px;
+  height: 24px;
 `;
 
 const CopyVector = React.memo((props: any) => {

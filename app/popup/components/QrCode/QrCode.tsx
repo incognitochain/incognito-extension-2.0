@@ -53,7 +53,7 @@ const QrCode = (props: IProps) => {
     <Styled className="qrcode-container">
       <div className="label fs-regular fw-medium">{label}</div>
       <div className="qrcode-react">
-        <QRCodeReact {...{ ...qrCodeProps, size: qrCodeProps?.size || 175 }} bgColor="transparent" />
+        <QRCodeReact {...{ ...qrCodeProps, size: qrCodeProps?.size || 184 }} bgColor="transparent" />
       </div>
       {hook}
       <Copy text={value} {...copyProps} />

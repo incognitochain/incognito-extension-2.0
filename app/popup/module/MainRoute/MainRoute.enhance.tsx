@@ -9,6 +9,7 @@ import { isFirstTimeScanCoinsSelector } from "@redux/scanCoins";
 import LoadingContainer from "@components/LoadingContainer";
 import styled, { ITheme } from "styled-components";
 import { otaKeyOfDefaultAccountSelector } from "@redux/account/account.selectors";
+import { useBackground } from "@popup/context/background";
 
 const LoadingScanCoins = styled.div`
   position: relative;
@@ -67,4 +68,16 @@ const withLoading = (WrappedComponent: any) => {
     );
   };
 };
-export default compose(withPToken, withRouteChange, withLoading);
+
+export const withBalance = (WrappedComponent: FunctionComponent) => (props: any) => {
+  const { request } = useBackground();
+  const OTAKey = useSelector(otaKeyOfDefaultAccountSelector);
+  const loadFollowTokensBalance = () => request("popup_followTokensBalance", {});
+
+  React.useEffect(() => {
+    loadFollowTokensBalance().then();
+  }, [OTAKey]);
+  return <WrappedComponent {...props} />;
+};
+
+export default compose(withPToken, withRouteChange, withLoading, withBalance);
