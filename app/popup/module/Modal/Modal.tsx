@@ -83,7 +83,7 @@ const Modal = (props: IProps) => {
           />
         )}
         <WrapContent>
-          <div className="modal-data" dangerouslySetInnerHTML={{ __html: modalData }} />
+          <div className="modal-data">{modalData}</div>
         </WrapContent>
       </div>
     );

@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { paymentAddressOfDefaultAccountSelector } from "@redux/account/account.selectors";
 import { actionToggleModal } from "@module/Modal";
 import QrCodeModal from "@components/QrCodeModal";
-import ReactDOMServer from "react-dom/server";
 
 const Styled = styled.div`
   padding: 8px 16px;
@@ -28,16 +27,23 @@ const Styled = styled.div`
 
 const AddressBar = React.memo(() => {
   const dispatch = useDispatch();
-  const address = ellipsisCenter({
-    str: useSelector(paymentAddressOfDefaultAccountSelector),
+  const paymentAddress = useSelector(paymentAddressOfDefaultAccountSelector);
+  const addressEllipsis = ellipsisCenter({
+    str: paymentAddress,
     limit: 12,
   });
-  // QrCodeModal value={address} label="QRCode"
+
   const onShowQrCodeModal = () => {
     dispatch(
       actionToggleModal({
         title: "Payment Address",
-        data: ReactDOMServer.renderToString(<QrCodeModal value={address} />),
+        data: (
+          <QrCodeModal
+            label="This is your address. Use it to receive any cryptocurrency from another Incognito address."
+            value={paymentAddress}
+            key="AddressBar"
+          />
+        ),
         closeable: true,
       }),
     );
@@ -45,10 +51,10 @@ const AddressBar = React.memo(() => {
 
   return (
     <Styled className="default-margin-horizontal">
-      <p className="fs-regular fw-medium">{address}</p>
+      <p className="fs-regular fw-medium">{addressEllipsis}</p>
       <Row>
         <QrCodeIcon onClick={onShowQrCodeModal} />
-        <CopyIcon text={address} />
+        <CopyIcon text={paymentAddress} />
       </Row>
     </Styled>
   );

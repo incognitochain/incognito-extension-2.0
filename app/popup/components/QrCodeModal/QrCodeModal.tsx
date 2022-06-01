@@ -13,7 +13,7 @@ const QrCodeModal = (props: IProps) => {
       label={label}
       qrCodeProps={{
         value,
-        size: 145,
+        size: 184,
       }}
     />
   );

@@ -274,8 +274,9 @@ export const ThemedGlobalStyle = createGlobalStyle`
 
     .cursor {
       :hover {
-    opacity: 0.8;
-    cursor: pointer;
+        opacity: 0.8;
+        cursor: pointer;
+      }
     }
 `;
 

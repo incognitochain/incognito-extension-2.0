@@ -32,15 +32,16 @@ const Styled = styled.div`
   }
   .label {
     text-align: center;
-    background-color: black;
+    margin-left: 54px;
+    margin-right: 54px;
   }
   .qrcode-react {
     justify-content: center;
     display: flex;
     width: fit-content;
-    padding: 15px;
+    padding: 8px;
     margin: auto;
-    background: white;
+    background: ${({ theme }: { theme: ITheme }) => theme.white};
     border-radius: 8px;
   }
 `;
@@ -50,7 +51,7 @@ const QrCode = (props: IProps) => {
   const { value } = qrCodeProps;
   return (
     <Styled className="qrcode-container">
-      <div className="label fs-medium fw-bold ellipsis">{label}</div>
+      <div className="label fs-regular fw-medium">{label}</div>
       <div className="qrcode-react">
         <QRCodeReact {...{ ...qrCodeProps, size: qrCodeProps?.size || 175 }} bgColor="transparent" />
       </div>

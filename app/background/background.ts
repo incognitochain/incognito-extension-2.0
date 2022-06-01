@@ -13,6 +13,7 @@ import Storage from "@services/storage";
 import { masterKeyReducerSelector } from "@redux/masterKey";
 import { setInterval } from "timers";
 import { actionFetchingScanCoins } from "@redux/scanCoins";
+import { actionClearAllModal } from "@module/Modal";
 const { init } = require("incognito-chain-web-js/build/web/wallet");
 
 window.store = store;
@@ -173,6 +174,15 @@ function setupController(versionedData: VersionedData) {
 
   chrome.runtime.onConnect.addListener(connectRemote);
   chrome.runtime.onConnectExternal.addListener(connectExternal);
+
+  // clear all modals when close popup
+  chrome.runtime.onConnect.addListener(function (port) {
+    if (port.name === "popup") {
+      port.onDisconnect.addListener(function () {
+        dispatch(actionClearAllModal());
+      });
+    }
+  });
 
   return Promise.resolve();
 }

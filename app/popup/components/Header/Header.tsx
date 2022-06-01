@@ -9,7 +9,7 @@ const Styled = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  height: 55px;
+  height: 64px;
   padding-left: 24px;
   padding-right: 24px;
 

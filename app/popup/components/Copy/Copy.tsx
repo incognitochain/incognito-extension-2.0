@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { ITheme } from "styled-components";
 import copy from "copy-to-clipboard";
 import { Button } from "@components/Core";
 import { ellipsisCenter } from "@popup/utils";
@@ -8,19 +8,15 @@ interface IProps {
   text: string;
   ellipsis?: boolean;
 }
-// background-color: ${(props: IGlobalStyle) => props.theme.copyButton};
-// border: solid 0.5px ${(props: IGlobalStyle) => props.theme.copyBorderButton};
-
-// color: ${(props: IGlobalStyle) => props.theme.copyTextButton};
 
 const Styled = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-
-  border-radius: 20px;
-  height: 40px;
-  margin-top: 15px;
+  background-color: ${({ theme }: { theme: ITheme }) => theme.primaryP9};
+  border-radius: 8px;
+  height: 50px;
+  margin-top: 24px;
   position: relative;
   .text {
     margin-right: 15px;
@@ -31,15 +27,15 @@ const Styled = styled.div`
   }
   .btn-container {
     height: 36px;
-    margin-right: 1px;
     padding: unset;
     max-width: 60px;
   }
   .btn-copy-container {
     min-width: 70px;
     position: absolute;
-    top: 1px;
-    right: 0px;
+    right: 15px;
+    border-radius: 8px;
+    background-color: ${({ theme }: { theme: ITheme }) => theme.colorP3};
   }
 `;
 
@@ -56,7 +52,7 @@ const Copy: React.FunctionComponent<IProps> = (props) => {
     }
   };
   return (
-    <Styled>
+    <Styled className="default-margin-horizontal">
       <p className={`text ${!ellipsis ? "ellipsis" : ""}`}>
         {ellipsis ? ellipsisCenter({ str: text, limit: 11 }) : text}{" "}
       </p>

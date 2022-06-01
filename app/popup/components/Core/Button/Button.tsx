@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import styled, { ITheme } from "styled-components";
 
 interface IProps {
@@ -18,6 +17,7 @@ const Styled = styled.button`
   margin: auto;
   padding: 0 11px;
   width: 100%;
+  color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
   &.btn-disabled {
   }
   .loading {
