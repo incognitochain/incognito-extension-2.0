@@ -57,9 +57,9 @@ const withLoading = (WrappedComponent: any) => {
     return (
       <>
         <WrappedComponent {...props} />
-        {isScanCoins && (
+        {!isScanCoins && (
           <LoadingScanCoins>
-            <LoadingContainer message="Please wait, this actions maybe take 10' " />
+            <LoadingContainer message="It looks like your first time scan UTXOs. Please wait, it can take 10 minutes." />
           </LoadingScanCoins>
         )}
       </>

@@ -11,7 +11,9 @@ const Styled = styled.div`
   align-items: center;
   flex-direction: column;
   .message {
-    margin-top: 16px;
+    margin-top: 24px;
+    max-width: 70%;
+    text-align: center;
   }
 `;
 
