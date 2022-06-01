@@ -1,11 +1,12 @@
-import { Button, FormControl, FormHelperText, InputLabel, OutlinedInput, Typography } from "@mui/material";
-import { MainLayout } from "@popup/components/layout/main-layout";
-import NavigationBar from "@popup/components/layout/navigation-bar";
+import Header from "@components/BaseComponent/Header";
+import BodyLayout from "@components/layout/BodyLayout";
+import TextInput from "@popup/components/Inputs/TextInput";
 import { useBackground } from "@popup/context/background";
 import { useCallAsync } from "@popup/utils/notifications";
 import { trim } from "lodash";
 import React, { useCallback, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { KeyChainLabel, PrimaryButtonContaniner, TextInputWraper } from "./CreateAccountPage.styled";
 
 let accountNameValidator = require("password-validator");
 
@@ -66,40 +67,21 @@ const CreateAccountPage: React.FC = () => {
 
   return (
     <>
-      <NavigationBar goBack={onBack} title={"Create keychain"} />
-      <MainLayout>
-        <Typography variant="h6">Keychain name</Typography>
-        <FormControl fullWidth variant="outlined" color="info">
-          <InputLabel htmlFor="outlined-adornment-password" color="info" sx={{ color: "#9C9C9C" }}>
-            Enter a keychain name
-          </InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            sx={{ backgroundColor: "#404040" }}
+      <Header title="Create keychain" onBackClick={onBack} />
+      <BodyLayout>
+        <KeyChainLabel>Keychain name</KeyChainLabel>
+        <TextInputWraper>
+          <TextInput
             value={keychainName}
+            placeholder={"Enter a keychain name"}
             onChange={keychainOnChange}
-            autoComplete="off"
-            inputProps={{
-              style: { color: "white" },
-            }}
-            label="Create password(min 10 chars)"
+            errorEnable={keychainNameError.length > 0}
+            errorText={keychainNameError}
           />
+        </TextInputWraper>
 
-          {keychainNameError.length > 0 && (
-            <FormHelperText error style={{ color: "red", fontSize: 13 }}>
-              {keychainNameError}
-            </FormHelperText>
-          )}
-        </FormControl>
-        <Button
-          variant="contained"
-          color="secondary"
-          style={{ height: 50, marginTop: 15, backgroundColor: "#ffffff", color: "#1A73E8" }}
-          onClick={createKeychainOnPressed}
-        >
-          Create keychain
-        </Button>
-      </MainLayout>
+        <PrimaryButtonContaniner onClick={createKeychainOnPressed}>Create keychain</PrimaryButtonContaniner>
+      </BodyLayout>
     </>
   );
 };
