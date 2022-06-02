@@ -5,9 +5,9 @@ import { selectedPrivacyToken } from "@redux/selectedPrivacy";
 
 const Styled = styled.div`
   display: flex;
-  flex: 1;
   flex-direction: column;
   align-items: center;
+  height: fit-content;
   .logo {
     width: 50px;
     height: 50px;

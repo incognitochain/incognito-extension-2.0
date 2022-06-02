@@ -91,12 +91,13 @@ const Styled = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 20px;
-  height: 40px;
+  border-radius: 8px;
+  height: 50px;
   margin: auto;
   padding: 0 11px;
   width: 100%;
   color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
+  background-color: ${({ theme }: { theme: ITheme }) => theme.colorP3};
   &.btn-disabled {
   }
   .loading {
