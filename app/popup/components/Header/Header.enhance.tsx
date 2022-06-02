@@ -1,5 +1,5 @@
 import React, { HTMLAttributes, SyntheticEvent } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import SearchBox from "./Header.searchBox";
 
 export interface TInner {
@@ -10,7 +10,8 @@ export interface TInner {
 export interface IProps {
   title?: string;
   onGoBack?: () => void;
-  rightHeader?: any;
+  rightHeader?: React.ReactNode;
+  showBack?: boolean;
   selectAccount?: boolean;
   lockWallet?: boolean;
   canSearch?: boolean;

@@ -1,11 +1,12 @@
 import React from "react";
 import Header from "@components/Header";
-import { AddressBar, TotalBalance, FollowTokensList } from "@module/Assets/features";
+import { AddressBar, TotalBalance, FollowTokensList, LockWallet } from "@module/Assets/features";
+import { SearchIcon } from "@components/Icons";
 
 const Assets = React.memo(() => {
   return (
     <>
-      <Header selectAccount lockWallet />
+      <Header showBack={false} rightHeader={<LockWallet />} customHeader={<SearchIcon />} selectAccount />
       <TotalBalance />
       <AddressBar />
       <FollowTokensList />

@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { ITheme } from "styled-components";
+import styled from "styled-components";
 
 const CheckedBoxImg = styled.img`
   width: 24px;

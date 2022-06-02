@@ -6,3 +6,4 @@ export { default as EyeIcon } from "./Eye";
 export { default as QrCodeIcon } from "./QrCode";
 export { default as CopyIcon } from "./Copy";
 export { default as LoadingIcon } from "./Loading";
+export { default as SearchIcon } from "./Search";
