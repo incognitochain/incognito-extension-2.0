@@ -10,13 +10,13 @@ const FollowTokensList = React.memo(() => {
   const followTokens = useSelector(sharedSelectors.followTokensFormatedSelector);
 
   return (
-    <WrapContent>
-      <MainStyled className="scroll-view">
+    <MainStyled>
+      <WrapContent>
         {followTokens.map((item: SelectedPrivacy) => (
           <FollowTokenItem {...item} key={item.tokenId} />
         ))}
-      </MainStyled>
-    </WrapContent>
+      </WrapContent>
+    </MainStyled>
   );
 });
 

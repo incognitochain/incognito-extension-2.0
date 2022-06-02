@@ -1,34 +1,37 @@
-import { P2_Regular } from "@popup/theme/Theme";
 import React from "react";
 import styled, { ITheme } from "styled-components";
 
-const Container = styled.div`
+const Container = styled.div<{ marginTop: number }>`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
+  .header-title {
+    margin-bottom: 12px;
+  }
+  margin-top: ${({ marginTop }: { marginTop: number }) => marginTop}px;
 `;
 
 const TextAreaStyled = styled.textarea`
-  padding-top: 10px;
-  padding-left: 16px;
-  padding-right: 50px;
+  padding: 10px 50px 10px 16px;
   width: 100%;
   height: 100%;
-  background: #404040;
+  background: ${({ theme }: { theme: ITheme }) => theme.primaryP9};
   border-radius: 8px;
-  border-width: 1;
+  border-width: 1px;
   color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
+
   :focus {
-    border: 2px solid #1a73e8;
+    border: 2px solid ${({ theme }: { theme: ITheme }) => theme.colorP3};
   }
+
   :hover {
     outline: none !important;
-    border: 2px solid #1a73e8;
+    border: 2px solid ${({ theme }: { theme: ITheme }) => theme.colorP3};
   }
+
   ::placeholder {
-    color: #9c9c9c;
-    font-family: "Inter";
+    color: ${({ theme }: { theme: ITheme }) => theme.primaryP8};
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -39,10 +42,11 @@ const TextAreaStyled = styled.textarea`
     flex-grow: 0;
   }
 `;
-const ErrorText = styled(P2_Regular)`
+const ErrorText = styled.p`
   width: 100%;
-  color: red;
+  color: ${({ theme }: { theme: ITheme }) => theme.colorP4};
   text-align: left;
+  margin-top: 4px;
 `;
 
 interface TextAreaProps {
@@ -51,23 +55,34 @@ interface TextAreaProps {
   onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   errorEnable?: boolean;
   errorText?: string;
-  multiple?: boolean;
+  header?: string;
+  disabled?: boolean;
+  marginTop?: number;
 }
 
 const TextArea = (props: TextAreaProps) => {
   const {
     value = "",
+    header,
     errorEnable = false,
     errorText = "",
     placeholder = "",
-    multiple = false,
+    disabled = false,
+    marginTop = 0,
     onChange = () => {},
   } = props;
 
   return (
-    <Container>
-      <TextAreaStyled placeholder={placeholder} className="full-width" onChange={onChange} value={value} />
-      {errorEnable && <ErrorText>{errorText}</ErrorText>}
+    <Container className="input-container" marginTop={marginTop}>
+      {!!header && <p className="header-title">{header}</p>}
+      <TextAreaStyled
+        placeholder={placeholder}
+        className="full-width fs-regular"
+        onChange={onChange}
+        value={value}
+        disabled={disabled}
+      />
+      {errorEnable && <ErrorText className="fs-regular">{errorText}</ErrorText>}
     </Container>
   );
 };

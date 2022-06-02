@@ -6,6 +6,7 @@ import withImport from "@module/ImportToken/ImportToken.enhance";
 import TextInput from "@components/Inputs/TextInput";
 import { TInner } from "@module/ImportToken/ImportToken.types";
 import { Button } from "@components/Core";
+import TextArea from "@components/Inputs/TextArea";
 
 const Styled = styled.div`
   input {
@@ -21,7 +22,7 @@ const Styled = styled.div`
 `;
 
 interface IProps {
-  onChangeTokenID: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeTokenID: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 export interface IMergeProps extends TInner, IProps {}
 
@@ -31,19 +32,18 @@ const ImportToken = React.memo((props: IMergeProps) => {
     <Styled>
       <Header title="Import Tokens" />
       <WrapContent paddingTop={true} className="default-padding-horizontal">
-        <TextInput
+        <TextArea
           value={tokenID || ""}
           header="Token ID Address"
           onChange={onChangeTokenID}
           errorEnable={true}
-          multiple={true}
           errorText={error}
         />
         {symbol && <TextInput value={symbol || ""} header="Token Symbol" disabled={true} />}
         {name && <TextInput value={name || ""} header="Token Name" disabled={true} />}
         {network && <TextInput value={network || ""} header="Network Name" disabled={true} />}
         {contractID && (
-          <TextInput value={contractID || ""} header="Token Contract Address" disabled={true} multiple={true} />
+          <TextArea value={contractID || ""} header="Token Contract Address" disabled={true} multiple={true} />
         )}
         <Button title="Add Token" className="btn-add-token" />
       </WrapContent>
