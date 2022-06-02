@@ -78,8 +78,6 @@ export const ThemedGlobalStyle = createGlobalStyle`
         color: ${({ theme }) => theme.primaryP7};
         scrollbar-color: transparent transparent; /*just hides the scrollbar for firefox */
         font-family: "Inter-Regular";
-        width: 375px;
-        height: 617px;
         font-style: normal;
         font-display: swap;
         box-sizing: border-box;
@@ -91,6 +89,9 @@ export const ThemedGlobalStyle = createGlobalStyle`
         line-height: ${FONT_SIZES.regular + 3}px;
         margin: auto;
         display: flex;
+        min-width: 375px;
+        max-width: 375px;
+        height: 600px;
         flex: 1;
         * {
              box-sizing: border-box;
@@ -243,11 +244,12 @@ export const ThemedGlobalStyle = createGlobalStyle`
 
     .scroll-view {
       position: relative;
-      overflow-x: scroll;
+      overflow-x: hidden;
       overflow-y: scroll;
-      //max-height: 480px;
-      //min-height: 480px;
-      height: 100%;
+      max-height: 536px;
+      min-height: 536px;
+      padding-bottom: 30px;
+      display: block;
     }
 
     .noselect {

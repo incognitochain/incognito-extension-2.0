@@ -8,7 +8,7 @@ const getTokenListNoCache = () => {
   return http1.get("coins/tokenlist").then((res: any) => res.map((token: any) => new PTokenModel(token, res)));
 };
 
-export const getTokensInfo = (tokenIDs: any = []) => {
+export const getTokensInfo = ({ tokenIDs }: { tokenIDs: string[] }) => {
   return http1
     .post("coins/tokeninfo", { TokenIDs: tokenIDs })
     .then((res: any) => res?.map((token: any) => new PTokenModel(token, res)))
