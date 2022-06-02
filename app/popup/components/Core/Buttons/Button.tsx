@@ -99,6 +99,7 @@ const Styled = styled.button`
   color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
   background-color: ${({ theme }: { theme: ITheme }) => theme.colorP3};
   &.btn-disabled {
+    background-color: ${({ theme }: { theme: ITheme }) => theme.colorP7};
   }
   .loading {
     position: absolute;

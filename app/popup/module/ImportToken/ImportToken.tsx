@@ -42,10 +42,8 @@ const ImportToken = React.memo((props: IMergeProps) => {
         {symbol && <TextInput value={symbol || ""} header="Token Symbol" disabled={true} />}
         {name && <TextInput value={name || ""} header="Token Name" disabled={true} />}
         {network && <TextInput value={network || ""} header="Network Name" disabled={true} />}
-        {contractID && (
-          <TextArea value={contractID || ""} header="Token Contract Address" disabled={true} multiple={true} />
-        )}
-        <Button title="Add Token" className="btn-add-token" />
+        {contractID && <TextArea value={contractID || ""} header="Token Contract Address" disabled={true} rows={2} />}
+        <Button disabled={!!error || !symbol} title="Add Token" className="btn-add-token" />
       </WrapContent>
     </Styled>
   );

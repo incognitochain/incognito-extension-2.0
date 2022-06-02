@@ -58,6 +58,7 @@ interface TextAreaProps {
   header?: string;
   disabled?: boolean;
   marginTop?: number;
+  rows?: number;
 }
 
 const TextArea = (props: TextAreaProps) => {
@@ -69,6 +70,7 @@ const TextArea = (props: TextAreaProps) => {
     placeholder = "",
     disabled = false,
     marginTop = 0,
+    rows = 4,
     onChange = () => {},
   } = props;
 
@@ -81,6 +83,7 @@ const TextArea = (props: TextAreaProps) => {
         onChange={onChange}
         value={value}
         disabled={disabled}
+        rows={rows}
       />
       {errorEnable && <ErrorText className="fs-regular">{errorText}</ErrorText>}
     </Container>

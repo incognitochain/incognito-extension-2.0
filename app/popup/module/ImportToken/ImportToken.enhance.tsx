@@ -18,7 +18,7 @@ const withImportToken = (WrappedComponent: FunctionComponent & any) => {
         const tokens: PTokenModel[] = await getTokensInfo({ tokenIDs: [tokenID] });
         const token = first(tokens);
         if (!token) {
-          return setState((value) => ({ ...value, error: "Cant find your tokenID" }));
+          return setState((value) => ({ ...value, error: "Can not find your tokenID" }));
         }
         setState((value) => ({
           ...value,
