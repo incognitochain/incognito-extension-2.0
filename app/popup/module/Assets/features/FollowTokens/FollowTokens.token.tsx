@@ -7,6 +7,7 @@ import { AppThunkDispatch } from "@redux/store";
 import { actionSelectedPrivacySet } from "@redux/selectedPrivacy";
 import { useHistory } from "react-router-dom";
 import { route as TokenDetailRoute } from "@module/TokenDetail";
+import { Image } from "@components/Core";
 
 const Styled = styled(Row)`
   height: 74px;
@@ -43,7 +44,7 @@ const Token = React.memo((props: SelectedPrivacy) => {
 
   return (
     <Styled className="default-padding-horizontal" onClick={onTokenClick}>
-      <img className="logo noselect" src={iconUrl} alt="logo-icon" />
+      <Image className="logo noselect" iconUrl={iconUrl} alt="logo-icon" />
       <Row className="wrap-content">
         <div>
           <p className="fs-medium noselect">{symbol}</p>
