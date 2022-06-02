@@ -346,8 +346,6 @@ export default class Account {
       new Validator("addFollowingTokens-accountSender", accountSender).required();
       new Validator("addFollowingTokens-tokens", tokens).required().array();
       const tokenIDs = tokens.map((token: any) => token?.tokenID).filter((tokenID: string) => !!tokenID);
-      console.log("SANG TEST::: ", tokenIDs);
-      console.log(accountSender.addListFollowingToken);
       await accountSender.addListFollowingToken({ tokenIDs });
     } catch (error) {
       console.log("addFollowingTokens error", error);

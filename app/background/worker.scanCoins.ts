@@ -8,6 +8,7 @@ import { IBalance } from "@core/types";
 import { actionFetchedFollowBalance, actionFetchingFollowBalance } from "@module/Assets";
 import { isFetchingAssetsSelector } from "@module/Assets";
 import { defaultAccountSelector } from "@redux/account/account.selectors";
+import uniq from "lodash/uniq";
 const { Account, PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 
 const tokens = [
@@ -37,7 +38,7 @@ export const scanCoins = async () => {
 
   try {
     const otaKey = accountSender.getOTAKey();
-
+    const _followTokens = accountSender.getListFollowingTokens();
     // Get coins scanned from storage, existed ignore and continue scan
     const coinsStore = await accountSender.getStorageCoinsScan();
     // const isScanned =
@@ -48,7 +49,9 @@ export const scanCoins = async () => {
     dispatch(actionFetchingScanCoins({ isFetching: true }));
 
     // start scan coins
-    const { elapsed, result } = await measure(accountSender, "scanCoins", { tokenList: tokens });
+    const { elapsed, result } = await measure(accountSender, "scanCoins", {
+      tokenList: uniq(tokens.concat(_followTokens)),
+    });
 
     if (!coinsStore) {
       dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey }));

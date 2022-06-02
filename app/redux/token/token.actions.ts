@@ -12,6 +12,7 @@ import PTokenModel from "@model/pTokenModel";
 import { actionFetchedFollowBalance, followsTokenAssetsSelector } from "@module/Assets";
 import { dispatch } from "@redux/store/store";
 import { IBalance } from "@core/types";
+import uniq from "lodash/uniq";
 const { PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
 
 const { PrivacyVersion, Validator } = require("incognito-chain-web-js/build/wallet");
@@ -129,18 +130,13 @@ const actionAddFollowToken =
           swipable: tokenID !== PRVIDSTR,
         },
       ]);
-      // setTimeout(() => {
-      //   const OTAKey = accountSender.OTAKey;
-      //   // dispatch(actionFetchedFollowBalance({ balance: newFollowed, OTAKey }));
-      // }, 200);
-
-      await accountSender.addListFollowingToken({ tokenIDs: [tokenID] });
-      // accountService.addFollowingTokens({ tokens: [{ tokenID }], accountSender }).then();
-      // // dispatch(setWallet(wallet));
+      await accountSender.addListFollowingToken({
+        tokenIDs: newFollowed.map(({ id }) => id),
+      });
+      // const OTAKey = accountSender.OTAKey;
+      // dispatch(actionFetchedFollowBalance({ balance: newFollowed, OTAKey }));
     } catch (error) {
-      console.log("SANG TEST:::: ERROR ", error);
-      // dispatch(actionAddFollowTokenFail(tokenID));
-      // throw error;
+      throw error;
     }
   };
 

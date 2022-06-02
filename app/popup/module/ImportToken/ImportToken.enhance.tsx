@@ -8,12 +8,16 @@ import PTokenModel from "@model/pTokenModel";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@redux/store";
 import { actionAddFollowToken } from "@redux/token";
+import { useLoading } from "@popup/context/loading";
+import { useHistory } from "react-router-dom";
 
 const log = createLogger("incognito:import-token");
 
 const withImportToken = (WrappedComponent: FunctionComponent & any) => {
   return (props: any) => {
     const dispatch: AppThunkDispatch = useDispatch();
+    const { showLoading } = useLoading();
+    const history = useHistory();
     const [{ tokenID, network, symbol, error, contractID, name }, setState] = React.useState<TInner>({});
 
     const getTokenInfo = async ({ tokenID }: { tokenID: string }) => {
@@ -53,9 +57,17 @@ const withImportToken = (WrappedComponent: FunctionComponent & any) => {
       _handleDetectToken({ tokenID: text });
     };
 
-    const onAddToken = () => {
+    const onAddToken = async () => {
       if (!tokenID) return;
-      dispatch(actionAddFollowToken({ tokenID })).then();
+      try {
+        showLoading(true);
+        await dispatch(actionAddFollowToken({ tokenID })).then();
+        history.goBack();
+      } catch (e) {
+        // Error
+      } finally {
+        showLoading(false);
+      }
     };
 
     return (
