@@ -1,4 +1,5 @@
 import React, { ImgHTMLAttributes } from "react";
+import imgLogo from "./inc_logo.png";
 
 interface IProps extends ImgHTMLAttributes<any> {
   iconUrl: string;
@@ -6,11 +7,13 @@ interface IProps extends ImgHTMLAttributes<any> {
 
 const Image = React.memo((props: IProps) => {
   const { iconUrl } = props;
-  const [imgSrc, setImgSrc] = React.useState<string | undefined>("");
-  const onError = () => setImgSrc("./icons/inc_logo.png");
 
-  console.log(imgSrc);
-  return <img className="logo noselect" src={imgSrc ? iconUrl : imgSrc} alt="logo-icon" onError={onError} />;
+  const onError = (e: any) => {
+    e.target.onerror = null;
+    e.target.src = imgLogo;
+  };
+
+  return <img className="logo noselect" src={iconUrl} alt="logo-icon" onError={onError} />;
 });
 
 export { Image };
