@@ -112,24 +112,3 @@ export const actionRequestAirdropNFTForListAccount =
       console.log("REQUEST AIRDROP NFT ERROR", error);
     }
   };
-
-export const actionSubmitOTAKeyForListAccount = (wallet: any) => async () => {
-  try {
-    if (!wallet) {
-      return;
-    }
-    const listAccount = await wallet.listAccount();
-    if (!listAccount) {
-      return;
-    }
-    const task = listAccount.map((account: any) => {
-      const accountWallet = accountService.getAccount(account, wallet);
-      if (!!accountWallet && accountWallet?.name) {
-        return accountWallet.submitOTAKey();
-      }
-    });
-    await Promise.all(task);
-  } catch (error) {
-    console.log("SUBMIT OTA KEY ERROR", error);
-  }
-};

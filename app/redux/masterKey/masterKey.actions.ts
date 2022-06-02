@@ -7,12 +7,7 @@ import {
 } from "@redux/masterKey/masterKey.selectors";
 import { ImportMasterKeyPayload, InitMasterKeyPayload } from "@redux/masterKey/masterKey.types";
 import { AppGetState, AppThunk, AppThunkDispatch } from "@redux/store";
-import {
-  actionRequestAirdropNFTForListAccount,
-  actionSubmitOTAKeyForListAccount,
-  reloadWallet,
-  setWallet,
-} from "@redux/wallet/wallet.actions";
+import { actionRequestAirdropNFTForListAccount, reloadWallet, setWallet } from "@redux/wallet/wallet.actions";
 import { getWalletAccounts } from "@services/api/masterKey";
 import { login } from "@services/authService";
 import { clearWalletCaches, getCache } from "@services/cache";
@@ -198,7 +193,6 @@ export const initMasterKey =
       await dispatch(switchMasterKeySuccess(defaultMasterKey.name));
       dispatch(reloadWallet());
       storeWalletAccountIdsOnAPI(wallet);
-      dispatch(actionSubmitOTAKeyForListAccount(wallet));
       dispatch(actionRequestAirdropNFTForListAccount(wallet));
     });
 
@@ -253,7 +247,6 @@ export const importMasterKey =
         await dispatch(importMasterKeySuccess(newMasterKey));
         await dispatch(switchMasterKeySuccess(data.masterKeyName));
         !!ignoreReloadWallet && dispatch(reloadWallet());
-        dispatch(actionSubmitOTAKeyForListAccount(wallet));
         dispatch(actionRequestAirdropNFTForListAccount(wallet));
         dispatch(syncUnlinkWithNewMasterKey(newMasterKey));
         dispatch(loadAllMasterKeyAccounts());
@@ -366,7 +359,6 @@ export const createMasterKey = (data: any) => async (dispatch: AppThunkDispatch,
       await dispatch(createMasterKeySuccess(newMasterKey));
       await dispatch(switchMasterKeySuccess(data.name));
       dispatch(reloadWallet());
-      dispatch(actionSubmitOTAKeyForListAccount(wallet));
       dispatch(actionRequestAirdropNFTForListAccount(wallet));
       storeWalletAccountIdsOnAPI(wallet);
       dispatch(loadAllMasterKeyAccounts());

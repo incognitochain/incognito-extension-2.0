@@ -1,6 +1,11 @@
 import React from "react";
 import styled, { ITheme } from "styled-components";
 import { Button } from "@components/Core";
+import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { paymentAddressOfDefaultAccountSelector } from "@redux/account/account.selectors";
+import { ellipsisCenter } from "@popup/utils";
+import { route as QRCodeRoute } from "@module/QRCode";
 
 const Styled = styled.div`
   display: flex;
@@ -20,10 +25,19 @@ const Styled = styled.div`
 `;
 
 const ActionsGroup = React.memo(() => {
+  const history = useHistory();
+  const paymentAddress = useSelector(paymentAddressOfDefaultAccountSelector);
+  const onShowQrCode = () => {
+    history.push(QRCodeRoute, {
+      title: "Payment Address",
+      label: "This is your address. Use it to receive any cryptocurrency from another Incognito address.",
+      value: paymentAddress,
+    });
+  };
   return (
     <Styled>
       <Button title="Send" className="fs-regular" />
-      <Button title="Receive" className="fs-regular" />
+      <Button title="Receive" className="fs-regular" onClick={onShowQrCode} />
     </Styled>
   );
 });
