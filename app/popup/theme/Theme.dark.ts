@@ -6,7 +6,7 @@ const darkTheme = (): Colors => {
     white,
     black,
 
-    body: black,
+    body: "#191919",
     content: "#303030",
 
     primaryP1: "#F3F3F3",
