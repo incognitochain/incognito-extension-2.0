@@ -98,8 +98,20 @@ const Styled = styled.button`
   width: 100%;
   color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
   background-color: ${({ theme }: { theme: ITheme }) => theme.colorP3};
+
+  :hover {
+    outline: none !important;
+    opacity: 0.9;
+  }
+
   &.btn-disabled {
     background-color: ${({ theme }: { theme: ITheme }) => theme.colorP7};
+  }
+  :disabled {
+    background-color: ${({ theme }: { theme: ITheme }) => theme.colorP7};
+    :hover {
+      opacity: 1;
+    }
   }
   .loading {
     position: absolute;

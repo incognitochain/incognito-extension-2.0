@@ -3,7 +3,7 @@ import { CONSTANT_CONFIGS } from "@constants/index";
 import { cachePromise, clearCache, getCache } from "@services/cache";
 import Storage from "@services/storage";
 import { cache } from "../cache";
-const { Validator } = require("incognito-chain-web-js/build/wallet");
+const { Validator } = require("incognito-chain-web-js/build/web/wallet");
 const sjcl = require("incognito-chain-web-js/lib/privacy/sjcl");
 const { codec, misc } = require("incognito-chain-web-js/lib/privacy/sjcl");
 const crypto = require("crypto");

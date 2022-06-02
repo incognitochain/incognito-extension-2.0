@@ -19,7 +19,7 @@ const log = createLogger("background:scanCoins");
 
 export const configAccount = async () => {
   const accountData = defaultAccountSelector(store.getState());
-  if (!accountData && accountData.PrivateKey) return;
+  if (!accountData || !accountData.PrivateKey) return;
   // const wallet = accountData.Wallet;
   let accountSender = new Account({});
   accountSender.setRPCClient("https://testnet.incognito.org/fullnode");

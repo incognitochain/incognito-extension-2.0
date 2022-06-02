@@ -11,7 +11,7 @@ import accountService from "@services/wallet/accountService";
 import uniqBy from "lodash/uniqBy";
 import { batch } from "react-redux";
 
-const { PrivacyVersion, PRVIDSTR } = require("incognito-chain-web-js/build/wallet");
+const { PrivacyVersion, PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
 
 const actionFetchingBalance = () => ({
   type: FollowActionType.ACTION_FETCHING_BALANCE,

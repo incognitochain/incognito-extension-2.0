@@ -1,4 +1,4 @@
-const { Validator } = require("incognito-chain-web-js/build/wallet");
+const { Validator } = require("incognito-chain-web-js/build/web/wallet");
 const sjcl = require("incognito-chain-web-js/lib/privacy/sjcl");
 
 const encryptData = (dataJSON: string, aesKey: string): string => {

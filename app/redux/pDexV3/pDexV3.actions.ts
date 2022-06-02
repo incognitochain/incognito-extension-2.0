@@ -4,7 +4,7 @@ import { getToken } from "@services/authService";
 import storage from "@services/storage";
 import Server from "@services/wallet/Server";
 
-const { PDexV3 } = require("incognito-chain-web-js/build/wallet");
+const { PDexV3 } = require("incognito-chain-web-js/build/web/wallet");
 
 export const actionGetPDexV3Inst = () => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
   const state = getState();

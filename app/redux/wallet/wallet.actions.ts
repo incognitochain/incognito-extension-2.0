@@ -18,7 +18,7 @@ import { isEqual } from "lodash";
 import { batch } from "react-redux";
 import { WalletActionType } from "./wallet.types";
 
-const { Validator } = require("incognito-chain-web-js/build/wallet");
+const { Validator } = require("incognito-chain-web-js/build/web/wallet");
 
 //--------------------------------------------------------------------
 // Pure Functions (Pure Action)

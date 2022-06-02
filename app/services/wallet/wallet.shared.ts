@@ -1,6 +1,6 @@
 import AccountModel from "@model/AccountModel";
 
-const { Validator } = require("incognito-chain-web-js/build/wallet");
+const { Validator } = require("incognito-chain-web-js/build/web/wallet");
 
 export const getAccountNameByAccount = (account: AccountModel) => {
   new Validator("account", account).object().required();

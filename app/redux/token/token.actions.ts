@@ -1,15 +1,18 @@
-import accountSelector from "@redux/account/account.selectors";
-import { AppGetState, AppThunkDispatch } from "@redux/store/index";
-import { getTokenList, getTokensInfo } from "@services/api/token";
+import accountSelector, { defaultAccountWalletSelector } from "@redux/account/account.selectors";
+import { AppGetState, AppThunkDispatch } from "@redux/store";
+import { getTokenList } from "@services/api/token";
 import { EXPIRED_TIME } from "@services/cache";
 import { uniqBy } from "lodash";
 import { TokenActionType } from "@redux/token/token.types";
 import { walletSelector } from "@redux/wallet/wallet.selectors";
 import accountService from "@services/wallet/accountService";
 import { batch } from "react-redux";
-import FollowSelector from "@redux/follow/follow.selectors";
 import FollowAction from "@redux/follow/follow.actions";
 import PTokenModel from "@model/pTokenModel";
+import { actionFetchedFollowBalance, followsTokenAssetsSelector } from "@module/Assets";
+import { dispatch } from "@redux/store/store";
+import { IBalance } from "@core/types";
+const { PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
 
 const { PrivacyVersion, Validator } = require("incognito-chain-web-js/build/wallet");
 
@@ -45,7 +48,6 @@ export const getPTokenList =
         // await getTokensInfo(coinsIndex),
         await getTokenList({ expiredTime }),
       ]);
-      console.log(pTokens);
       const tokens = uniqBy([...pTokens], "tokenId");
       dispatch(setListPToken(tokens));
       return tokens;
@@ -111,3 +113,35 @@ export const setToken = (token: any) => ({
   type: TokenActionType.SET,
   data: token,
 });
+
+const actionAddFollowToken =
+  ({ tokenID }: { tokenID: string }) =>
+  async (dispatch: AppThunkDispatch, getState: AppGetState) => {
+    try {
+      const state = getState();
+      const accountSender = defaultAccountWalletSelector(state);
+      if (!accountSender) return;
+      const followed: IBalance[] = followsTokenAssetsSelector(state);
+      const newFollowed = followed.concat([
+        {
+          id: tokenID,
+          amount: "0",
+          swipable: tokenID !== PRVIDSTR,
+        },
+      ]);
+      // setTimeout(() => {
+      //   const OTAKey = accountSender.OTAKey;
+      //   // dispatch(actionFetchedFollowBalance({ balance: newFollowed, OTAKey }));
+      // }, 200);
+
+      await accountSender.addListFollowingToken({ tokenIDs: [tokenID] });
+      // accountService.addFollowingTokens({ tokens: [{ tokenID }], accountSender }).then();
+      // // dispatch(setWallet(wallet));
+    } catch (error) {
+      console.log("SANG TEST:::: ERROR ", error);
+      // dispatch(actionAddFollowTokenFail(tokenID));
+      // throw error;
+    }
+  };
+
+export { actionAddFollowToken };

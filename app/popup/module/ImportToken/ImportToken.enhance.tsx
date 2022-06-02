@@ -5,11 +5,15 @@ import debounce from "lodash/debounce";
 import first from "lodash/first";
 import { createLogger } from "@core/utils";
 import PTokenModel from "@model/pTokenModel";
+import { useDispatch } from "react-redux";
+import { AppThunkDispatch } from "@redux/store";
+import { actionAddFollowToken } from "@redux/token";
 
 const log = createLogger("incognito:import-token");
 
 const withImportToken = (WrappedComponent: FunctionComponent & any) => {
   return (props: any) => {
+    const dispatch: AppThunkDispatch = useDispatch();
     const [{ tokenID, network, symbol, error, contractID, name }, setState] = React.useState<TInner>({});
 
     const getTokenInfo = async ({ tokenID }: { tokenID: string }) => {
@@ -49,6 +53,11 @@ const withImportToken = (WrappedComponent: FunctionComponent & any) => {
       _handleDetectToken({ tokenID: text });
     };
 
+    const onAddToken = () => {
+      if (!tokenID) return;
+      dispatch(actionAddFollowToken({ tokenID })).then();
+    };
+
     return (
       <WrappedComponent
         {...{
@@ -60,6 +69,7 @@ const withImportToken = (WrappedComponent: FunctionComponent & any) => {
           error,
           contractID,
           onChangeTokenID,
+          onAddToken,
         }}
       />
     );

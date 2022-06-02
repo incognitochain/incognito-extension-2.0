@@ -14,7 +14,7 @@ import {
   YellowBox,
 } from "./MasterKeyPage.styled";
 
-const { newMnemonic } = require("incognito-chain-web-js/build/wallet");
+const { newMnemonic } = require("incognito-chain-web-js/build/web/wallet");
 
 export interface MasterKeyPharsePageBaseProps {
   onBack?: () => void;

@@ -12,7 +12,7 @@ import {
   TextInputWraper,
 } from "./ImportMasterKeyPage.styled";
 
-const { validateMnemonic } = require("incognito-chain-web-js/build/wallet");
+const { validateMnemonic } = require("incognito-chain-web-js/build/web/wallet");
 
 const NAME_PATTERN = /^[A-Za-z0-9]*$/;
 
@@ -85,7 +85,6 @@ export const ImportMasterKeyPage: React.FC<ImportMasterKeyPageProps> = (props: I
         <MnemonicTextArea>
           <TextArea
             value={mnemonicLocal}
-            multiple={true}
             placeholder={"12 word recovery phrase"}
             onChange={mnemonicOnChange}
             errorEnable={mnemonicErrorVisible}

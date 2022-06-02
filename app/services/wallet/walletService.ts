@@ -22,7 +22,7 @@ const {
   Wallet,
   PrivacyVersion,
   setShardNumber,
-} = require("incognito-chain-web-js/build/wallet");
+} = require("incognito-chain-web-js/build/web/wallet");
 
 Wallet.RandomBytesFunc = crypto.randomBytes;
 Wallet.setPrivacyUtilRandomBytesFunc(crypto.randomBytes);

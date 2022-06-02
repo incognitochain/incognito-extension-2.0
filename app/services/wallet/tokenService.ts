@@ -6,7 +6,7 @@ import storage from "@services/storage";
 import { getAccountWallet } from "@services/wallet/wallet.shared";
 import { updateStatusHistory } from "@services/wallet/walletService";
 import _ from "lodash";
-const { Wallet, Validator } = require("incognito-chain-web-js/build/wallet");
+const { Wallet, Validator } = require("incognito-chain-web-js/build/web/wallet");
 
 export const PRV = {
   id: "0000000000000000000000000000000000000000000000000000000000000004",

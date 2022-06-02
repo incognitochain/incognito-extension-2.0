@@ -30,7 +30,7 @@ import { batch } from "react-redux";
 import { $CombinedState } from "redux";
 import { AccountActionType } from "./account.types";
 
-const { PrivacyVersion, Validator } = require("incognito-chain-web-js/build/wallet");
+const { PrivacyVersion, Validator } = require("incognito-chain-web-js/build/web/wallet");
 
 //--------------------------------------------------------------------
 // Pure Functions (Pure Actions)

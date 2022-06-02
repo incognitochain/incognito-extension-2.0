@@ -18,7 +18,7 @@ import {
 } from "./RestoreWalletPage.styled";
 import { route as AssetsRoute } from "@module/Assets/Assets.route";
 
-const { validateMnemonic } = require("incognito-chain-web-js/build/wallet");
+const { validateMnemonic } = require("incognito-chain-web-js/build/web/wallet");
 
 let validator = require("password-validator");
 
@@ -129,7 +129,6 @@ const RestoreWalletPage: React.FC = () => {
         <MnemonicTextArea>
           <TextArea
             value={mnemonic}
-            multiple={true}
             placeholder={"12 word recovery phrase"}
             onChange={mnemonicOnChange}
             errorEnable={mnemonicError}

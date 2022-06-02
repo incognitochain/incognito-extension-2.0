@@ -2,7 +2,7 @@ import { defaultAccountSelector } from "@redux/account/account.selectors";
 import { RootState } from "@redux/reducers/index";
 import orderBy from "lodash/orderBy";
 import { createSelector } from "reselect";
-const { PRVIDSTR } = require("incognito-chain-web-js/build/wallet");
+const { PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
 
 export const followStateSelector = createSelector(
   (state: RootState) => state.follow,

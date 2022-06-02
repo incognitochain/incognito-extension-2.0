@@ -14,7 +14,7 @@ const { init } = require("incognito-chain-web-js/build/web/wallet");
 window.store = store;
 window.persistor = persistor;
 
-const { gomobileServices } = require("incognito-chain-web-js/build/wallet");
+const { gomobileServices } = require("incognito-chain-web-js/build/web/wallet");
 const PortStream = require("extension-port-stream");
 const endOfStream = require("end-of-stream");
 const log = createLogger("sol:bg");

@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-catch */
 // import { STACK_TRACE } from "@services/exception/customError/code/webjsCode";
 import Server from "@services/wallet/Server";
-import _, { cloneDeep } from "lodash";
+import _, { cloneDeep, trim } from "lodash";
 // import { getPDexV3Instance } from "@screens/PDexV3";
 // import { delay } from "@src/utils/delay";
 // import { v4 } from "uuid";
@@ -20,7 +20,7 @@ import { PRV_ID } from "@constants/common";
 import { getToken } from "../authService";
 import { getPDexV3Instance } from "@/redux/pDexV3/pDexV3.actions";
 // import { getPDexV3Instance } from '@src/screens/PDexV3';
-const { PDexV3 } = require("incognito-chain-web-js/build/wallet");
+const { PDexV3 } = require("incognito-chain-web-js/build/web/wallet");
 
 const {
   AccountWallet,
@@ -32,7 +32,7 @@ const {
   PRVIDSTR,
   isPaymentAddress,
   isOldPaymentAddress,
-} = require("incognito-chain-web-js/build/wallet");
+} = require("incognito-chain-web-js/build/web/wallet");
 
 const TAG = "Account";
 
@@ -341,16 +341,14 @@ export default class Account {
     }
   }
 
-  static async addFollowingTokens(tokens: any, account: any, wallet: any) {
+  static async addFollowingTokens({ tokens, accountSender }: { accountSender: any; tokens: any[] }) {
     try {
-      new Validator("addFollowingTokens-account", account).required();
-      new Validator("addFollowingTokens-wallet", wallet).required();
+      new Validator("addFollowingTokens-accountSender", accountSender).required();
       new Validator("addFollowingTokens-tokens", tokens).required().array();
-      const accountWallet = this.getAccount(account, wallet);
-      const tokenIDs = tokens
-        .map((token: any) => token?.tokenID)
-        .filter((tokenID: string) => typeof tokenID === "string");
-      await accountWallet.addListFollowingToken({ tokenIDs });
+      const tokenIDs = tokens.map((token: any) => token?.tokenID).filter((tokenID: string) => !!tokenID);
+      console.log("SANG TEST::: ", tokenIDs);
+      console.log(accountSender.addListFollowingToken);
+      await accountSender.addListFollowingToken({ tokenIDs });
     } catch (error) {
       console.log("addFollowingTokens error", error);
       throw error;

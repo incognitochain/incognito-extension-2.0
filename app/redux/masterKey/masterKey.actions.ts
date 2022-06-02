@@ -46,7 +46,7 @@ import { MasterKeyImportAction, MasterKeyRemoveAction } from ".";
 import { uniqBy } from "lodash";
 import { loadMasterKeys } from "./masterKey.reducer";
 import { walletSelector } from "@redux/wallet/wallet.selectors";
-const { Validator } = require("incognito-chain-web-js/build/wallet");
+const { Validator } = require("incognito-chain-web-js/build/web/wallet");
 
 //--------------------------------------------------------------------
 // Pure Functions (Pure Action)
