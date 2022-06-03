@@ -100,7 +100,7 @@ class SelectedPrivacy {
   displayName: any;
   contractId: any;
   decimals: any;
-  pDecimals: any;
+  pDecimals: number;
   externalSymbol: any;
   paymentAddress: any;
   isWithdrawable: any;
@@ -133,7 +133,7 @@ class SelectedPrivacy {
   pricePrv: any;
   change: any;
 
-  amount: any;
+  amount: number;
 
   formatAmount?: string;
   formatPriceByUsd?: string;
@@ -146,6 +146,7 @@ class SelectedPrivacy {
     const isUnknown = _tokenID !== PRVIDSTR && !tokenId;
     const unknownText = "Incognito Token";
 
+    this.amount = 0;
     this.currencyType = pTokenData.currencyType;
     this.isMainCrypto = _tokenID === PRVIDSTR; // PRV
     this.isToken = tokenId !== PRVIDSTR && !!tokenId;
@@ -202,12 +203,6 @@ class SelectedPrivacy {
     if (!this.symbol && this.isIncognitoToken && !this.isMainCrypto) {
       this.symbol = "INC";
     }
-    // this.amount = token?.amount;
-    // if (this.isMainCrypto) {
-    //   this.amount = account?.value;
-    //   this.symbol = common.PRV.symbol;
-    // }
-    this.amount = this.amount || 0;
     this.listChildToken = pTokenData?.listChildToken;
     this.iconUrl = getIconUrl.call(this, pTokenData.image);
     this.change = pTokenData?.change;
@@ -226,7 +221,7 @@ class SelectedPrivacy {
     const followToken = followTokens.find(({ id }) => id === tokenId);
     if (followToken) {
       const { amount } = followToken;
-      this.amount = amount;
+      this.amount = new BigNumber(amount || "0").toNumber();
 
       const formatPriceByUsd = format.formatAmount({
         humanAmount: this.priceUsd,

@@ -12,6 +12,7 @@ import { reducer as configReducer } from "@popup/configs";
 import { reducer as assetsReducer } from "@module/Assets";
 import { reducer as themeReducer } from "@popup/theme";
 import { reducer as modalReducer } from "@module/Modal";
+import { reducer as sendReducer } from "@module/Send";
 
 import { $CombinedState, combineReducers } from "redux";
 
@@ -30,6 +31,7 @@ const rootReducers = combineReducers({
   themeReducer,
   modalReducer,
   selectedPrivacy,
+  sendReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducers> & {

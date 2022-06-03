@@ -40,8 +40,13 @@ export const selectedPrivacyToken = createSelector(
   },
 );
 
+export const selectedPrivacyNativeToken = createSelector(getPrivacyDataByTokenID, (getFn) => {
+  return getFn(PRVIDSTR);
+});
+
 export default {
   getPrivacyDataByTokenID,
   selectedPrivacyTokenID,
   selectedPrivacyToken,
+  selectedPrivacyNativeToken,
 };
