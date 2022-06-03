@@ -67,26 +67,26 @@ export const actionFetchFee =
       }
       dispatch(actionFetching({ isFetching: true }));
       // await actionInitEstimateFee({ screen })(dispatch, getState);
-      if (selectedPrivacy.isToken) {
-        // TODO: Check Valid address here
-
-        // const token = await account.getPrivacyTokenById(selectedPrivacy.tokenId, bridgeTokens, chainTokens);
-        if (selectedPrivacy?.isWithdrawable && screen === "UnShield") {
-          isAddressValidated = await token.bridgeWithdrawCheckValAddress({ address });
-          if (isAddressValidated) {
-            await actionFetchUserFees({ address, amount, memo, incognitoAmount, requestedAmount })(dispatch, getState);
-          }
-        }
-        try {
-          let feePTokenEstData = await token.getEstFeeFromNativeFee({
-            nativeFee: feeEst,
-          });
-          feePTokenEst = feePTokenEstData;
-          minFeePTokenEst = feePTokenEstData;
-        } catch (e) {
-          console.debug(e);
-        }
-      }
+      // if (selectedPrivacy.isToken) {
+      //   // TODO: Check Valid address here
+      //
+      //   // const token = await account.getPrivacyTokenById(selectedPrivacy.tokenId, bridgeTokens, chainTokens);
+      //   if (selectedPrivacy?.isWithdrawable && screen === "UnShield") {
+      //     isAddressValidated = await token.bridgeWithdrawCheckValAddress({ address });
+      //     if (isAddressValidated) {
+      //       await actionFetchUserFees({ address, amount, memo, incognitoAmount, requestedAmount })(dispatch, getState);
+      //     }
+      //   }
+      //   try {
+      //     let feePTokenEstData = await token.getEstFeeFromNativeFee({
+      //       nativeFee: feeEst,
+      //     });
+      //     feePTokenEst = feePTokenEstData;
+      //     minFeePTokenEst = feePTokenEstData;
+      //   } catch (e) {
+      //     console.debug(e);
+      //   }
+      // }
     } catch (error) {
       throw error;
     } finally {
@@ -105,4 +105,4 @@ export const actionFetchFee =
     }
   };
 
-export { actionInit, actionSendFetching, actionFetchedMaxNativeFee, actionFetchedMaxPTokenFee };
+export { actionInit, actionFetching, actionFetchedMaxNativeFee, actionFetchedMaxPTokenFee };
