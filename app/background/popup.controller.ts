@@ -43,6 +43,7 @@ export interface PopupControllerOpt {
   notifyAllDomains: ((payload: Notification) => Promise<void>) | null;
   extensionManager: ExtensionManager;
   persistData: any;
+  scanCoinHandler: any;
 }
 
 export class PopupController {
@@ -53,9 +54,19 @@ export class PopupController {
   private extensionManager: ExtensionManager;
   private popupState: PopupStateResolver;
   private persistData: any;
+  private scanCoinHandler: any;
 
   constructor(opts: PopupControllerOpt) {
-    const { store, notifyAllDomains, connection, extensionManager, actionManager, popupState, persistData } = opts;
+    const {
+      store,
+      notifyAllDomains,
+      connection,
+      extensionManager,
+      actionManager,
+      popupState,
+      persistData,
+      scanCoinHandler,
+    } = opts;
     this.store = store;
     this.actionManager = actionManager;
     this.popupState = popupState;
@@ -63,6 +74,7 @@ export class PopupController {
     this._notifyAllDomains = notifyAllDomains;
     this.extensionManager = extensionManager;
     this.persistData = persistData;
+    this.scanCoinHandler = scanCoinHandler;
   }
 
   createMiddleware() {
@@ -75,6 +87,7 @@ export class PopupController {
           {
             try {
               await this.initMasterKey(req.params as InitMasterKeyPayload);
+              await this.scanCoinHandler();
               this._notifyAll({
                 type: "stateChanged",
                 data: { state: "unlocked" },
@@ -110,6 +123,7 @@ export class PopupController {
           break;
         case "popup_importWallet":
           await this.importMasterKey(req.params as InitMasterKeyPayload);
+          await this.scanCoinHandler();
           this._notifyAll({
             type: "stateChanged",
             data: { state: "unlocked" },
@@ -117,6 +131,7 @@ export class PopupController {
           break;
         case "popup_restoreWallet":
           await this.restoreWallet(req.params);
+          await this.scanCoinHandler();
           this._notifyAll({
             type: "stateChanged",
             data: { state: "unlocked" },
@@ -132,6 +147,7 @@ export class PopupController {
               //   data: { state: "unlocked" },
               // });
               await this.unlockWallet(req.params);
+              await this.scanCoinHandler();
             } catch (err) {
               log("error: popup_unlockWallet failed  with error: %s", err);
               res.error = err;
@@ -143,6 +159,7 @@ export class PopupController {
           try {
             // await this.store.lockSecretBox();
             await this.lockWalletAction();
+            await this.scanCoinHandler();
             this._notifyAll({
               type: "stateChanged",
               data: { state: "locked" },
