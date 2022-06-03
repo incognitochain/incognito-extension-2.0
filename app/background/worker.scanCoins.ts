@@ -38,7 +38,7 @@ export const scanCoins = async () => {
 
   try {
     const otaKey = accountSender.getOTAKey();
-    const _followTokens = accountSender.getListFollowingTokens();
+    const _followTokens = (await accountSender.getListFollowingTokens()) || [];
     // Get coins scanned from storage, existed ignore and continue scan
     const coinsStore = await accountSender.getStorageCoinsScan();
     // const isScanned =
