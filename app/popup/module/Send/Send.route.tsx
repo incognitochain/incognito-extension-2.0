@@ -4,7 +4,7 @@ import { IRouteProps } from "@popup/module";
 export const route = "/send";
 
 const sendRoute: IRouteProps = {
-  path: route,
+  path: "/send/:id",
   component: lazy(() => import("./Send")),
 };
 

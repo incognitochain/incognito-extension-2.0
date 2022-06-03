@@ -2,10 +2,12 @@ import React from "react";
 import styled, { ITheme } from "styled-components";
 import { Button } from "@components/Core";
 import { useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { paymentAddressOfDefaultAccountSelector } from "@redux/account/account.selectors";
-import { ellipsisCenter } from "@popup/utils";
 import { route as QRCodeRoute } from "@module/QRCode";
+import { route as SendRoute } from "@module/Send";
+import { actionSelectedPrivacySet, selectedPrivacyToken } from "@redux/selectedPrivacy";
+import { AppThunkDispatch } from "@redux/store";
 
 const Styled = styled.div`
   display: flex;
@@ -26,7 +28,10 @@ const Styled = styled.div`
 
 const ActionsGroup = React.memo(() => {
   const history = useHistory();
+  const dispatch: AppThunkDispatch = useDispatch();
   const paymentAddress = useSelector(paymentAddressOfDefaultAccountSelector);
+  const { tokenId: tokenID } = useSelector(selectedPrivacyToken);
+
   const onShowQrCode = () => {
     history.push(QRCodeRoute, {
       title: "Payment Address",
@@ -34,9 +39,15 @@ const ActionsGroup = React.memo(() => {
       value: paymentAddress,
     });
   };
+
+  const navigateSendRoute = () => {
+    history.push(`${SendRoute}/${tokenID}`);
+    dispatch(actionSelectedPrivacySet({ tokenID: tokenID }));
+  };
+
   return (
     <Styled>
-      <Button title="Send" className="fs-regular" />
+      <Button title="Send" className="fs-regular" onClick={navigateSendRoute} />
       <Button title="Receive" className="fs-regular" onClick={onShowQrCode} />
     </Styled>
   );

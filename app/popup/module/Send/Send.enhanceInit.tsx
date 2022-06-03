@@ -19,10 +19,11 @@ const enhanceInit = (WrappedComp: React.FunctionComponent) => (props: any) => {
   const dispatch: AppThunkDispatch = useDispatch();
   const [init, setInit] = React.useState(false);
   const selectedPrivacy: SelectedPrivacy = useSelector(selectedPrivacyToken);
+  const send = useSelector(sendSelector);
   const account = useSelector(defaultAccountSelector);
   const { amount: prvAmount, pDecimals: prvPDecimals } = useSelector(selectedPrivacyNativeToken);
   const tokenAmount: number = selectedPrivacy?.amount;
-  const send = useSelector(sendSelector);
+
   const isInitingForm = !selectedPrivacy || !send.init || !init;
 
   const handleFetchedMaxNativeFee = async ({
@@ -64,6 +65,8 @@ const enhanceInit = (WrappedComp: React.FunctionComponent) => (props: any) => {
     if (init) {
       return;
     }
+
+    console.log("SANG TEST::: ", { prvAmount, selectedPrivacy });
     try {
       setInit(false);
       batch(() => {

@@ -51,25 +51,68 @@ export interface ISendData {
   feeError: string;
 }
 
+export interface IUserFees {
+  Level1: string;
+  Level2?: string;
+}
+export interface IUserFeesData {
+  PrivacyFees: IUserFees;
+  TokenFees: IUserFees;
+  Address?: string;
+  FeeAddress: string;
+  ID: string;
+}
+
+export interface IFeeTypes {
+  tokenId: string;
+  symbol: string;
+}
+
 export interface ISendState {
   isFetching: boolean;
   isFetched: boolean;
-  init: boolean;
-
-  typeSend: TypeSend;
-
-  // Fee
-  isUseFeePRV: boolean;
-  feePRV: number;
-  feePRVStr: string;
+  minFeePrv: number;
+  minFeePrvText: string;
+  feePrv: number;
+  feePrvText: string;
+  maxFeePrv: number;
+  maxFeePrvText: string;
   feePToken: number;
-  feePTokenStr: string;
-
-  // Amount
+  feePTokenText: string;
+  feeBurnPToken: number;
+  feeBurnPTokenText: string;
+  minFeePToken: number;
+  minFeePTokenText: string;
+  maxFeePToken: number;
+  maxFeePTokenText: string;
+  amount: number;
+  amountText: string;
   minAmount: number;
   minAmountText: string;
-  maxAmount: number;
-  maxAmountText: string;
+  init: boolean;
+  screen: TypeSend;
+  types: IFeeTypes[];
+  actived: string;
+  rate: number;
+  isAddressValidated: boolean;
+  isValidETHAddress: boolean;
+  userFees: {
+    isFetching: boolean;
+    isFetched: boolean;
+    data: IUserFeesData | any;
+    hasMultiLevel: boolean;
+    isMemoRequired: boolean;
+  };
+  isValidating: boolean;
+  fast2x: boolean;
+  totalFeePrv: number;
+  totalFeePrvText: string;
+  userFeePrv: string;
+  totalFeePToken: number;
+  totalFeePTokenText: string;
+  userFeePToken: string;
+  sending: false;
+  errorMessage: string;
 }
 
 export interface ISendFormData {
