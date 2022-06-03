@@ -1,12 +1,54 @@
 import { Action } from "redux";
 import { SendActionTypes } from "@module/Send/Send.constant";
 
-//----------------------------------------------
-// Reducer Payload
-//----------------------------------------------
 export enum TypeSend {
   SEND = "SEND",
   UNSHIELD = "UNSHIELD",
+}
+
+export interface ISendData {
+  feePrv: number;
+  feePToken: number;
+  fee: number;
+  feeText: string;
+  feeUnitByTokenId: string;
+  feePDecimals: number;
+  feeSymbol: string;
+  totalFee: number;
+  totalFeeText: string;
+  maxFee: number;
+  maxFeeText: string;
+  minAmount: number;
+  minAmountText: string;
+  maxAmount: number;
+  maxAmountText: string;
+  isUsedPRVFee: boolean;
+  isUseTokenFee: boolean;
+  isUnShield: boolean;
+  isSend: boolean;
+  hasMultiLevel: boolean;
+  inputAmount: string;
+  inputMemo: string;
+  inputAddress: string;
+  titleBtnSubmit: string;
+  forceSendTitleBtnSubmit: string;
+  disabledForm: boolean;
+  isIncognitoAddress: boolean;
+  isExternalAddress: boolean;
+  userFee: string;
+  originalFee: number;
+  nativeFee: string;
+  privacyFee: string;
+  incognitoAmount: string;
+  requestedAmount: string;
+  paymentAddress: string;
+  memo: string;
+  userFeeLevel: number;
+  userFeeSelection: number;
+  symbol: string;
+  amountFormatedNoClip: string;
+  totalFeeFormatedNoClip: string;
+  feeError: string;
 }
 
 export interface ISendState {
@@ -28,6 +70,12 @@ export interface ISendState {
   minAmountText: string;
   maxAmount: number;
   maxAmountText: string;
+}
+
+export interface ISendFormData {
+  amount: string;
+  memo?: string;
+  toAddress: string;
 }
 
 //----------------------------------------------

@@ -12,7 +12,7 @@ export const sendDataSelector = createSelector(
   sendSelector,
   selectedPrivacyToken,
   (state: RootState) => state,
-  (send, selectedPrivacy, state) =>
+  (send, selectedPrivacy, state): any =>
     getSendData({
       send,
       selectedPrivacy,
