@@ -26,11 +26,16 @@ import { Web3Connection } from "../core/connection";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { ActionManager } from "./lib/action-manager";
 import { PopupStateResolver } from "./lib/popup-state-resolver";
+import { dispatch } from "@redux/store/store";
+import { actionFetchingScanCoins } from "@redux/scanCoins";
+import { scanCoins } from "@background/worker.scanCoins";
 
 const createEngineStream = require("json-rpc-middleware-stream/engineStream");
 const PortStream = require("extension-port-stream");
 const RpcEngine = require("json-rpc-engine");
 const log = createLogger("sol:ctr");
+
+let scanCoinInterval: any;
 
 interface IncognitoControllerOpts {
   storedData: StoredData;
@@ -86,9 +91,11 @@ export default class IncognitoController {
       notifyAllDomains: this.notifyAllConnections.bind(this),
       extensionManager: this.extensionManager,
       persistData: this.saveStore.bind(this),
+      scanCoinHandler: this.scanCoinHandler.bind(this),
     });
     this.connections = {};
     // this.saveStore();
+    this.scanCoinHandler();
   }
 
   setPopupOpen() {
@@ -306,6 +313,21 @@ export default class IncognitoController {
     chrome.browserAction.setBadgeText({ text: label });
     chrome.browserAction.setBadgeBackgroundColor({ color: "#037DD6" });
   };
+
+  scanCoinHandler() {
+    const popupState = this.popupState;
+    if (popupState && popupState.get().walletState === "unlocked") {
+      if (!scanCoinInterval) {
+        scanCoins().then();
+        scanCoinInterval = setInterval(() => {
+          scanCoins().then();
+        }, 5000);
+      }
+    } else {
+      dispatch(actionFetchingScanCoins({ isFetching: false }));
+      scanCoinInterval && clearInterval(scanCoinInterval);
+    }
+  }
 }
 
 /**

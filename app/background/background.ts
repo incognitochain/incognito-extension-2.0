@@ -36,11 +36,11 @@ async function initialize() {
   const versionedData = await loadStateFromPersistence();
   setupController(versionedData).then();
 
-  dispatch(actionFetchingScanCoins({ isFetching: false }));
-  scanCoins().then();
-  setInterval(() => {
-    scanCoins().then();
-  }, 40000);
+  // dispatch(actionFetchingScanCoins({ isFetching: false }));
+  // scanCoins().then();
+  // setInterval(() => {
+  //   scanCoins().then();
+  // }, 40000);
 }
 
 async function loadWasmConfig(): Promise<void | Error> {
