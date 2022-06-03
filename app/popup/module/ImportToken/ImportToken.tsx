@@ -29,7 +29,7 @@ interface IProps {
 export interface IMergeProps extends TInner, IProps {}
 
 const ImportToken = React.memo((props: IMergeProps) => {
-  const { tokenID, symbol, network, name, contractID, error, onChangeTokenID, onAddToken } = props;
+  const { tokenID, symbol, network, name, contractID, pDecimals, error, onChangeTokenID, onAddToken } = props;
   return (
     <Styled>
       <Header title="Import Tokens" />
@@ -44,6 +44,7 @@ const ImportToken = React.memo((props: IMergeProps) => {
         {symbol && <TextInput value={symbol || ""} header="Token Symbol" disabled={true} />}
         {name && <TextInput value={name || ""} header="Token Name" disabled={true} />}
         {network && <TextInput value={network || ""} header="Network Name" disabled={true} />}
+        {pDecimals && <TextInput value={pDecimals.toString() || ""} header="Token pDecimal" disabled={true} />}
         {contractID && <TextArea value={contractID || ""} header="Token Contract Address" disabled={true} rows={2} />}
         <Button disabled={!!error || !symbol} title="Add Token" className="btn-add-token" onClick={onAddToken} />
       </WrapContent>

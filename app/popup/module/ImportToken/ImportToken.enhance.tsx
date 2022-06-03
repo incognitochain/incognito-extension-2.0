@@ -5,24 +5,30 @@ import debounce from "lodash/debounce";
 import first from "lodash/first";
 import { createLogger } from "@core/utils";
 import PTokenModel from "@model/pTokenModel";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppThunkDispatch } from "@redux/store";
 import { actionAddFollowToken } from "@redux/token";
 import { useLoading } from "@popup/context/loading";
 import { useHistory } from "react-router-dom";
+import { followsTokenAssetsSelector } from "@module/Assets";
 
 const log = createLogger("incognito:import-token");
 
 const withImportToken = (WrappedComponent: FunctionComponent & any) => {
   return (props: any) => {
     const dispatch: AppThunkDispatch = useDispatch();
+    const followed = useSelector(followsTokenAssetsSelector);
     const { showLoading } = useLoading();
     const history = useHistory();
-    const [{ tokenID, network, symbol, error, contractID, name }, setState] = React.useState<TInner>({});
+    const [{ tokenID, network, symbol, error, contractID, name, pDecimals }, setState] = React.useState<TInner>({});
 
     const getTokenInfo = async ({ tokenID }: { tokenID: string }) => {
       try {
         if (!tokenID) return;
+        const isExist = followed.some(({ id }) => id.toLowerCase() === tokenID);
+        if (isExist) {
+          return setState((value) => ({ ...value, error: "Token have been added before" }));
+        }
         const tokens: PTokenModel[] = await getTokensInfo({ tokenIDs: [tokenID] });
         const token = first(tokens);
         if (!token) {
@@ -35,6 +41,7 @@ const withImportToken = (WrappedComponent: FunctionComponent & any) => {
           network: token.network,
           symbol: token.symbol,
           name: token.name,
+          pDecimals: token.pDecimals,
           error: undefined,
         }));
       } catch (error) {
@@ -80,6 +87,7 @@ const withImportToken = (WrappedComponent: FunctionComponent & any) => {
           name,
           error,
           contractID,
+          pDecimals,
           onChangeTokenID,
           onAddToken,
         }}

@@ -3,6 +3,7 @@ export interface TInner {
   symbol?: string;
   network?: string;
   contractID?: string;
+  pDecimals?: number;
   name?: string;
   error?: string;
 }
