@@ -7,17 +7,8 @@ import { defaultAccountSelector, listAccountSelector } from "@redux/account/acco
 import { throttle, trim } from "lodash";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
-// import { defaultAccountNameSelector } from '@module/Account/Account.selector';
-import { Link, useHistory } from "react-router-dom";
-// import { useSelector } from 'react-redux';
+import { useHistory } from "react-router-dom";
 import styled, { ITheme } from "styled-components";
-import { route } from "./SelectAccount.route";
-
-const CustomLink = styled(Link)`
-  padding: 9px 16px;
-  border: 1px solid ${({ theme }: { theme: ITheme }) => theme.primaryP7};
-  border-radius: 8px;
-`;
 
 const AccountNameButtonStyled = styled.button`
   padding: 9px 16px;
@@ -45,7 +36,7 @@ export const BtnSelectAccount = React.memo(() => {
     callAsync(request("popup_switchAccount", { accountName: trim(accountName) }), {
       progress: { message: "Switching Account..." },
       success: { message: "Switch Done" },
-      onSuccess: (result) => {
+      onSuccess: () => {
         // history.goBack();
         console.log("Swtich Account Done: TO DO ");
       },
@@ -79,7 +70,7 @@ export const BtnSelectAccount = React.memo(() => {
 
   return (
     <>
-      <AccountNameButtonStyled onClick={handleClickListItem} className="btn-select-account fw-medium ellipsis">
+      <AccountNameButtonStyled onClick={handleClickListItem} className="btn-select-account fw-medium ellipsis hover">
         {accountNameSelectedTrim}
       </AccountNameButtonStyled>
       <Menu
