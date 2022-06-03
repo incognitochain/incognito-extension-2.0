@@ -50,7 +50,7 @@ const Header = (props: IMergeProps & any) => {
   const { rightHeader, showBack = true, selectAccount, handleClick, renderHeaderTitle }: IMergeProps = props;
   return (
     <Styled>
-      <div className="left">
+      <div className="left hover">
         {showBack && <ArrowLeftIcon onClick={handleClick} />}
         {renderHeaderTitle()}
       </div>

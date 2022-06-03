@@ -26,7 +26,7 @@ const SearchVector = React.memo((props: any) => {
 const Search = (props: IProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   const { className = "" } = props;
   return (
-    <Styled type="button" className={`icon ${className || ""}`} {...props}>
+    <Styled type="button" className={`icon hover ${className || ""}`} {...props}>
       <SearchVector />
     </Styled>
   );

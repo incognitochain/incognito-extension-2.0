@@ -308,6 +308,12 @@ export const ThemedGlobalStyle = createGlobalStyle`
     .tooltip:hover .tooltiptext {
       visibility: visible;
     }
+    
+    .hover {
+      :hover {
+        opacity: 0.8;
+      }
+    }
 `;
 
 export const Row = styled.div`

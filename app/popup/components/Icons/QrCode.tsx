@@ -61,7 +61,7 @@ const QrCodeVector = React.memo((props: any) => {
 function QrCode(props: IProps) {
   const { onClick } = props;
   return (
-    <Styled className="icon qrcode-icon" onClick={onClick}>
+    <Styled className="icon hover qrcode-icon" onClick={onClick}>
       <QrCodeVector />
     </Styled>
   );

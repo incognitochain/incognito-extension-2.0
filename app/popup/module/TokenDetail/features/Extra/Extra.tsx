@@ -2,6 +2,7 @@ import React from "react";
 import styled, { ITheme } from "styled-components";
 import { useSelector } from "react-redux";
 import { selectedPrivacyToken } from "@redux/selectedPrivacy";
+import { Image } from "@components/Core";
 
 const Styled = styled.div`
   display: flex;
@@ -26,7 +27,7 @@ const Extra = React.memo(() => {
   const { iconUrl, formatAmount, symbol, formatBalanceByUsd } = useSelector(selectedPrivacyToken);
   return (
     <Styled>
-      <img className="logo noselect" src={iconUrl} alt="token-detail-icon" />
+      <Image iconUrl={iconUrl} alt="token-detail-icon" />
       <p className="fs-avglarge amount">{`${formatAmount} ${symbol}`}</p>
       <p className="fs-regular price-amount">{`$${formatBalanceByUsd}`}</p>
     </Styled>
