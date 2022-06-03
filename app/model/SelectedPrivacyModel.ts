@@ -257,7 +257,7 @@ class SelectedPrivacy {
           humanAmount: new BigNumber(convert.toString({ text: formatAmount.toString() }))
             .multipliedBy(convert.toString({ text: formatPriceByUsd }))
             .toString(),
-          decimals: this.decimals,
+          decimals: this.pDecimals,
         }),
         decimals: this.pDecimals,
       });
