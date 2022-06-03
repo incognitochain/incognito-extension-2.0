@@ -14,7 +14,6 @@ const { init } = require("incognito-chain-web-js/build/web/wallet");
 window.store = store;
 window.persistor = persistor;
 
-const { gomobileServices } = require("incognito-chain-web-js/build/web/wallet");
 const PortStream = require("extension-port-stream");
 const endOfStream = require("end-of-stream");
 const log = createLogger("sol:bg");
@@ -34,37 +33,20 @@ async function initialize() {
   await loadWasmConfig();
   await loadStoreRedux();
 
-  dispatch(actionFetchingScanCoins({ isFetching: false }));
+  const versionedData = await loadStateFromPersistence();
+  setupController(versionedData).then();
 
+  dispatch(actionFetchingScanCoins({ isFetching: false }));
   scanCoins().then();
   setInterval(() => {
     scanCoins().then();
   }, 40000);
-
-  // TODO: remove command
-  // const versionedData = await loadStateFromPersistence();
-  // await setupController(versionedData);
-  const versionedData = await loadStateFromPersistence();
-  setupController(versionedData);
-  // workerGetCoins().then();
-
-  // setInterval(() => {
-  //   scanCoins().then();
-  // }, 2000);
 }
 
 async function loadWasmConfig(): Promise<void | Error> {
   try {
     // new method load wasm
     await init(null, 8);
-
-    // TODO: Remove load wasm
-    // const wasmUrl = chrome.runtime.getURL("assets/privacy.wasm");
-    // if (typeof gomobileServices.loadWasm === "function") {
-    //   await gomobileServices.loadWasm(wasmUrl);
-    // } else {
-    //   return new Error("loadWasm something wrong");
-    // }
   } catch (error) {
     console.log("loadWasmConfig Error ", error);
   }

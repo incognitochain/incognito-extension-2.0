@@ -66,16 +66,19 @@ export const withBalance = (WrappedComponent: FunctionComponent) => (props: any)
   const { request, popupState } = useBackground();
   const OTAKey = useSelector(otaKeyOfDefaultAccountSelector);
   const loadFollowTokensBalance = throttle(() => request("popup_followTokensBalance", {}), 1000);
+  const walletState = popupState?.walletState;
+  const interval = React.useRef<any>(null);
 
   React.useEffect(() => {
-    if (popupState && popupState.walletState === "unlocked") {
+    if (!walletState || !OTAKey || walletState !== "unlocked" || interval.current) return;
+    interval.current = setInterval(() => {
       loadFollowTokensBalance();
-      // interval load balance
-      setInterval(() => {
-        loadFollowTokensBalance();
-      }, 2000);
-    }
-  }, [OTAKey]);
+    }, 2000);
+    return () => {
+      clearInterval(interval.current);
+      interval.current = null;
+    };
+  }, [OTAKey, walletState]);
 
   return <WrappedComponent {...props} />;
 };
