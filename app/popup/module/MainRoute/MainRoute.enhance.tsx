@@ -11,6 +11,14 @@ import { useBackground } from "@popup/context/background";
 import throttle from "lodash/throttle";
 import { useLoading } from "@popup/context/loading";
 
+const withBackgroundState = (WrappedComponent: FunctionComponent) => {
+  return (props: any) => {
+    const { popupState } = useBackground();
+    if (!popupState) return null;
+    return <WrappedComponent {...props} />;
+  };
+};
+
 const withPToken = (WrappedComponent: FunctionComponent) => {
   return (props: any) => {
     const dispatch: AppThunkDispatch = useDispatch();
@@ -55,19 +63,21 @@ const withLoading = (WrappedComponent: any) => {
 };
 
 export const withBalance = (WrappedComponent: FunctionComponent) => (props: any) => {
-  const { request } = useBackground();
+  const { request, popupState } = useBackground();
   const OTAKey = useSelector(otaKeyOfDefaultAccountSelector);
   const loadFollowTokensBalance = throttle(() => request("popup_followTokensBalance", {}), 1000);
 
   React.useEffect(() => {
-    loadFollowTokensBalance();
-    // interval load balance
-    setInterval(() => {
+    if (popupState && popupState.walletState === "unlocked") {
       loadFollowTokensBalance();
-    }, 2000);
+      // interval load balance
+      setInterval(() => {
+        loadFollowTokensBalance();
+      }, 2000);
+    }
   }, [OTAKey]);
 
   return <WrappedComponent {...props} />;
 };
 
-export default compose(withPToken, withRouteChange, withLoading, withBalance);
+export default compose(withBackgroundState, withPToken, withRouteChange, withLoading, withBalance);

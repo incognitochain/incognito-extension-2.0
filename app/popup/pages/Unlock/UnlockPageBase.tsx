@@ -36,7 +36,6 @@ export const UnlockPageBase: React.FC = () => {
             progress: { message: "Unlocking wallet..." },
             success: { message: "Wallet unlocked" },
             onSuccess: () => {
-              // history.push(Paths.homeRouteStack);
               showLoading(false);
               history.push(AssetsRoute);
             },

@@ -131,7 +131,7 @@ export class PopupController {
               //   type: "stateChanged",
               //   data: { state: "unlocked" },
               // });
-              await this.unlockWallet(req.params as InitMasterKeyPayload);
+              await this.unlockWallet(req.params);
             } catch (err) {
               log("error: popup_unlockWallet failed  with error: %s", err);
               res.error = err;
@@ -249,14 +249,19 @@ export class PopupController {
   }
 
   async unlockWallet({ password }: { password: string }) {
-    await this.store.unlockSecretBox(password);
-    const wallet = await dispatch(unlockMasterKey(password));
-    this.store.setWallet(wallet);
-    this.persistData();
+    try {
+      await this.store.unlockSecretBox(password);
+      const wallet = await dispatch(unlockMasterKey(password));
+      this.store.setWallet(wallet);
+      this.persistData();
+    } catch (e) {
+      console.log("unlockWallet ERROR ", e);
+    }
   }
 
   async initMasterKey(data: InitMasterKeyPayload) {
     const { mnemonic, masterKeyName, password } = data;
+
     const wallet = await dispatch(initMasterKey({ mnemonic, masterKeyName, password }));
     const salt = await Storage.getItem(APP_SALT_KEY);
     const passphraseEncrypted = await Storage.getItem(APP_PASS_PHRASE_CIPHER);
