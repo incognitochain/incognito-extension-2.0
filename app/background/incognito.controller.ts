@@ -321,7 +321,7 @@ export default class IncognitoController {
         scanCoins().then();
         scanCoinInterval = setInterval(() => {
           scanCoins().then();
-        }, 5000);
+        }, 40000);
       }
     } else {
       dispatch(actionFetchingScanCoins({ isFetching: false }));

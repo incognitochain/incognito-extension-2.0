@@ -8,3 +8,7 @@ export { default as CopyIcon } from "./Copy";
 export { default as LoadingIcon } from "./Loading";
 export { default as SearchIcon } from "./Search";
 export { default as ArrowCircleIcon } from "./ArrowCircle";
+export { default as SettingIcon } from "./SettingIcon";
+export { default as NetworkIcon } from "./NetworkIcon";
+export { default as LockIcon } from "./LockIcon";
+export { default as RightArrowIcon } from "./RightArrowIcon";

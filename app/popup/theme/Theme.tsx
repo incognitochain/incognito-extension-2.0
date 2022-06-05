@@ -314,6 +314,13 @@ export const ThemedGlobalStyle = createGlobalStyle`
         opacity: 0.8;
       }
     }
+
+    .hover-with-cursor {
+      :hover {
+        opacity: 0.8;
+        cursor: pointer;
+      }
+    }
 `;
 
 export const Row = styled.div`
