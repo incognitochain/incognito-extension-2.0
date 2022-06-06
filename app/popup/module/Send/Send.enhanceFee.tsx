@@ -2,8 +2,8 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppThunkDispatch } from "@redux/store";
-import { ISendData, TypeSend } from "@module/Send/Send.types";
-import { sendDataSelector } from "@module/Send/Send.selector";
+// import { ISendData, TypeSend } from "@module/Send/Send.types";
+// import { sendDataSelector } from "@module/Send/Send.selector";
 // import { useDispatch, useSelector } from "react-redux";
 // import { actionFetchFee } from "./Send.actions";
 // import { ISendData } from "./Send.types";

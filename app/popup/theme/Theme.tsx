@@ -321,6 +321,13 @@ export const ThemedGlobalStyle = createGlobalStyle`
         cursor: pointer;
       }
     }
+
+    .hook-row-space-between {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
 `;
 
 export const Row = styled.div`

@@ -3,8 +3,6 @@ import styled, { ITheme } from "styled-components";
 
 export const Styled = styled.div`
   margin-bottom: 16px;
-  height: 75px;
-  border-bottom: 1px solid ${({ theme }: { theme: ITheme }) => theme.primaryP10};
 
   .input-wrapper {
     position: relative;
@@ -28,6 +26,7 @@ export const Styled = styled.div`
     height: 54px;
     display: flex;
     flex: 1;
+    border-bottom: 1px solid ${({ theme }: { theme: ITheme }) => theme.primaryP10};
   }
   .sub-title {
     width: 60px;
@@ -36,6 +35,7 @@ export const Styled = styled.div`
     margin-top: 10px;
   }
   p.error {
+    color: ${({ theme }: { theme: ITheme }) => theme.colorP4};
   }
   p.warning {
   }

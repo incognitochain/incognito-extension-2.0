@@ -2,7 +2,7 @@ import BigNumber from "bignumber.js";
 import isEmpty from "lodash/isEmpty";
 import convert from "@popup/utils/convert";
 import format from "@popup/utils/format";
-const { keyServices } = require("incognito-chain-web-js/build/web/wallet");
+const { isPaymentAddress, isOldPaymentAddress } = require("incognito-chain-web-js/build/web/wallet");
 
 const isSafeInteger = (number: number) => Math.abs(number) <= Number.MAX_SAFE_INTEGER;
 
@@ -50,10 +50,13 @@ const regexp =
     pattern && !pattern.test(value) ? message : undefined;
 
 const incognitoAddress = (message?: string) => (value: string) => {
-  if (value?.length < 15 || !keyServices.checkPaymentAddress(value)) {
-    return message || "Invalid address";
+  if (value && value?.length < 15) {
+    return "Invalid address";
   }
-  if (value && !keyServices.checkPaymentAddress(value)) {
+  if (isOldPaymentAddress(value)) {
+    return message || "Require an Incognito address V2";
+  }
+  if (!isPaymentAddress(value)) {
     return message || "Use Unshield to exit Incognito";
   }
   return undefined;

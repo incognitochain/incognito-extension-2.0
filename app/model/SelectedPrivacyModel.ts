@@ -127,7 +127,7 @@ class SelectedPrivacy {
   isBSC: boolean;
   isBNB: boolean;
   isMATIC: boolean;
-  tokenId: any;
+  tokenId: string;
 
   priceUsd: any;
   pricePrv: any;
@@ -159,7 +159,7 @@ class SelectedPrivacy {
     this.isPrivateCoin = pTokenData?.type === common.PRIVATE_TOKEN_TYPE.COIN;
 
     // pToken is private token (pETH <=> ETH, pBTC <=> BTC, ...)
-    this.isIncognitoToken = (!this.isPToken && !this.isMainCrypto) || detectToken.ispNEO(this?.tokenId); // is tokens were issued from users
+    this.isIncognitoToken = (!this.isPToken && !this.isMainCrypto) || detectToken.ispNEO(tokenId); // is tokens were issued from users
     this.isErc20Token = this.isPrivateToken && this.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.ERC20;
     this.isBep2Token = this.isPrivateToken && this.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.BNB_BEP2;
     this.isPolygonErc20Token =

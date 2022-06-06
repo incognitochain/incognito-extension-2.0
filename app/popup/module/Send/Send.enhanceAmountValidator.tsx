@@ -4,7 +4,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import convert from "@utils/convert";
 import { validator } from "@components/ReduxForm";
-import { ISendData } from "./Send.types";
+// import { ISendData } from "./Send.types";
 import { sendDataSelector } from "./Send.selector";
 
 export interface TInner {

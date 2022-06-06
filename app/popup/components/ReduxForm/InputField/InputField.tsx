@@ -1,6 +1,6 @@
 import React from "react";
 import { WrappedFieldInputProps, WrappedFieldMetaProps } from "redux-form";
-import { AddressBookIcon, EyeIcon, InfiniteIcon, ScanIcon } from "@components/Icons";
+import { AddressBookIcon, EyeIcon, ScanIcon } from "@components/Icons";
 import { INPUT_FIELD } from "./InputField.constant";
 import { Styled } from "./InputField.styled";
 import MaxBtn from "@components/Max/Max";
@@ -18,6 +18,8 @@ export interface IInputFieldProps {
   onClickScan?: () => any;
   warning?: string;
   errorCustom?: string;
+  leftTitle: string;
+  rightTitle?: string;
 }
 
 interface IInputProps {
@@ -53,7 +55,10 @@ const InputField = (props: IInputFieldProps) => {
     onClickScan,
     warning,
     errorCustom,
+    leftTitle,
+    rightTitle,
   } = props;
+  console.log("SANG TEST:::: ", props);
   const { error: errorMeta, touched, submitting } = meta;
   const error = errorMeta || errorCustom;
   const [togglePassword, setTogglePassword] = React.useState(false);
@@ -89,8 +94,8 @@ const InputField = (props: IInputFieldProps) => {
   const renderHeader = () => {
     return (
       <Row className="wrap-input-header">
-        <p className="fs-small">Amount</p>
-        <p className="fs-small">1000 BTC</p>
+        <p className="fs-small fw-regular">{leftTitle}</p>
+        {rightTitle && <p className="fs-small fw-regular">{rightTitle}</p>}
       </Row>
     );
   };
@@ -121,11 +126,11 @@ const InputField = (props: IInputFieldProps) => {
         const value = componentProps?.value || input?.value || "";
         return (
           <div className="hook-row-space-between wrapper">
-            <p className="sub-title fw-medium fs-regular ellipsis">{subtitle}</p>
-            <div className="wrap-content">
-              <p className="ellipsis">{value}</p>
-              {suffix && <p className="suffix ellipsis">{suffix}</p>}
-            </div>
+            <p className="fs-large">{subtitle}</p>
+            <p className="fs-large">{value}</p>
+            {/*<div className="wrap-content">*/}
+            {/*  {suffix && <p className="suffix ellipsis">{suffix}</p>}*/}
+            {/*</div>*/}
           </div>
         );
       }

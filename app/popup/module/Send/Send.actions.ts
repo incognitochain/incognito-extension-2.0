@@ -1,12 +1,4 @@
-import {
-  SendFetchingAction,
-  SendFetchingPayload,
-  SendActionTypes,
-  SendSetMaxPRVFeePayload,
-  SendSetMaxPRVFeeAction,
-  SendSetMaxPTokenFeePayload,
-  SendSetMaxPTokenFeeAction,
-} from "@module/Send";
+import { SendFetchingAction, SendFetchingPayload, SendActionTypes } from "@module/Send";
 import { AppThunkDispatch } from "@redux/store";
 import { RootState } from "@redux/reducers";
 import SelectedPrivacy from "@model/SelectedPrivacyModel";
@@ -17,22 +9,8 @@ import BigNumber from "bignumber.js";
 
 const MAX_FEE_PER_TX = 100;
 
-const actionInit = () => ({
-  type: SendActionTypes.INIT,
-});
-
 const actionFetching = (payload: SendFetchingPayload): SendFetchingAction => ({
   type: SendActionTypes.FETCHING,
-  payload,
-});
-
-const actionFetchedMaxNativeFee = (payload: SendSetMaxPRVFeePayload): SendSetMaxPRVFeeAction => ({
-  type: SendActionTypes.SET_MAX_NATIVE_FEE,
-  payload,
-});
-
-const actionFetchedMaxPTokenFee = (payload: SendSetMaxPTokenFeePayload): SendSetMaxPTokenFeeAction => ({
-  type: SendActionTypes.SET_MAX_PTOKEN_FEE,
   payload,
 });
 
@@ -105,4 +83,4 @@ export const actionFetchFee =
     }
   };
 
-export { actionInit, actionFetching, actionFetchedMaxNativeFee, actionFetchedMaxPTokenFee };
+export { actionFetching };

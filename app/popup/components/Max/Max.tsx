@@ -12,7 +12,7 @@ const Styled = styled.button`
 
 const MaxBtn = React.memo((props: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
-    <Styled {...props}>
+    <Styled type="button" {...props}>
       <p>Max</p>
     </Styled>
   );
