@@ -1,8 +1,11 @@
-import styled from "styled-components";
+import styled, { ITheme } from "styled-components";
 // import { COLORS, ITheme } from 'src/styles';
 
 export const Styled = styled.div`
-  margin-bottom: 15px;
+  margin-bottom: 16px;
+  height: 75px;
+  border-bottom: 1px solid ${({ theme }: { theme: ITheme }) => theme.primaryP10};
+
   .input-wrapper {
     position: relative;
     flex: 1;
@@ -10,12 +13,19 @@ export const Styled = styled.div`
       margin-top: 10px;
     }
   }
+  .wrap-input-header {
+    margin-bottom: 8px;
+    justify-content: space-between;
+    p {
+      color: ${({ theme }: { theme: ITheme }) => theme.primaryP8};
+    }
+  }
   .align-right {
     text-align: right;
   }
   .input-container {
     position: relative;
-    height: 40px;
+    height: 54px;
     display: flex;
     flex: 1;
   }
@@ -35,14 +45,16 @@ export const Styled = styled.div`
   }
   .input-container > input,
   .textarea-container > textarea {
-    position: absolute;
-    left: 0;
-    top: 0;
+    //position: absolute;
+    //left: 0;
+    //top: 0;
     width: 100%;
     height: 100%;
-    border-radius: 8px;
-    padding: 0 10px;
+    max-height: 32px;
+    color: ${({ theme }) => theme.primaryP7};
     :focus {
+    }
+    :hover {
     }
   }
   .textarea-container > textarea {
@@ -74,16 +86,16 @@ export const Styled = styled.div`
   }
   .input-container .sub-icon {
     position: absolute;
-    top: 50%;
+    top: 30%;
     transform: translateY(-50%);
   }
 
   .input-amount {
     > input {
-      padding-right: 40px;
+      padding-right: 70px;
     }
     .sub-icon {
-      right: 10px;
+      right: 0;
     }
   }
 

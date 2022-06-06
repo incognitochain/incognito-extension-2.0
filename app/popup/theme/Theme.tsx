@@ -314,6 +314,10 @@ export const ThemedGlobalStyle = createGlobalStyle`
         opacity: 0.8;
       }
     }
+
+    .default-margin-top {
+      margin-top: 24px;
+    }
 `;
 
 export const Row = styled.div`

@@ -13,8 +13,8 @@ export interface TInner {}
 
 const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
   const dispatch: AppThunkDispatch = useDispatch();
-  const { inputAddress, inputAmount, inputMemo, isIncognitoAddress, isExternalAddress }: ISendData =
-    useSelector(sendDataSelector);
+  // const { inputAddress, inputAmount, inputMemo, isIncognitoAddress, isExternalAddress }: ISendData =
+  //   useSelector(sendDataSelector);
   const handleChangeForm = async ({
     address,
     amount,

@@ -18,12 +18,13 @@ const darkTheme = (): Colors => {
     primaryP7: "#FFFFFF",
     primaryP8: "#9C9C9C",
     primaryP9: "#404040",
+    primaryP10: "#484848",
 
     // specific color
     colorP1: "#FF9500",
     colorP2: "#34C759",
     colorP3: "#1A73E8",
-    colorP4: "#FF3B30",
+    colorP4: "#F6465D",
     colorP5: "#64A121",
     colorP6: "#00407E",
     colorP7: "#C0C0C0",

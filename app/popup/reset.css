@@ -532,3 +532,16 @@ input {
 .preload-container .icon {
   margin-bottom: 30px;
 }
+
+/* Remove arrow input number */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

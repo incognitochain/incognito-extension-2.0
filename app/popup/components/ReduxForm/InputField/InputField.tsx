@@ -3,6 +3,8 @@ import { WrappedFieldInputProps, WrappedFieldMetaProps } from "redux-form";
 import { AddressBookIcon, EyeIcon, InfiniteIcon, ScanIcon } from "@components/Icons";
 import { INPUT_FIELD } from "./InputField.constant";
 import { Styled } from "./InputField.styled";
+import MaxBtn from "@components/Max/Max";
+import { Row } from "@popup/theme";
 
 export interface IInputFieldProps {
   meta: WrappedFieldMetaProps;
@@ -30,12 +32,12 @@ interface ITextAreaProps {
 
 export const Input = React.memo((props: IInputProps) => {
   const { input: inputProps, componentProps } = props;
-  return <input type="text" autoComplete="off" {...inputProps} {...componentProps} />;
+  return <input className="fs-large" type="text" autoComplete="off" {...inputProps} {...componentProps} />;
 });
 
 export const TextArea = React.memo((props: ITextAreaProps) => {
   const { input: inputProps, componentProps } = props;
-  return <textarea autoComplete="off" {...inputProps} {...componentProps} />;
+  return <textarea className="fs-large" autoComplete="off" {...inputProps} {...componentProps} />;
 });
 
 const InputField = (props: IInputFieldProps) => {
@@ -83,6 +85,15 @@ const InputField = (props: IInputFieldProps) => {
       </>
     );
   };
+
+  const renderHeader = () => {
+    return (
+      <Row className="wrap-input-header">
+        <p className="fs-small">Amount</p>
+        <p className="fs-small">1000 BTC</p>
+      </Row>
+    );
+  };
   const renderInput = () => {
     switch (inputType) {
       case INPUT_FIELD.amount:
@@ -90,7 +101,7 @@ const InputField = (props: IInputFieldProps) => {
           <div className="input-container input-amount">
             <Input {...{ input, componentProps }} />
             <div className="sub-icon">
-              <InfiniteIcon onClick={onClickMax} />
+              <MaxBtn onClick={onClickMax} />
             </div>
           </div>
         );
@@ -150,6 +161,7 @@ const InputField = (props: IInputFieldProps) => {
   };
   return (
     <Styled>
+      {renderHeader()}
       {renderInput()}
       {renderError()}
     </Styled>
