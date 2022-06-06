@@ -315,8 +315,11 @@ export const ThemedGlobalStyle = createGlobalStyle`
       }
     }
 
-    .default-margin-top {
-      margin-top: 24px;
+    .hover-with-cursor {
+      :hover {
+        opacity: 0.8;
+        cursor: pointer;
+      }
     }
 `;
 

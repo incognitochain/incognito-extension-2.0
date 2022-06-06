@@ -8,6 +8,8 @@ import { GetStartedPage } from "@popup/pages/GetStarted/GetStartedPage";
 import HomeRouteStack from "@popup/pages/Home/HomeRouteStack";
 import ImportMasterKeyRouteStack from "@popup/pages/Import/ImportMasterKeyRouteStack";
 import RestoreWalletPage from "@popup/pages/RestoreWallet/RestoreWalletPage";
+import SettingsPage from "@popup/pages/Settings/Settings";
+import NetworkPage from "@popup/pages/Network/Network";
 import { UnlockPage } from "@popup/pages/Unlock/UnlockPage";
 import React, { Suspense } from "react";
 // import NotFoundPage from "@popup/pages/NotFound/NotFoundPage";
@@ -75,6 +77,8 @@ const MainRoute = () => {
           <Route exact path={Paths.restoreWalletPage} component={RestoreWalletPage} />
           <Route exact path={Paths.getStatedPage} component={GetStartedPage} />
           <Route exact path={Paths.unlockPage} component={UnlockPage} />
+          <Route exact path={Paths.settingsPage} component={SettingsPage} />
+          <Route exact path={Paths.networkPage} component={NetworkPage} />
           {defaultRoute(`default-route`, {}, popupState, isNotification)}
         </Switch>
       </Suspense>

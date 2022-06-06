@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "@components/Header";
-import { AddressBar, TotalBalance, FollowTokensList, LockWallet } from "@module/Assets/features";
+import { AddressBar, TotalBalance, FollowTokensList, LockWallet, Settings } from "@module/Assets/features";
 import { SearchIcon } from "@components/Icons";
 import { useHistory } from "react-router-dom";
 import { route as ImportTokensRoute } from "@module/ImportToken";
@@ -14,7 +14,12 @@ const Assets = React.memo(() => {
     <>
       <Header
         showBack={false}
-        rightHeader={<LockWallet />}
+        rightHeader={
+          <>
+            <Settings />
+            <LockWallet />
+          </>
+        }
         customHeader={<SearchIcon onClick={navigateImportTokens} />}
         selectAccount
       />
