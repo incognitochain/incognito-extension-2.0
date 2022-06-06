@@ -37,10 +37,11 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergePro
     //   val = handleStandardizedAddress(value);
     // }
     dispatch(change(FORM_CONFIGS.formName, field, val));
-    dispatch(focus(FORM_CONFIGS.formName, field));
+    // dispatch(focus(FORM_CONFIGS.formName, field));
   };
 
   const onClickMax = async () => {
+    console.log("SANG TEST: ", maxAmountText);
     if (!maxAmountText) return;
     onChangeField(maxAmountText, FORM_CONFIGS.amount).then();
   };

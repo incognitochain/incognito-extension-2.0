@@ -75,7 +75,7 @@ export const withBalance = (WrappedComponent: FunctionComponent) => (props: any)
     if (!walletState || !OTAKey || walletState !== "unlocked" || interval.current) return;
     interval.current = setInterval(() => {
       loadFollowTokensBalance();
-    }, 2000);
+    }, 20000);
     return () => {
       clearInterval(interval.current);
       interval.current = null;

@@ -2,8 +2,7 @@ import React from "react";
 import { batch, useDispatch, useSelector } from "react-redux";
 import { reset } from "redux-form";
 import SelectedPrivacy from "@model/SelectedPrivacyModel";
-import { selectedPrivacyNativeToken, selectedPrivacyToken } from "@redux/selectedPrivacy/selectedPrivacy.selectors";
-import { defaultAccountSelector } from "@redux/account/account.selectors";
+import { selectedPrivacyToken } from "@redux/selectedPrivacy/selectedPrivacy.selectors";
 import { sendSelector } from "@module/Send/Send.selector";
 import { FORM_CONFIGS } from "./Send.constant";
 import { AppThunkDispatch } from "@redux/store";
@@ -17,16 +16,10 @@ const enhanceInit = (WrappedComp: React.FunctionComponent) => (props: any) => {
   const [init, setInit] = React.useState(false);
   const selectedPrivacy: SelectedPrivacy = useSelector(selectedPrivacyToken);
   const send = useSelector(sendSelector);
-  const account = useSelector(defaultAccountSelector);
-  const { amount: prvAmount, pDecimals: prvPDecimals } = useSelector(selectedPrivacyNativeToken);
-  const tokenAmount: number = selectedPrivacy?.amount;
-
   const isInitingForm = !selectedPrivacy || !send.init || !init;
 
-  const initData = async () => {
+  const initData = React.useCallback(async () => {
     if (init) return;
-
-    console.log("SANG TEST::: ", { prvAmount, selectedPrivacy });
     try {
       setInit(false);
       batch(() => {
@@ -37,7 +30,7 @@ const enhanceInit = (WrappedComp: React.FunctionComponent) => (props: any) => {
     } finally {
       setInit(true);
     }
-  };
+  }, []);
 
   React.useEffect(() => {
     initData().then();

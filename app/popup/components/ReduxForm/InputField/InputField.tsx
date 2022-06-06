@@ -58,7 +58,6 @@ const InputField = (props: IInputFieldProps) => {
     leftTitle,
     rightTitle,
   } = props;
-  console.log("SANG TEST:::: ", props);
   const { error: errorMeta, touched, submitting } = meta;
   const error = errorMeta || errorCustom;
   const [togglePassword, setTogglePassword] = React.useState(false);

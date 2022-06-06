@@ -6,6 +6,9 @@ import { FORM_CONFIGS } from "@module/Send";
 import { INPUT_FIELD } from "@components/ReduxForm/InputField";
 import styled from "styled-components";
 import { IMergeProps } from "@module/Send/Send.enhance";
+import { Button } from "@components/Core";
+import { useSelector } from "react-redux";
+import { sendDataSelector } from "@module/Send/Send.selector";
 
 const Styled = styled.div`
   .scroll-view {
@@ -15,6 +18,7 @@ const Styled = styled.div`
 
 const SendForm = React.memo((props: IMergeProps & any) => {
   const { onClickMax, validateAddress, warningAddress } = props;
+  const { networkFeeSymbol, networkFeeText } = useSelector(sendDataSelector);
   return (
     <Styled>
       <WrapContent className="default-padding-horizontal">
@@ -51,12 +55,13 @@ const SendForm = React.memo((props: IMergeProps & any) => {
             leftTitle="Network Fee"
             inputType={INPUT_FIELD.leftTitleDisplayPTag}
             componentProps={{
-              value: "PRV",
+              value: networkFeeSymbol,
             }}
-            subtitle="0.0000001"
+            subtitle={networkFeeText}
             // onClickMax={onClickMax}
             // validate={validateAmount}
           />
+          <Button title="Send anonymously" style={{ marginTop: 24 }} onClick={() => {}} />
         </form>
       </WrapContent>
     </Styled>

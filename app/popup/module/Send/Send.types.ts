@@ -10,6 +10,8 @@ export interface ISendData {
   maxAmount: number;
   maxAmountText: string;
   screen: TypeSend;
+  networkFeeText: string;
+  networkFeeSymbol: string;
 }
 
 export interface ISendFormData {

@@ -36,8 +36,8 @@ const getMaxSendAmount = ({
   if (screen === TypeSend.UNSHIELD) {
     maxAmount = new BigNumber(maxAmount).minus(sendTokenID === burnFeeTokenID ? burnFee : 0).toNumber();
   }
-  const maxAmountText = format
-    .formatAmount({
+  const maxAmountText = convert
+    .toHumanAmount({
       originalAmount: maxAmount,
       decimals: sendTokenPDecimal,
     })
@@ -58,7 +58,7 @@ const getSendData = ({
   selectedPrivacy: SelectedPrivacy;
   getDataByTokenID: (tokenID: string) => SelectedPrivacy;
   state: RootState;
-}): ISendData => {
+}): ISendData & any => {
   // Send Selector
   const _sendSelector = sendSelector(state);
 
@@ -98,10 +98,23 @@ const getSendData = ({
     state,
   });
 
+  const networkFeeText = format.formatAmount({
+    originalAmount: networkFeeAmount,
+    decimals: networkFeeToken.pDecimals,
+    clipAmount: false,
+  });
+
+  console.log("SANG TEST::: 111 ", {
+    networkFeeAmount,
+    networkFeeToken: networkFeeToken.pDecimals,
+  });
+
   return {
     maxAmount,
     maxAmountText,
     screen,
+    networkFeeText,
+    networkFeeSymbol: networkFeeToken.symbol,
   };
 };
 

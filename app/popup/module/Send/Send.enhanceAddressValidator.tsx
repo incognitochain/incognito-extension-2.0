@@ -18,7 +18,7 @@ const enhanceAddressValidation = (WrappedComp: React.FunctionComponent) => (prop
   //   // default
   //   return validator.combinedUnknownAddress;
   // }, [paymentAddress, isIncognitoAddress, isExternalAddress, isAddressValidated]);
-  const getAddressValidator = () => {
+  const getAddressValidator = React.useCallback(() => {
     if (screen === TypeSend.SEND) {
       return validator.combinedIncognitoAddress;
     }
@@ -26,17 +26,16 @@ const enhanceAddressValidation = (WrappedComp: React.FunctionComponent) => (prop
     //   return getExternalAddressValidator();
     // }
     return [];
-  };
+  }, [screen]);
 
-  const getWarningAddress = () => {
+  const getWarningAddress = React.useCallback(() => {
     // if (isExternalAddress) {
     //   return 'You are exiting Incognito and going public.';
     // }
     return "You are exiting Incognito and going public.";
-  };
+  }, []);
 
   const validateAddress = getAddressValidator();
-
   const warningAddress = getWarningAddress();
 
   return (
