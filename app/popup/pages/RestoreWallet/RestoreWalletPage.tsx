@@ -47,13 +47,18 @@ const RestoreWalletPage: React.FC = () => {
   const [verifyErrorMessage, setVerifyErrorMessage] = useState("");
 
   const restoreWallet = async () => {
-    showLoading(true);
+    showLoading({
+      value: true,
+      message: "Waiting...",
+    });
     callAsync(request("popup_importWallet", { mnemonic, password }), {
       progress: { message: "Restore Wallet..." },
       success: { message: "Restore Done" },
       onSuccess: (result: any) => {
         // history.push(Paths.homeRouteStack);
-        showLoading(false);
+        showLoading({
+          value: false,
+        });
         history.push(AssetsRoute);
       },
     });
@@ -158,128 +163,6 @@ const RestoreWalletPage: React.FC = () => {
       </BodyLayout>
     </>
   );
-
-  // return (
-  //   <div style={{ flex: 1, display: "flex", flexDirection: "column", backgroundColor: "#404040" }}>
-  //     <NavigationBar goBack={onBack} title={"Reset Wallet"} />
-  //     <MainLayout>
-  //       <Typography variant="subtitle1" style={{ marginBottom: 12 }}>
-  //         Restore your wallet using your twelve seed words. Note that this will delete any existing wallet on this
-  //         device.
-  //       </Typography>
-  //       <FormControl fullWidth variant="outlined" color="info">
-  //         <InputLabel htmlFor="outlined-adornment-password" color="info" sx={{ color: "#9C9C9C" }}>
-  //           12 word recovery phrase
-  //         </InputLabel>
-  //         <OutlinedInput
-  //           id="outlined-adornment-password"
-  //           sx={{ backgroundColor: "#404040" }}
-  //           multiline={true}
-  //           value={mnemonic}
-  //           maxRows={2}
-  //           onChange={mnemonicOnChange}
-  //           inputProps={{
-  //             style: { color: "white", height: 50 },
-  //           }}
-  //           label="12 word recovery phrase"
-  //         />
-  //         {mnemonicError.length > 0 && (
-  //           <FormHelperText error style={{ color: "red", fontSize: 13 }}>
-  //             {mnemonicError}
-  //           </FormHelperText>
-  //         )}
-  //       </FormControl>
-
-  //       <Typography variant="h6" style={{ marginTop: 10, marginBottom: 10 }}>
-  //         Password
-  //       </Typography>
-  //       <FormControl fullWidth variant="outlined" color="info">
-  //         <InputLabel htmlFor="outlined-adornment-password" color="info" sx={{ color: "#9C9C9C" }}>
-  //           Create new password (min 10 chars)
-  //         </InputLabel>
-  //         <OutlinedInput
-  //           id="outlined-adornment-password"
-  //           sx={{ backgroundColor: "#404040" }}
-  //           type={passwordVisible ? "text" : "password"}
-  //           value={password}
-  //           onChange={passwordOnChange}
-  //           endAdornment={
-  //             <InputAdornment position="end">
-  //               <IconButton
-  //                 aria-label="toggle password visibility"
-  //                 onClick={handleClickShowPassword}
-  //                 onMouseDown={handleMouseDownPassword}
-  //                 edge="end"
-  //                 sx={{ color: "white" }}
-  //               >
-  //                 {passwordVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
-  //               </IconButton>
-  //             </InputAdornment>
-  //           }
-  //           inputProps={{
-  //             style: { color: "white" },
-  //           }}
-  //           label="Create new password (min 10 chars)"
-  //         />
-
-  //         {passwordError.length > 0 && (
-  //           <FormHelperText error style={{ color: "red", fontSize: 13 }}>
-  //             {passwordError}
-  //           </FormHelperText>
-  //         )}
-  //       </FormControl>
-
-  //       <Typography variant="h6" style={{ marginTop: 5, marginBottom: 10 }}>
-  //         Verify
-  //       </Typography>
-  //       <FormControl fullWidth variant="outlined" color="info">
-  //         <InputLabel htmlFor="outlined-adornment-verify" color="info" sx={{ color: "#9C9C9C" }}>
-  //           Enter the password again
-  //         </InputLabel>
-  //         <OutlinedInput
-  //           id="outlined-adornment-verify"
-  //           sx={{ backgroundColor: "#404040", marginBottom: 2 }}
-  //           type={verifyVisible ? "text" : "password"}
-  //           value={verify}
-  //           onChange={verifyOnChange}
-  //           endAdornment={
-  //             <InputAdornment position="end">
-  //               <IconButton
-  //                 aria-label="toggle verify visibility"
-  //                 onClick={handleClickShowVerify}
-  //                 onMouseDown={handleMouseDownVerify}
-  //                 edge="end"
-  //                 sx={{ color: "white" }}
-  //               >
-  //                 {verifyVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
-  //               </IconButton>
-  //             </InputAdornment>
-  //           }
-  //           inputProps={{
-  //             style: { color: "white" },
-  //           }}
-  //           label="Enter the password again"
-  //         />
-
-  //         {verifyPassword.length > 0 && (
-  //           <FormHelperText error style={{ color: "red", fontSize: 13 }}>
-  //             {verifyPassword}
-  //           </FormHelperText>
-  //         )}
-  //       </FormControl>
-
-  //       <Button
-  //         fullWidth
-  //         variant="contained"
-  //         color="secondary"
-  //         style={{ height: 50, marginTop: 20 }}
-  //         onClick={restoreWalletOnPressed}
-  //       >
-  //         {"Restore"}
-  //       </Button>
-  //     </MainLayout>
-  //   </div>
-  // );
 };
 
 export default RestoreWalletPage;

@@ -112,8 +112,7 @@ export const loadAllMasterKeyAccountsSuccess = (accounts: any): MasterKeyLoadAll
 //--------------------------------------------------------------------
 
 const updateNetwork = async () => {
-  // const serverJSONString = await storage.getItem('$servers');
-  const serverJSONString = null;
+  const serverJSONString = await Storage.getItem("$servers");
   const servers = JSON.parse(serverJSONString || "[]");
   const currentServer = servers.find((item: any) => item.default) || {
     id: "mainnet",
@@ -155,7 +154,7 @@ export const unlockMasterKey =
     await getPassphrase();
     await updateNetwork();
     await login();
-    const servers = await serverService.get();
+    const servers = await serverService.getServerList();
     if (!servers || servers?.length === 0) {
       await serverService.setDefaultList();
     }
@@ -281,7 +280,7 @@ export const getWalletInstanceByImportMasterKey = async (data: any) => {
 export const loadWallet = () => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
   try {
     await login();
-    const servers = await serverService.get();
+    const servers = await serverService.getServerList();
     if (!servers || servers?.length === 0) {
       await serverService.setDefaultList();
     }

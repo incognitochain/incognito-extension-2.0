@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-finally */
 /* eslint-disable no-useless-catch */
 import _ from "lodash";
 import storage from "@services/storage";
@@ -13,16 +14,13 @@ export const MAINNET_1_FULLNODE = "http://51.83.237.20:9338";
 export const TESTNET_FULLNODE = "https://testnet.incognito.org/fullnode";
 export const TESTNET1_FULLNODE = "https://testnet1.incognito.org/fullnode";
 export const DEV_TEST_FULLNODE = "http://172.105.114.134:8334";
-// export const DEV_TEST_FULLNODE =
-//   'https://pdexv3test.incognito.corncob.dev/block/f77320ece044035ef7f5c0681bfa921c326ac92707b67bcacce7a78d067df7d9?beacon=true';
+
 export const DEFAULT_SHARD_NUMBER = 8;
 
-interface IServer {
-  id?: string;
+export interface ServerModel {
+  id: string;
   default?: boolean;
   address?: string;
-  username?: string;
-  password?: string;
   name?: string;
   coinServices?: any;
   pubsubServices?: any;
@@ -37,18 +35,11 @@ interface IServer {
   web3Configs?: any;
   pancakeConfigs?: any;
   uniConfigs?: any;
+  portalServices?: any;
 }
 
-let cachedList: any[] = [];
+let cachedList: ServerModel[] = [];
 
-const TEST_NODE_SERVER = {
-  id: "testnode",
-  default: false,
-  address: "http://51.161.117.88:6354",
-  username: "",
-  password: "",
-  name: "Test Node",
-};
 const MAIN_NET_SERVER = {
   id: "mainnet",
   default: true,
@@ -59,7 +50,7 @@ const MAIN_NET_SERVER = {
   coinServices: "https://api-coinservice.incognito.org",
   pubsubServices: "https://api-coinservice.incognito.org/txservice",
   requestServices: "https://api-coinservice.incognito.org",
-  apiServices: "https://api-coinservice.incognito.org",
+  apiServices: "https://api-service.incognito.org",
   shardNumber: DEFAULT_SHARD_NUMBER,
   IncContractAddress: "0x43D037A562099A4C2c95b1E2120cc43054450629",
   IncBSCContractAddress: "0x43D037A562099A4C2c95b1E2120cc43054450629",
@@ -72,6 +63,16 @@ const MAIN_NET_SERVER = {
   uniConfigs: UNI_CONSTANTS.UNI_MAINNET_CONFIGS,
   web3Configs: WEB3_CONSTANT.WEB3_MAINNET_CONFIGS,
 };
+
+const TEST_NODE_SERVER = {
+  id: "testnode",
+  default: false,
+  address: "http://51.161.117.88:6354",
+  username: "",
+  password: "",
+  name: "Test Node",
+};
+
 const BETA_SERVER = {
   id: "beta",
   default: false,
@@ -82,7 +83,7 @@ const BETA_SERVER = {
   coinServices: "http://51.161.119.66:9005",
   pubsubServices: "http://51.161.119.66:9005/txservice",
   requestServices: "http://51.161.119.66:9005",
-  apiServices: "https://api-coinservice.incognito.org",
+  apiServices: "https://api-service.incognito.org",
   shardNumber: DEFAULT_SHARD_NUMBER,
   IncContractAddress: "0x43D037A562099A4C2c95b1E2120cc43054450629",
   IncBSCContractAddress: "0x43D037A562099A4C2c95b1E2120cc43054450629",
@@ -102,15 +103,15 @@ const TEST_NET_SERVER = {
   username: "",
   password: "",
   name: "Testnet",
-  coinServices: "http://51.89.21.38:8096",
-  pubsubServices: "http://51.89.21.38:9096",
-  requestServices: "http://51.89.21.38:8096",
+  coinServices: "https://api-coinservice-staging.incognito.org",
+  pubsubServices: "https://api-coinservice-staging.incognito.org/txservice",
+  requestServices: "https://api-coinservice-staging.incognito.org",
   apiServices: "https://staging-api-service.incognito.org",
   shardNumber: DEFAULT_SHARD_NUMBER,
   IncContractAddress: "0x2f6F03F1b43Eab22f7952bd617A24AB46E970dF7",
   IncBSCContractAddress: "0x2f6F03F1b43Eab22f7952bd617A24AB46E970dF7",
   explorer: "https://testnet.incognito.org",
-  tradeServices: "http://51.89.21.38:8096",
+  tradeServices: "https://api-coinservice-staging.incognito.org",
   portalServices: "http://51.161.119.66:8020",
   webviewChartServices: "https://chart-webview-staging.incognito.org",
   bscConfigs: BSC_CONSTANT.BSC_TESTNET_CONFIGS,
@@ -128,7 +129,6 @@ const LOCAL_SERVER = {
   name: "Local",
   portalServices: "http://139.162.55.124:8010",
 };
-
 const TEST_NET_1_SERVER = {
   id: "testnet1",
   default: false,
@@ -201,7 +201,7 @@ const BETA_66 = {
   coinServices: "http://51.161.119.66:9005",
   pubsubServices: "http://51.161.119.66:8001",
   requestServices: "http://51.161.119.66:9005",
-  apiServices: "https://api-coinservice.incognito.org",
+  apiServices: "https://api-service.incognito.org",
   shardNumber: DEFAULT_SHARD_NUMBER,
   IncContractAddress: "0x43D037A562099A4C2c95b1E2120cc43054450629",
   IncBSCContractAddress: "0x43D037A562099A4C2c95b1E2120cc43054450629",
@@ -225,7 +225,7 @@ const BETA_2 = {
   coinServices: "https://api-coinservice-beta2.incognito.org",
   pubsubServices: "https://api-coinservice-beta2.incognito.org/txservice",
   requestServices: "https://api-coinservice-beta2.incognito.org",
-  apiServices: "https://api-coinservice.incognito.org",
+  apiServices: "https://api-service.incognito.org",
   shardNumber: DEFAULT_SHARD_NUMBER,
   IncContractAddress: "0x43D037A562099A4C2c95b1E2120cc43054450629",
   IncBSCContractAddress: "0x43D037A562099A4C2c95b1E2120cc43054450629",
@@ -257,101 +257,47 @@ export const KEY = {
   DEFAULT_LIST_SERVER,
 };
 
-const combineCachedListWithDefaultList = (_cachedList: any[]) => {
-  if (!_cachedList) return DEFAULT_LIST_SERVER;
-  return DEFAULT_LIST_SERVER.map((server) => {
-    const cachedServer = _cachedList.find((item) => item.id === server.id);
-    return {
-      ...server,
-      default: cachedServer?.default,
-    };
-  });
-};
-
 export default class Server {
-  static get() {
-    if (cachedList.length > 0) {
-      const servers = combineCachedListWithDefaultList(cachedList);
-      return Promise.resolve(servers);
-    }
-    return storage.getItem(KEY.SERVER).then((strData) => {
-      // console.log("strData ", strData);
-
-      if (!strData) return DEFAULT_LIST_SERVER;
-      cachedList = combineCachedListWithDefaultList(JSON.parse(strData) || []);
-      if (!cachedList || cachedList?.length === 0) {
-        return DEFAULT_LIST_SERVER;
-      }
-
-      if (!cachedList.find((item) => item.id === DEV_TEST_SERVER.id)) {
-        cachedList.push(DEV_TEST_SERVER);
-      }
-      if (!cachedList.find((item) => item.id === TEST_NODE_SERVER.id)) {
-        cachedList.push(TEST_NODE_SERVER);
-      }
-      if (!cachedList.find((item) => item.id === TEST_NET_1_SERVER.id)) {
-        cachedList.push(TEST_NET_1_SERVER);
-      }
-      if (cachedList.find((item) => item.id === TEST_NODE_SERVER.id && !item.address.includes("http"))) {
-        const item = cachedList.find((item) => item.id === TEST_NODE_SERVER.id);
-        item.address = TEST_NODE_SERVER.address;
-      }
-
-      storage.setItem(KEY.SERVER, JSON.stringify(cachedList));
-      return cachedList;
-    });
+  static async setServerListToStorage(serverList: ServerModel[]): Promise<void> {
+    await storage.setItem(KEY.SERVER, JSON.stringify(serverList));
   }
 
-  static getDefault() {
-    return Server.get().then((result) => {
-      if (result && result.length) {
-        for (const s of result) {
-          if (s.default) {
-            const id = s?.id;
-            const server: IServer = DEFAULT_LIST_SERVER.find((item) => item?.id === id) || {
-              id: "",
-              default: false,
-              address: "",
-              username: "",
-              password: "",
-              name: "",
-            };
+  static async getServerListFromStorage(): Promise<ServerModel[]> {
+    const serverListJSON = await storage.getItem(KEY.SERVER);
+    return (serverListJSON && JSON.parse(serverListJSON)) || [];
+  }
 
-            // console.log("SERVER : ", server);
-            return {
-              ...s,
-              address: server?.address || "",
-              coinServices: server?.coinServices || "",
-              pubsubServices: server?.pubsubServices || "",
-              requestServices: server?.requestServices || "",
-              apiServices: server?.apiServices || "",
-              shardNumber: server?.shardNumber || "",
-              IncContractAddress: server?.IncContractAddress || "",
-              IncBSCContractAddress: server?.IncContractAddress || "",
-              tradeServices: server?.tradeServices || "",
-              webviewChartServices: server?.webviewChartServices || "",
-              bscConfigs: server?.bscConfigs || "",
-              web3Configs: server?.web3Configs || "",
-              pancakeConfigs: server?.pancakeConfigs || "",
-              uniConfigs: server?.uniConfigs || "",
-            };
-          }
+  static async getServerList(): Promise<ServerModel[]> {
+    let serverList: ServerModel[] = [];
+    try {
+      if (cachedList && cachedList.length > 0) {
+        serverList = cachedList;
+      } else {
+        serverList = await Server.getServerListFromStorage();
+        if (serverList && serverList.length < 1) {
+          serverList = DEFAULT_LIST_SERVER;
+          cachedList = DEFAULT_LIST_SERVER;
+          storage.setItem(KEY.SERVER, JSON.stringify(serverList));
         }
       }
-      this.setDefault(MAIN_NET_SERVER);
-      return MAIN_NET_SERVER;
-    });
+    } catch (error) {
+      console.log("[getServerList] ERROR: ", error);
+    } finally {
+      return serverList;
+    }
   }
 
-  static async getDefaultIfNullGettingDefaulList() {
-    const list = (await Server.get().catch(console.log)) || KEY.DEFAULT_LIST_SERVER;
-    return list?.find((_) => _.default);
+  static async getDefault(): Promise<ServerModel> {
+    const serverList = await Server.getServerList();
+    const serverDefaultFilter = serverList.filter((server) => server.default);
+    const serverDefault = serverDefaultFilter.length > 0 ? serverDefaultFilter[0] : MAIN_NET_SERVER;
+    return serverDefault;
   }
 
-  static async setDefault(defaultServer: any) {
+  static async setDefaultServer(defaultServer: ServerModel): Promise<void> {
     try {
-      const servers = await Server.get();
-      const newServers = servers.map((server) => {
+      const serverList = await Server.getServerList();
+      const newServerList = serverList.map((server: ServerModel) => {
         if (defaultServer.id === server.id) {
           return {
             ...defaultServer,
@@ -360,15 +306,20 @@ export default class Server {
         }
         return { ...server, default: false };
       });
-      await Server.set(newServers);
-      return newServers;
+      cachedList = newServerList;
+      await Server.setServerListToStorage(newServerList);
     } catch (e) {
       throw e;
     }
   }
 
-  static isMainnet(network: any) {
-    return _.isEqual(network?.id, "mainnet");
+  static isMainnet(network: ServerModel) {
+    return _.isEqual(network.id, "mainnet");
+  }
+
+  static async getNetwork(): Promise<string> {
+    const server = await Server.getDefault();
+    return server.id;
   }
 
   static setDefaultList() {
@@ -379,16 +330,5 @@ export default class Server {
     } catch (e) {
       throw e;
     }
-  }
-
-  static set(servers: any[]) {
-    cachedList = servers;
-    const strData = JSON.stringify(cachedList);
-    return storage.setItem(KEY.SERVER, strData);
-  }
-
-  static async getNetwork() {
-    const server = await Server.getDefault();
-    return server?.id;
   }
 }

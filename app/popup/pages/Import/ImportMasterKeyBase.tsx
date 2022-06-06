@@ -25,14 +25,18 @@ const ImportMasterKeyBase: React.FC = () => {
   const routeData = useRef<ImportMasterKeyRouteType & ImportMasterKeyBaseProps>({});
 
   const importWallet = async () => {
-    showLoading(true);
+    showLoading({
+      value: true,
+    });
     const { mnemonic = "", masterKeyName = "", password = "" } = routeData.current;
     callAsync(request("popup_importWallet", { mnemonic, masterKeyName, password }), {
       progress: { message: "Import wallet..." },
       success: { message: "Assets Imported" },
       onSuccess: (result: any) => {
         // history.push(Paths.homeRouteStack);
-        showLoading(false);
+        showLoading({
+          value: false,
+        });
         history.push(AssetsRoute);
       },
     });

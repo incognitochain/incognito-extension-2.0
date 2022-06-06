@@ -19,12 +19,16 @@ const LockWallet = React.memo(() => {
   const { showLoading } = useLoading();
 
   const onLockPressed = throttle(() => {
-    showLoading(true);
+    showLoading({
+      value: true,
+    });
     callAsync(request("popup_lockWallet", {}), {
       progress: { message: "locking wallet..." },
       success: { message: "Wallet locked" },
       onSuccess: (result) => {
-        showLoading(false);
+        showLoading({
+          value: false,
+        });
         history.push(Paths.unlockPage);
       },
     });

@@ -67,13 +67,17 @@ const withImportToken = (WrappedComponent: FunctionComponent & any) => {
     const onAddToken = async () => {
       if (!tokenID) return;
       try {
-        showLoading(true);
+        showLoading({
+          value: true,
+        });
         await dispatch(actionAddFollowToken({ tokenID })).then();
         history.goBack();
       } catch (e) {
         // Error
       } finally {
-        showLoading(false);
+        showLoading({
+          value: false,
+        });
       }
     };
 

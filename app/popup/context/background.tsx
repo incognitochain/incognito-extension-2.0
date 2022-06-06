@@ -109,7 +109,7 @@ export function BackgroundProvider(props: React.PropsWithChildren<{}>) {
 
       log("performing rpc request: %O", request);
       engine.handle(request, function (err: any, response: any) {
-        console.log("jsonRpcConnection response ", response);
+        // console.log("jsonRpcConnection response ", response);
         if (err) {
           reject(err);
         } else {

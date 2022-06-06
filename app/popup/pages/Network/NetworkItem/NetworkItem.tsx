@@ -10,8 +10,9 @@ interface NetworkItemProps {
 
 const NetworkItem: React.FC<NetworkItemProps> = (props: NetworkItemProps) => {
   const { title, description, onClick, disabled = false } = props;
+  const className = `${disabled ? "none-select" : "selected"} hover-with-cursor `;
   return (
-    <Container className="hover-with-cursor" onClick={onClick} disabled={disabled}>
+    <Container className={className} onClick={onClick}>
       <LeftView>
         <CircleView />
       </LeftView>

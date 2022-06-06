@@ -31,12 +31,17 @@ export const UnlockPageBase: React.FC = () => {
       try {
         const passWordValid = await checkPasswordValid(password);
         if (passWordValid) {
-          showLoading(true);
+          showLoading({
+            value: true,
+            message: "Loading...",
+          });
           callAsync(request("popup_unlockWallet", { password }), {
             progress: { message: "Unlocking wallet..." },
             success: { message: "Wallet unlocked" },
             onSuccess: () => {
-              showLoading(false);
+              showLoading({
+                value: false,
+              });
               history.push(AssetsRoute);
             },
           });

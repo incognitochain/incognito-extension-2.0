@@ -41,12 +41,16 @@ const CreateAccountPage: React.FC = () => {
 
   const createKeychainOnPressed = () => {
     if (checkValid()) {
-      showLoading(true);
+      showLoading({
+        value: true,
+      });
       callAsync(request("popup_createAccount", { accountName: trim(keychainName) }), {
         progress: { message: "Account Creating..." },
         success: { message: "Account Created" },
         onSuccess: (result) => {
-          showLoading(false);
+          showLoading({
+            value: false,
+          });
           history.goBack();
         },
       });
