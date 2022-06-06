@@ -6,6 +6,7 @@ const Container = styled.div`
   height: 100%;
   position: fixed;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: ${({ theme }: { theme: ITheme }) => theme.primaryP6};
@@ -41,14 +42,29 @@ const AnimationLoading = styled.div`
   }
 `;
 
-const Loading = () => (
+const Message = styled.p`
+  margin-top: 10px;
+  color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
+  text-align: center;
+`;
+
+interface LoadingProps {
+  message?: string;
+}
+
+const Loading = (props: LoadingProps) => (
   <Container>
     <AnimationLoading />
+    {props.message && <Message className="fs-medium fw-suppermedium">{props.message}</Message>}
   </Container>
 );
 
+interface ShowLoadingProps {
+  value: boolean;
+  message?: string;
+}
 interface LoadingContextType {
-  showLoading: (flag: boolean) => void;
+  showLoading: (_: ShowLoadingProps) => void;
 }
 const LoadingContextInit = {
   showLoading: () => {},
@@ -56,12 +72,11 @@ const LoadingContextInit = {
 
 const LoadingContext = React.createContext<LoadingContextType>(LoadingContextInit);
 
-// const ChildrenComponents = React.memo((props: any) => {
-//   return {props.children};
-// });
-
 export function LoadingProvider(props: React.PropsWithChildren<{}>) {
-  const [isLoading, setLoading] = useState(false);
+  const [loadingProps, setLoading] = useState<ShowLoadingProps>({
+    value: false,
+    message: "Loading...",
+  });
   const children = useMemo(() => props.children, []);
   return (
     <LoadingContext.Provider
@@ -71,7 +86,7 @@ export function LoadingProvider(props: React.PropsWithChildren<{}>) {
     >
       <>
         {children}
-        {isLoading && <Loading />}
+        {loadingProps.value && <Loading message={loadingProps.message || "Loading..."} />}
       </>
     </LoadingContext.Provider>
   );

@@ -2,16 +2,13 @@ import styled, { ITheme } from "styled-components";
 
 const Container = styled.button`
   width: 100%;
-  margin-top: 6px;
-  margin-bottom: 6px;
+  margin-top: 8px;
+  margin-bottom: 8px;
   padding: 4px;
   border-radius: 8px;
   display: flex;
   flex-direction: row;
   background-color: ${({ theme }: { theme: ITheme }) => theme.primaryP9};
-  :disabled {
-    opacity: 0.4;
-  }
 `;
 
 const LeftView = styled.div`

@@ -56,7 +56,9 @@ const withLoading = (WrappedComponent: any) => {
     const isScanCoins = useSelector(isFirstTimeScanCoinsSelector);
     const OTAKey = useSelector(otaKeyOfDefaultAccountSelector);
     React.useEffect(() => {
-      showLoading(!!isScanCoins && !!OTAKey);
+      showLoading({
+        value: !!isScanCoins && !!OTAKey,
+      });
     }, [isScanCoins, OTAKey]);
     return <WrappedComponent {...props} />;
   };

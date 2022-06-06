@@ -328,6 +328,15 @@ export const ThemedGlobalStyle = createGlobalStyle`
       align-items: center;
       justify-content: space-between;
     }
+    
+    .none-select {
+      opacity: 0.4;
+    }
+    
+    .selected {
+      opacity: 1;
+      box-shadow: 0px 0px 10px 0px  ${({ theme }: { theme: ITheme }) => theme.primaryP7};
+    }
 `;
 
 export const Row = styled.div`
