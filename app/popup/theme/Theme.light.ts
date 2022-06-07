@@ -29,6 +29,7 @@ const lightTheme = (): Colors => {
     colorP5: "#64A121",
     colorP6: "#00407E",
     colorP7: "#C0C0C0",
+    colorP8: "#FFC043",
   };
 };
 
