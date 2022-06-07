@@ -1,6 +1,6 @@
-import { P2_Regular } from "@popup/theme/Theme";
 import React, { HTMLInputTypeAttribute, useState } from "react";
 import styled, { ITheme } from "styled-components";
+import { EyeCloseIcon, EyeOpenIcon } from "@popup/components/Icons";
 
 const Container = styled.div`
   display: flex;
@@ -13,21 +13,19 @@ const TextInputWithIcon = styled.input`
   padding-right: 50px;
   width: 100%;
   height: 48px;
-  background: #404040;
   border-radius: 8px;
   border-width: 1;
+  background: ${({ theme }: { theme: ITheme }) => theme.primaryP9};
   color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
   :focus {
-    border: 2px solid #1a73e8;
+    border: 2px solid ${({ theme }: { theme: ITheme }) => theme.colorP10};
   }
   :hover {
     outline: none !important;
-    border: 2px solid #1a73e8;
+    border: 2px solid ${({ theme }: { theme: ITheme }) => theme.colorP10};
   }
   ::placeholder {
-    color: #9c9c9c;
-    font-family: "Inter";
-    font-style: normal;
+    color: ${({ theme }: { theme: ITheme }) => theme.colorP11};
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;
@@ -37,34 +35,11 @@ const TextInputWithIcon = styled.input`
     flex-grow: 0;
   }
 `;
-const ErrorText = styled(P2_Regular)`
+
+const ErrorText = styled.p`
   width: 100%;
   color: red;
   text-align: left;
-`;
-
-const EyeCloseIconStyled = styled.img`
-  position: absolute;
-  right: 40px;
-  width: 26px;
-  height: 24px;
-  align-items: center;
-  :hover {
-    opacity: 0.8;
-    cursor: pointer;
-  }
-`;
-
-const EyeOpenIconStyled = styled.img`
-  position: absolute;
-  right: 40px;
-  width: 26px;
-  height: 16px;
-  align-items: center;
-  :hover {
-    opacity: 0.8;
-    cursor: pointer;
-  }
 `;
 
 const InputWrapper = styled.div`
@@ -72,6 +47,19 @@ const InputWrapper = styled.div`
   align-items: center;
   flex-direction: row;
   width: 100%;
+`;
+
+const IconContainer = styled.div`
+  position: absolute;
+  right: 40px;
+  width: 30px;
+  height: 30pxpx;
+  justify-content: center;
+  align-items: center;
+  :hover {
+    opacity: 0.8;
+    cursor: pointer;
+  }
 `;
 
 interface PasswordInputProps {
@@ -97,13 +85,6 @@ const PasswordInput = (props: PasswordInputProps) => {
     setType(type === "text" ? "password" : "text");
   };
 
-  const Icon =
-    type === "password" ? (
-      <EyeCloseIconStyled src="./icons/ic_eye_closed.png" onClick={onClick} />
-    ) : (
-      <EyeOpenIconStyled src="./icons/ic_eye_open.png" onClick={onClick} />
-    );
-
   return (
     <Container>
       <InputWrapper>
@@ -114,9 +95,9 @@ const PasswordInput = (props: PasswordInputProps) => {
           onChange={onChange}
           value={value}
         />
-        {Icon}
+        <IconContainer onClick={onClick}>{type === "password" ? <EyeCloseIcon /> : <EyeOpenIcon />}</IconContainer>
       </InputWrapper>
-      {errorEnable && <ErrorText>{errorText}</ErrorText>}
+      {errorEnable && <ErrorText className="fs-small fw-regular">{errorText}</ErrorText>}
     </Container>
   );
 };

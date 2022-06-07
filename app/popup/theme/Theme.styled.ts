@@ -29,6 +29,9 @@ export interface Colors {
   colorP6: Color;
   colorP7: Color;
   colorP8: Color;
+  colorP9: Color;
+  colorP10: Color;
+  colorP11: Color;
 }
 
 export interface Grids {

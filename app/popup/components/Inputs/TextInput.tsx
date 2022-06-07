@@ -1,4 +1,3 @@
-import { P2_Regular } from "@popup/theme/Theme";
 import React from "react";
 import styled, { ITheme } from "styled-components";
 
@@ -24,16 +23,14 @@ const TextInputStyled = styled.input`
   border-width: 1px;
   color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
   :focus {
-    border: 2px solid #1a73e8;
+    border: 2px solid ${({ theme }: { theme: ITheme }) => theme.colorP10};
   }
   :hover {
     outline: none !important;
-    border: 2px solid #1a73e8;
+    border: 2px solid ${({ theme }: { theme: ITheme }) => theme.colorP10};
   }
   ::placeholder {
-    color: #9c9c9c;
-    font-family: "Inter";
-    font-style: normal;
+    color: ${({ theme }: { theme: ITheme }) => theme.colorP11};
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;
@@ -43,7 +40,7 @@ const TextInputStyled = styled.input`
     flex-grow: 0;
   }
 `;
-const ErrorText = styled(P2_Regular)`
+const ErrorText = styled.p`
   width: 100%;
   color: red;
   text-align: left;
@@ -86,7 +83,7 @@ const TextInput = (props: TextInputProps) => {
         disabled={disabled}
         multiple={multiple}
       />
-      {errorEnable && <ErrorText>{errorText}</ErrorText>}
+      {errorEnable && <ErrorText className="fs-small fw-regular">{errorText}</ErrorText>}
     </Container>
   );
 };

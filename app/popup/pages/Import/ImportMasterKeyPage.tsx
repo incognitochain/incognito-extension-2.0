@@ -68,10 +68,10 @@ export const ImportMasterKeyPage: React.FC<ImportMasterKeyPageProps> = (props: I
     <>
       <Header title="Master key" onBackClick={onBack} />
       <BodyLayout>
-        <DescriptionText>
+        <DescriptionText className="fs-regular fw-regular">
           {"Lorem Ipsum is simply dummy text of the printing and typesetting industry."}
         </DescriptionText>
-        <MasterKeyNameLabel>Master key name</MasterKeyNameLabel>
+        <MasterKeyNameLabel className="fs-small fw-regular">{"Master key name"}</MasterKeyNameLabel>
         <TextInputWraper>
           <TextInput
             value={masterKeyNameLocal}

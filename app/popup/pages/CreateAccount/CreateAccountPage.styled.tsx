@@ -1,5 +1,4 @@
-import { PrimaryButton } from "@popup/components/Core/Buttons";
-import { P2_Regular } from "@popup/theme/Theme";
+import { PrimaryButtonStyled } from "@popup/components/Core/Buttons";
 import styled from "styled-components";
 
 const TextInputWraper = styled.div`
@@ -7,13 +6,13 @@ const TextInputWraper = styled.div`
   margin-top: 8px;
 `;
 
-const KeyChainLabel = styled(P2_Regular)`
+const KeyChainLabel = styled.p`
   width: 100%;
   margin-top: 24px;
   text-align: left;
 `;
 
-const PrimaryButtonContaniner = styled(PrimaryButton)`
+const PrimaryButtonContaniner = styled(PrimaryButtonStyled)`
   margin-top: 90px;
 `;
 

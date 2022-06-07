@@ -2,7 +2,6 @@ import Header from "@components/BaseComponent/Header";
 import BodyLayout from "@components/layout/BodyLayout";
 import PasswordInput from "@popup/components/Inputs/PasswordInput";
 import TextArea from "@popup/components/Inputs/TextArea";
-import { Paths } from "@popup/components/routes/paths";
 import { useBackground } from "@popup/context/background";
 import { useCallAsync } from "@popup/utils/notifications";
 import { trim } from "lodash";
@@ -124,8 +123,8 @@ const RestoreWalletPage: React.FC = () => {
   return (
     <>
       <Header title={"Reset Wallet"} onBackClick={onBack} />
-      <BodyLayout>
-        <DescriptionText>
+      <BodyLayout className="scroll-view">
+        <DescriptionText className="fs-regular fw-regular">
           {
             "Restore your wallet using your twelve seed words. Note that this will delete any existing wallet on this device."
           }
@@ -141,7 +140,7 @@ const RestoreWalletPage: React.FC = () => {
           />
         </MnemonicTextArea>
 
-        <PasswordLabel>Password</PasswordLabel>
+        <PasswordLabel className="fs-small fw-regular">{"Password"}</PasswordLabel>
         <PasswordInput
           value={password}
           placeholder={"Create password (min 10 chars)"}
@@ -149,7 +148,7 @@ const RestoreWalletPage: React.FC = () => {
           errorEnable={true}
           errorText={passwordErrorMessage}
         />
-        <VerifyLabel>Verify</VerifyLabel>
+        <VerifyLabel className="fs-small fw-regular">{"Verify"}</VerifyLabel>
         <PasswordInput
           value={verify}
           placeholder={"Enter the password again"}

@@ -1,6 +1,6 @@
-import { H4 } from "@popup/theme/Theme";
 import React from "react";
 import styled, { ITheme } from "styled-components";
+import { BackIcon } from "@popup/components/Icons";
 
 const Container = styled.div`
   background-color: ${({ theme }: { theme: ITheme }) => theme.primaryP6};
@@ -14,20 +14,13 @@ const Container = styled.div`
   top: 0px;
 `;
 
-const BackIconStyled = styled.img`
+const BackIconContainer = styled.div`
   width: 24px;
   height: 24px;
-  :hover {
-    opacity: 0.8;
-    cursor: pointer;
-  }
-`;
-
-const BackIcon = styled(BackIconStyled)`
   margin-left: 24px;
 `;
 
-const TitleStyled = styled(H4)`
+const TitleStyled = styled.p`
   margin-left: 12px;
   text-align: left;
 `;
@@ -42,8 +35,10 @@ const Header = (props: HeaderProps) => {
   const { title = "", onBackClick = () => {}, rightView } = props;
   return (
     <Container>
-      <BackIcon src="./icons/ic_back.png" onClick={onBackClick} />
-      <TitleStyled>{title}</TitleStyled>
+      <BackIconContainer className="hover-with-cursor" onClick={onBackClick}>
+        <BackIcon />
+      </BackIconContainer>
+      <TitleStyled className="fw-medium fs-large">{title}</TitleStyled>
       {/* TO DO */}
       {rightView && <></>}
     </Container>
