@@ -4,23 +4,17 @@ import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 import storage from "redux-persist/lib/storage";
 import { ISendState, TypeSend, SendActions } from "@module/Send/Send.types";
 import { SendActionTypes } from "@module/Send/Send.constant";
-const { PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
-
-const MAX_FEE_PER_TX = 100;
 
 const _initialState: ISendState = {
   isFetching: false,
-  isFetched: false,
 
   init: false,
   screen: TypeSend.SEND,
 
-  networkFee: MAX_FEE_PER_TX,
-  networkFeeText: `${MAX_FEE_PER_TX}`,
-  networkFeeToken: PRVIDSTR,
+  networkFee: 0,
+  networkFeeToken: "",
 
   burnFee: 0,
-  burnFeeText: "0",
   burnFeeToken: "",
 };
 
@@ -39,6 +33,36 @@ const reducer: Reducer<ISendState, SendActions> = (state = initialState, action:
       return {
         ...state,
         isFetching: false,
+      };
+    }
+    case SendActionTypes.SET_NETWORK_FEE: {
+      const { networkFee, networkFeeToken } = action.payload;
+      return {
+        ...state,
+        networkFee,
+        networkFeeToken,
+      };
+    }
+    case SendActionTypes.SET_BURN_FEE: {
+      const { burnFee, burnFeeToken } = action.payload;
+      return {
+        ...state,
+        burnFee,
+        burnFeeToken,
+      };
+    }
+    case SendActionTypes.SET_INIT_FORM: {
+      const { init } = action.payload;
+      return {
+        ...state,
+        init,
+      };
+    }
+    case SendActionTypes.FREE_DATA: {
+      return {
+        ...{
+          ..._initialState,
+        },
       };
     }
     default:

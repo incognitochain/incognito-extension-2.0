@@ -18,6 +18,9 @@ export interface ISendData {
   btnSubmit: string;
   selectedPrivacy: SelectedPrivacy;
   isSend: boolean;
+  disabledForm: boolean;
+  init: boolean;
+  isFetching: boolean;
 }
 
 export interface ISendFormData {
@@ -28,19 +31,16 @@ export interface ISendFormData {
 
 export interface ISendState {
   isFetching: boolean;
-  isFetched: boolean;
 
   init: boolean;
   screen: TypeSend;
 
   // Native Token -> PRV
   networkFee: number;
-  networkFeeText: string;
   networkFeeToken: string;
 
   // Token | PRV
   burnFee: number;
-  burnFeeText: string;
   burnFeeToken: string;
 }
 
@@ -56,6 +56,20 @@ export interface SendSetMaxPTokenFeePayload {
   amountText: string;
 }
 
+export interface SendSetNetworkFeePayload {
+  networkFee: number;
+  networkFeeToken: string;
+}
+
+export interface SendSetBurnFeePayload {
+  burnFee: number;
+  burnFeeToken: string;
+}
+
+export interface SendSetInitFormPayload {
+  init: boolean;
+}
+
 //----------------------------------------------
 // Action Definition here!
 //----------------------------------------------
@@ -68,5 +82,30 @@ export interface SendFetchedAction extends Action {
   type: SendActionTypes.FETCHED;
 }
 
+export interface SendSetNetworkFeeAction extends Action {
+  type: SendActionTypes.SET_NETWORK_FEE;
+  payload: SendSetNetworkFeePayload;
+}
+
+export interface SendSetBurnFeeAction extends Action {
+  type: SendActionTypes.SET_BURN_FEE;
+  payload: SendSetBurnFeePayload;
+}
+
+export interface SendSetInitFormAction extends Action {
+  type: SendActionTypes.SET_INIT_FORM;
+  payload: SendSetInitFormPayload;
+}
+
+export interface SendFreeDataAction extends Action {
+  type: SendActionTypes.FREE_DATA;
+}
+
 //-----------------------------------
-export type SendActions = SendFetchingAction | SendFetchedAction;
+export type SendActions =
+  | SendFetchingAction
+  | SendFetchedAction
+  | SendSetNetworkFeeAction
+  | SendSetBurnFeeAction
+  | SendSetInitFormAction
+  | SendFreeDataAction;

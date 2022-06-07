@@ -171,7 +171,7 @@ const Button = (props: IProps & React.ButtonHTMLAttributes<HTMLButtonElement>) =
   return (
     <Styled
       type="button"
-      className={`btn-container ${disabled ? "btn-disabled" : ""}  ${className}`}
+      className={`btn-container ${disabled ? "btn-disabled" : ""} ${className}`}
       disabled={disabled}
       {...rest}
     >

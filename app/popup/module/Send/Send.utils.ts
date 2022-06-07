@@ -1,8 +1,7 @@
 import { ISendData, ISendState, TypeSend } from "@module/Send/Send.types";
 import SelectedPrivacy from "@model/SelectedPrivacyModel";
 import { RootState } from "@redux/reducers";
-import { sendSelector } from "@module/Send/Send.selector";
-import { formValueSelector } from "redux-form";
+import { formValueSelector, isValid, isSubmitting } from "redux-form";
 import { FORM_CONFIGS } from "@module/Send/Send.constant";
 import BigNumber from "bignumber.js";
 import convert from "@utils/convert";
@@ -58,9 +57,9 @@ const getSendData = ({
   selectedPrivacy: SelectedPrivacy;
   getDataByTokenID: (tokenID: string) => SelectedPrivacy;
   state: RootState;
-}): ISendData & any => {
+}): ISendData => {
   // Send Selector
-  const _sendSelector = sendSelector(state);
+  const _sendSelector = send;
 
   // Send Token
   const { amount: tokenAmount, pDecimals: tokenPDecimals, tokenId: tokenID, symbol: tokenSymbol } = selectedPrivacy;
@@ -68,13 +67,13 @@ const getSendData = ({
   // Network Fee Token
   const networkFeeToken = getDataByTokenID(_sendSelector.networkFeeToken);
   const networkFeeAmount = _sendSelector.networkFee;
-  const { amount: networkUserAmount } = networkFeeToken;
+  const { amount: networkUserBalance } = networkFeeToken;
 
   // Burn Token Fee
   // Ignore case send internal
   const burnFeeToken = getDataByTokenID(_sendSelector.burnFeeToken);
   const burnFeeAmount = _sendSelector.burnFee;
-  const { amount: burnUserAmount, pDecimals: burnPDecimals, tokenId: burnFeeTokenID } = burnFeeToken;
+  const { amount: burnUserBalance, pDecimals: burnPDecimals, tokenId: burnFeeTokenID } = burnFeeToken;
 
   // Form Selector
   const _formSelector = formValueSelector(FORM_CONFIGS.formName);
@@ -105,6 +104,11 @@ const getSendData = ({
   const showMemo: boolean = isSend || selectedPrivacy.currencyType === 4 || selectedPrivacy.isBep2Token;
   const btnSubmit: string = isSend ? "Send anonymously" : "Unshield my crypto";
 
+  const valid = isValid(FORM_CONFIGS.formName)(state);
+  const submitting = isSubmitting(FORM_CONFIGS.formName)(state);
+
+  const disabledForm = !valid || submitting || !networkFeeAmount;
+
   return {
     maxAmount,
     maxAmountText,
@@ -116,6 +120,9 @@ const getSendData = ({
     btnSubmit,
     selectedPrivacy,
     isSend,
+    disabledForm,
+    init: _sendSelector.init,
+    isFetching: _sendSelector.isFetching,
   };
 };
 

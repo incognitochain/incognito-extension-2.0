@@ -1,6 +1,6 @@
 import { change, focus, InjectedFormProps, reduxForm } from "redux-form";
 import { compose } from "recompose";
-import { FORM_CONFIGS, ISendFormData } from "@module/Send";
+import { actionFreeData, FORM_CONFIGS, ISendFormData } from "@module/Send";
 import withInit, { TInnerInit } from "./Send.enhanceInit";
 import withValAddress, { TInner as TInnerAddress } from "./Send.enhanceAddressValidator";
 import withValAmount, { TInner as TInnerAmount } from "./Send.enhanceAmountValidator";
@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { sendDataSelector } from "@module/Send/Send.selector";
 import { AppThunkDispatch } from "@redux/store";
 
-export interface IMergeProps extends InjectedFormProps<any, any>, TInnerInit, TInnerAddress, TInnerAmount, TInnerSend {
+export interface IMergeProps extends InjectedFormProps<any, any>, TInnerInit, TInnerAmount, TInnerAddress, TInnerSend {
   onClickMax: () => any;
   onChangeField: (value: string, field: any) => any;
   onClickAddressBook: () => any;
@@ -23,21 +23,11 @@ export interface IMergeProps extends InjectedFormProps<any, any>, TInnerInit, TI
 const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergeProps & any) => {
   const dispatch: AppThunkDispatch = useDispatch();
 
-  // const { clearForceSendData, clearCurrentRequest, handleSendAnonymously, handleUnShieldCrypto }: IMergeProps = props;
-  // const history = useHistory();
-  // const darkMode = useSelector(darkModeSelector);
-  // const handleStandardizedAddress = (value: string) => standardizedAddress(value);
-  // const selectedPrivacy: ISelectedPrivacy = useSelector(selectedPrivacySelector);
-  // const { disabledForm, isSend, isUnShield }: ISendData = useSelector(sendDataSelector);
-
   const { maxAmountText } = useSelector(sendDataSelector);
   const onChangeField = async (value: string, field: string) => {
     let val: any = value;
-    // if (field === "toAddress") {
-    //   val = handleStandardizedAddress(value);
-    // }
     dispatch(change(FORM_CONFIGS.formName, field, val));
-    // dispatch(focus(FORM_CONFIGS.formName, field));
+    dispatch(focus(FORM_CONFIGS.formName, field));
   };
 
   const onClickMax = async () => {
@@ -117,6 +107,12 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergePro
     //   );
     // }
   };
+
+  React.useEffect(() => {
+    return () => {
+      dispatch(actionFreeData());
+    };
+  }, []);
 
   return (
     <WrappedComponent
