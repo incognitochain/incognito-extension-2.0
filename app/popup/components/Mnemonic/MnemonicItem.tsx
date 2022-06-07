@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled, { ITheme } from "styled-components";
-import { P2_Regular, P1_Regular, P2_Medium } from "@popup/theme/Theme";
 
 const Container = styled.button`
   box-sizing: border-box;
@@ -8,17 +7,13 @@ const Container = styled.button`
   width: 103px;
   height: 40px;
 
-  /* Auto layout */
-
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 9px 16px 10px 12px;
   gap: 8px;
 
-  /* Background/Tertiary Black */
-
-  border: 1px solid #404040;
+  border: 1px solid ${({ theme }: { theme: ITheme }) => theme.primaryP9};
   border-radius: 8px;
 
   :hover {
@@ -27,33 +22,33 @@ const Container = styled.button`
     cursor: pointer;
   }
 
-  :active {
-    background: blue;
-  }
-
-  .focus {
-    color: red;
-  }
-
   :disabled {
     :hover {
       opacity: 1;
-      border: 1px solid #404040;
+      border: 1px solid ${({ theme }: { theme: ITheme }) => theme.primaryP9};
       cursor: default;
     }
     :active {
       background: transparent;
     }
   }
+
+  &.selected-color {
+    background-color: ${({ theme }: { theme: ITheme }) => theme.primaryP9};
+  }
+
+  &.none-selecte-color {
+    background-color: transparent;
+  }
 `;
 
-const IndexText = styled(P2_Regular)`
-  color: #9c9c9c;
+const IndexText = styled.p`
+  color: ${({ theme }: { theme: ITheme }) => theme.primaryP8};
   text-align: left;
 `;
 
-const TitleText = styled(P2_Regular)`
-  color: #ffffff;
+const TitleText = styled.p`
+  color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
   flex: none;
   order: 1;
   flex-grow: 0;
@@ -70,7 +65,7 @@ const MnemonicItem = (props: MnemonicItemProps) => {
   const { index = 1, title = "", disabled = true, onClick = () => {} } = props;
   const [selected, setSelected] = useState(false);
 
-  const backgroundColor = selected && !disabled ? "#404040" : "transparent";
+  const isSelected = selected && !disabled;
 
   const onClickItem = () => {
     setSelected(!selected);
@@ -78,9 +73,13 @@ const MnemonicItem = (props: MnemonicItemProps) => {
   };
 
   return (
-    <Container disabled={disabled} onClick={onClickItem} style={{ backgroundColor }}>
-      <IndexText>#{index + 1}</IndexText>
-      <TitleText>{title}</TitleText>
+    <Container
+      disabled={disabled}
+      onClick={onClickItem}
+      className={`${isSelected ? "selected-color" : "none-selecte-color"}`}
+    >
+      <IndexText className="fs-small fw-regular">#{index + 1}</IndexText>
+      <TitleText className="fs-small fw-regular">{title}</TitleText>
     </Container>
   );
 };
