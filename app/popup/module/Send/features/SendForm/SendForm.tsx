@@ -17,8 +17,9 @@ const Styled = styled.div`
 `;
 
 const SendForm = React.memo((props: IMergeProps & any) => {
-  const { onClickMax, validateAddress, warningAddress } = props;
-  const { networkFeeSymbol, networkFeeText } = useSelector(sendDataSelector);
+  const { onClickMax, validateAmount, validateAddress, warningAddress } = props;
+  const { networkFeeSymbol, networkFeeText, showMemo, btnSubmit } = useSelector(sendDataSelector);
+
   return (
     <Styled>
       <WrapContent className="default-padding-horizontal">
@@ -32,7 +33,7 @@ const SendForm = React.memo((props: IMergeProps & any) => {
             }}
             leftTitle="Amount"
             onClickMax={onClickMax}
-            // validate={validateAmount}
+            validate={validateAmount}
           />
           <Field
             component={InputField}
@@ -42,13 +43,15 @@ const SendForm = React.memo((props: IMergeProps & any) => {
             validate={validateAddress}
             warning={warningAddress}
           />
-          <Field
-            component={InputField}
-            name={FORM_CONFIGS.memo}
-            leftTitle="Memo"
-            // onClickMax={onClickMax}
-            // validate={validateAmount}
-          />
+          {showMemo && (
+            <Field
+              component={InputField}
+              name={FORM_CONFIGS.memo}
+              leftTitle="Memo"
+              // onClickMax={onClickMax}
+              // validate={validateAmount}
+            />
+          )}
           <Field
             component={InputField}
             name={FORM_CONFIGS.fee}
@@ -61,7 +64,7 @@ const SendForm = React.memo((props: IMergeProps & any) => {
             // onClickMax={onClickMax}
             // validate={validateAmount}
           />
-          <Button title="Send anonymously" style={{ marginTop: 24 }} onClick={() => {}} />
+          <Button title={btnSubmit} style={{ marginTop: 24 }} onClick={() => {}} />
         </form>
       </WrapContent>
     </Styled>

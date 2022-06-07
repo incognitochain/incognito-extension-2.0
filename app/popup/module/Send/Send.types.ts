@@ -1,5 +1,6 @@
 import { Action } from "redux";
 import { SendActionTypes } from "@module/Send/Send.constant";
+import SelectedPrivacy from "@model/SelectedPrivacyModel";
 
 export enum TypeSend {
   SEND = "SEND",
@@ -12,6 +13,11 @@ export interface ISendData {
   screen: TypeSend;
   networkFeeText: string;
   networkFeeSymbol: string;
+  headerTitle: string;
+  showMemo: boolean;
+  btnSubmit: string;
+  selectedPrivacy: SelectedPrivacy;
+  isSend: boolean;
 }
 
 export interface ISendFormData {

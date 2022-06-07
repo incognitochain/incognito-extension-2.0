@@ -80,6 +80,8 @@ const getSendData = ({
   const _formSelector = formValueSelector(FORM_CONFIGS.formName);
 
   const screen = _sendSelector.screen;
+  const isSend = screen === TypeSend.SEND;
+
   const { maxAmount, maxAmountText } = getMaxSendAmount({
     sendTokenID: tokenID,
     sendTokenAmount: tokenAmount,
@@ -92,11 +94,6 @@ const getSendData = ({
     burnFeeTokenID: burnFeeToken.tokenId,
     screen,
   });
-  console.log({
-    send,
-    selectedPrivacy,
-    state,
-  });
 
   const networkFeeText = format.formatAmount({
     originalAmount: networkFeeAmount,
@@ -104,10 +101,9 @@ const getSendData = ({
     clipAmount: false,
   });
 
-  console.log("SANG TEST::: 111 ", {
-    networkFeeAmount,
-    networkFeeToken: networkFeeToken.pDecimals,
-  });
+  const headerTitle: string = `${isSend ? "Send" : "Unshield"} ${tokenSymbol}`;
+  const showMemo: boolean = isSend || selectedPrivacy.currencyType === 4 || selectedPrivacy.isBep2Token;
+  const btnSubmit: string = isSend ? "Send anonymously" : "Unshield my crypto";
 
   return {
     maxAmount,
@@ -115,6 +111,11 @@ const getSendData = ({
     screen,
     networkFeeText,
     networkFeeSymbol: networkFeeToken.symbol,
+    headerTitle,
+    showMemo,
+    btnSubmit,
+    selectedPrivacy,
+    isSend,
   };
 };
 

@@ -41,7 +41,6 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergePro
   };
 
   const onClickMax = async () => {
-    console.log("SANG TEST: ", maxAmountText);
     if (!maxAmountText) return;
     onChangeField(maxAmountText, FORM_CONFIGS.amount).then();
   };
