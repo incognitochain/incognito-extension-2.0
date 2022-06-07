@@ -1,19 +1,16 @@
-import { P2_Medium, P1_Regular } from "@popup/theme/Theme";
+import { PrimaryButtonStyled } from "@popup/components/Core/Buttons";
 import styled, { ITheme } from "styled-components";
-import { PrimaryButton, SecondaryButton } from "@popup/components/Core/Buttons";
 
-const DescriptionText = styled(P2_Medium)`
+const DescriptionText = styled.p`
   margin-top: 24px;
-  color: #ffffff;
-  text-align: justify;
+  padding-left: 8px;
+  padding-right: 8px;
+  letter-spacing: -0.02em;
+  color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
 `;
 
-const PrimaryButtonContaniner = styled(PrimaryButton)`
-  margin-top: 90px;
-`;
-
-const SecondaryButtonContaniner = styled(SecondaryButton)`
-  margin-top: 35px;
+const PrimaryButtonContaniner = styled(PrimaryButtonStyled)`
+  margin-top: 30px;
 `;
 
 const MnemonicTextPickArea = styled.div`
@@ -22,13 +19,13 @@ const MnemonicTextPickArea = styled.div`
   margin-top: 20px;
   height: 140px;
   padding: 15px;
-  background: #404040;
+  background: ${({ theme }: { theme: ITheme }) => theme.primaryP9};
   border-radius: 8px;
 `;
 
-const MnemonicsText = styled(P1_Regular)`
-  color: #ffffff;
+const MnemonicsText = styled.p`
+  color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
   text-align: justify;
 `;
 
-export { DescriptionText, MnemonicTextPickArea, PrimaryButtonContaniner, SecondaryButtonContaniner, MnemonicsText };
+export { DescriptionText, MnemonicTextPickArea, PrimaryButtonContaniner, MnemonicsText };

@@ -1,11 +1,12 @@
+import { BookmarkIcon } from "@popup/components/Icons";
 import Header from "@components/BaseComponent/Header";
 import BodyLayout from "@components/layout/BodyLayout";
 import MnemonicItem from "@components/Mnemonic/MnemonicItem";
-import { useSnackbar } from "notistack";
 import React, { useLayoutEffect, useState } from "react";
 import {
-  BookMarkImg,
+  BookMarkContainer,
   BookMarkText,
+  CopyButtonContainer,
   CopyButton,
   CopyText,
   MnemoicBox,
@@ -13,6 +14,8 @@ import {
   PrimaryButtonContaniner,
   YellowBox,
 } from "./MasterKeyPage.styled";
+import copy from "copy-to-clipboard";
+import { useSnackbar } from "notistack";
 
 const { newMnemonic } = require("incognito-chain-web-js/build/web/wallet");
 
@@ -42,18 +45,8 @@ const MasterKeyPageBase: React.FC<MasterKeyPharsePageBaseProps> = (props: Master
   }, []);
 
   const copyTextOnClick = () => {
-    mnemonic &&
-      mnemonic.length > 0 &&
-      navigator.clipboard.writeText(mnemonic).then(
-        function () {
-          console.log("Copying to clipboard was successful!");
-          enqueueSnackbar("Copying to clipboard was successful!", { variant: "success" });
-        },
-        function (err) {
-          console.error("Async: Could not copy text: ", err);
-          enqueueSnackbar(" Could not copy text", { variant: "error" });
-        },
-      );
+    mnemonic && mnemonic.length > 0 && copy(mnemonic);
+    enqueueSnackbar("Copied", { variant: "success" });
   };
 
   const saveMyPhrase = () => {
@@ -63,10 +56,14 @@ const MasterKeyPageBase: React.FC<MasterKeyPharsePageBaseProps> = (props: Master
   return (
     <>
       <Header title="Master key phrase" onBackClick={onBack} />
-      <BodyLayout>
+      <BodyLayout className="scroll-view">
         <YellowBox>
-          <BookMarkImg />
-          <BookMarkText>Save these words in the correct order. Never share this phrase with anyone.</BookMarkText>
+          <BookMarkContainer>
+            <BookmarkIcon />
+          </BookMarkContainer>
+          <BookMarkText className="fs-small fw-medium">
+            {"Save these words in the correct order. Never share this phrase with anyone."}
+          </BookMarkText>
         </YellowBox>
 
         <MnemoicBox>
@@ -77,13 +74,13 @@ const MasterKeyPageBase: React.FC<MasterKeyPharsePageBaseProps> = (props: Master
           ))}
         </MnemoicBox>
 
-        <CopyButton onClick={copyTextOnClick}>
-          <CopyText>Copy</CopyText>
-        </CopyButton>
+        <CopyButtonContainer>
+          <CopyButton className="center hover-with-cursor" onClick={copyTextOnClick}>
+            <CopyText className="fs-small fw-medium">{"Copy"}</CopyText>
+          </CopyButton>
+        </CopyButtonContainer>
 
-        <PrimaryButtonContaniner onClick={saveMyPhrase} disabled={false}>
-          I'm saved my phrase
-        </PrimaryButtonContaniner>
+        <PrimaryButtonContaniner onClick={saveMyPhrase}>{"I'm saved my phrase"}</PrimaryButtonContaniner>
       </BodyLayout>
     </>
   );

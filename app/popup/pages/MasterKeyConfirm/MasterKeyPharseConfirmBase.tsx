@@ -1,7 +1,6 @@
 import Header from "@components/BaseComponent/Header";
 import BodyLayout from "@components/layout/BodyLayout";
 import MnemonicItem from "@components/Mnemonic/MnemonicItem";
-import { isDebugMode } from "@utils/env";
 import { shuffle } from "lodash";
 import React, { useMemo, useState } from "react";
 import { MnemoicBox, MnemonicItemWrapper } from "../MasterKey/MasterKeyPage.styled";
@@ -9,7 +8,7 @@ import {
   DescriptionText,
   MnemonicsText,
   MnemonicTextPickArea,
-  SecondaryButtonContaniner,
+  PrimaryButtonContaniner,
 } from "./MasterKeyPharseConfirm.styled";
 
 export interface MasterKeyPharseConfirmPageBaseProps {
@@ -51,8 +50,8 @@ const MasterKeyPharseConfirmBase: React.FC<MasterKeyPharseConfirmPageBaseProps> 
     <>
       <Header title="Master key phrase" onBackClick={onBack} />
       <BodyLayout>
-        <DescriptionText>
-          Click on these words in the correct order. If you make a mistake, click again to undo.
+        <DescriptionText className="fs-regular fw-regular">
+          {"Click on these words in the correct order. If you make a mistake, click again to undo."}
         </DescriptionText>
 
         <MnemoicBox>
@@ -73,9 +72,9 @@ const MasterKeyPharseConfirmBase: React.FC<MasterKeyPharseConfirmPageBaseProps> 
           <MnemonicsText>{phraseSelectedString}</MnemonicsText>
         </MnemonicTextPickArea>
 
-        <SecondaryButtonContaniner disabled={!isPhraseCorrect} onClick={createMasterKeyOnClick}>
+        <PrimaryButtonContaniner disabled={!isPhraseCorrect} onClick={createMasterKeyOnClick}>
           {isPhraseCorrect ? "Continue" : "That's not quite right"}
-        </SecondaryButtonContaniner>
+        </PrimaryButtonContaniner>
       </BodyLayout>
     </>
   );

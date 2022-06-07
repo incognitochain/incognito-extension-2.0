@@ -13,3 +13,4 @@ export { default as NetworkIcon } from "./NetworkIcon";
 export { default as LockIcon } from "./LockIcon";
 export { default as RightArrowIcon } from "./RightArrowIcon";
 export { default as CircleIcon } from "./CircleIcon";
+export { default as BookmarkIcon } from "./BookmarkIcon";
