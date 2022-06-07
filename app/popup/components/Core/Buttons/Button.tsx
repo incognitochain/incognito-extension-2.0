@@ -1,8 +1,55 @@
 import styled, { ITheme } from "styled-components";
 import React from "react";
 
+const PrimaryButton1 = styled.button`
+  color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
+  background: ${({ theme }: { theme: ITheme }) => theme.colorP3};
+  padding: 12px;
+  gap: 10px;
+  width: 100%;
+  height: 50px;
+  border-radius: 8px;
+  letter-spacing: -0.02em;
+
+  :disabled {
+    color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
+    background: ${({ theme }: { theme: ITheme }) => theme.colorP7};
+    :hover {
+      opacity: 1;
+      cursor: default;
+    }
+  }
+`;
+
+const SecondaryButton1 = styled.button`
+  color: ${({ theme }: { theme: ITheme }) => theme.colorP3};
+  background: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
+  padding: 12px;
+  gap: 10px;
+  width: 100%;
+  height: 50px;
+  border-radius: 8px;
+  letter-spacing: -0.02em;
+
+  :disabled {
+    color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
+    background: ${({ theme }: { theme: ITheme }) => theme.colorP7};
+    :hover {
+      opacity: 1;
+      cursor: default;
+    }
+  }
+`;
+
+const PrimaryButtonStyled = styled(PrimaryButton1).attrs({
+  className: "fs-medium fw-medium center hover-with-cursor",
+})``;
+const SecondButtonStyled = styled(SecondaryButton1).attrs({
+  className: "fs-medium fw-medium center hover-with-cursor",
+})``;
+
 const PrimaryButton = styled.button`
-  color: ${({ theme }: { theme: ITheme }) => "white"};
+  color: ${({ theme }: { theme: ITheme }) => theme.black};
   background: ${({ theme }: { theme: ITheme }) => "#1A73E8"};
   align-items: center;
   display: flex;
@@ -133,4 +180,4 @@ const Button = (props: IProps & React.ButtonHTMLAttributes<HTMLButtonElement>) =
   );
 };
 
-export { PrimaryButton, SecondaryButton, Button };
+export { PrimaryButton1, PrimaryButton, SecondaryButton, Button, PrimaryButtonStyled, SecondButtonStyled };

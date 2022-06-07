@@ -1,42 +1,43 @@
-import { P2_Regular, P1_Regular } from "@popup/theme/Theme";
+import { PrimaryButtonStyled } from "@popup/components/Core/Buttons";
 import styled, { ITheme } from "styled-components";
-import { PrimaryButton } from "@popup/components/Core/Buttons";
 
 const TextInputWraper = styled.div`
-  width: 100%;
   margin-top: 8px;
 `;
 
-const MasterKeyNameText = styled(P2_Regular)`
-  width: 100%;
+const MasterKeyNameText = styled.p`
+  color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
   margin-top: 24px;
   text-align: left;
 `;
 
-const ContentText1 = styled(P1_Regular)`
-  width: 100%;
+const ContentText1 = styled.p`
+  color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
   margin-top: 32px;
 `;
 
-const ContentText2 = styled(P1_Regular)`
-  width: 100%;
+const ContentText2 = styled.p`
+  color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
 `;
 
 const RowCheckBox = styled.div`
-  width: 100%;
   height: 50px;
   margin-top: 80px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
 `;
 
-const CheckBoxDescription = styled(P1_Regular)`
-  width: 100%;
+const CheckBoxDescription = styled.p`
   margin-left: 16px;
+
+  &.activeColor {
+    color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
+  }
+
+  &.deactiveColor {
+    color: ${({ theme }: { theme: ITheme }) => theme.primaryP8};
+  }
 `;
 
-const PrimaryButtonContaniner = styled(PrimaryButton)`
+const PrimaryButtonContaniner = styled(PrimaryButtonStyled)`
   margin-top: 32px;
 `;
 

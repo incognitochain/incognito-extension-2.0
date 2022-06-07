@@ -2,7 +2,7 @@
 import Header from "@components/BaseComponent/Header";
 import BodyLayout from "@components/layout/BodyLayout";
 import TextInput from "@popup/components/Inputs/TextInput";
-import React, { useCallback, useLayoutEffect, useState, useEffect } from "react";
+import React, { useCallback, useLayoutEffect, useState } from "react";
 import {
   ContentText1,
   ContentText2,
@@ -36,10 +36,6 @@ export const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateN
     setCheckBoxAcceptLocal(checkBoxAccept);
   }, []);
 
-  useEffect(() => {
-    // onReadyClick && onReadyClick("ABCDE", true);
-  }, []);
-
   const readyOnClick = () => {
     if (!NAME_PATTERN.test(masterKeyNameLocal)) {
       return setErrorVisible(true);
@@ -57,8 +53,8 @@ export const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateN
   return (
     <>
       <Header title="Create new key" onBackClick={onBack} />
-      <BodyLayout>
-        <MasterKeyNameText>Master key name</MasterKeyNameText>
+      <BodyLayout className="scroll-view">
+        <MasterKeyNameText className="fs-small  fw-regular">{"Master key name"}</MasterKeyNameText>
         <TextInputWraper>
           <TextInput
             value={masterKeyNameLocal}
@@ -68,22 +64,27 @@ export const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateN
             errorText={"Master key names must be alphanumeric. Please choose another."}
           />
         </TextInputWraper>
-        <ContentText1>
-          The next screen will contain 12 special words that will allow you to recover your funds
+        <ContentText1 className="fs-regular fw-regular">
+          {"The next screen will contain 12 special words that will allow you to recover your funds"}
         </ContentText1>
         <br />
-        <ContentText2>
-          Be prepared to record them in a safe place. If anyone gains access to them, they will gain access to your
-          funds.
+        <ContentText2 className="fs-regular fw-regular">
+          {
+            "Be prepared to record them in a safe place. If anyone gains access to them, they will gain access to your funds."
+          }
         </ContentText2>
 
-        <RowCheckBox>
+        <RowCheckBox className="center">
           <CheckBox isActive={checkBoxAcceptLocal} onClicked={() => setCheckBoxAcceptLocal(!checkBoxAcceptLocal)} />
-          <CheckBoxDescription>I accept that if I lose these words I will lose access to my funds.</CheckBoxDescription>
+          <CheckBoxDescription
+            className={`fs-regular fw-regular ${checkBoxAcceptLocal ? "activeColor" : "deactiveColor"}`}
+          >
+            {"I accept that if I lose these words I will lose access to my funds."}
+          </CheckBoxDescription>
         </RowCheckBox>
 
         <PrimaryButtonContaniner onClick={readyOnClick} disabled={readyButtonDisable}>
-          I'm ready
+          {"I'm ready"}
         </PrimaryButtonContaniner>
       </BodyLayout>
     </>

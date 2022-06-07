@@ -1,41 +1,25 @@
-import React, { HTMLInputTypeAttribute, useState } from "react";
+import { PrimaryButtonStyled, SecondButtonStyled } from "@popup/components/Core/Buttons";
 import styled, { ITheme } from "styled-components";
-import { H4, P2_Regular, P1, H3 } from "@popup/theme/Theme";
-import { PrimaryButton, SecondaryButton } from "@popup/components/Core/Buttons";
 
-const PrimaryButtonContaniner = styled(PrimaryButton)`
-  margin-top: 120px;
-`;
-
-const SecondaryButtonContaniner = styled(SecondaryButton)`
-  margin-top: 8px;
-`;
-
-const CircleImage = styled.img`
-  width: 72px;
-  height: 72px;
+const CircleIconContainer = styled.div`
   margin-top: 180px;
 `;
 
-const IncognitoImage = styled.img`
-  width: 160px;
-  height: 38px;
+const IncognitoContainer = styled.div`
   margin-top: 16px;
 `;
 
-const ExtensionTextContainer = styled(P1)`
-  text-align: center;
-  margin-top: 8px;
-  color: #c0c0c0;
+const PrimaryButtonWrapper = styled(PrimaryButtonStyled)`
+  margin-top: 120px;
 `;
 
-const CircleImageContainer = () => <CircleImage src="./icons/ic_circle.png" />;
-const IncognitoImageContainer = () => <IncognitoImage src="./icons/label_incognito.png" />;
+const SecondaryButtonWrapper = styled(SecondButtonStyled)`
+  margin-top: 8px;
+`;
 
-export {
-  CircleImageContainer,
-  IncognitoImageContainer,
-  ExtensionTextContainer,
-  PrimaryButtonContaniner,
-  SecondaryButtonContaniner,
-};
+const Title = styled.p`
+  color: ${({ theme }: { theme: ITheme }) => theme.colorP7};
+  text-align: start;
+`;
+
+export { CircleIconContainer, IncognitoContainer, PrimaryButtonWrapper, SecondaryButtonWrapper, Title };

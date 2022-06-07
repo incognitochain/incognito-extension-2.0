@@ -317,6 +317,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
 
     .hover-with-cursor {
       :hover {
+        outline: none !important;
         opacity: 0.8;
         cursor: pointer;
       }

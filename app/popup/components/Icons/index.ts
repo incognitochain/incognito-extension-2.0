@@ -12,3 +12,4 @@ export { default as SettingIcon } from "./SettingIcon";
 export { default as NetworkIcon } from "./NetworkIcon";
 export { default as LockIcon } from "./LockIcon";
 export { default as RightArrowIcon } from "./RightArrowIcon";
+export { default as CircleIcon } from "./CircleIcon";
