@@ -8,9 +8,10 @@ import { throttle } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useLoading } from "@popup/context/loading";
+import CircleIcon from "@components/Icons/CircleIcon";
 
 import {
-  CircleImageStyled,
+  CircleIconContainer,
   ForgotYourPasswordStyled,
   PasswordText,
   PrimaryButtonContaniner,
@@ -65,25 +66,25 @@ export const UnlockPageBase: React.FC = () => {
 
   return (
     <MainLayout>
-      <CircleImageStyled />
-      <Title>Welcome back</Title>
-      <PasswordText>Password</PasswordText>
+      <CircleIconContainer>
+        <CircleIcon />
+      </CircleIconContainer>
+      <Title className="fs-large fw-medium">{"Welcome back"}</Title>
+      <PasswordText className="fs-small fw-regular">{"Password"}</PasswordText>
       <PasswordInput
         value={password}
         onChange={handleChangePassword}
         errorEnable={true}
         errorText={passwordErrorMessage}
       />
-      <PrimaryButtonContaniner onClick={unLockOnClick} disabled={false}>
-        Go incognito
-      </PrimaryButtonContaniner>
+      <PrimaryButtonContaniner onClick={unLockOnClick}>{"Go incognito"}</PrimaryButtonContaniner>
       <ForgotYourPasswordStyled
-        className="cursor"
+        className="cursor fs-regular fw-regular"
         onClick={() => {
           history.push(Paths.restoreWalletPage);
         }}
       >
-        Forgot your password?
+        {"Forgot your password?"}
       </ForgotYourPasswordStyled>
     </MainLayout>
   );

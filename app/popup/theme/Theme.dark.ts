@@ -29,6 +29,9 @@ const darkTheme = (): Colors => {
     colorP6: "#00407E",
     colorP7: "#C0C0C0",
     colorP8: "#FFC043",
+    colorP9: "#757575",
+    colorP10: "#1a73e8",
+    colorP11: "#9c9c9c",
   };
 };
 

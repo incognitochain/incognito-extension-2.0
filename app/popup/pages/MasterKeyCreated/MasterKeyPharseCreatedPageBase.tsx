@@ -1,10 +1,12 @@
+import CircleIcon from "@components/Icons/CircleIcon";
+import IncognitoIcon from "@components/Icons/IncognitoIcon";
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { Paths } from "../../components/routes/paths";
+import { Paths } from "@components/routes/paths";
 import {
-  CircleImageContainer,
+  CircleIconContainer,
   ExtensionTextContainer,
-  IncognitoImageContainer,
+  IncognitoContainer,
   PrimaryButtonContaniner,
 } from "./MasterKeyPharseCreated.styled";
 
@@ -17,16 +19,20 @@ const MasterKeyPharseCreatedPageBase = (props: MasterKeyPharseCreatedPageBasePro
   const history = useHistory();
   return (
     <>
-      <CircleImageContainer />
-      <IncognitoImageContainer />
-      <ExtensionTextContainer>Extention</ExtensionTextContainer>
+      <CircleIconContainer>
+        <CircleIcon />
+      </CircleIconContainer>
+      <IncognitoContainer>
+        <IncognitoIcon />
+      </IncognitoContainer>
+      <ExtensionTextContainer>{"Extention"}</ExtensionTextContainer>
       <PrimaryButtonContaniner
         onClick={() => {
           history.push(Paths.homeRouteStack);
         }}
         disabled={false}
       >
-        Create new key
+        {"Create new key"}
       </PrimaryButtonContaniner>
     </>
   );

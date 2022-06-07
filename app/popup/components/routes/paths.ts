@@ -22,7 +22,6 @@ export const Paths = {
   masterKeyPhraseConfirmPage: "/master-key-pharse-confirm",
   masterKeyPhraseCreatedPage: "/master-key-pharse-created",
   createNewKeyStack: "/create-new-key-stack",
-  signInPage: "/signin-page",
   passwordPage: "/password-page",
 
   importMasterKeyPage: "/import-master-key",
@@ -59,7 +58,6 @@ export const Links = {
   masterKeyPhrasePage: compile(Paths.masterKeyPhrasePage),
   masterKeyPhraseConfirmPage: compile(Paths.masterKeyPhraseConfirmPage),
   masterKeyPhraseCreatedPage: compile(Paths.masterKeyPhraseCreatedPage),
-  signInPage: compile(Paths.signInPage),
   createNewKeyStack: compile(Paths.createNewKeyStack),
   passwordPage: compile(Paths.passwordPage),
   importMasterKeyStack: compile(Paths.importMasterKeyStack),

@@ -76,7 +76,7 @@ const CreateAccountPage: React.FC = () => {
     <>
       <Header title="Create keychain" onBackClick={onBack} />
       <BodyLayout>
-        <KeyChainLabel>Keychain name</KeyChainLabel>
+        <KeyChainLabel className="fs-regular fw-regular">{"Keychain name"}</KeyChainLabel>
         <TextInputWraper>
           <TextInput
             value={keychainName}
@@ -87,7 +87,7 @@ const CreateAccountPage: React.FC = () => {
           />
         </TextInputWraper>
 
-        <PrimaryButtonContaniner onClick={createKeychainOnPressed}>Create keychain</PrimaryButtonContaniner>
+        <PrimaryButtonContaniner onClick={createKeychainOnPressed}>{"Create keychain"}</PrimaryButtonContaniner>
       </BodyLayout>
     </>
   );

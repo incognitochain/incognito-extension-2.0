@@ -91,10 +91,9 @@ export const PasswordPage: React.FC<PasswordPageBaseProps> = (props: PasswordPag
   return (
     <>
       <Header title={headerTitle} onBackClick={onBack} />
-      <BodyLayout>
-        <DescriptionText>{descriptionText}</DescriptionText>
-
-        <PasswordLabel>Password</PasswordLabel>
+      <BodyLayout className="scroll-view">
+        <DescriptionText className="fs-regular fw-regular">{descriptionText}</DescriptionText>
+        <PasswordLabel className="fs-small fw-regular">{"Password"}</PasswordLabel>
         <PasswordInput
           value={password}
           placeholder={"Create password (min 10 chars)"}
@@ -102,7 +101,7 @@ export const PasswordPage: React.FC<PasswordPageBaseProps> = (props: PasswordPag
           errorEnable={true}
           errorText={passwordErrorMessage}
         />
-        <VerifyLabel>Verify</VerifyLabel>
+        <VerifyLabel className="fs-small fw-regular">{"Verify"}</VerifyLabel>
         <PasswordInput
           value={verify}
           placeholder={"Enter the password again"}
@@ -110,9 +109,7 @@ export const PasswordPage: React.FC<PasswordPageBaseProps> = (props: PasswordPag
           errorEnable={true}
           errorText={verifyPasswordError}
         />
-        <PrimaryButtonContaniner onClick={continueOnClick} disabled={false}>
-          {buttonTitle}
-        </PrimaryButtonContaniner>
+        <PrimaryButtonContaniner onClick={continueOnClick}>{buttonTitle}</PrimaryButtonContaniner>
       </BodyLayout>
     </>
   );

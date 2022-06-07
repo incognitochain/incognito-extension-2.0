@@ -14,3 +14,6 @@ export { default as LockIcon } from "./LockIcon";
 export { default as RightArrowIcon } from "./RightArrowIcon";
 export { default as CircleIcon } from "./CircleIcon";
 export { default as BookmarkIcon } from "./BookmarkIcon";
+export { default as EyeOpenIcon } from "./EyeOpenIcon";
+export { default as EyeCloseIcon } from "./EyeCloseIcon";
+export { default as BackIcon } from "./BackIcon";
