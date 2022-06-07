@@ -1,7 +1,4 @@
 import { Reducer } from "redux";
-import { persistReducer } from "redux-persist";
-import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
-import storage from "redux-persist/lib/storage";
 import { ISendState, TypeSend, SendActions } from "@module/Send/Send.types";
 import { SendActionTypes } from "@module/Send/Send.constant";
 
@@ -70,11 +67,4 @@ const reducer: Reducer<ISendState, SendActions> = (state = initialState, action:
   }
 };
 
-const persistConfig: any = {
-  key: "sendReducer",
-  storage: storage,
-  whitelist: [""],
-  stateReconciler: autoMergeLevel2,
-};
-
-export default persistReducer(persistConfig, reducer);
+export default reducer;

@@ -32,15 +32,31 @@ export const getAccountWallet = (account: any, wallet: any) => {
     new Validator("wallet.AuthToken", wallet.AuthToken).string();
     new Validator("wallet.RpcApiService", wallet.RpcApiService).string();
     new Validator("wallet.PortalService", wallet.PortalService).string();
-    accountWallet.setRPCClient(wallet.RpcClient);
+
+    global.network = {
+      address: "https://testnet.incognito.org/fullnode",
+      coinServices: "https://api-coinservice-staging.incognito.org",
+      pubsubServices: "https://api-coinservice-staging.incognito.org/txservice",
+      apiServices: "https://staging-api-service-staging.incognito.org",
+    };
+
+    const { address, coinServices, pubsubServices, apiServices } = global.network;
+    accountWallet.setRPCClient(address);
     accountWallet.setStorageServices(wallet.Storage);
-    accountWallet.setRPCCoinServices(wallet.RpcCoinService);
-    accountWallet.setRPCTxServices(wallet.PubsubService);
-    accountWallet.setRPCRequestServices(wallet.RpcRequestService);
+    accountWallet.setRPCCoinServices(coinServices);
+    accountWallet.setRPCTxServices(pubsubServices);
+    accountWallet.setRPCRequestServices(pubsubServices);
     accountWallet.setAuthToken(wallet.AuthToken);
-    accountWallet.setRPCApiServices(wallet.RpcApiService, wallet.AuthToken);
+    accountWallet.setRPCApiServices(apiServices, wallet.AuthToken);
+    // accountWallet.setRPCClient(wallet.RpcClient);
+    // accountWallet.setStorageServices(wallet.Storage);
+    // accountWallet.setRPCCoinServices(wallet.RpcCoinService);
+    // accountWallet.setRPCTxServices(wallet.PubsubService);
+    // accountWallet.setRPCRequestServices(wallet.RpcRequestService);
+    // accountWallet.setAuthToken(wallet.AuthToken);
+    // accountWallet.setRPCApiServices(wallet.RpcApiService, wallet.AuthToken);
     // accountWallet.setUseLegacyEncoding(wallet.UseLegacyEncoding);
-    accountWallet.setRPCPortalServices(wallet.PortalService);
+    // accountWallet.setRPCPortalServices(wallet.PortalService);
     return accountWallet;
   } catch (error) {
     console.log("getAccountWallet error", error);

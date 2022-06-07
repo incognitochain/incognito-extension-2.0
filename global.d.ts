@@ -7,6 +7,7 @@ declare global {
       isMainnet: any;
       severDefault: any;
       homeConfig: any;
+      network: any;
       __DEV__: boolean
     }
   }
@@ -14,6 +15,7 @@ declare global {
     store: Store;
     persistor: Persistor;
     Go: any;
+    network: any;
   }
 }
 

@@ -116,8 +116,7 @@ export default class Account {
   }
 
   static async createAndSendNativeToken({
-    wallet,
-    account,
+    accountSender,
     prvPayments,
     info,
     fee,
@@ -129,8 +128,7 @@ export default class Account {
     version,
   }: any = {}) {
     try {
-      new Validator("createAndSendNativeToken-wallet", wallet).required();
-      new Validator("createAndSendNativeToken-account", account).required();
+      new Validator("createAndSendNativeToken-account", accountSender).required();
       new Validator("createAndSendNativeToken-prvPayments", prvPayments).required().paymentInfoList();
       new Validator("createAndSendNativeToken-fee", fee).required().amount();
       new Validator("createAndSendNativeToken-info", info).string();
@@ -138,10 +136,9 @@ export default class Account {
       new Validator("createAndSendNativeToken-metadata", metadata).object();
       new Validator("createAndSendNativeToken-txType", txType).required().number();
       new Validator("createAndSendNativeToken-version", version).required().number();
-      const accountWallet = this.getAccount(account, wallet);
-      await accountWallet.resetProgressTx();
+      // await accountWallet.resetProgressTx();
       const infoStr = typeof info !== "string" ? JSON.stringify(info) : info;
-      const result = await accountWallet.createAndSendNativeToken({
+      const result = await accountSender.createAndSendNativeToken({
         transfer: {
           info: infoStr,
           prvPayments,
@@ -163,8 +160,7 @@ export default class Account {
   }
 
   static async createAndSendPrivacyToken({
-    wallet,
-    account,
+    accountSender,
     prvPayments,
     tokenPayments,
     info,
@@ -178,8 +174,7 @@ export default class Account {
     txHashHandler,
     version,
   }: any = {}) {
-    new Validator("createAndSendPrivacyToken-wallet", wallet).required();
-    new Validator("createAndSendPrivacyToken-account", account).required();
+    new Validator("createAndSendPrivacyToken-accountSender", accountSender).required();
     new Validator("createAndSendPrivacyToken-prvPayments", prvPayments).paymentInfoList();
     new Validator("createAndSendPrivacyToken-tokenPayments", tokenPayments).required().paymentInfoList();
     new Validator("createAndSendPrivacyToken-fee", fee).required().amount();
@@ -192,10 +187,8 @@ export default class Account {
     new Validator("createAndSendPrivacyToken-version", version).required().number();
 
     let result;
-    const accountWallet = this.getAccount(account, wallet);
-    await accountWallet.resetProgressTx();
     const infoStr = typeof info !== "string" ? JSON.stringify(info) : info;
-    result = await accountWallet.createAndSendPrivacyToken({
+    result = await accountSender.createAndSendPrivacyToken({
       transfer: {
         info: infoStr,
         prvPayments,

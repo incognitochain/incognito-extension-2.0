@@ -6,6 +6,8 @@ import { FORM_CONFIGS } from "@module/Send/Send.constant";
 import BigNumber from "bignumber.js";
 import convert from "@utils/convert";
 import format from "@utils/format";
+import isEmpty from "lodash/isEmpty";
+const { isPaymentAddress } = require("incognito-chain-web-js/build/web/wallet");
 
 interface IMaxSend {
   sendTokenID: string;
@@ -73,10 +75,10 @@ const getSendData = ({
   // Ignore case send internal
   const burnFeeToken = getDataByTokenID(_sendSelector.burnFeeToken);
   const burnFeeAmount = _sendSelector.burnFee;
-  const { amount: burnUserBalance, pDecimals: burnPDecimals, tokenId: burnFeeTokenID } = burnFeeToken;
+  const { amount: burnUserBalance } = burnFeeToken;
 
   // Form Selector
-  const _formSelector = formValueSelector(FORM_CONFIGS.formName);
+  const formSelector = formValueSelector(FORM_CONFIGS.formName);
 
   const screen = _sendSelector.screen;
   const isSend = screen === TypeSend.SEND;
@@ -107,7 +109,32 @@ const getSendData = ({
   const valid = isValid(FORM_CONFIGS.formName)(state);
   const submitting = isSubmitting(FORM_CONFIGS.formName)(state);
 
-  const disabledForm = !valid || submitting || !networkFeeAmount;
+  // form selector
+  const inputAmount = formSelector(state, FORM_CONFIGS.amount);
+  const inputAddress = formSelector(state, FORM_CONFIGS.toAddress);
+  const inputMemo = formSelector(state, FORM_CONFIGS.memo);
+
+  const isIncognitoAddress = isEmpty(inputAddress) ? false : isPaymentAddress(inputAddress);
+  const isExternalAddress = isEmpty(inputAddress) ? false : !isIncognitoAddress && selectedPrivacy.isWithdrawable;
+
+  const inputOriginalAmount = convert.toOriginalAmount({
+    humanAmount: `${convert.toNumber({ text: inputAmount, autoCorrect: true }) || 0}`,
+    decimals: tokenPDecimals,
+  });
+
+  const enoughNetworkFee = new BigNumber(networkUserBalance).isGreaterThanOrEqualTo(networkFeeAmount);
+
+  const isMainCrypto = selectedPrivacy.isMainCrypto;
+
+  const disabledForm =
+    !valid ||
+    submitting ||
+    !inputOriginalAmount ||
+    !networkFeeAmount ||
+    !enoughNetworkFee ||
+    (!isSend && !!burnFeeAmount) ||
+    (isSend && isExternalAddress) ||
+    (!isSend && isIncognitoAddress);
 
   return {
     maxAmount,
@@ -115,6 +142,7 @@ const getSendData = ({
     screen,
     networkFeeText,
     networkFeeSymbol: networkFeeToken.symbol,
+    networkFeeAmount,
     headerTitle,
     showMemo,
     btnSubmit,
@@ -123,6 +151,14 @@ const getSendData = ({
     disabledForm,
     init: _sendSelector.init,
     isFetching: _sendSelector.isFetching,
+    isIncognitoAddress,
+    isExternalAddress,
+    inputAmount,
+    inputAddress,
+    inputMemo,
+    inputOriginalAmount: inputOriginalAmount.toString(),
+
+    isMainCrypto,
   };
 };
 

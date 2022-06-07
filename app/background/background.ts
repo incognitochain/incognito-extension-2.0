@@ -29,6 +29,13 @@ initialize().catch((err) => {
 
 async function initialize() {
   console.log({ store: store.getState(), persistor: persistor.getState() });
+  // TODO: REMOVE HARD CODE
+  global.network = {
+    address: "https://testnet.incognito.org/fullnode",
+    coinServices: "https://api-coinservice-staging.incognito.org",
+    pubsubServices: "https://api-coinservice-staging.incognito.org/txservice",
+    apiServices: "https://staging-api-service-staging.incognito.org",
+  };
   enableLogger();
   await loadWasmConfig();
   await loadStoreRedux();

@@ -23,8 +23,9 @@ export const configAccount = async () => {
   if (!accountData || !accountData.PrivateKey) return;
   // const wallet = accountData.Wallet;
   let accountSender = new Account({});
-  accountSender.setRPCClient("https://testnet.incognito.org/fullnode");
-  accountSender.setRPCCoinServices("https://api-coinservice-staging.incognito.org");
+  const { address, coinServices } = global.network;
+  accountSender.setRPCClient(address);
+  accountSender.setRPCCoinServices(coinServices);
   accountSender.setStorageServices(Storage);
   await accountSender.setKey(accountData.PrivateKey);
   return accountSender;

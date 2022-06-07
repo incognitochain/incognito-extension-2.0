@@ -73,6 +73,7 @@ export const withBalance = (WrappedComponent: FunctionComponent) => (props: any)
 
   React.useEffect(() => {
     if (!walletState || !OTAKey || walletState !== "unlocked" || interval.current) return;
+    loadFollowTokensBalance();
     interval.current = setInterval(() => {
       loadFollowTokensBalance();
     }, 20000);

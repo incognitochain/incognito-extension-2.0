@@ -10,29 +10,23 @@ export interface TInner {
 }
 
 const enhanceAddressValidation = (WrappedComp: React.FunctionComponent) => (props: any) => {
-  const { screen } = useSelector(sendDataSelector);
-  // const selectedPrivacy = useSelector(selectedPrivacySelector);
-  // const { isAddressValidated } = useSelector(sendSelector);
-  // const { symbol, isErc20Token } = selectedPrivacy;
-  // const getExternalAddressValidator = React.useCallback(() => {
-  //   // default
-  //   return validator.combinedUnknownAddress;
-  // }, [paymentAddress, isIncognitoAddress, isExternalAddress, isAddressValidated]);
+  const { screen, isIncognitoAddress, inputAddress } = useSelector(sendDataSelector);
+  const getExternalAddressValidator = React.useCallback(() => {
+    // default
+    return validator.combinedUnknownAddress;
+  }, [isIncognitoAddress]);
   const getAddressValidator = React.useCallback(() => {
     if (screen === TypeSend.SEND) {
       return validator.combinedIncognitoAddress;
     }
-    // if (isExternalAddress) {
-    //   return getExternalAddressValidator();
-    // }
-    return [];
-  }, [screen]);
+    return getExternalAddressValidator();
+  }, [screen, isIncognitoAddress, inputAddress]);
 
   const getWarningAddress = React.useCallback(() => {
     // if (isExternalAddress) {
     //   return 'You are exiting Incognito and going public.';
     // }
-    return "You are exiting Incognito and going public.";
+    // return "You are exiting Incognito and going public.";
   }, []);
 
   const validateAddress = getAddressValidator();

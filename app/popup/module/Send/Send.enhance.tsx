@@ -1,6 +1,6 @@
 import { change, focus, InjectedFormProps, reduxForm } from "redux-form";
 import { compose } from "recompose";
-import { actionFreeData, FORM_CONFIGS, ISendFormData } from "@module/Send";
+import { actionFreeData, FORM_CONFIGS } from "@module/Send";
 import withInit, { TInnerInit } from "./Send.enhanceInit";
 import withValAddress, { TInner as TInnerAddress } from "./Send.enhanceAddressValidator";
 import withValAmount, { TInner as TInnerAmount } from "./Send.enhanceAmountValidator";
@@ -10,6 +10,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sendDataSelector } from "@module/Send/Send.selector";
 import { AppThunkDispatch } from "@redux/store";
+import { useLoading } from "@popup/context/loading";
 
 export interface IMergeProps extends InjectedFormProps<any, any>, TInnerInit, TInnerAmount, TInnerAddress, TInnerSend {
   onClickMax: () => any;
@@ -17,13 +18,16 @@ export interface IMergeProps extends InjectedFormProps<any, any>, TInnerInit, TI
   onClickAddressBook: () => any;
   onClickScan: () => any;
   onGoBack: () => any;
-  handleSend: (payload: ISendFormData) => any;
+  handleSend: () => any;
 }
 
 const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergeProps & any) => {
-  const dispatch: AppThunkDispatch = useDispatch();
+  const { handleSendAnonymously, handleUnShieldCrypto } = props;
 
-  const { maxAmountText } = useSelector(sendDataSelector);
+  const dispatch: AppThunkDispatch = useDispatch();
+  const { showLoading } = useLoading();
+  const { maxAmountText, disabledForm, isSend } = useSelector(sendDataSelector);
+
   const onChangeField = async (value: string, field: string) => {
     let val: any = value;
     dispatch(change(FORM_CONFIGS.formName, field, val));
@@ -77,35 +81,21 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergePro
     // history.push(`${routeDetail}/${selectedPrivacy.tokenId}`);
   };
 
-  const handleSend = async (payload: ISendFormData) => {
-    // try {
-    //   if (disabledForm) {
-    //     return;
-    //   }
-    //   await dispatch(
-    //     actionToggleModal({
-    //       data: <LoadingTx />,
-    //       isLoadingModal: true,
-    //     }),
-    //   );
-    //   if (isSend) {
-    //     await handleSendAnonymously(payload);
-    //   }
-    //   if (isUnShield) {
-    //     await handleUnShieldCrypto();
-    //   }
-    // } catch (error) {
-    //   dispatch(
-    //     actionToggleToast({
-    //       toggle: true,
-    //       value: error,
-    //       type: TOAST_CONFIGS.error,
-    //       defaultMessage: {
-    //         defaultChainErrorMsg: ERROR_MESSAGE.DEFAULT_ERROR_SEND,
-    //       },
-    //     }),
-    //   );
-    // }
+  const handleSend = async () => {
+    try {
+      if (disabledForm) {
+        return;
+      }
+      showLoading({ value: true });
+      if (isSend) {
+        await handleSendAnonymously();
+      }
+      await handleUnShieldCrypto();
+    } catch (error) {
+      // Handle error
+    } finally {
+      showLoading({ value: false });
+    }
   };
 
   React.useEffect(() => {

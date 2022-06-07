@@ -12,6 +12,7 @@ export interface ISendData {
   maxAmountText: string;
   screen: TypeSend;
   networkFeeText: string;
+  networkFeeAmount: number;
   networkFeeSymbol: string;
   headerTitle: string;
   showMemo: boolean;
@@ -21,12 +22,13 @@ export interface ISendData {
   disabledForm: boolean;
   init: boolean;
   isFetching: boolean;
-}
-
-export interface ISendFormData {
-  amount: string;
-  memo?: string;
-  toAddress: string;
+  isIncognitoAddress: boolean;
+  isExternalAddress: boolean;
+  inputAmount: string;
+  inputAddress: string;
+  inputMemo: string;
+  inputOriginalAmount: string;
+  isMainCrypto: boolean;
 }
 
 export interface ISendState {
