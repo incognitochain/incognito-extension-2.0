@@ -159,6 +159,7 @@ const getSendData = ({
     inputOriginalAmount: inputOriginalAmount.toString(),
 
     isMainCrypto,
+    networkFeeToken,
   };
 };
 

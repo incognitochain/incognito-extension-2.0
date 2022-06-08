@@ -29,6 +29,7 @@ export interface ISendData {
   inputMemo: string;
   inputOriginalAmount: string;
   isMainCrypto: boolean;
+  networkFeeToken: SelectedPrivacy;
 }
 
 export interface ISendState {
