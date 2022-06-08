@@ -113,9 +113,9 @@ const InputField = (props: IInputFieldProps) => {
         return (
           <div className="input-container input-address">
             <Input {...{ input, componentProps }} />
-            {/*<div className="sub-icon">*/}
-            {/*  <AddressBookIcon onClick={onClickAddressBook} />*/}
-            {/*</div>*/}
+            <div className="sub-icon">
+              <AddressBookIcon onClick={onClickAddressBook} />
+            </div>
             {/*<div className="sub-icon">*/}
             {/*  <ScanIcon onClick={onClickScan} />*/}
             {/*</div>*/}

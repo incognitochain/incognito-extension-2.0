@@ -62,6 +62,7 @@ const SendForm = React.memo((props: IMergeProps & any) => {
           componentProps={{
             value: networkFeeSymbol,
           }}
+          onClickAddressBook={() => {}}
           subtitle={networkFeeText}
         />
         <Button className="btn-submit" title={btnSubmit} disabled={disabledForm} type="submit" />
