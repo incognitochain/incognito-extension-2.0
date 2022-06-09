@@ -22,7 +22,7 @@ const KeyChainItem = React.memo((props: IKeyChainItemProps & any) => {
   const { name, address, onSelectedItem } = props;
   const ellipsisAddress = ellipsisCenter({ str: address, limit: 12 });
   return (
-    <Styled className="cursor" onClick={() => onSelectedItem({ address })}>
+    <Styled className="cursor wrap-keychain" onClick={() => onSelectedItem({ address })}>
       <p className="fs-medium">{name}</p>
       <p className="fs-regular sub-content">{ellipsisAddress}</p>
     </Styled>

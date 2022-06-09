@@ -11,6 +11,9 @@ const Styled = styled.div`
   .wrap-content {
     padding-left: 16px;
     padding-right: 16px;
+    .wrap-keychain:first-child {
+      margin-top: 0;
+    }
   }
 `;
 
