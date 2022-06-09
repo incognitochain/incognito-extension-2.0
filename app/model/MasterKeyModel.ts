@@ -1,10 +1,9 @@
 import storage from "@services/storage";
 import { getPassphrase } from "@services/wallet/passwordService";
 import Server from "@services/wallet/Server";
-import { initWallet, loadWallet } from "@services/wallet/walletService";
+import { importWallet, initWallet, loadWallet } from "@services/wallet/walletService";
 import { isEqual, toLower } from "lodash";
 import { BaseModel } from "./BaseModel";
-
 const { loadBackupKey, parseStorageBackup } = require("incognito-chain-web-js/build/web/wallet");
 
 export interface MasterKeyModelProps {
@@ -54,7 +53,7 @@ class MasterKeyModel extends BaseModel {
   constructor(data: MasterKeyModelProps = MasterKeyModelInit) {
     super();
     this.name = data.name;
-    this.mnemonic = data.passphrase;
+    this.mnemonic = data.mnemonic;
     this.passphrase = data.passphrase;
     this.isActive = !!data.isActive;
     this.deletedAccountIds = data.deletedAccountIds || [];
@@ -89,7 +88,9 @@ class MasterKeyModel extends BaseModel {
     if (rawData) {
       wallet = await loadWallet(passphrase, storageName, rootName);
     } else {
-      wallet = await initWallet(storageName, rootName);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      wallet = await importWallet(this.mnemonic!, rootName);
+      // wallet = await initWallet(storageName, rootName);
     }
     this.mnemonic = wallet.Mnemonic;
     this.wallet = wallet;

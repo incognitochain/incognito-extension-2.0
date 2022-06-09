@@ -1,9 +1,10 @@
-import http from "@services/http";
+import http, { changeBaseUrl } from "@services/http";
 
 export const getWalletAccounts = async (masterAccountPublicKey: any) => {
   let result = [];
   try {
     const url = `hd-wallet/recovery?Key=${masterAccountPublicKey}`;
+    await changeBaseUrl();
     const res: any = await http.get(url);
     result =
       res?.Accounts?.map((account: any) => ({

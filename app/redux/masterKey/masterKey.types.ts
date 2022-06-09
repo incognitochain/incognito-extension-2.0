@@ -14,6 +14,7 @@ export enum MasterKeyActionType {
   LOADING_INITIAL = `MASTER_KEY/LOADING_INITIAL`,
   SYNC_ACCOUNT_SUCCESS = `MASTER_KEY/SYNC_ACCOUNT_SUCCESS`,
   LOADING_ALL_ACCOUNTS = `MASTER_KEY/LOADING_ALL_ACCOUNTS`,
+  SWITCH_NETWORK = `MASTER_KEY/SWITCH_NETWORK`,
 }
 
 //----------------------------------------------
@@ -84,6 +85,11 @@ export interface MasterKeyLoadingAllAccountAction extends Action {
   payload: any;
 }
 
+export interface MasterKeySwitchNetworkAction extends Action {
+  type: MasterKeyActionType.SWITCH_NETWORK;
+  payload: any;
+}
+
 //-----------------------------------
 
 export type MasterKeyActions =
@@ -97,4 +103,5 @@ export type MasterKeyActions =
   | MasterKeyUpdateAction
   | MasterKeyImportAction
   | MasterKeyLoadAllAccoutsAction
-  | MasterKeyLoadingAllAccountAction;
+  | MasterKeyLoadingAllAccountAction
+  | MasterKeySwitchNetworkAction;

@@ -24,6 +24,7 @@ import {
   ImportMasterKeyPayload,
   initMasterKey,
   InitMasterKeyPayload,
+  masterKeySwitchNetwork,
   unlockMasterKey,
 } from "@redux/masterKey";
 import { dispatch, persistor } from "@redux/store/store";
@@ -169,6 +170,16 @@ export class PopupController {
             res.error = err;
           }
           break;
+        case "popup_switchNetwork":
+          try {
+            await this.switchNetwork();
+            await this.scanCoinHandler();
+          } catch (err) {
+            log("error: popup_lockWallet failed  with error: %s", err);
+            res.error = err;
+          }
+          break;
+
         case "popup_authoriseRequestAccounts":
           try {
             await this.approveRequestAccounts(req);
@@ -270,9 +281,18 @@ export class PopupController {
       await this.store.unlockSecretBox(password);
       const wallet = await dispatch(unlockMasterKey(password));
       this.store.setWallet(wallet);
-      this.persistData();
+      // this.persistData();
     } catch (e) {
       console.log("unlockWallet ERROR ", e);
+    }
+  }
+
+  async switchNetwork() {
+    try {
+      const wallet = await dispatch(masterKeySwitchNetwork());
+      this.store.setWallet(wallet);
+    } catch (e) {
+      console.log("switchNetwork ERROR ", e);
     }
   }
 

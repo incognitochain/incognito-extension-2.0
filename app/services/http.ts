@@ -3,6 +3,7 @@ import { v4 } from "uuid";
 import { CONSTANT_CONFIGS } from "@constants/index";
 // import Log from "@src/services/log";
 // import { CustomError, ErrorCode, ExHandler } from "./exception";
+import Server from "@services/wallet/Server";
 
 const CancelToken = axios.CancelToken;
 const HEADERS = { "Content-Type": "application/json" };
@@ -140,4 +141,10 @@ export const setTokenHeader = (token: any) => {
   }
 };
 
+export const changeBaseUrl = async () => {
+  const isMainnet = await Server.isMainnetDefault();
+  instance.defaults.baseURL = isMainnet
+    ? "https://api-service.incognito.org"
+    : "https://staging-api-service.incognito.org";
+};
 export default instance;

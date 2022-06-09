@@ -107,6 +107,7 @@ const TEST_NET_SERVER = {
   pubsubServices: "https://api-coinservice-staging.incognito.org/txservice",
   requestServices: "https://api-coinservice-staging.incognito.org",
   apiServices: "https://staging-api-service.incognito.org",
+  // apiServices: "https://api-service.incognito.org",
   shardNumber: DEFAULT_SHARD_NUMBER,
   IncContractAddress: "0x2f6F03F1b43Eab22f7952bd617A24AB46E970dF7",
   IncBSCContractAddress: "0x2f6F03F1b43Eab22f7952bd617A24AB46E970dF7",
@@ -239,18 +240,7 @@ const BETA_2 = {
   web3Configs: WEB3_CONSTANT.WEB3_MAINNET_CONFIGS,
 };
 
-const DEFAULT_LIST_SERVER = [
-  LOCAL_SERVER,
-  TEST_NET_SERVER,
-  TEST_NODE_SERVER,
-  MAIN_NET_SERVER,
-  TEST_NET_1_SERVER,
-  DEV_TEST_SERVER,
-  BETA_SERVER,
-  PORTAL_SERVER,
-  BETA_66,
-  BETA_2,
-];
+const DEFAULT_LIST_SERVER = [TEST_NET_SERVER, MAIN_NET_SERVER];
 
 export const KEY = {
   SERVER: "$servers",
@@ -270,15 +260,10 @@ export default class Server {
   static async getServerList(): Promise<ServerModel[]> {
     let serverList: ServerModel[] = [];
     try {
-      if (cachedList && cachedList.length > 0) {
-        serverList = cachedList;
-      } else {
-        serverList = await Server.getServerListFromStorage();
-        if (serverList && serverList.length < 1) {
-          serverList = DEFAULT_LIST_SERVER;
-          cachedList = DEFAULT_LIST_SERVER;
-          storage.setItem(KEY.SERVER, JSON.stringify(serverList));
-        }
+      serverList = await Server.getServerListFromStorage();
+      if (serverList && serverList.length < 1) {
+        serverList = DEFAULT_LIST_SERVER;
+        storage.setItem(KEY.SERVER, JSON.stringify(serverList));
       }
     } catch (error) {
       console.log("[getServerList] ERROR: ", error);
@@ -300,13 +285,12 @@ export default class Server {
       const newServerList = serverList.map((server: ServerModel) => {
         if (defaultServer.id === server.id) {
           return {
-            ...defaultServer,
+            ...server,
             default: true,
           };
         }
         return { ...server, default: false };
       });
-      cachedList = newServerList;
       await Server.setServerListToStorage(newServerList);
     } catch (e) {
       throw e;
@@ -317,6 +301,12 @@ export default class Server {
     return _.isEqual(network.id, "mainnet");
   }
 
+  static async isMainnetDefault() {
+    const currentNetworkId = await Server.getNetwork();
+    console.log("currentNetworkId ", currentNetworkId);
+    return _.isEqual(currentNetworkId, "mainnet");
+  }
+
   static async getNetwork(): Promise<string> {
     const server = await Server.getDefault();
     return server.id;
@@ -324,9 +314,7 @@ export default class Server {
 
   static setDefaultList() {
     try {
-      cachedList = KEY.DEFAULT_LIST_SERVER;
-      const strData = JSON.stringify(cachedList);
-      return storage.setItem(KEY.SERVER, strData);
+      return Server.setServerListToStorage(KEY.DEFAULT_LIST_SERVER);
     } catch (e) {
       throw e;
     }
