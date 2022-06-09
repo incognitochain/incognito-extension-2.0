@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@redux/store";
 import { actionSelectedPrivacySet } from "@redux/selectedPrivacy";
 import { useHistory } from "react-router-dom";
-import { route as TokenDetailRoute } from "@module/TokenDetail";
+import { route as routeTokenDetail } from "@module/TokenDetail";
 import { Image } from "@components/Core";
 
 const Styled = styled(Row)`
@@ -39,7 +39,7 @@ const Token = React.memo((props: SelectedPrivacy) => {
 
   const onTokenClick = React.useCallback(() => {
     dispatch(actionSelectedPrivacySet({ tokenID }));
-    history.push(TokenDetailRoute);
+    history.push(routeTokenDetail);
   }, [tokenID]);
 
   return (

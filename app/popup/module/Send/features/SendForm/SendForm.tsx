@@ -21,8 +21,16 @@ const Styled = styled.div`
 `;
 
 const SendForm = React.memo((props: IMergeProps & any) => {
-  const { onClickMax, validateAmount, validateAddress, warningAddress, handleSubmit, handleSend, isInitingForm } =
-    props;
+  const {
+    onClickMax,
+    validateAmount,
+    validateAddress,
+    warningAddress,
+    handleSubmit,
+    handleSend,
+    isInitingForm,
+    onClickAddressBook,
+  } = props;
   const { networkFeeSymbol, networkFeeText, showMemo, btnSubmit, disabledForm } = useSelector(sendDataSelector);
 
   const renderMemo = () => {
@@ -52,6 +60,7 @@ const SendForm = React.memo((props: IMergeProps & any) => {
           leftTitle="To"
           validate={validateAddress}
           warning={warningAddress}
+          onClickAddressBook={onClickAddressBook}
         />
         {renderMemo()}
         <Field

@@ -342,6 +342,10 @@ export const ThemedGlobalStyle = createGlobalStyle`
     .sub-text {
       color:${({ theme }: { theme: ITheme }) => theme.primaryP7};
     }
+    
+    .default-padding-top {
+      padding-top: 24px;
+    }
 `;
 
 export const Row = styled.div`

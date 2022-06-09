@@ -1,43 +1,25 @@
-// import { AccountInstance } from 'incognito-js/build/web/browser';
-// import { useSelector } from 'react-redux';
-// import { keySearchSelector, useSearchBoxVer2 } from 'src/components/Header';
-// import { listMasterKeyWithKeychainsSelector } from 'src/module/HDWallet';
-// import { filterKeychainByKeySearch } from 'src/utils/keychain';
-//
-// interface IHooks {
-//     walletName: string;
-//     listAccount: AccountInstance[];
-//     walletId: number;
-// }
-//
-// export const useMasterKeyWithKeychains: () => [IHooks[]] = () => {
-//     const keySearch = useSelector(keySearchSelector);
-//     let result: any[] = [];
-//     const [filter] = useSearchBoxVer2();
-//     const listMasterKeyWithKeychains = useSelector(listMasterKeyWithKeychainsSelector);
-//     listMasterKeyWithKeychains
-//         .map((masterKey) => ({
-//             data: masterKey.listAccount.map((account: AccountInstance) => ({
-//                 ...account,
-//                 name: account.name,
-//                 address: account.key.keySet.paymentAddressKeySerialized,
-//             })),
-//             walletName: masterKey.wallet.name,
-//             walletId: masterKey.walletId,
-//         }))
-//         .forEach((masterKey: { walletId: number; data: { name: string; address: string }[]; walletName: string }) => {
-//             const { data, walletName, walletId } = masterKey;
-//             const keychainAddrFil = filter(data, () => filterKeychainByKeySearch(data, keySearch));
-//             if (keychainAddrFil.length !== 0) {
-//                 const payload = {
-//                     listAccount: [...keychainAddrFil],
-//                     walletName,
-//                     walletId,
-//                 };
-//                 result.push(payload);
-//             }
-//         });
-//     return [result];
-// };
+import { useSelector } from "react-redux";
+import { groupMasterKeys } from "@redux/masterKey";
+import { defaultAccountSelector } from "@redux/account/account.selectors";
 
-export default {};
+interface IHooks {
+  walletName: string;
+  listAccount: any[];
+  walletId: string;
+}
+
+export const useMasterKeyWithKeychains: () => [IHooks[]] = () => {
+  const _groupedMasterKeys = useSelector(groupMasterKeys);
+  const _defaultAccount = useSelector(defaultAccountSelector);
+  const result = _groupedMasterKeys.map((masterKey) => ({
+    listAccount: (masterKey.child || [])
+      .map((account) => ({
+        name: account.AccountName,
+        address: account.PaymentAddress,
+      }))
+      .filter((account) => account.address !== _defaultAccount),
+    walletName: masterKey.name,
+    walletId: masterKey.name,
+  }));
+  return [result];
+};

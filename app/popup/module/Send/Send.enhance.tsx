@@ -11,6 +11,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { sendDataSelector } from "@module/Send/Send.selector";
 import { AppThunkDispatch } from "@redux/store";
 import { useLoading } from "@popup/context/loading";
+import { useHistory } from "react-router-dom";
+import AddressBook from "@module/AddressBook";
+import { actionToggleModal } from "../Modal";
+import { route as routeTokenDetail } from "@module/TokenDetail";
 
 export interface IMergeProps extends InjectedFormProps<any, any>, TInnerInit, TInnerAmount, TInnerAddress, TInnerSend {
   onClickMax: () => any;
@@ -25,8 +29,9 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergePro
   const { handleSendAnonymously, handleUnShieldCrypto } = props;
 
   const dispatch: AppThunkDispatch = useDispatch();
+  const history = useHistory();
   const { showLoading } = useLoading();
-  const { maxAmountText, disabledForm, isSend } = useSelector(sendDataSelector);
+  const { maxAmountText, disabledForm, isSend, selectedPrivacy } = useSelector(sendDataSelector);
 
   const onChangeField = async (value: string, field: string) => {
     let val: any = value;
@@ -40,45 +45,27 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergePro
   };
 
   const onClickAddressBook = () => {
-    // dispatch(
-    //   actionToggleModal({
-    //     data: (
-    //       <AddressBook
-    //         onGoBack={() => dispatch(actionToggleModal({}))}
-    //         onSelectedAddrBook={(addressBook: IAddressBook) => {
-    //           onChangeField(addressBook.address, FORM_CONFIGS.toAddress);
-    //           dispatch(actionToggleModal({}));
-    //         }}
-    //         filterBySelectedPrivacy
-    //       />
-    //     ),
-    //     customModalStyle: {
-    //       backgroundColor: darkMode && COLORS.black2,
-    //     },
-    //   }),
-    // );
+    dispatch(
+      actionToggleModal({
+        data: (
+          <AddressBook
+            onGoBack={() => dispatch(actionToggleModal({}))}
+            onSelectedAddrBook={({ address }: { address: string }) => {
+              onChangeField(address, FORM_CONFIGS.toAddress);
+              dispatch(actionToggleModal({}));
+            }}
+          />
+        ),
+        title: "Address Book",
+        closeable: true,
+      }),
+    );
   };
 
-  const handleScanQrCode = (value: any) => {
-    // if (isString(value)) {
-    //   onChangeField(value, FORM_CONFIGS.toAddress);
-    //   dispatch(actionToggleModal({}));
-    // }
-  };
-
-  const onClickScan = () => {
-    // dispatch(
-    //   actionToggleModal({
-    //     data: <QrReader onScan={handleScanQrCode} />,
-    //     isLoadingModal: true,
-    //   }),
-    // );
-  };
+  const onClickScan = () => {};
 
   const onGoBack = () => {
-    // clearForceSendData && clearForceSendData();
-    // clearCurrentRequest && clearCurrentRequest();
-    // history.push(`${routeDetail}/${selectedPrivacy.tokenId}`);
+    history.push(`${routeTokenDetail}/${selectedPrivacy.tokenId}`);
   };
 
   const handleSend = async () => {

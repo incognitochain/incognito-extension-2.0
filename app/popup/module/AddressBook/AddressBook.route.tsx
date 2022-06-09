@@ -1,12 +1,11 @@
 import { lazy } from "react";
 import { IRouteProps } from "@popup/module";
 
+export const route = "/address-book";
+
 const addressBookRoute: IRouteProps = {
   path: "/address-book",
-  exact: true,
   component: lazy(() => import("./AddressBook")),
 };
-
-export const route = "/address-book";
 
 export default addressBookRoute;
