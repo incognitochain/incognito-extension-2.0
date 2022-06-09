@@ -1,2 +1,2 @@
-export { default } from './SelectAccount';
+export { default } from './SelectAccountPage';
 export * from './SelectAccount.btn';

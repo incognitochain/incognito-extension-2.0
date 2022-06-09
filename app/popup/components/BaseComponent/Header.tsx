@@ -25,6 +25,12 @@ const TitleStyled = styled.p`
   text-align: left;
 `;
 
+const RightViewContainer = styled.div`
+  position: absolute;
+  right: 0;
+  margin-right: 24px;
+`;
+
 interface HeaderProps {
   title?: string;
   rightView?: React.ReactNode;
@@ -39,8 +45,7 @@ const Header = (props: HeaderProps) => {
         <BackIcon />
       </BackIconContainer>
       <TitleStyled className="fw-medium fs-large">{title}</TitleStyled>
-      {/* TO DO */}
-      {rightView && <></>}
+      {rightView && <RightViewContainer>{rightView}</RightViewContainer>}
     </Container>
   );
 };

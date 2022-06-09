@@ -11,6 +11,7 @@ import RestoreWalletPage from "@popup/pages/RestoreWallet/RestoreWalletPage";
 import SettingsPage from "@popup/pages/Settings/Settings";
 import NetworkPage from "@popup/pages/Network/Network";
 import { UnlockPage } from "@popup/pages/Unlock/UnlockPage";
+import SelectAccountPage from "@popup/module/Account/features/SelectAccount/SelectAccountPage"
 import React, { Suspense } from "react";
 // import NotFoundPage from "@popup/pages/NotFound/NotFoundPage";
 import { RouteProps } from "react-router";
@@ -79,6 +80,7 @@ const MainRoute = () => {
           <Route exact path={Paths.unlockPage} component={UnlockPage} />
           <Route exact path={Paths.settingsPage} component={SettingsPage} />
           <Route exact path={Paths.networkPage} component={NetworkPage} />
+          <Route exact path={Paths.selectAccountPage} component={SelectAccountPage} />
           {defaultRoute(`default-route`, {}, popupState, isNotification)}
         </Switch>
       </Suspense>
