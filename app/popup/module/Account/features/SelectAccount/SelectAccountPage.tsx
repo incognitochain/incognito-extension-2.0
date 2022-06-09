@@ -1,15 +1,18 @@
-import { ellipsisCenter } from "@popup/utils";
+import { AddButton } from "@components/AddButton/AddButton";
 import Header from "@components/BaseComponent/Header";
 import BodyLayout from "@components/layout/BodyLayout";
+import { Paths } from "@components/routes/paths";
+import { useBackground } from "@popup/context/background";
+import { useLoading } from "@popup/context/loading";
+import { ellipsisCenter } from "@popup/utils";
+import { useCallAsync } from "@popup/utils/notifications";
 import { defaultAccountSelector, listAccountSelector } from "@redux/account/account.selectors";
-import React, { useMemo, useCallback } from "react";
+import { trim } from "lodash";
+import React from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import AccountItem from "./AccountItem/AccountItem";
-import { useBackground } from "@popup/context/background";
-import { useCallAsync } from "@popup/utils/notifications";
-import { trim } from "lodash";
-import { useLoading } from "@popup/context/loading";
+
 const SelectAccountPage = React.memo(() => {
   const { request } = useBackground();
   const callAsync = useCallAsync();
@@ -45,7 +48,11 @@ const SelectAccountPage = React.memo(() => {
 
   return (
     <>
-      <Header title="Keychain" onBackClick={() => history.goBack()} />
+      <Header
+        title="Keychain"
+        onBackClick={() => history.goBack()}
+        rightView={<AddButton onClick={() => history.push(Paths.createAccountPage)} />}
+      />
       <BodyLayout className="scroll-view">
         {listAccount &&
           listAccount.map((accountItem) => {
@@ -58,6 +65,7 @@ const SelectAccountPage = React.memo(() => {
             });
             return (
               <AccountItem
+                key={paymentAddress}
                 isSelected={isSelected}
                 title={name}
                 description={paymentAddressEllipsis}
