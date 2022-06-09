@@ -9,6 +9,7 @@ import { scanCoins } from "@background/worker.scanCoins";
 import { setInterval } from "timers";
 import { actionFetchingScanCoins } from "@redux/scanCoins";
 import { actionClearAllModal } from "@module/Modal";
+import Storage from "@services/storage";
 const { init } = require("incognito-chain-web-js/build/web/wallet");
 
 window.store = store;
@@ -37,6 +38,7 @@ async function initialize() {
     apiServices: "https://staging-api-service-staging.incognito.org",
   };
   enableLogger();
+  // await Storage.logAll();
   await loadWasmConfig();
   await loadStoreRedux();
 

@@ -82,17 +82,20 @@ export const reducer: Reducer<AccountState, AccountActions> = (
   let newList = [];
 
   switch (action.type) {
-    case AccountActionType.SET:
+    case AccountActionType.SET: {
       newList = setAccount(state.list, action.payload);
       return {
         ...state,
         list: newList,
       };
-    case AccountActionType.SET_LIST:
+    }
+    case AccountActionType.SET_LIST: {
       return {
         ...state,
         list: cloneDeep(action.payload),
       };
+    }
+
     case AccountActionType.REMOVE_BY_PRIVATE_KEY:
       newList = removeByPrivateKey(state.list, action.payload);
       return {

@@ -130,7 +130,8 @@ export type PopupActions =
   | "popup_updateToken"
   | "popup_createAccount"
   | "popup_switchAccount"
-  | "popup_followTokensBalance";
+  | "popup_followTokensBalance"
+  | "popup_switchNetwork";
 
 export type PendingSignTransaction = {
   message: string;

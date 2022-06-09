@@ -57,14 +57,12 @@ export const reloadWallet =
     const state = getState();
     const masterKey = currentMasterKeySelector(state);
     let wallet = masterKey.wallet;
-
     let defaultAccount: AccountModel;
 
     try {
       await configsWallet(wallet);
       if (wallet?.Name) {
         listAccount = (await wallet.listAccount()) || [];
-
         defaultAccount = listAccount.find((item) => isEqual(item?.accountName, accountName)) || listAccount[0];
 
         if (!defaultAccount?.accountName) {

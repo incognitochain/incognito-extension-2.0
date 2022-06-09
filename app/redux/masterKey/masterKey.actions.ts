@@ -47,7 +47,6 @@ import { uniqBy } from "lodash";
 import { loadMasterKeys } from "./masterKey.reducer";
 import { walletSelector } from "@redux/wallet/wallet.selectors";
 const { Validator } = require("incognito-chain-web-js/build/web/wallet");
-
 //--------------------------------------------------------------------
 // Pure Functions (Pure Action)
 //--------------------------------------------------------------------
@@ -112,11 +111,7 @@ export const loadAllMasterKeyAccountsSuccess = (accounts: any): MasterKeyLoadAll
 //--------------------------------------------------------------------
 
 const updateNetwork = async () => {
-  const serverJSONString = await Storage.getItem("$servers");
-  const servers = JSON.parse(serverJSONString || "[]");
-  const currentServer = servers.find((item: any) => item.default) || {
-    id: "mainnet",
-  };
+  const currentServer = await serverService.getDefault();
   const isMainnet = currentServer.id === "mainnet";
   MasterKeyModel.network = isMainnet ? "mainnet" : "testnet";
 };
@@ -147,6 +142,45 @@ export const migrateData = async () => {
   // console.log('[migrateData] isMigratedData ', isMigratedData);
   // return isMigratedData;
 };
+export const masterKeySwitchNetwork = (): AppThunk => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
+
+  await updateNetwork();
+  await login();
+  const masterKey = currentMasterKeySelector(getState());
+  const wallet = masterKey.wallet || {};
+  // TO DO (after)
+
+  // await dispatch(loadAllMasterKeys());
+  // const masterKey = currentMasterKeySelector(getState());
+  // const wallet: any = masterKey.wallet || {};
+  // const listAccounts: any = await wallet.listAccountNoCache();
+  
+  // let masterAccountInfo = await wallet.MasterAccount.getDeserializeInformationNoCache();
+
+  // const serverAccounts = await getWalletAccounts(masterAccountInfo.PublicKeyCheckEncode);
+  // console.log(" masterAccountInfo ", masterAccountInfo);
+  // console.log(" serverAccounts ", serverAccounts);
+  // for (const account of wallet.MasterAccount.child) {
+  //   const accountInfo = await account.getDeserializeInformationNoCache();
+  //   console.log("accountInfo ", accountInfo);
+  // }
+  // const listAccount = (await wallet.listAccount()) || [];
+
+  // await syncServerAccounts(wallet);
+
+  // batch(() => {
+  //   dispatch(setWallet(wallet));
+  //   dispatch(setListAccount(listAccounts));
+  //   dispatch(setAccount(listAccounts[0]));
+  //   dispatch(setDefaultAccount(listAccounts[0]));
+  // });
+  // batch(async () => {
+  //   await dispatch(importMasterKeySuccess(masterKey));
+  //   await dispatch(switchMasterKeySuccess(masterKey.name));
+  // });
+  return wallet;
+};
+
 export const unlockMasterKey =
   (password: string): AppThunk =>
   async (dispatch: AppThunkDispatch, getState: AppGetState) => {
@@ -192,7 +226,7 @@ export const initMasterKey =
       await dispatch(switchMasterKeySuccess(defaultMasterKey.name));
       dispatch(reloadWallet());
       storeWalletAccountIdsOnAPI(wallet);
-      dispatch(actionRequestAirdropNFTForListAccount(wallet));
+      // dispatch(actionRequestAirdropNFTForListAccount(wallet));
     });
 
     return wallet;
@@ -246,7 +280,7 @@ export const importMasterKey =
         await dispatch(importMasterKeySuccess(newMasterKey));
         await dispatch(switchMasterKeySuccess(data.masterKeyName));
         !!ignoreReloadWallet && dispatch(reloadWallet());
-        dispatch(actionRequestAirdropNFTForListAccount(wallet));
+        // dispatch(actionRequestAirdropNFTForListAccount(wallet));
         dispatch(syncUnlinkWithNewMasterKey(newMasterKey));
         dispatch(loadAllMasterKeyAccounts());
         dispatch(reloadWallet());
@@ -358,7 +392,7 @@ export const createMasterKey = (data: any) => async (dispatch: AppThunkDispatch,
       await dispatch(createMasterKeySuccess(newMasterKey));
       await dispatch(switchMasterKeySuccess(data.name));
       dispatch(reloadWallet());
-      dispatch(actionRequestAirdropNFTForListAccount(wallet));
+      // dispatch(actionRequestAirdropNFTForListAccount(wallet));
       storeWalletAccountIdsOnAPI(wallet);
       dispatch(loadAllMasterKeyAccounts());
     });
@@ -384,7 +418,7 @@ export const loadAllMasterKeyAccounts = () => async (dispatch: AppThunkDispatch,
         accounts = [...accounts, ...masterKeyAccounts];
         const wallet = masterKey?.wallet;
         if (wallet) {
-          dispatch(actionRequestAirdropNFTForListAccount(wallet));
+          // dispatch(actionRequestAirdropNFTForListAccount(wallet));
         }
       } catch (error) {
         console.log("ERROR LOAD ACCOUNTS OF MASTER KEYS", error);
