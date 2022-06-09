@@ -19,23 +19,23 @@
 // import { translateByFieldSelector } from "src/module/Configs";
 // import { isKeyChainExist, isKeychainExistByName } from "src/utils/keychain";
 //
-// interface IProps {}
-//
-// interface TInner {
-//   handleCreate: any;
-//   isCreate: boolean;
-//   handleAction: () => any;
-//   disabledForm: boolean;
-// }
-//
-// export interface IMergeProps extends IProps, TInner {}
-//
-// export const FORM_CONFIGS = {
-//   formName: "form-address-book",
-//   name: "name",
-//   address: "address",
-// };
-//
+interface IProps {}
+
+interface TInner {
+  handleCreate: any;
+  isCreate: boolean;
+  handleAction: () => any;
+  disabledForm: boolean;
+}
+
+export interface IMergeProps extends IProps, TInner {}
+
+export const FORM_CONFIGS = {
+  formName: "form-address-book",
+  name: "name",
+  address: "address",
+};
+
 // const enhance = (WrappedComponent: React.FunctionComponent) => (props: IProps & any) => {
 //   const dispatch = useDispatch();
 //   const mainnet = "";
@@ -125,5 +125,3 @@
 //   }),
 //   enhance,
 // );
-
-export default {};

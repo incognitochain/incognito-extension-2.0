@@ -26,6 +26,7 @@ const Styled = styled.div`
 `;
 const AddressBook = React.memo((props: IMergeProps & any) => {
   const { addressBook, onGoBack, onSelectedItem, onRemoveItem, showRemoveItem } = props;
+  console.log("SANG TEST: ", addressBook);
   const factories = addressBook.map((item: { title: string; data: any[] }) => ({
     masterKeyName: item.title,
     listAccount: item.data,
