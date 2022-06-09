@@ -13,10 +13,10 @@ import { ThemeProvider as ThemeProviderMUI } from "@mui/system";
 import { Modal } from "@module/Modal";
 import { Router } from "react-router";
 import { createBrowserHistory, createMemoryHistory } from "history";
-import { isDev } from "@popup/configs";
+import { isMainnet } from "@popup/configs";
 import { LoadingProvider } from "@popup/context/loading";
 
-const history = isDev ? createBrowserHistory() : createMemoryHistory(); // Instead of createBrowserHistory();
+const history = !isMainnet ? createBrowserHistory() : createMemoryHistory(); // Instead of createBrowserHistory();
 
 const App: React.FunctionComponent = () => {
   const useStyles = makeStyles({

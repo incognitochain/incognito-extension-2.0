@@ -9,23 +9,21 @@ import { actionFetchedFollowBalance, actionFetchingFollowBalance } from "@module
 import { isFetchingAssetsSelector } from "@module/Assets";
 import { defaultAccountSelector } from "@redux/account/account.selectors";
 import uniq from "lodash/uniq";
+import Server from "@services/wallet/Server";
 const { Account, PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 
-const tokens = [
-  "880ea0787f6c1555e59e3958a595086b7802fc7a38276bcd80d4525606557fbc",
-  "ffd8d42dc40a8d166ea4848baf8b5f6e9fe0e9c30d60062eb7d44a8df9e00854",
-];
+const tokens: any[] = [];
 
 const log = createLogger("background:scanCoins");
 
 export const configAccount = async () => {
   const accountData = defaultAccountSelector(store.getState());
   if (!accountData || !accountData.PrivateKey) return;
-  // const wallet = accountData.Wallet;
   let accountSender = new Account({});
-  const { address, coinServices } = global.network;
-  accountSender.setRPCClient(address);
-  accountSender.setRPCCoinServices(coinServices);
+  const server = await Server.getDefault();
+  const { coinServices: COIN_SERVICE, address: FULL_NODE } = server;
+  accountSender.setRPCClient("https:community-fullnode.incognito.org/fullnode");
+  accountSender.setRPCCoinServices(COIN_SERVICE);
   accountSender.setStorageServices(Storage);
   await accountSender.setKey(accountData.PrivateKey);
   return accountSender;

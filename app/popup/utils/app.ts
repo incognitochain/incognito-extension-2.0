@@ -1,5 +1,3 @@
-import { isDev } from "@popup/configs";
-
 export const getActiveTabs = () => {
   return new Promise((resolve) => {
     chrome.tabs.query({ active: true }, (tabs) => {
@@ -17,7 +15,6 @@ export const getLastFocusedWindow = () => {
 };
 
 export const closeExtensionPopup = () => {
-  if (isDev) return;
   return chrome.windows.getCurrent((windowDetails) => {
     if (windowDetails?.type === "popup") {
       return chrome.windows.remove(windowDetails.id);

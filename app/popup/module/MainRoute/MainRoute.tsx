@@ -87,4 +87,3 @@ const MainRoute = () => {
 };
 
 export default enhance(React.memo(MainRoute));
-// export default React.memo(MainRoute);

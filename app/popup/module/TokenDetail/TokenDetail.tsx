@@ -19,7 +19,6 @@ const Styled = styled.div`
 const TokenDetail = React.memo(() => {
   const tokenSelected = useSelector(selectedPrivacyToken);
   const history = useHistory();
-  console.log(tokenSelected);
   return (
     <Styled>
       <Header

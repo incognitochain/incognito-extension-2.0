@@ -1,18 +1,38 @@
 import axios from "axios";
 import CONSTANT_CONFIGS from "@constants/config";
 import { CustomError, ErrorCode, ExHandler } from "./exception";
+import Server from "@services/wallet/Server";
 
 const HEADERS = { "Content-Type": "application/json" };
 const TIMEOUT = 20000;
 
 const instance = axios.create({
-  baseURL: CONSTANT_CONFIGS.TOKENS_URL,
+  baseURL: CONSTANT_CONFIGS.COINS_SERVICE_URL,
   timeout: TIMEOUT,
   headers: {
     ...HEADERS,
     Authorization: "",
   },
 });
+
+// Add a request interceptor
+instance.interceptors.request.use(
+  async (config) => {
+    const newConfig = {
+      ...config,
+    };
+    const server = await Server.getDefault();
+    const BASE_URL = server.coinServices;
+    if (BASE_URL) {
+      newConfig["baseURL"] = BASE_URL;
+    }
+    console.log(newConfig);
+    return newConfig;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
 
 instance.interceptors.response.use(
   (res) => {

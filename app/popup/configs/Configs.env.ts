@@ -40,6 +40,5 @@ export const getEnvs = () => {
 };
 
 export const ENVS: IENVS = getEnvs();
-export const isDev: boolean = !ENVS.REACT_APP_IS_MAINNET;
-export const isMainnet: boolean = ENVS.REACT_APP_IS_MAINNET;
+export const isMainnet: boolean = global.isMainnet;
 export const appDomain: string = ENVS.REACT_APP_DOMAIN_URL;

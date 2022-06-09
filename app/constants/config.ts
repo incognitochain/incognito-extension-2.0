@@ -4,9 +4,7 @@ export const MAIN_WEBSITE = "https://we.incognito.org";
 
 const PASSPHRASE_WALLET_DEFAULT = "PASSPHRASE_WALLET_DEFAULT";
 
-const TOKENS_URL = isMainnet
-  ? "https://api-coinservice.incognito.org"
-  : "https://api-coinservice-staging.incognito.org";
+const COINS_SERVICE_URL = "https://api-coinservice.incognito.org";
 
 const API_BASE_URL = isMainnet
   ? "https://api-service.incognito.org"
@@ -110,6 +108,7 @@ export default {
   NODE_MONITOR_URL,
   NODE_MONITOR_DETAIL_URL,
   FAUCET_URL,
-  TOKENS_URL,
   PASSPHRASE_WALLET_DEFAULT,
+
+  COINS_SERVICE_URL,
 };

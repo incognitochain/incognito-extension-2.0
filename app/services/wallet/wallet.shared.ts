@@ -1,4 +1,5 @@
 import AccountModel from "@model/AccountModel";
+import Server from "@services/wallet/Server";
 
 const { Validator } = require("incognito-chain-web-js/build/web/wallet");
 
@@ -33,21 +34,19 @@ export const getAccountWallet = (account: any, wallet: any) => {
     new Validator("wallet.RpcApiService", wallet.RpcApiService).string();
     new Validator("wallet.PortalService", wallet.PortalService).string();
 
-    global.network = {
-      address: "https://testnet.incognito.org/fullnode",
-      coinServices: "https://api-coinservice-staging.incognito.org",
-      pubsubServices: "https://api-coinservice-staging.incognito.org/txservice",
-      apiServices: "https://staging-api-service-staging.incognito.org",
-    };
+    // TODO: REMOVE SOON
+    const FULL_NODE = "https://community-fullnode.incognito.org/fullnode";
+    const COIN_SERVICE = "https://api-coinservice.incognito.org";
+    const PUBSUB = "https://api-coinservice.incognito.org/txservice";
+    const API_SERVICE = "https://api-service.incognito.org";
 
-    const { address, coinServices, pubsubServices, apiServices } = global.network;
-    accountWallet.setRPCClient(address);
+    accountWallet.setRPCClient(FULL_NODE);
     accountWallet.setStorageServices(wallet.Storage);
-    accountWallet.setRPCCoinServices(coinServices);
-    accountWallet.setRPCTxServices(pubsubServices);
-    accountWallet.setRPCRequestServices(pubsubServices);
+    accountWallet.setRPCCoinServices(COIN_SERVICE);
+    accountWallet.setRPCTxServices(PUBSUB);
+    accountWallet.setRPCRequestServices(PUBSUB);
     accountWallet.setAuthToken(wallet.AuthToken);
-    accountWallet.setRPCApiServices(apiServices, wallet.AuthToken);
+    accountWallet.setRPCApiServices(API_SERVICE, wallet.AuthToken);
     // accountWallet.setRPCClient(wallet.RpcClient);
     // accountWallet.setStorageServices(wallet.Storage);
     // accountWallet.setRPCCoinServices(wallet.RpcCoinService);

@@ -11,7 +11,6 @@ import styled, {
 
 import { darkModeSelector } from "./Theme.selector";
 import { Colors } from "./Theme.styled";
-import { isDev } from "@popup/configs";
 
 const MEDIA_WIDTHS = {
   upToExtraSmall: 500,
@@ -82,7 +81,6 @@ export const ThemedGlobalStyle = createGlobalStyle`
         font-display: swap;
         box-sizing: border-box;
         font-weight: 400;
-        // border: ${isDev ? "solid 0.5px" : "none"};
         overflow: hidden;
         position: relative;
         font-size: ${FONT_SIZES.regular}px;

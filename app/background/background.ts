@@ -5,11 +5,7 @@ import { createLogger, isInternalProcess } from "@core/utils";
 import LocalStore from "./lib/local-store";
 import IncognitoController from "./incognito.controller";
 import { initialState } from "./store";
-import { scanCoins } from "@background/worker.scanCoins";
-import { setInterval } from "timers";
-import { actionFetchingScanCoins } from "@redux/scanCoins";
 import { actionClearAllModal } from "@module/Modal";
-import Storage from "@services/storage";
 const { init } = require("incognito-chain-web-js/build/web/wallet");
 
 window.store = store;
@@ -29,27 +25,12 @@ initialize().catch((err) => {
 });
 
 async function initialize() {
-  console.log({ store: store.getState(), persistor: persistor.getState() });
-  // TODO: REMOVE HARD CODE
-  global.network = {
-    address: "https://testnet.incognito.org/fullnode",
-    coinServices: "https://api-coinservice-staging.incognito.org",
-    pubsubServices: "https://api-coinservice-staging.incognito.org/txservice",
-    apiServices: "https://staging-api-service-staging.incognito.org",
-  };
   enableLogger();
-  // await Storage.logAll();
   await loadWasmConfig();
   await loadStoreRedux();
 
   const versionedData = await loadStateFromPersistence();
   setupController(versionedData).then();
-
-  // dispatch(actionFetchingScanCoins({ isFetching: false }));
-  // scanCoins().then();
-  // setInterval(() => {
-  //   scanCoins().then();
-  // }, 40000);
 }
 
 async function loadWasmConfig(): Promise<void | Error> {
