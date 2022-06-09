@@ -33,6 +33,7 @@ export const Paths = {
   restoreWalletPage: "/restore-wallet-page",
   settingsPage: "/settings-page",
   networkPage: "/network-page",
+  selectAccountPage: "/select-account-page",
 };
 
 export const PathsKey: PathsKeyMap = {
