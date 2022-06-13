@@ -2,12 +2,13 @@ import React from "react";
 import styled, { ITheme } from "styled-components";
 import { Button } from "@components/Core";
 import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { batch, useDispatch, useSelector } from "react-redux";
 import { paymentAddressOfDefaultAccountSelector } from "@redux/account/account.selectors";
 import { route as QRCodeRoute } from "@module/QRCode";
-import { route as SendRoute } from "@module/Send";
+import { actionFreeData, FORM_CONFIGS, route as SendRoute } from "@module/Send";
 import { actionSelectedPrivacySet, selectedPrivacyToken } from "@redux/selectedPrivacy";
 import { AppThunkDispatch } from "@redux/store";
+import { reset } from "redux-form";
 
 const Styled = styled.div`
   display: flex;
@@ -42,7 +43,11 @@ const ActionsGroup = React.memo(() => {
 
   const navigateSendRoute = () => {
     history.push(`${SendRoute}/${tokenID}`);
-    dispatch(actionSelectedPrivacySet({ tokenID: tokenID }));
+    batch(() => {
+      dispatch(actionFreeData());
+      dispatch(reset(FORM_CONFIGS.formName));
+      dispatch(actionSelectedPrivacySet({ tokenID: tokenID }));
+    });
   };
 
   return (

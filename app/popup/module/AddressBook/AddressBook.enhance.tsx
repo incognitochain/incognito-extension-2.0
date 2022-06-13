@@ -6,6 +6,7 @@ import { FORM_CONFIGS } from "@module/Send";
 import { change, focus } from "redux-form";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@redux/store";
+import { useHistory } from "react-router-dom";
 
 export interface TInner {
   addressBook: IPropsAddrBook[];
@@ -25,6 +26,7 @@ export interface IMergeProps extends TInner, IProps {}
 const enhance = (WrappedComponent: React.FunctionComponent) => (props: IProps & any) => {
   let addressBook: { title: string; data: any[] }[] = [];
   const dispatch: AppThunkDispatch = useDispatch();
+  const history = useHistory();
   const [listMasterKeyWithKeychains] = useMasterKeyWithKeychains();
   addressBook = [
     ...listMasterKeyWithKeychains.map((item) => ({
@@ -41,7 +43,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IProps & 
 
   const onSelectedItem = async ({ address }: { address: string }) => {
     await onChangeField(address, FORM_CONFIGS.toAddress);
-    history.back();
+    history.goBack();
   };
 
   return (

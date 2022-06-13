@@ -51,12 +51,6 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergePro
 
   const onGoBack = () => {
     history.push(`${routeTokenDetail}/${selectedPrivacy.tokenId}`);
-    setTimeout(() => {
-      batch(() => {
-        dispatch(actionFreeData());
-        dispatch(reset(FORM_CONFIGS.formName));
-      });
-    }, 100);
   };
 
   const handleSend = async () => {

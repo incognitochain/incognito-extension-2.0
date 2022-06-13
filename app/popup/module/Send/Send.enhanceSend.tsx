@@ -74,6 +74,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
       await callAsync(request("popup_create_and_send_transaction", { isMainCrypto, payload }), {
         onSuccess: (result: any) => {
           const { reqResponse: tx } = result.result;
+          console.log("SEND RESULT: ", result);
           if (!tx) return;
           const confirmData = getConfirmTxBuilder({
             tx,
@@ -87,6 +88,9 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
         },
         onError: (error) => {
           console.log("SEND ERROR: ", error);
+        },
+        onFinish: () => {
+          console.log("SEND FINISH: ");
         },
       });
     } catch (e) {
