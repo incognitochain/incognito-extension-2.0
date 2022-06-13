@@ -1,4 +1,4 @@
-import { change, focus, InjectedFormProps, reduxForm } from "redux-form";
+import { change, focus, InjectedFormProps, reduxForm, reset } from "redux-form";
 import { compose } from "recompose";
 import { actionFreeData, FORM_CONFIGS } from "@module/Send";
 import withInit, { TInnerInit } from "./Send.enhanceInit";
@@ -7,13 +7,12 @@ import withValAmount, { TInner as TInnerAmount } from "./Send.enhanceAmountValid
 import withSend, { TInner as TInnerSend } from "./Send.enhanceSend";
 import withFee from "./Send.enhanceFee";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { batch, useDispatch, useSelector } from "react-redux";
 import { sendDataSelector } from "@module/Send/Send.selector";
 import { AppThunkDispatch } from "@redux/store";
 import { useLoading } from "@popup/context/loading";
 import { useHistory } from "react-router-dom";
-import AddressBook from "@module/AddressBook";
-import { actionToggleModal } from "../Modal";
+import { route as routeAddressBook } from "@module/AddressBook";
 import { route as routeTokenDetail } from "@module/TokenDetail";
 
 export interface IMergeProps extends InjectedFormProps<any, any>, TInnerInit, TInnerAmount, TInnerAddress, TInnerSend {
@@ -45,27 +44,19 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergePro
   };
 
   const onClickAddressBook = () => {
-    dispatch(
-      actionToggleModal({
-        data: (
-          <AddressBook
-            onGoBack={() => dispatch(actionToggleModal({}))}
-            onSelectedAddrBook={({ address }: { address: string }) => {
-              onChangeField(address, FORM_CONFIGS.toAddress);
-              dispatch(actionToggleModal({}));
-            }}
-          />
-        ),
-        title: "Address Book",
-        closeable: true,
-      }),
-    );
+    history.push(routeAddressBook);
   };
 
   const onClickScan = () => {};
 
   const onGoBack = () => {
     history.push(`${routeTokenDetail}/${selectedPrivacy.tokenId}`);
+    setTimeout(() => {
+      batch(() => {
+        dispatch(actionFreeData());
+        dispatch(reset(FORM_CONFIGS.formName));
+      });
+    }, 100);
   };
 
   const handleSend = async () => {
@@ -85,12 +76,6 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergePro
     }
   };
 
-  React.useEffect(() => {
-    return () => {
-      dispatch(actionFreeData());
-    };
-  }, []);
-
   return (
     <WrappedComponent
       {...{
@@ -109,6 +94,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergePro
 export default compose<IMergeProps, any>(
   reduxForm({
     form: FORM_CONFIGS.formName,
+    destroyOnUnmount: false,
   }),
   withInit,
   withValAddress,

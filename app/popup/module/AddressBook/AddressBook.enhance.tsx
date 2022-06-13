@@ -2,10 +2,13 @@ import { IAddressBook } from "./AddressBook.interface";
 import React from "react";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { useMasterKeyWithKeychains } from "@popup/hooks/useMasterKeyWithKeychains";
+import { FORM_CONFIGS } from "@module/Send";
+import { change, focus } from "redux-form";
+import { useDispatch } from "react-redux";
+import { AppThunkDispatch } from "@redux/store";
 
 export interface TInner {
   addressBook: IPropsAddrBook[];
-  onSelectedItem: (item: IAddressBook) => any;
 }
 
 export interface IPropsAddrBook {
@@ -20,8 +23,8 @@ export interface IProps {
 export interface IMergeProps extends TInner, IProps {}
 
 const enhance = (WrappedComponent: React.FunctionComponent) => (props: IProps & any) => {
-  const { onSelectedAddrBook } = props;
   let addressBook: { title: string; data: any[] }[] = [];
+  const dispatch: AppThunkDispatch = useDispatch();
   const [listMasterKeyWithKeychains] = useMasterKeyWithKeychains();
   addressBook = [
     ...listMasterKeyWithKeychains.map((item) => ({
@@ -30,10 +33,15 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IProps & 
     })),
   ];
 
+  const onChangeField = async (value: string, field: string) => {
+    let val: any = value;
+    dispatch(change(FORM_CONFIGS.formName, field, val));
+    dispatch(focus(FORM_CONFIGS.formName, field));
+  };
+
   const onSelectedItem = async ({ address }: { address: string }) => {
-    if (typeof onSelectedAddrBook === "function") {
-      return onSelectedAddrBook({ address });
-    }
+    await onChangeField(address, FORM_CONFIGS.toAddress);
+    history.back();
   };
 
   return (

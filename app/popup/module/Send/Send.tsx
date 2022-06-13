@@ -6,10 +6,11 @@ import { useSelector } from "react-redux";
 import { sendDataSelector } from "@module/Send/Send.selector";
 
 const Send = React.memo((props: IMergeProps & any) => {
+  const { onGoBack } = props;
   const { headerTitle } = useSelector(sendDataSelector);
   return (
     <>
-      <Header showBack={true} title={headerTitle} />
+      <Header showBack={true} title={headerTitle} onGoBack={onGoBack} />
       <SendForm {...props} />
     </>
   );

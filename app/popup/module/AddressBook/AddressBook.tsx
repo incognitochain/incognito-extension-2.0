@@ -1,9 +1,8 @@
 import React from "react";
-import styled from "styled-components";
 import withAddressBook, { IMergeProps } from "./AddressBook.enhance";
 import MasterKeyItem from "@module/Account/features/MasterKeyItem";
-
-const Styled = styled.div``;
+import Header from "@components/Header";
+import WrapContent from "@components/Content/Content";
 
 const AddressBook = React.memo((props: IMergeProps & any) => {
   const { addressBook, onSelectedItem } = props;
@@ -12,11 +11,14 @@ const AddressBook = React.memo((props: IMergeProps & any) => {
     listAccount: item.data,
   }));
   return (
-    <Styled className="default-padding-horizontal">
-      {factories.map((account: any) => (
-        <MasterKeyItem onSelectedItem={onSelectedItem} {...account} key={account.masterKeyName} />
-      ))}
-    </Styled>
+    <>
+      <Header title="Address Book" />
+      <WrapContent className="default-padding-horizontal default-padding0-top">
+        {factories.map((account: any) => (
+          <MasterKeyItem onSelectedItem={onSelectedItem} {...account} key={account.masterKeyName} />
+        ))}
+      </WrapContent>
+    </>
   );
 });
 

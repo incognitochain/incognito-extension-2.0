@@ -9,8 +9,7 @@ const Styled = styled.div`
     background-color: ${({ theme }: { theme: ITheme }) => theme.primaryP9};
   }
   .wrap-content {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-top: 16px;
     .wrap-keychain:first-child {
       margin-top: 0;
     }

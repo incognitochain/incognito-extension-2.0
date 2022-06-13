@@ -32,10 +32,10 @@ const getTxsHistoryBuilder = ({
     let statusColor;
     if (history.statusStr === "Failed") {
       statusColor = colors.colorP4;
-    } else if (history.statusStr === "Completed") {
-      statusColor = colors.colorP5;
+    } else if (history.statusStr === "Success") {
+      statusColor = colors.colorP2;
     } else {
-      statusColor = colors.primaryP8;
+      statusColor = colors.colorP8;
     }
 
     return {

@@ -33,8 +33,6 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
       autoCorrect: true,
     });
 
-    console.log(maxAmountNum);
-
     let currentState = { ...state };
     if (Number.isFinite(maxAmountNum)) {
       currentState = {

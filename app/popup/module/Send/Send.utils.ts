@@ -37,6 +37,9 @@ const getMaxSendAmount = ({
   if (screen === TypeSend.UNSHIELD) {
     maxAmount = new BigNumber(maxAmount).minus(sendTokenID === burnFeeTokenID ? burnFee : 0).toNumber();
   }
+  if (maxAmount <= 0) {
+    maxAmount = 0;
+  }
   const maxAmountText = convert
     .toHumanAmount({
       originalAmount: maxAmount,
