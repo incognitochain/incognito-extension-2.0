@@ -56,7 +56,7 @@ const NetworkPage: React.FC = () => {
             key={network.id}
             title={network.name}
             description={network.address}
-            disabled={!network.default}
+            isSelected={network.default}
             onClick={() => {
               handleSetDefaultNetwork(network);
             }}

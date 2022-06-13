@@ -2,9 +2,12 @@ import styled, { ITheme } from "styled-components";
 
 const Container = styled.button`
   width: 100%;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  padding: 4px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-top: 14px;
+  padding-bottom: 14px;
   border-radius: 8px;
   display: flex;
   flex-direction: row;
@@ -20,11 +23,15 @@ const LeftView = styled.div`
   display: flex;
 `;
 
-const CircleView = styled.div`
+const CircleView = styled.button`
   width: 8px;
   height: 8px;
   border-radius: 4px;
-  background-color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
+  background-color: ${({ theme }: { theme: ITheme }) => theme.colorP10};
+
+  :disabled {
+    background-color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
+  }
 `;
 
 const RightView = styled.div`

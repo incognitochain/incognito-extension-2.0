@@ -2,7 +2,12 @@ import styled, { ITheme } from "styled-components";
 
 const Container = styled.div`
   width: 100%;
-  padding: 4px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-top: 14px;
+  padding-bottom: 14px;
   display: flex;
   border-radius: 8px;
   flex-direction: row;
