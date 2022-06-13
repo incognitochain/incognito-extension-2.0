@@ -7,7 +7,7 @@ import uniqBy from "lodash/uniqBy";
 import { IBalance } from "@core/types";
 import { actionFetchedFollowBalance, actionFetchingFollowBalance } from "@module/Assets";
 import { isFetchingAssetsSelector } from "@module/Assets";
-import { defaultAccountSelector } from "@redux/account/account.selectors";
+import { defaultAccountSelector, defaultAccountWalletSelector } from "@redux/account/account.selectors";
 import uniq from "lodash/uniq";
 import Server from "@services/wallet/Server";
 const { Account, PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
@@ -19,13 +19,11 @@ const log = createLogger("background:scanCoins");
 export const configAccount = async () => {
   const accountData = defaultAccountSelector(store.getState());
   if (!accountData || !accountData.PrivateKey) return;
-  let accountSender = new Account({});
-  const server = await Server.getDefault();
-  const { coinServices: COIN_SERVICE, address: FULL_NODE } = server;
-  accountSender.setRPCClient("https:community-fullnode.incognito.org/fullnode");
-  accountSender.setRPCCoinServices(COIN_SERVICE);
+  // let accountSender = new Account({});
+  // const server = await Server.getDefault();
+  // const { coinServices: COIN_SERVICE, address: FULL_NODE } = server;
+  const accountSender = defaultAccountWalletSelector(store.getState());
   accountSender.setStorageServices(Storage);
-  await accountSender.setKey(accountData.PrivateKey);
   return accountSender;
 };
 
@@ -40,7 +38,7 @@ export const scanCoins = async () => {
     const _followTokens = (await accountSender.getListFollowingTokens()) || [];
     // Get coins scanned from storage, existed ignore and continue scan
     const coinsStore = await accountSender.getStorageCoinsScan();
-    // const isScanned =
+
     if (!coinsStore) {
       dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey }));
     }

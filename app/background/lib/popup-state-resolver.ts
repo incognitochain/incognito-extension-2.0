@@ -1,4 +1,4 @@
-import { AVAILABLE_NETWORKS, PopupState } from "../../core/types";
+import { AVAILABLE_NETWORKS, PopupState } from "@core/types";
 import { ActionManager } from "./action-manager";
 import { Store } from "../store";
 
@@ -21,6 +21,7 @@ export class PopupStateResolver {
       authorizedOrigins: [],
       actions: this.actionManager.getOrderedActions(),
       storeData: {},
+      reqResponse: null,
     };
 
     if (this.store.hasSecretBox()) {

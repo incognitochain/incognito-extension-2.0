@@ -74,6 +74,7 @@ export type PopupState = {
   authorizedOrigins: string[];
   actions: OrderedAction[];
   storeData?: any;
+  reqResponse: null;
 };
 
 export type ActionKey = {
@@ -131,7 +132,8 @@ export type PopupActions =
   | "popup_createAccount"
   | "popup_switchAccount"
   | "popup_followTokensBalance"
-  | "popup_switchNetwork";
+  | "popup_switchNetwork"
+  | "popup_create_and_send_transaction";
 
 export type PendingSignTransaction = {
   message: string;

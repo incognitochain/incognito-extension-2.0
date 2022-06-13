@@ -79,7 +79,7 @@ export const reloadWallet =
             dispatch(FollowAction.actionLoadFollowBalance());
             dispatch(actionSetSignPublicKeyEncode());
             dispatch(actionSyncAccountMasterKey());
-            dispatch(actionSetNFTTokenData());
+            // dispatch(actionSetNFTTokenData());
           });
         }, 500);
       }

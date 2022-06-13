@@ -9,7 +9,7 @@ import { isFirstTimeScanCoinsSelector } from "@redux/scanCoins";
 import { otaKeyOfDefaultAccountSelector } from "@redux/account/account.selectors";
 import { useBackground } from "@popup/context/background";
 import throttle from "lodash/throttle";
-import { useLoading } from "@popup/context/loading";
+import { Loading } from "@popup/context/loading";
 
 const withBackgroundState = (WrappedComponent: FunctionComponent) => {
   return (props: any) => {
@@ -52,15 +52,13 @@ const withRouteChange = (WrappedComponent: any) => {
 
 const withLoading = (WrappedComponent: any) => {
   return (props: any) => {
-    const { showLoading } = useLoading();
     const isScanCoins = useSelector(isFirstTimeScanCoinsSelector);
-    const OTAKey = useSelector(otaKeyOfDefaultAccountSelector);
-    React.useEffect(() => {
-      showLoading({
-        value: !!isScanCoins && !!OTAKey,
-      });
-    }, [isScanCoins, OTAKey]);
-    return <WrappedComponent {...props} />;
+    return (
+      <>
+        <WrappedComponent {...props} />
+        {isScanCoins && <Loading message="Scanning coins, please wait a few minutes" />}
+      </>
+    );
   };
 };
 

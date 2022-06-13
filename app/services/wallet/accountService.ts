@@ -137,7 +137,7 @@ export default class Account {
       new Validator("createAndSendNativeToken-txType", txType).required().number();
       new Validator("createAndSendNativeToken-version", version).required().number();
       // await accountWallet.resetProgressTx();
-      const infoStr = typeof info !== "string" ? JSON.stringify(info) : info;
+      const infoStr = typeof info !== "string" ? JSON.stringify(info) : info || "";
       const result = await accountSender.createAndSendNativeToken({
         transfer: {
           info: infoStr,

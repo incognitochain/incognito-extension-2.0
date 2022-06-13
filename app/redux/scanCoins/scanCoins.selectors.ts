@@ -15,7 +15,7 @@ const isFirstTimeScanCoinsSelector = createSelector(
   statusScanCoinsSelector,
   otaKeyOfDefaultAccountSelector,
   (scanStatus, OTAKey) => {
-    if (!OTAKey) return;
+    if (!OTAKey) return false;
     return !scanStatus[OTAKey] || (scanStatus[OTAKey] && scanStatus[OTAKey].isScanning);
   },
 );

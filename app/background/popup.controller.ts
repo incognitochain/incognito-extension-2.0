@@ -27,12 +27,14 @@ import {
   masterKeySwitchNetwork,
   unlockMasterKey,
 } from "@redux/masterKey";
-import { dispatch, persistor } from "@redux/store/store";
+import { dispatch, persistor, store } from "@redux/store/store";
 import Storage from "@services/storage";
 import { APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@constants/common";
 import { actionFetchCreateAccount, actionSwitchAccount } from "@redux/account";
 import { getFollowTokensBalance } from "@background/worker.scanCoins";
-
+import { defaultAccountWalletSelector } from "@redux/account/account.selectors";
+import accountService from "@services/wallet/accountService";
+const { setShardNumber } = require("incognito-chain-web-js/build/web/wallet");
 const log = createLogger("sol:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
 
@@ -81,6 +83,7 @@ export class PopupController {
   createMiddleware() {
     return createAsyncMiddleware(async (req: any, res: any, next: any) => {
       const method = req.method as PopupActions;
+      let reqResponse;
       switch (method) {
         case "popup_getState":
           break;
@@ -255,6 +258,15 @@ export class PopupController {
             res.error = err;
           }
           break;
+        case "popup_create_and_send_transaction":
+          try {
+            const { isMainCrypto, payload } = req.params;
+            reqResponse = await this.createAndSendTransaction({ isMainCrypto, payload });
+          } catch (err) {
+            log("popup_create_and_send_transaction failed with error: %s", err);
+            res.error = err;
+          }
+          break;
         default:
           log("popup controller middleware did not match method name %s", req.method);
           await next();
@@ -263,8 +275,12 @@ export class PopupController {
       // if any of the above popup commands did not error
       // out make sure to return the state, the popup expects it!
       if (!res.error) {
-        res.result = this.popupState.get();
+        res.result = {
+          ...this.popupState.get(),
+          reqResponse,
+        };
       }
+      reqResponse = null;
     });
   }
 
@@ -434,6 +450,27 @@ export class PopupController {
 
   async loadFollowTokensBalance() {
     await getFollowTokensBalance();
+  }
+
+  async createAndSendTransaction({ isMainCrypto = true, payload = null }: { isMainCrypto: Boolean; payload: any }) {
+    const accountSender = defaultAccountWalletSelector(store.getState());
+    if (!accountSender) return null;
+    let tx;
+    if (typeof setShardNumber === "function") {
+      await setShardNumber(8);
+    }
+    if (isMainCrypto) {
+      tx = await accountService.createAndSendNativeToken({
+        ...payload,
+        accountSender,
+      });
+    } else {
+      tx = await accountService.createAndSendPrivacyToken({
+        ...payload,
+        accountSender,
+      });
+    }
+    return tx;
   }
 
   changeNetwork(req: any) {

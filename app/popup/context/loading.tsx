@@ -11,6 +11,16 @@ const Container = styled.div`
   align-items: center;
   background-color: ${({ theme }: { theme: ITheme }) => theme.primaryP6};
   opacity: 0.9;
+  .wrap-loading-view {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px 8px;
+    background-color: ${({ theme }: { theme: ITheme }) => theme.primaryP5};
+    border-radius: 8px;
+    width: 90%;
+  }
 `;
 
 const AnimationLoading = styled.div`
@@ -52,10 +62,12 @@ interface LoadingProps {
   message?: string;
 }
 
-const Loading = (props: LoadingProps) => (
+export const Loading = (props: LoadingProps) => (
   <Container>
-    <AnimationLoading />
-    {props.message && <Message className="fs-medium fw-suppermedium">{props.message}</Message>}
+    <div className="wrap-loading-view">
+      <AnimationLoading />
+      {props.message && <Message className="fs-regular fw-suppermedium">{props.message}</Message>}
+    </div>
   </Container>
 );
 

@@ -26,7 +26,6 @@ instance.interceptors.request.use(
     if (BASE_URL) {
       newConfig["baseURL"] = BASE_URL;
     }
-    console.log(newConfig);
     return newConfig;
   },
   (error) => {

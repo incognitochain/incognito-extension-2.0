@@ -3,9 +3,10 @@ import { useLoading } from "@popup/context/loading";
 import { useSelector } from "react-redux";
 import { defaultAccountWalletSelector } from "@redux/account/account.selectors";
 import { getConfirmTxBuilder, route as routeConfirmTx } from "@module/Send/features/ConfirmTx";
-import accountService from "@services/wallet/accountService";
 import { sendDataSelector } from "@module/Send/Send.selector";
 import { useHistory } from "react-router-dom";
+import { useCallAsync } from "@popup/utils/notifications";
+import { useBackground } from "@popup/context/background";
 const { PrivacyVersion, ACCOUNT_CONSTANT } = require("incognito-chain-web-js/build/web/wallet");
 
 export interface TInner {
@@ -27,14 +28,16 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
   const { showLoading } = useLoading();
   const history = useHistory();
 
+  const callAsync = useCallAsync();
+  const { request } = useBackground();
+
   const handleSendAnonymously = async () => {
     try {
       if (!inputOriginalAmount || !inputAddress || disabledForm) {
         return;
       }
       showLoading({ value: true });
-      let tx;
-      let payload = {
+      let payload: any = {
         accountSender,
         fee: networkFeeAmount,
         info: inputMemo,
@@ -43,8 +46,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
         version: PrivacyVersion.ver3,
       };
       if (isMainCrypto) {
-        // Handle send native token
-        tx = await accountService.createAndSendNativeToken({
+        payload = {
           ...payload,
           prvPayments: [
             {
@@ -53,10 +55,10 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
               Message: inputMemo,
             },
           ],
-        });
+        };
       } else {
         // Handle send privacy token
-        tx = await accountService.createAndSendPrivacyToken({
+        payload = {
           ...payload,
           tokenID: selectedPrivacy?.tokenId,
           tokenPayments: [
@@ -66,21 +68,29 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
               Message: inputMemo,
             },
           ],
-        });
+        };
       }
-      const confirmData = getConfirmTxBuilder({
-        tx,
-        address: inputAddress,
-        amount: inputOriginalAmount,
-        networkFee: networkFeeAmount,
-        networkFeeToken: networkFeeToken,
-        sendToken: selectedPrivacy,
+
+      await callAsync(request("popup_create_and_send_transaction", { isMainCrypto, payload }), {
+        onSuccess: (result: any) => {
+          const { reqResponse: tx } = result.result;
+          if (!tx) return;
+          const confirmData = getConfirmTxBuilder({
+            tx,
+            address: inputAddress,
+            amount: inputOriginalAmount,
+            networkFee: networkFeeAmount,
+            networkFeeToken: networkFeeToken,
+            sendToken: selectedPrivacy,
+          });
+          history.push(routeConfirmTx, { confirmTx: confirmData });
+        },
+        onError: (error) => {
+          console.log("SEND ERROR: ", error);
+        },
       });
-      history.push(routeConfirmTx, { confirmTx: confirmData });
     } catch (e) {
-      console.log("SEND ERROR: ", e);
-      // handle error
-      alert("SEND ERROR");
+      showLoading({ value: false });
     } finally {
       showLoading({ value: false });
     }

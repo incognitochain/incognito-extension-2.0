@@ -21,6 +21,7 @@ const getConfirmTxBuilder = ({
   const _formatedAmount = format.formatAmount({
     originalAmount: convert.toNumber({ text: amount }),
     decimals: sendToken.pDecimals,
+    clipAmount: false,
   });
 
   const _formatedNetworkFee = format.formatAmount({
