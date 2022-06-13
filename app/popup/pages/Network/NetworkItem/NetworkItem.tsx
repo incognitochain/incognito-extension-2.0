@@ -1,20 +1,22 @@
 import React from "react";
 import { Container, Description, LeftView, RightView, Title, CircleView } from "./NetworkItem.styled";
+import { RadioButton } from "@components/RadioButton/RadioButton";
 
 interface NetworkItemProps {
   title?: string;
   description?: string;
   onClick?: any;
-  disabled?: boolean;
+  isSelected?: boolean;
 }
 
 const NetworkItem: React.FC<NetworkItemProps> = (props: NetworkItemProps) => {
-  const { title, description, onClick, disabled = false } = props;
-  const className = `${disabled ? "none-select" : "selected"} hover-with-cursor `;
+  const { title, description, onClick, isSelected = false } = props;
+  // const className = `${disabled ? "transparent" : "selected"} hover-with-cursor `;
   return (
-    <Container className={className} onClick={onClick}>
+    <Container className={"hover-with-cursor"} onClick={onClick}>
       <LeftView>
-        <CircleView />
+        {/* <CircleView disabled={disabled} /> */}
+        <RadioButton isChecked={isSelected} />
       </LeftView>
       <RightView>
         <Title className="fs-regular fw-medium">{title}</Title>
