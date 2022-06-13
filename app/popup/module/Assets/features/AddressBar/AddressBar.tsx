@@ -3,14 +3,14 @@ import styled, { ITheme } from "styled-components";
 import { CopyIcon, QrCodeIcon } from "@components/Icons";
 import { Row } from "@popup/theme";
 import { ellipsisCenter } from "@popup/utils";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { paymentAddressOfDefaultAccountSelector } from "@redux/account/account.selectors";
 import { useHistory } from "react-router-dom";
 import { route as QRCodeRoute } from "@module/QRCode";
 
 const Styled = styled.div`
   padding: 8px 16px;
-  border: 1px solid ${({ theme }: { theme: ITheme }) => theme.primaryP8};
+  border: 1px solid ${({ theme }: { theme: ITheme }) => theme.primaryP10};
   display: flex;
   flex-direction: row;
   border-radius: 8px;
