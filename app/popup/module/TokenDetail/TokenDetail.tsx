@@ -8,6 +8,7 @@ import { ArrowCircleIcon } from "@components/Icons";
 import { Extra, ActionsGroup } from "@module/TokenDetail/features";
 import { useHistory } from "react-router-dom";
 import { route as routeWallet } from "@module/Assets/Assets.route";
+import { TxsHistory } from "@module/TokenDetail/features/TxsHistory";
 
 const Styled = styled.div`
   height: 100%;
@@ -29,6 +30,7 @@ const TokenDetail = React.memo(() => {
       <WrapContent>
         <Extra />
         <ActionsGroup />
+        <TxsHistory />
       </WrapContent>
     </Styled>
   );
