@@ -4,7 +4,10 @@ const Container = styled.button`
   width: 100%;
   margin-top: 10px;
   margin-bottom: 10px;
-  padding: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-top: 14px;
+  padding-bottom: 14px;
   border-radius: 8px;
   display: flex;
   flex-direction: row;
