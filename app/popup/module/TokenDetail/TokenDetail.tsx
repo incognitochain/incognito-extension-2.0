@@ -8,7 +8,10 @@ import { ArrowCircleIcon } from "@components/Icons";
 import { Extra, ActionsGroup } from "@module/TokenDetail/features";
 import { useHistory } from "react-router-dom";
 import { route as routeWallet } from "@module/Assets/Assets.route";
-import { TxsHistory } from "@module/TokenDetail/features/TxsHistory";
+import withHistory, { TxsHistory } from "@module/TokenDetail/features/TxsHistory";
+import { compose } from "recompose";
+import { withBalance } from "@module/MainRoute/MainRoute.enhance";
+import { sleep } from "@popup/utils/utils";
 
 const Styled = styled.div`
   height: 100%;
@@ -17,14 +20,29 @@ const Styled = styled.div`
   }
 `;
 
-const TokenDetail = React.memo(() => {
+const TokenDetail = React.memo((props: any) => {
+  const { loadFollowTokensBalance, handleLoadHistory } = props;
   const tokenSelected = useSelector(selectedPrivacyToken);
+  const [isLoading, setIsLoading] = React.useState(false);
   const history = useHistory();
+
+  const onReload = async () => {
+    try {
+      if (isLoading) return;
+      setIsLoading(true);
+      await Promise.all([loadFollowTokensBalance(), handleLoadHistory(), sleep(1000)]);
+    } catch (e) {
+      // Ignore Error
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Styled>
       <Header
         onGoBack={() => history.push(routeWallet)}
-        rightHeader={<ArrowCircleIcon />}
+        rightHeader={<ArrowCircleIcon className="hover" onClick={onReload} isLoading={isLoading} />}
         title={tokenSelected.symbol}
       />
       <WrapContent>
@@ -36,4 +54,4 @@ const TokenDetail = React.memo(() => {
   );
 });
 
-export default TokenDetail;
+export default compose(withBalance, withHistory)(TokenDetail);

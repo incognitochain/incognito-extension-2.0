@@ -1,7 +1,9 @@
 import React from "react";
 import styled, { ITheme } from "styled-components";
 
-interface IProps {}
+interface IProps {
+  isLoading: boolean;
+}
 
 const Styled = styled.button`
   padding: 8px;
@@ -10,6 +12,15 @@ const Styled = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @keyframes spin {
+    from {
+      transform: rotate(360deg);
+    }
+    to {
+      transform: rotate(0deg);
+    }
+  }
 `;
 
 const ArrowCircleVector = React.memo((props: any) => {
@@ -24,9 +35,14 @@ const ArrowCircleVector = React.memo((props: any) => {
 });
 
 const ArrowCircle = (props: IProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
-  const { className = "" } = props;
+  const { className = "", isLoading } = props;
   return (
-    <Styled type="button" className={`icon ${className || ""}`} {...props}>
+    <Styled
+      type="button"
+      className={`icon spinner ${className || ""}`}
+      {...props}
+      style={{ animation: isLoading ? `spin ${1}s linear infinite` : "" }}
+    >
       <ArrowCircleVector />
     </Styled>
   );

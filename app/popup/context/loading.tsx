@@ -56,6 +56,7 @@ const Message = styled.p`
   margin-top: 10px;
   color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
   text-align: center;
+  width: 80%;
 `;
 
 interface LoadingProps {

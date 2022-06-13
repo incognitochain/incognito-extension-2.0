@@ -15,6 +15,7 @@ const tokens: any[] = [
   "ffd8d42dc40a8d166ea4848baf8b5f6e912ad79875f4373070b59392b1756c8f",
   "b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696",
   "b2655152784e8639fa19521a7035f331eea1f1e911b2f3200a507ebb4554387b",
+  "c01e7dc1d1aba995c19b257412340b057f8ad1482ccb6a9bb0adce61afbf05d4",
 ];
 
 const log = createLogger("background:scanCoins");
@@ -55,6 +56,7 @@ export const scanCoins = async () => {
 
     if (!coinsStore) {
       dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey }));
+      getFollowTokensBalance().then();
     }
 
     console.log("scanCoins: ", { elapsed, otaKey, coins: result });

@@ -81,7 +81,7 @@ export const withBalance = (WrappedComponent: FunctionComponent) => (props: any)
     };
   }, [OTAKey, walletState]);
 
-  return <WrappedComponent {...props} />;
+  return <WrappedComponent {...{ ...props, loadFollowTokensBalance }} />;
 };
 
 export default compose(withBackgroundState, withPToken, withRouteChange, withLoading, withBalance);
