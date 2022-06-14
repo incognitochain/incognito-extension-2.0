@@ -318,9 +318,19 @@ export default class IncognitoController {
     const popupState = this.popupState;
     if (popupState && popupState.get().walletState === "unlocked") {
       if (!scanCoinInterval) {
-        scanCoins().then();
-        scanCoinInterval = setInterval(() => {
+        try {
           scanCoins().then();
+        } catch (e) {
+          console.log("SCAN COINS ERROR: ", e);
+          // Handle error
+        }
+        scanCoinInterval = setInterval(() => {
+          try {
+            scanCoins().then();
+          } catch (e) {
+            console.log("SCAN COINS ERROR: ", e);
+            // Handle error
+          }
         }, 40000);
       }
     } else {

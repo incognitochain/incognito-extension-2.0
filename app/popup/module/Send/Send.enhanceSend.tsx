@@ -90,6 +90,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
           console.log("SEND ERROR: ", error);
         },
         onFinish: () => {
+          showLoading({ value: false });
           console.log("SEND FINISH: ");
         },
       });
