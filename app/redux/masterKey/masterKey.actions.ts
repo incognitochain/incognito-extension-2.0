@@ -143,7 +143,6 @@ export const migrateData = async () => {
   // return isMigratedData;
 };
 export const masterKeySwitchNetwork = (): AppThunk => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
-
   await updateNetwork();
   await login();
   const masterKey = currentMasterKeySelector(getState());
@@ -154,7 +153,7 @@ export const masterKeySwitchNetwork = (): AppThunk => async (dispatch: AppThunkD
   // const masterKey = currentMasterKeySelector(getState());
   // const wallet: any = masterKey.wallet || {};
   // const listAccounts: any = await wallet.listAccountNoCache();
-  
+
   // let masterAccountInfo = await wallet.MasterAccount.getDeserializeInformationNoCache();
 
   // const serverAccounts = await getWalletAccounts(masterAccountInfo.PublicKeyCheckEncode);
@@ -268,7 +267,7 @@ export const importMasterKey =
       wallet = await importWallet(mnemonic, newMasterKey.getStorageName());
       await login();
       await syncServerAccounts(wallet);
-
+      await loadListAccount(wallet);
       newMasterKey.wallet = wallet;
       newMasterKey.mnemonic = wallet.Mnemonic;
       wallet.RootName = newMasterKey.name;

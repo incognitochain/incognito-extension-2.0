@@ -73,12 +73,12 @@ export const clearCache = (key: string) => {
   return delete CacheObject[key];
 };
 
-export const clearAllCaches = () => {
-  Object.keys(caches).forEach((key) => delete CacheObject[key]);
+export const clearAllCaches = async () => {
+  Object.keys(CacheObject).forEach((key) => delete CacheObject[key]);
 };
 
 export const clearWalletCaches = () => {
-  Object.keys(caches).forEach((key) => {
+  Object.keys(CacheObject).forEach((key) => {
     if (key.includes(KEYS.PDEX_HISTORY)) {
       delete CacheObject[key];
     }
