@@ -34,6 +34,7 @@ import { actionFetchCreateAccount, actionSwitchAccount } from "@redux/account";
 import { getFollowTokensBalance } from "@background/worker.scanCoins";
 import { defaultAccountWalletSelector } from "@redux/account/account.selectors";
 import accountService from "@services/wallet/accountService";
+import { clearAllCaches } from "@services/cache";
 const { setShardNumber } = require("incognito-chain-web-js/build/web/wallet");
 const log = createLogger("sol:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -343,7 +344,7 @@ export class PopupController {
     const { mnemonic, password } = params;
     // Clear All Local Data
     await Storage.clear();
-
+    await clearAllCaches();
     // Create new wallet, the same flow import wallet
     const wallet = await dispatch(importMasterKey({ mnemonic, masterKeyName: "Wallet", password }));
     const salt = await Storage.getItem(APP_SALT_KEY);
