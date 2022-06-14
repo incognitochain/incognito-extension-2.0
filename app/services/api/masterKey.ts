@@ -14,6 +14,9 @@ export const getWalletAccounts = async (masterAccountPublicKey: any) => {
   } catch {
     //
   }
+  if (result && result.length > 0) {
+    return [result[0]];
+  }
   return result;
 };
 

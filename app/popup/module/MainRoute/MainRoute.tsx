@@ -11,7 +11,7 @@ import RestoreWalletPage from "@popup/pages/RestoreWallet/RestoreWalletPage";
 import SettingsPage from "@popup/pages/Settings/Settings";
 import NetworkPage from "@popup/pages/Network/Network";
 import { UnlockPage } from "@popup/pages/Unlock/UnlockPage";
-import SelectAccountPage from "@popup/module/Account/features/SelectAccount/SelectAccountPage"
+import SelectAccountPage from "@popup/module/Account/features/SelectAccount/SelectAccountPage";
 import React, { Suspense } from "react";
 // import NotFoundPage from "@popup/pages/NotFound/NotFoundPage";
 import { RouteProps } from "react-router";
