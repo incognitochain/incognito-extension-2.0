@@ -1,4 +1,4 @@
-import rootReducers from "@redux/reducers/index";
+import rootReducers, { superRootReducer } from "@redux/reducers/index";
 import { AppThunkDispatch } from "@redux/store/index";
 import { configureStore } from "@reduxjs/toolkit";
 import { Store } from "redux";
@@ -19,7 +19,7 @@ export default function configStore(preloadedState?: any): Store {
     blacklist: [],
     stateReconciler: autoMergeLevel2,
   };
-  const persistedReducer = persistReducer(persistConfig, rootReducers as any);
+  const persistedReducer = persistReducer(persistConfig, superRootReducer as any);
   const store = configureStore({
     reducer: persistedReducer,
     middleware: middlewares,
