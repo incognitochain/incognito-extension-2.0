@@ -5,7 +5,7 @@ import TextArea from "@popup/components/Inputs/TextArea";
 import { useBackground } from "@popup/context/background";
 import { useCallAsync } from "@popup/utils/notifications";
 import { trim } from "lodash";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { useLoading } from "@popup/context/loading";
 import {
@@ -31,6 +31,10 @@ schema
   .spaces(0, "The password should not have spaces");
 
 const RestoreWalletPage: React.FC = () => {
+  const phraseTextInput = useRef<any>(null);
+  const passwordTextInput = useRef<any>(null);
+  const verifyTextInput = useRef<any>(null);
+
   const history = useHistory();
   const callAsync = useCallAsync();
   const { request } = useBackground();
@@ -132,29 +136,49 @@ const RestoreWalletPage: React.FC = () => {
 
         <MnemonicTextArea>
           <TextArea
+            refInput={phraseTextInput}
             value={mnemonic}
             placeholder={"12-word recovery phrase"}
             onChange={mnemonicOnChange}
             errorEnable={mnemonicError}
             errorText={"Mnemonic words is invalid."}
+            onKeyDown={(e) => {
+              if (e.code.toLowerCase() === "enter") {
+                phraseTextInput.current.blur();
+                passwordTextInput.current.focus();
+              }
+            }}
           />
         </MnemonicTextArea>
 
         <PasswordLabel className="fs-small fw-regular">{"Password"}</PasswordLabel>
         <PasswordInput
+          refInput={passwordTextInput}
           value={password}
           placeholder={"Create password (min 10 chars)"}
           onChange={passwordOnChange}
           errorEnable={true}
           errorText={passwordErrorMessage}
+          onKeyDown={(e) => {
+            if (e.code.toLowerCase() === "enter") {
+              passwordTextInput.current.blur();
+              verifyTextInput.current.focus();
+            }
+          }}
         />
         <VerifyLabel className="fs-small fw-regular">{"Verify"}</VerifyLabel>
         <PasswordInput
+          refInput={verifyTextInput}
           value={verify}
           placeholder={"Enter the password again"}
           onChange={verifyOnChange}
           errorEnable={true}
           errorText={verifyErrorMessage}
+          onKeyDown={(e) => {
+            if (e.code.toLowerCase() === "enter") {
+              restoreWalletOnPressed();
+            }
+          }}
         />
         <PrimaryButtonContaniner onClick={restoreWalletOnPressed} disabled={false}>
           {"Restore"}

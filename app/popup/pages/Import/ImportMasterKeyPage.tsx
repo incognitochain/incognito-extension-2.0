@@ -3,7 +3,7 @@ import BodyLayout from "@components/layout/BodyLayout";
 import TextArea from "@popup/components/Inputs/TextArea";
 import TextInput from "@popup/components/Inputs/TextInput";
 import { trim } from "lodash";
-import React, { useCallback, useLayoutEffect, useState } from "react";
+import React, { useCallback, useLayoutEffect, useState, useRef, useEffect } from "react";
 import {
   DescriptionText,
   MasterKeyNameLabel,
@@ -26,6 +26,9 @@ interface ImportMasterKeyPageProps {
 export const ImportMasterKeyPage: React.FC<ImportMasterKeyPageProps> = (props: ImportMasterKeyPageProps) => {
   const { masterKeyName = "", onBack = () => {}, continueOnClick = () => {}, mnemonic = "" } = props;
 
+  const masterKeyNameTextInput = useRef<any>(null);
+  const phraseTextInput = useRef<any>(null);
+
   const [masterKeyNameLocal, setMasterKeyNameLocal] = useState("");
   const [mnemonicLocal, setMnemonicLocal] = useState("");
 
@@ -35,6 +38,10 @@ export const ImportMasterKeyPage: React.FC<ImportMasterKeyPageProps> = (props: I
   useLayoutEffect(() => {
     setMasterKeyNameLocal(masterKeyName);
     setMnemonicLocal(mnemonic);
+  }, []);
+
+  useEffect(() => {
+    masterKeyNameTextInput.current && masterKeyNameTextInput.current.focus();
   }, []);
 
   const continueOnPress = () => {
@@ -71,21 +78,36 @@ export const ImportMasterKeyPage: React.FC<ImportMasterKeyPageProps> = (props: I
         <MasterKeyNameLabel className="fs-small fw-regular">{"Master key name"}</MasterKeyNameLabel>
         <TextInputWraper>
           <TextInput
+            refInput={masterKeyNameTextInput}
             value={masterKeyNameLocal}
             placeholder={"Enter a name for your master key"}
             onChange={masterKeyOnChange}
             errorEnable={errorVisible}
             errorText={"Master key names must be alphanumeric. Please choose another."}
+            onKeyDown={(e) => {
+              if (e.code.toLowerCase() === "enter") {
+                masterKeyNameTextInput.current.blur();
+                // phraseTextInput.current.focus();
+                continueOnPress();
+              }
+            }}
           />
         </TextInputWraper>
 
         <MnemonicTextArea>
           <TextArea
+            refInput={phraseTextInput}
             value={mnemonicLocal}
             placeholder={"12-word recovery phrase"}
             onChange={mnemonicOnChange}
             errorEnable={mnemonicErrorVisible}
             errorText={"Mnemonic words is invalid."}
+            onKeyDown={(e) => {
+              if (e.code.toLowerCase() === "enter") {
+                continueOnPress();
+                phraseTextInput.current.blur();
+              }
+            }}
           />
         </MnemonicTextArea>
 

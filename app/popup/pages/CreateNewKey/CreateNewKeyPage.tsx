@@ -49,7 +49,6 @@ export const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateN
   }, []);
 
   const readyButtonDisable: boolean = !checkBoxAcceptLocal || !masterKeyNameLocal || masterKeyNameLocal.length < 0;
-
   return (
     <>
       <Header title="Create new key" onBackClick={onBack} />
@@ -62,6 +61,17 @@ export const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateN
             onChange={masterKeyOnChange}
             errorEnable={errorVisible}
             errorText={"Master key names must be alphanumeric. Please choose another."}
+            onKeyDown={(e) => {
+              if (e.code.toLowerCase() === "enter") {
+                if (!NAME_PATTERN.test(masterKeyNameLocal)) {
+                  setErrorVisible(true);
+                  return;
+                }
+                if (checkBoxAcceptLocal) {
+                  onReadyClick && onReadyClick(masterKeyNameLocal, checkBoxAcceptLocal);
+                }
+              }
+            }}
           />
         </TextInputWraper>
         <ContentText1 className="fs-regular fw-regular">

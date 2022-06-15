@@ -50,12 +50,14 @@ interface TextInputProps {
   value: string;
   placeholder?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement> | undefined;
   errorEnable?: boolean;
   errorText?: string;
   multiple?: boolean;
   header?: string;
   disabled?: boolean;
   marginTop?: number;
+  refInput?: any;
 }
 
 const TextInput = (props: TextInputProps) => {
@@ -69,6 +71,8 @@ const TextInput = (props: TextInputProps) => {
     disabled = false,
     marginTop = 0,
     onChange = () => {},
+    onKeyDown = () => {},
+    refInput,
   } = props;
 
   return (
@@ -82,6 +86,8 @@ const TextInput = (props: TextInputProps) => {
         value={value}
         disabled={disabled}
         multiple={multiple}
+        onKeyDown={onKeyDown}
+        ref={refInput}
       />
       {errorEnable && <ErrorText className="fs-small fw-regular">{errorText}</ErrorText>}
     </Container>
