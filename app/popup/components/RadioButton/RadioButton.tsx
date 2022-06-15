@@ -1,7 +1,7 @@
 import styled, { ITheme } from "styled-components";
 import React from "react";
 
-const Contariner = styled.div`
+const Contariner = styled.button`
   background: "transparent";
   width: 16px;
   height: 16px;
@@ -18,9 +18,14 @@ const FillContent = styled.label`
 
 interface RadioButtonProps {
   isChecked?: boolean;
+  onClick?: () => void;
 }
 
 export const RadioButton = (props: RadioButtonProps) => {
-  const { isChecked } = props;
-  return <Contariner className="center">{isChecked && <FillContent />}</Contariner>;
+  const { isChecked, onClick = () => {} } = props;
+  return (
+    <Contariner className="center" onClick={onClick}>
+      {isChecked && <FillContent />}
+    </Contariner>
+  );
 };

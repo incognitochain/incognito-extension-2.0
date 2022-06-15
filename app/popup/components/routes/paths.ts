@@ -34,6 +34,7 @@ export const Paths = {
   settingsPage: "/settings-page",
   networkPage: "/network-page",
   selectAccountPage: "/select-account-page",
+  accountDetailPage: "/account-detail-page",
 };
 
 export const PathsKey: PathsKeyMap = {

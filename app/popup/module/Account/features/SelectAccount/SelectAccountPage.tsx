@@ -12,8 +12,10 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import AccountItem from "./AccountItem/AccountItem";
+import { useSnackbar } from "notistack";
 
 const SelectAccountPage = React.memo(() => {
+  const { enqueueSnackbar } = useSnackbar();
   const { request } = useBackground();
   const callAsync = useCallAsync();
   const history = useHistory();
@@ -21,29 +23,32 @@ const SelectAccountPage = React.memo(() => {
   const defaultAccount: any = useSelector(defaultAccountSelector);
   const listAccount = useSelector(listAccountSelector);
 
-  const switchAccount = (accountName: string) => {
-    showLoading({
-      value: true,
-    });
-    callAsync(request("popup_switchAccount", { accountName: trim(accountName) }), {
-      progress: { message: "Switching Account..." },
-      success: { message: "Switch Done" },
-      onSuccess: () => {
-        showLoading({
-          value: false,
-        });
-        history.goBack();
-      },
-    });
+  const switchAccount = (accountItem: any) => {
+    const accountName = accountItem.AccountName || accountItem.name;
+    if (accountName && (accountName != defaultAccount.AccountName || accountName != defaultAccount?.name)) {
+      showLoading({
+        value: true,
+      });
+      callAsync(request("popup_switchAccount", { accountName: trim(accountName) }), {
+        progress: { message: "Switching Account..." },
+        success: { message: "Switch Done" },
+        onSuccess: () => {
+          showLoading({
+            value: false,
+          });
+          history.goBack();
+        },
+      });
+    } else {
+      // history.goBack();
+      enqueueSnackbar(`Your cuurent keychain is ${accountName}`, { variant: "warning" });
+    }
   };
 
   const accountItemOnClick = async (accountItem: any) => {
-    const accountName = accountItem.AccountName || accountItem.name;
-    if (accountName && (accountName != defaultAccount.AccountName || accountName != defaultAccount?.name)) {
-      switchAccount(accountName);
-    } else {
-      history.goBack();
-    }
+    history.push(Paths.accountDetailPage, {
+      accountDetail: accountItem,
+    });
   };
 
   return (
@@ -70,6 +75,7 @@ const SelectAccountPage = React.memo(() => {
                 title={name}
                 description={paymentAddressEllipsis}
                 onClick={() => accountItemOnClick(accountItem)}
+                radioBtnOnClick={() => switchAccount(accountItem)}
               />
             );
           })}

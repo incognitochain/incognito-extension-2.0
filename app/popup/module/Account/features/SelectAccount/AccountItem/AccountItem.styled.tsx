@@ -1,6 +1,6 @@
 import styled, { ITheme } from "styled-components";
 
-const Container = styled.button`
+const Container = styled.div`
   width: 100%;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -22,7 +22,7 @@ const LeftView = styled.div`
   justify-content: center;
 `;
 
-const MiddleView = styled.div`
+const MiddleView = styled.button`
   display: flex;
   width: 80%;
   flex-direction: column;

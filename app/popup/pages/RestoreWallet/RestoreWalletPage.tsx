@@ -126,14 +126,14 @@ const RestoreWalletPage: React.FC = () => {
       <BodyLayout className="scroll-view">
         <DescriptionText className="fs-regular fw-regular">
           {
-            "Restore your wallet using your twelve seed words. Note that this will delete any existing wallet on this device."
+            "Restore your wallet using your twelve seed words. Note that this will delete ALL existing keychains on this device."
           }
         </DescriptionText>
 
         <MnemonicTextArea>
           <TextArea
             value={mnemonic}
-            placeholder={"12 word recovery phrase"}
+            placeholder={"12-word recovery phrase"}
             onChange={mnemonicOnChange}
             errorEnable={mnemonicError}
             errorText={"Mnemonic words is invalid."}
