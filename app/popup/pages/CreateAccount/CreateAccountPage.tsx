@@ -5,7 +5,7 @@ import { useBackground } from "@popup/context/background";
 import { useLoading } from "@popup/context/loading";
 import { useCallAsync } from "@popup/utils/notifications";
 import { trim } from "lodash";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useRef, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { KeyChainLabel, PrimaryButtonContaniner, TextInputWraper } from "./CreateAccountPage.styled";
 let accountNameValidator = require("password-validator");
@@ -22,6 +22,8 @@ schema
   .spaces(0, "Account name should not have spaces");
 
 const CreateAccountPage: React.FC = () => {
+  const keychainNameTextInput = useRef<any>(null);
+
   const history = useHistory();
   const callAsync = useCallAsync();
   const { request } = useBackground();
@@ -29,6 +31,10 @@ const CreateAccountPage: React.FC = () => {
 
   const [keychainName, setKeychainName] = useState("");
   const [keychainNameError, setKeychainNameError] = useState("");
+
+  useEffect(() => {
+    keychainNameTextInput.current.focus();
+  }, []);
 
   const keychainOnChange = useCallback((e: any) => {
     setKeychainName(e.target.value);
@@ -79,11 +85,17 @@ const CreateAccountPage: React.FC = () => {
         <KeyChainLabel className="fs-regular fw-regular">{"Keychain name"}</KeyChainLabel>
         <TextInputWraper>
           <TextInput
+            refInput={keychainNameTextInput}
             value={keychainName}
             placeholder={"Enter a keychain name"}
             onChange={keychainOnChange}
             errorEnable={keychainNameError.length > 0}
             errorText={keychainNameError}
+            onKeyDown={(e) => {
+              if (e.code.toLowerCase() === "enter") {
+                createKeychainOnPressed();
+              }
+            }}
           />
         </TextInputWraper>
 

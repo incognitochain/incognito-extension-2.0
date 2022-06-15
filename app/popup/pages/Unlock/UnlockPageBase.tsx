@@ -5,7 +5,7 @@ import { useBackground } from "@popup/context/background";
 import { useCallAsync } from "@popup/utils/notifications";
 import { checkPasswordValid } from "@services/wallet/passwordService";
 import { throttle } from "lodash";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState, useLayoutEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { useLoading } from "@popup/context/loading";
 import CircleIcon from "@components/Icons/CircleIcon";
@@ -25,6 +25,7 @@ export const UnlockPageBase: React.FC = () => {
   const { request } = useBackground();
   const { showLoading } = useLoading();
 
+  const passwordTextInput = useRef<any>(null);
   const [password, setPassword] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>("");
   const unLockOnClick = useCallback(
@@ -62,7 +63,9 @@ export const UnlockPageBase: React.FC = () => {
     setPassword(event.target.value);
   };
 
-  useEffect(() => {}, []);
+  useLayoutEffect(() => {
+    passwordTextInput.current.focus();
+  }, []);
 
   return (
     <MainLayout>
@@ -72,10 +75,16 @@ export const UnlockPageBase: React.FC = () => {
       <Title className="fs-large fw-medium">{"Welcome back"}</Title>
       <PasswordText className="fs-small fw-regular">{"Password"}</PasswordText>
       <PasswordInput
+        refInput={passwordTextInput}
         value={password}
         onChange={handleChangePassword}
         errorEnable={true}
         errorText={passwordErrorMessage}
+        onKeyDown={(e) => {
+          if (e.code.toLowerCase() === "enter") {
+            unLockOnClick();
+          }
+        }}
       />
       <PrimaryButtonContaniner onClick={unLockOnClick}>{"Go incognito"}</PrimaryButtonContaniner>
       <ForgotYourPasswordStyled

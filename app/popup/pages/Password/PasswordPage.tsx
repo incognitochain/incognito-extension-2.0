@@ -1,7 +1,7 @@
 import Header from "@components/BaseComponent/Header";
 import BodyLayout from "@components/layout/BodyLayout";
 import PasswordInput from "@popup/components/Inputs/PasswordInput";
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useRef, useEffect } from "react";
 import { DescriptionText, PasswordLabel, VerifyLabel, PrimaryButtonContaniner } from "./PasswordPage.styled";
 
 let passwordValidator = require("password-validator");
@@ -33,6 +33,9 @@ export const PasswordPage: React.FC<PasswordPageBaseProps> = (props: PasswordPag
     buttonTitle = "Continue",
   } = props;
 
+  const passwordTextInput = useRef<any>(null);
+  const verifyTextInput = useRef<any>(null);
+
   const [password, setPassword] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>("");
 
@@ -42,6 +45,10 @@ export const PasswordPage: React.FC<PasswordPageBaseProps> = (props: PasswordPag
   useLayoutEffect(() => {
     setPassword(passwordInitValue);
     setVerify(passwordInitValue);
+  }, []);
+
+  useEffect(() => {
+    passwordTextInput.current.focus();
   }, []);
 
   const handleChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,19 +102,32 @@ export const PasswordPage: React.FC<PasswordPageBaseProps> = (props: PasswordPag
         <DescriptionText className="fs-regular fw-regular">{descriptionText}</DescriptionText>
         <PasswordLabel className="fs-small fw-regular">{"Password"}</PasswordLabel>
         <PasswordInput
+          refInput={passwordTextInput}
           value={password}
           placeholder={"Create password (min 10 chars)"}
           onChange={handleChangePassword}
           errorEnable={true}
           errorText={passwordErrorMessage}
+          onKeyDown={(e) => {
+            if (e.code.toLowerCase() === "enter") {
+              passwordTextInput.current.blur();
+              verifyTextInput.current.focus();
+            }
+          }}
         />
         <VerifyLabel className="fs-small fw-regular">{"Verify"}</VerifyLabel>
         <PasswordInput
+          refInput={verifyTextInput}
           value={verify}
           placeholder={"Enter the password again"}
           onChange={handleChangeVerify}
           errorEnable={true}
           errorText={verifyPasswordError}
+          onKeyDown={(e) => {
+            if (e.code.toLowerCase() === "enter") {
+              continueOnClick();
+            }
+          }}
         />
         <PrimaryButtonContaniner onClick={continueOnClick}>{buttonTitle}</PrimaryButtonContaniner>
       </BodyLayout>

@@ -53,12 +53,14 @@ interface TextAreaProps {
   value: string;
   placeholder?: string;
   onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onKeyDown?: React.KeyboardEventHandler<HTMLTextAreaElement> | undefined;
   errorEnable?: boolean;
   errorText?: string;
   header?: string;
   disabled?: boolean;
   marginTop?: number;
   rows?: number;
+  refInput?: any;
 }
 
 const TextArea = (props: TextAreaProps) => {
@@ -72,6 +74,8 @@ const TextArea = (props: TextAreaProps) => {
     marginTop = 0,
     rows = 4,
     onChange = () => {},
+    onKeyDown = () => {},
+    refInput,
   } = props;
 
   return (
@@ -81,9 +85,11 @@ const TextArea = (props: TextAreaProps) => {
         placeholder={placeholder}
         className="full-width fs-regular"
         onChange={onChange}
+        onKeyDown={onKeyDown}
         value={value}
         disabled={disabled}
         rows={rows}
+        ref={refInput}
       />
       {errorEnable && <ErrorText className="fs-regular">{errorText}</ErrorText>}
     </Container>

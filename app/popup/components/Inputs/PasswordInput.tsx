@@ -68,6 +68,8 @@ interface PasswordInputProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   errorEnable?: boolean;
   errorText?: string;
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement> | undefined;
+  refInput?: any;
 }
 
 const PasswordInput = (props: PasswordInputProps) => {
@@ -77,6 +79,8 @@ const PasswordInput = (props: PasswordInputProps) => {
     errorText = "Password Invalid!",
     placeholder = "Enter your password",
     onChange = () => {},
+    onKeyDown = () => {},
+    refInput,
   } = props;
 
   const [type, setType] = useState<HTMLInputTypeAttribute | undefined>("password");
@@ -94,6 +98,8 @@ const PasswordInput = (props: PasswordInputProps) => {
           className="full-width"
           onChange={onChange}
           value={value}
+          onKeyDown={onKeyDown}
+          ref={refInput}
         />
         <IconContainer onClick={onClick}>{type === "password" ? <EyeCloseIcon /> : <EyeOpenIcon />}</IconContainer>
       </InputWrapper>
