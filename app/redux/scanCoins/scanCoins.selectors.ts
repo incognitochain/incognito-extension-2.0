@@ -15,9 +15,23 @@ const isFirstTimeScanCoinsSelector = createSelector(
   statusScanCoinsSelector,
   otaKeyOfDefaultAccountSelector,
   (scanStatus, OTAKey) => {
-    if (!OTAKey) return false;
-    return !scanStatus[OTAKey] || (scanStatus[OTAKey] && scanStatus[OTAKey].isScanning);
+    if (!OTAKey || !scanStatus[OTAKey]) return false;
+    return scanStatus[OTAKey].isScanning;
   },
 );
 
-export { scanCoinsReducerSelector, isFetchingScanCoinsSelector, statusScanCoinsSelector, isFirstTimeScanCoinsSelector };
+const isShowConfirmScanCoins = createSelector(
+  statusScanCoinsSelector,
+  otaKeyOfDefaultAccountSelector,
+  (scanStatus, OTAKey) => {
+    return OTAKey && (!scanStatus || scanStatus[OTAKey] === undefined);
+  },
+);
+
+export {
+  scanCoinsReducerSelector,
+  isFetchingScanCoinsSelector,
+  statusScanCoinsSelector,
+  isFirstTimeScanCoinsSelector,
+  isShowConfirmScanCoins,
+};

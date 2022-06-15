@@ -49,6 +49,7 @@ export const scanCoins = async () => {
 
     dispatch(actionFetchingScanCoins({ isFetching: true }));
 
+    console.log("SANG TEST:: SCANNING COINS");
     // start scan coins
     const { elapsed, result } = await measure(accountSender, "scanCoins", {
       tokenList: uniq(tokens.concat(_followTokens)),

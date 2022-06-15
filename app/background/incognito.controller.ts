@@ -26,8 +26,8 @@ import { Web3Connection } from "../core/connection";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { ActionManager } from "./lib/action-manager";
 import { PopupStateResolver } from "./lib/popup-state-resolver";
-import { dispatch } from "@redux/store/store";
-import { actionFetchingScanCoins } from "@redux/scanCoins";
+import { dispatch, store as reduxStore } from "@redux/store/store";
+import { actionFetchingScanCoins, isShowConfirmScanCoins } from "@redux/scanCoins";
 import { scanCoins } from "@background/worker.scanCoins";
 
 const createEngineStream = require("json-rpc-middleware-stream/engineStream");
@@ -316,8 +316,9 @@ export default class IncognitoController {
 
   scanCoinHandler() {
     const popupState = this.popupState;
+    const showConfirmScanCoins = isShowConfirmScanCoins(reduxStore.getState());
     if (popupState && popupState.get().walletState === "unlocked") {
-      if (!scanCoinInterval) {
+      if (!scanCoinInterval && !showConfirmScanCoins) {
         try {
           scanCoins().then();
         } catch (e) {

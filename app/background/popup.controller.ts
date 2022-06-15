@@ -93,7 +93,7 @@ export class PopupController {
           {
             try {
               await this.initMasterKey(req.params as InitMasterKeyPayload);
-              await this.scanCoinHandler();
+              // await this.scanCoinHandler();
               this._notifyAll({
                 type: "stateChanged",
                 data: { state: "unlocked" },
@@ -129,7 +129,7 @@ export class PopupController {
           break;
         case "popup_importWallet":
           await this.importMasterKey(req.params as InitMasterKeyPayload);
-          await this.scanCoinHandler();
+          // await this.scanCoinHandler();
           this._notifyAll({
             type: "stateChanged",
             data: { state: "unlocked" },
@@ -137,7 +137,7 @@ export class PopupController {
           break;
         case "popup_restoreWallet":
           await this.restoreWallet(req.params);
-          await this.scanCoinHandler();
+          // await this.scanCoinHandler();
           this._notifyAll({
             type: "stateChanged",
             data: { state: "unlocked" },
@@ -165,7 +165,7 @@ export class PopupController {
           try {
             // await this.store.lockSecretBox();
             await this.lockWalletAction();
-            await this.scanCoinHandler();
+            // await this.scanCoinHandler();
             this._notifyAll({
               type: "stateChanged",
               data: { state: "locked" },
@@ -178,7 +178,7 @@ export class PopupController {
         case "popup_switchNetwork":
           try {
             await this.switchNetwork();
-            await this.scanCoinHandler();
+            // await this.scanCoinHandler();
           } catch (err) {
             log("error: popup_lockWallet failed  with error: %s", err);
             res.error = err;
@@ -266,6 +266,14 @@ export class PopupController {
             reqResponse = await this.createAndSendTransaction({ isMainCrypto, payload });
           } catch (err) {
             log("popup_create_and_send_transaction failed with error: %s", err);
+            res.error = err;
+          }
+          break;
+        case "popup_request_scan_coins":
+          try {
+            await this.scanCoinHandler();
+          } catch (err) {
+            log("error: popup_lockWallet failed  with error: %s", err);
             res.error = err;
           }
           break;

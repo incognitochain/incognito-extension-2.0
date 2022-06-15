@@ -10,7 +10,7 @@ import { makeStyles } from "@mui/styles";
 import { SnackbarProvider } from "notistack";
 import { themeHelper } from "../helper/index";
 import { ThemeProvider as ThemeProviderMUI } from "@mui/system";
-import { Modal } from "@module/Modal";
+import { ModalProvider } from "@module/Modal";
 import { Router } from "react-router";
 import { createBrowserHistory, createMemoryHistory } from "history";
 import { isMainnet } from "@popup/configs";
@@ -37,21 +37,22 @@ const App: React.FunctionComponent = () => {
           <ConnectionProvider>
             <ProgramPluginsManagerProvider>
               <LoadingProvider>
-                <SnackbarProvider
-                  maxSnack={5}
-                  autoHideDuration={2000}
-                  classes={{
-                    variantSuccess: classes.success,
-                    variantError: classes.error,
-                    variantWarning: classes.warning,
-                    variantInfo: classes.info,
-                  }}
-                >
-                  <Router history={history}>
-                    <MainRoute />
-                    <Modal />
-                  </Router>
-                </SnackbarProvider>
+                <ModalProvider>
+                  <SnackbarProvider
+                    maxSnack={5}
+                    autoHideDuration={2000}
+                    classes={{
+                      variantSuccess: classes.success,
+                      variantError: classes.error,
+                      variantWarning: classes.warning,
+                      variantInfo: classes.info,
+                    }}
+                  >
+                    <Router history={history}>
+                      <MainRoute />
+                    </Router>
+                  </SnackbarProvider>
+                </ModalProvider>
               </LoadingProvider>
             </ProgramPluginsManagerProvider>
           </ConnectionProvider>

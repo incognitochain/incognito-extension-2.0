@@ -4,12 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppThunkDispatch } from "@redux/store";
 import { compose } from "recompose";
 import { useHistory } from "react-router-dom";
-import { actionToggleModal } from "@module/Modal";
-import { isFirstTimeScanCoinsSelector } from "@redux/scanCoins";
+import { actionToggleModal, useModal } from "@module/Modal";
+import { isFirstTimeScanCoinsSelector, isShowConfirmScanCoins } from "@redux/scanCoins";
 import { otaKeyOfDefaultAccountSelector } from "@redux/account/account.selectors";
 import { useBackground } from "@popup/context/background";
 import throttle from "lodash/throttle";
 import { Loading } from "@popup/context/loading";
+import BoxScanCoin from "@components/BoxScanCoin";
 
 const withBackgroundState = (WrappedComponent: FunctionComponent) => {
   return (props: any) => {
@@ -52,7 +53,21 @@ const withRouteChange = (WrappedComponent: any) => {
 
 const withLoading = (WrappedComponent: any) => {
   return (props: any) => {
+    const { setModal } = useModal();
     const isScanCoins = useSelector(isFirstTimeScanCoinsSelector);
+    const showConfirmScanCoins = useSelector(isShowConfirmScanCoins);
+
+    React.useEffect(() => {
+      if (showConfirmScanCoins) {
+        setModal({
+          data: <BoxScanCoin />,
+          title: "",
+          isTransparent: true,
+          closable: false,
+        });
+      }
+    }, [showConfirmScanCoins]);
+
     return (
       <>
         <WrappedComponent {...props} />
@@ -68,9 +83,10 @@ export const withBalance = (WrappedComponent: FunctionComponent) => (props: any)
   const loadFollowTokensBalance = throttle(() => request("popup_followTokensBalance", {}), 1000);
   const walletState = popupState?.walletState;
   const interval = React.useRef<any>(null);
+  const isScanCoins = useSelector(isFirstTimeScanCoinsSelector);
 
   React.useEffect(() => {
-    if (!walletState || !OTAKey || walletState !== "unlocked" || interval.current) return;
+    if (!walletState || !OTAKey || walletState !== "unlocked" || interval.current || isScanCoins) return;
     loadFollowTokensBalance();
     interval.current = setInterval(() => {
       loadFollowTokensBalance();
@@ -79,7 +95,7 @@ export const withBalance = (WrappedComponent: FunctionComponent) => (props: any)
       clearInterval(interval.current);
       interval.current = null;
     };
-  }, [OTAKey, walletState]);
+  }, [OTAKey, walletState, isScanCoins]);
 
   return <WrappedComponent {...{ ...props, loadFollowTokensBalance }} />;
 };
