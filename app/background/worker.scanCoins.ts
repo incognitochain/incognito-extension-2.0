@@ -83,11 +83,6 @@ export const getFollowTokensBalance = async () => {
       defaultTokens: tokens,
       version: PrivacyVersion.ver3,
     });
-    console.log("SANG TEST::: ", {
-      otaKey,
-      tokens,
-      balance,
-    });
     const _balance = uniqBy(balance, "id");
     dispatch(actionFetchedFollowBalance({ balance: _balance, OTAKey: otaKey }));
   } catch (error) {

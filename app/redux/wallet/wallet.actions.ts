@@ -76,7 +76,7 @@ export const reloadWallet =
         });
         setTimeout(() => {
           batch(() => {
-            dispatch(FollowAction.actionLoadFollowBalance());
+            // dispatch(FollowAction.actionLoadFollowBalance());
             dispatch(actionSetSignPublicKeyEncode());
             dispatch(actionSyncAccountMasterKey());
             // dispatch(actionSetNFTTokenData());
