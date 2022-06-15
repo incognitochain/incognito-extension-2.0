@@ -8,16 +8,17 @@ interface AccountItemProps {
   description?: string;
   onClick?: any;
   isSelected?: boolean;
+  radioBtnOnClick?: () => void;
 }
 
 const AccountItem: React.FC<AccountItemProps> = (props: AccountItemProps) => {
-  const { title = "", description = "", onClick = () => {}, isSelected = false } = props;
+  const { title = "", description = "", onClick = () => {}, radioBtnOnClick = () => {}, isSelected = false } = props;
   return (
-    <Container onClick={onClick} className={"hover-with-cursor"}>
+    <Container className={"hover-with-cursor"}>
       <LeftView>
-        <RadioButton isChecked={isSelected} />
+        <RadioButton isChecked={isSelected} onClick={radioBtnOnClick} />
       </LeftView>
-      <MiddleView>
+      <MiddleView onClick={onClick}>
         <Title className="fs-regular fw-medium">{title}</Title>
         <Description className="fs-small fw-medium">{description}</Description>
       </MiddleView>

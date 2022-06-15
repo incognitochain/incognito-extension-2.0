@@ -344,6 +344,10 @@ export const ThemedGlobalStyle = createGlobalStyle`
     .default-padding-top {
       padding-top: 24px;
     }
+    
+    .no-padding {
+      padding: 0px 0px 0px 0px;
+    }
 `;
 
 export const Row = styled.div`
