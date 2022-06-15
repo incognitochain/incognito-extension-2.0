@@ -23,7 +23,6 @@ interface IProps {}
 const BoxScanCoin = React.memo((props: IProps) => {
   const dispatch: AppThunkDispatch = useDispatch();
   const accountSender = useSelector(defaultAccountWalletSelector);
-  console.log(accountSender);
   const { closeModal } = useModal();
   const { request } = useBackground();
 

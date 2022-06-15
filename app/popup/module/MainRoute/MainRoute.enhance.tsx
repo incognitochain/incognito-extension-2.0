@@ -87,6 +87,7 @@ export const withBalance = (WrappedComponent: FunctionComponent) => (props: any)
 
   React.useEffect(() => {
     if (!walletState || !OTAKey || walletState !== "unlocked" || interval.current || isScanCoins) return;
+    console.log("SANG TEST::: ", isScanCoins);
     loadFollowTokensBalance();
     interval.current = setInterval(() => {
       loadFollowTokensBalance();

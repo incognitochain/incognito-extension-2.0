@@ -49,7 +49,7 @@ export const scanCoins = async () => {
 
     dispatch(actionFetchingScanCoins({ isFetching: true }));
 
-    console.log("SANG TEST:: SCANNING COINS");
+    console.log("SCANNING COINS::: ");
     // start scan coins
     const { elapsed, result } = await measure(accountSender, "scanCoins", {
       tokenList: uniq(tokens.concat(_followTokens)),
@@ -57,7 +57,7 @@ export const scanCoins = async () => {
 
     if (!coinsStore) {
       dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey }));
-      getFollowTokensBalance().then();
+      // getFollowTokensBalance().then();
     }
 
     console.log("scanCoins: ", { elapsed, otaKey, coins: result });
@@ -82,6 +82,11 @@ export const getFollowTokensBalance = async () => {
     const { balance }: { balance: IBalance[] } = await accountSender.getFollowTokensBalance({
       defaultTokens: tokens,
       version: PrivacyVersion.ver3,
+    });
+    console.log("SANG TEST::: ", {
+      otaKey,
+      tokens,
+      balance,
     });
     const _balance = uniqBy(balance, "id");
     dispatch(actionFetchedFollowBalance({ balance: _balance, OTAKey: otaKey }));
