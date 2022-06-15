@@ -39,10 +39,10 @@ const AccountDetailPage = React.memo(() => {
         <AccountDetailItem title="Public key" description={PublicKeyCheckEncode} />
         <AccountDetailItem title="Readonly key" description={ReadonlyKey} />
         <AccountDetailItem title="Validator key" description={ValidatorKey} />
-        <AccountDetailItem title="Validator Public key'" description={BLSPublicKey} />
+        <AccountDetailItem title="Validator Public key" description={BLSPublicKey} />
         <AccountDetailItem title="OTA key" description={OTAKey} />
         <AccountDetailItem title="ID" description={ID} />
-        <AccountDetailItem title="Shard" description={parseShard(PublicKeyBytes)} />
+        <AccountDetailItem title="Shard" description={(PublicKeyBytes && parseShard(PublicKeyBytes)) || ""} />
       </BodyLayout>
     </>
   );

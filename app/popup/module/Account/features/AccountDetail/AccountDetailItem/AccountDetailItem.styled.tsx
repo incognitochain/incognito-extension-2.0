@@ -4,7 +4,7 @@ const Container = styled.div`
   width: 100%;
   padding-left: 26px;
   padding-right: 26px;
-  padding-top: 8px;
+  padding-top: 10px;
   padding-bottom: 8px;
   display: flex;
   flex-direction: column;
@@ -32,7 +32,6 @@ const TopRightView = styled.div`
 
 const BottomView = styled.div`
   margin-top: 2px;
-  width: 85%;
 `;
 
 const Title = styled.p`
@@ -47,11 +46,11 @@ const Description = styled.p`
 `;
 
 const QrCodeIconContainer = styled.div`
-  padding: 4px;
+  padding: 5px;
 `;
 
 const CopyIconContainer = styled.div`
-  padding: 4px;
+  padding: 5px;
 `;
 
 export {

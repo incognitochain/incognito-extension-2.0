@@ -101,8 +101,7 @@ const CreateNewKeyBase: React.FC = () => {
             onBack={() => {
               setRoutePath(Paths.masterKeyPhraseConfirmPage);
             }}
-            descriptionText="Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
-            galley."
+            descriptionText=""
             buttonTitle="Create Master Key"
             continuePressed={(password: string) => {
               routeData.current = { ...routeData.current, password };

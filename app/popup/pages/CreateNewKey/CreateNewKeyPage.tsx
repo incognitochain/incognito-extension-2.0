@@ -65,7 +65,7 @@ export const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateN
           />
         </TextInputWraper>
         <ContentText1 className="fs-regular fw-regular">
-          {"The next screen will contain 12 special words that will allow you to recover your funds"}
+          {"The next screen will contain 12 special words that will allow you to recover your funds."}
         </ContentText1>
         <br />
         <ContentText2 className="fs-regular fw-regular">

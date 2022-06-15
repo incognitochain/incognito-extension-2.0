@@ -61,16 +61,13 @@ export const ImportMasterKeyPage: React.FC<ImportMasterKeyPageProps> = (props: I
     setMnemonicErrorVisible(false);
     setMnemonicLocal(e.target.value);
   }, []);
-
   // const continueButtonDisable = trim(masterKeyNameLocal || "").length === 0 || trim(mnemonicLocal || "").length === 0;
 
   return (
     <>
       <Header title="Master key" onBackClick={onBack} />
       <BodyLayout>
-        <DescriptionText className="fs-regular fw-regular">
-          {"Lorem Ipsum is simply dummy text of the printing and typesetting industry."}
-        </DescriptionText>
+        <DescriptionText className="fs-regular fw-regular">{""}</DescriptionText>
         <MasterKeyNameLabel className="fs-small fw-regular">{"Master key name"}</MasterKeyNameLabel>
         <TextInputWraper>
           <TextInput
@@ -85,7 +82,7 @@ export const ImportMasterKeyPage: React.FC<ImportMasterKeyPageProps> = (props: I
         <MnemonicTextArea>
           <TextArea
             value={mnemonicLocal}
-            placeholder={"12 word recovery phrase"}
+            placeholder={"12-word recovery phrase"}
             onChange={mnemonicOnChange}
             errorEnable={mnemonicErrorVisible}
             errorText={"Mnemonic words is invalid."}

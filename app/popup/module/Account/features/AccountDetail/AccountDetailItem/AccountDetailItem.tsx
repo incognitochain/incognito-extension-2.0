@@ -35,7 +35,7 @@ const AccountDetailItem: React.FC<AccountDetailItemProps> = (props: AccountDetai
     <Container className={"hover-with-cursor"}>
       <TopView>
         <TopLeftView>
-          <Title className="fs-medium fw-medium">{title}</Title>
+          <Title className="fs-medium fw-suppermedium">{title}</Title>
         </TopLeftView>
         <TopRightView>
           <QrCodeIconContainer>
@@ -47,7 +47,7 @@ const AccountDetailItem: React.FC<AccountDetailItemProps> = (props: AccountDetai
         </TopRightView>
       </TopView>
       <BottomView>
-        <Description className="fs-regular fw-medium">{description}</Description>
+        <Description className="fs-regular fw-regular">{description}</Description>
       </BottomView>
     </Container>
   );
