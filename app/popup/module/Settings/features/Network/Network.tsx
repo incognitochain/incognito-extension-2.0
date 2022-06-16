@@ -1,14 +1,14 @@
-import Header from "@components/BaseComponent/Header";
 import { useBackground } from "@popup/context/background";
 import { useLoading } from "@popup/context/loading";
 import { useCallAsync } from "@popup/utils/notifications";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { BodyLayoutWrapper } from "./Network.styled";
-import NetworkItem from "./NetworkItem/NetworkItem";
 import serverService, { ServerModel } from "@services/wallet/Server";
-import { route as AssetsRoute } from "@module/Assets/Assets.route";
+import { route as routeAssets } from "@module/Assets";
 import { changeBaseUrl } from "@services/http";
+import WrapContent from "@components/Content/Content";
+import { NetworkItem } from "@module/Settings/features/Network";
+import Header from "@components/Header";
 
 const NetworkPage: React.FC = () => {
   const history = useHistory();
@@ -24,9 +24,7 @@ const NetworkPage: React.FC = () => {
   };
 
   const handleSetDefaultNetwork = async (network: ServerModel) => {
-    showLoading({
-      value: true,
-    });
+    showLoading({ value: true });
 
     await serverService.setDefaultServer(network);
     await changeBaseUrl();
@@ -34,35 +32,31 @@ const NetworkPage: React.FC = () => {
     callAsync(request("popup_switchNetwork", {}), {
       progress: { message: "Switching..." },
       success: { message: "Switch Network Done" },
-      onSuccess: (result: any) => {
-        showLoading({
-          value: false,
-        });
-        history.replace(AssetsRoute);
+      onSuccess: () => {
+        showLoading({ value: false });
+        history.replace(routeAssets);
       },
     });
   };
 
   useEffect(() => {
-    getServerList();
+    getServerList().then();
   }, []);
 
   return (
     <>
-      <Header title="Network" onBackClick={() => history.goBack()} />
-      <BodyLayoutWrapper className="scroll-view">
+      <Header title="Network" />
+      <WrapContent className="default-padding-horizontal">
         {networkList.map((network: ServerModel) => (
           <NetworkItem
             key={network.id}
             title={network.name}
             description={network.address}
             isSelected={network.default}
-            onClick={() => {
-              handleSetDefaultNetwork(network);
-            }}
+            onClick={() => handleSetDefaultNetwork(network)}
           />
         ))}
-      </BodyLayoutWrapper>
+      </WrapContent>
     </>
   );
 };

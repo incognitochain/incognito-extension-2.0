@@ -31,8 +31,6 @@ export const Paths = {
   unlockPage: "/unlock-page",
   createAccountPage: "/create-account-page",
   restoreWalletPage: "/restore-wallet-page",
-  settingsPage: "/settings-page",
-  networkPage: "/network-page",
   selectAccountPage: "/select-account-page",
   accountDetailPage: "/account-detail-page",
 };

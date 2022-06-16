@@ -1,7 +1,8 @@
 import * as React from "react";
 import { SVGProps } from "react";
+import styled from "styled-components";
 
-const SettingIcon = (props: SVGProps<SVGSVGElement>) => (
+const SettingVector = (props: SVGProps<SVGSVGElement>) => (
   <svg width={40} height={40} fill="none" {...props}>
     <circle cx={20} cy={20} r={20} fill="#303030" />
     <path
@@ -11,4 +12,20 @@ const SettingIcon = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default SettingIcon;
+interface IProps {}
+
+const Styled = styled.button`
+  width: 40px;
+  height: 40px;
+`;
+
+const Setting = (props: IProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+  const { className = "" } = props;
+  return (
+    <Styled type="button" className={`icon ${className || ""}`} {...props}>
+      <SettingVector />
+    </Styled>
+  );
+};
+
+export default Setting;
