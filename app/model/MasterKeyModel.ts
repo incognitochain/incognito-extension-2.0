@@ -90,7 +90,6 @@ class MasterKeyModel extends BaseModel {
     } else {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       wallet = await importWallet(this.mnemonic!, rootName);
-      // wallet = await initWallet(storageName, rootName);
     }
     this.mnemonic = wallet.Mnemonic;
     this.wallet = wallet;

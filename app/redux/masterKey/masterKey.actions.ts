@@ -7,27 +7,20 @@ import {
 } from "@redux/masterKey/masterKey.selectors";
 import { ImportMasterKeyPayload, InitMasterKeyPayload } from "@redux/masterKey/masterKey.types";
 import { AppGetState, AppThunk, AppThunkDispatch } from "@redux/store";
-import { actionRequestAirdropNFTForListAccount, reloadWallet, setWallet } from "@redux/wallet/wallet.actions";
+import { reloadWallet, setWallet } from "@redux/wallet/wallet.actions";
 import { getWalletAccounts } from "@services/api/masterKey";
 import { login } from "@services/authService";
-import { clearWalletCaches, getCache } from "@services/cache";
+import { clearWalletCaches } from "@services/cache";
 import { ExHandler } from "@services/exception";
 import Storage from "@services/storage";
 import {
   cachePassword,
   getPassphrase,
   getPassphraseNoCache,
-  getPasswordFromCache,
   savePasspharseToStorage,
 } from "@services/wallet/passwordService";
 import serverService from "@services/wallet/Server";
-import {
-  configsWallet,
-  importWallet,
-  loadListAccount,
-  saveWallet,
-  storeWalletAccountIdsOnAPI,
-} from "@services/wallet/walletService";
+import { configsWallet, importWallet, loadListAccount, saveWallet } from "@services/wallet/walletService";
 import { batch } from "react-redux";
 import {
   InitMasterKeySuccessAction,
@@ -217,15 +210,12 @@ export const initMasterKey =
     await loadListAccount(wallet);
     const { aesKey } = await getPassphraseNoCache();
     await savePasspharseToStorage(aesKey, mnemonic, password);
-    await storeWalletAccountIdsOnAPI(wallet);
-    await dispatch(setWallet(wallet));
+    dispatch(setWallet(wallet));
 
     batch(async () => {
       await dispatch(initMasterKeySuccess(masterKeys));
       await dispatch(switchMasterKeySuccess(defaultMasterKey.name));
       dispatch(reloadWallet());
-      storeWalletAccountIdsOnAPI(wallet);
-      // dispatch(actionRequestAirdropNFTForListAccount(wallet));
     });
 
     return wallet;
@@ -391,8 +381,6 @@ export const createMasterKey = (data: any) => async (dispatch: AppThunkDispatch,
       await dispatch(createMasterKeySuccess(newMasterKey));
       await dispatch(switchMasterKeySuccess(data.name));
       dispatch(reloadWallet());
-      // dispatch(actionRequestAirdropNFTForListAccount(wallet));
-      storeWalletAccountIdsOnAPI(wallet);
       dispatch(loadAllMasterKeyAccounts());
     });
   } catch (error) {

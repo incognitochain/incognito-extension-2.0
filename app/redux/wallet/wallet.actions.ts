@@ -1,17 +1,14 @@
 import { configsWallet } from "@/services/wallet/walletService";
 import AccountModel from "@model/account";
 import {
-  actionSetNFTTokenData,
   actionSetSignPublicKeyEncode,
   setAccount,
   setDefaultAccount,
   setListAccount,
 } from "@redux/account/account.actions";
-import FollowAction from "@redux/follow/follow.actions";
 import { actionSyncAccountMasterKey, updateMasterKey } from "@redux/masterKey/masterKey.actions";
 import { currentMasterKeySelector } from "@redux/masterKey/masterKey.selectors";
 import { AppGetState, AppThunkDispatch } from "@redux/store";
-import { getPTokenList } from "@redux/token/token.actions";
 import { walletSelector } from "@redux/wallet/wallet.selectors";
 import accountService from "@services/wallet/accountService";
 import { isEqual } from "lodash";
@@ -76,10 +73,8 @@ export const reloadWallet =
         });
         setTimeout(() => {
           batch(() => {
-            // dispatch(FollowAction.actionLoadFollowBalance());
             dispatch(actionSetSignPublicKeyEncode());
             dispatch(actionSyncAccountMasterKey());
-            // dispatch(actionSetNFTTokenData());
           });
         }, 500);
       }

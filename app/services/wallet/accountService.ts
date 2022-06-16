@@ -1,15 +1,8 @@
-/* eslint-disable no-useless-catch */
-// import { STACK_TRACE } from "@services/exception/customError/code/webjsCode";
 import Server from "@services/wallet/Server";
-import _, { cloneDeep, trim } from "lodash";
-// import { getPDexV3Instance } from "@screens/PDexV3";
-// import { delay } from "@src/utils/delay";
-// import { v4 } from "uuid";
-// import random from "lodash/random";
-// import { CustomError, ErrorCode, ExHandler } from "../exception";
+import _, { cloneDeep } from "lodash";
 import storage from "@services/storage";
 import { CONSTANT_KEYS, COINS } from "@constants/index";
-import { cachePromise, clearAllCaches } from "@services/cache";
+import { clearAllCaches } from "@services/cache";
 import BigNumber from "bignumber.js";
 import { CustomError, ErrorCode, ExHandler } from "../exception";
 import { loadListAccountWithBLSPubKey, saveWallet } from "./walletService";
@@ -17,10 +10,6 @@ import AccountModel from "@model/account";
 import { STACK_TRACE } from "@services/exception/customError/code/webjsCode";
 import { getAccountNameByAccount, getAccountWallet } from "@services/wallet/wallet.shared";
 import { PRV_ID } from "@constants/common";
-import { getToken } from "../authService";
-import { getPDexV3Instance } from "@/redux/pDexV3/pDexV3.actions";
-// import { getPDexV3Instance } from '@src/screens/PDexV3';
-const { PDexV3 } = require("incognito-chain-web-js/build/web/wallet");
 
 const {
   AccountWallet,
@@ -283,30 +272,6 @@ export default class Account {
     } catch (e) {
       return false;
     }
-  }
-
-  static async getBalance({ account, wallet, tokenID, version }: any) {
-    new Validator("getBalance-account", account).required();
-    new Validator("getBalance-wallet", wallet).required();
-    new Validator("getBalance-tokenID", tokenID).required().string();
-    new Validator("getBalance-version", version).number();
-    version = version || PrivacyVersion.ver2;
-    const accountWallet = this.getAccount(account, wallet);
-    let balance = 0;
-    try {
-      const params = { tokenID, version };
-      const key = accountWallet.getKeyCacheBalance(params);
-      balance = await cachePromise(key, () =>
-        accountWallet.getBalance({
-          tokenID,
-          version,
-        }),
-      );
-      balance = new BigNumber(balance).toNumber();
-    } catch (error) {
-      throw error;
-    }
-    return balance;
   }
 
   static parseShard(account: any) {
@@ -632,16 +597,11 @@ export default class Account {
       if (account) {
         const keyInfo = (await account.getKeyInfo({ version })) || {};
         const otaKey = account.getOTAKey();
-        const pDexV3Inst = await getPDexV3Instance({ account });
-        const keyFollowPoolsDefault = pDexV3Inst.getKeyFollowedDefaultPools();
-        const keyFollowPools = pDexV3Inst.getKeyFollowPools();
         const followedDefaultTokensKey = account.getKeyFollowedDefaultTokens();
         let task = [
           account.removeStorageCoinsV1(),
           account.clearAccountStorage(otaKey),
           account.clearAccountStorage(followedDefaultTokensKey),
-          pDexV3Inst.clearStorage(keyFollowPoolsDefault),
-          pDexV3Inst.clearStorage(keyFollowPools),
         ];
         clearAllCaches();
         if (keyInfo.nftindex) {

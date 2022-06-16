@@ -4,7 +4,6 @@ import CONSTANT_KEYS from "@constants/keys";
 import { getTokenInfo } from "@services/api/token";
 import storage from "@services/storage";
 import { getAccountWallet } from "@services/wallet/wallet.shared";
-import { updateStatusHistory } from "@services/wallet/walletService";
 import _ from "lodash";
 const { Wallet, Validator } = require("incognito-chain-web-js/build/web/wallet");
 
@@ -118,7 +117,6 @@ export default class Token {
       if (!token?.id) {
         throw new Error("Token is required");
       }
-      await updateStatusHistory(wallet).catch(() => console.warn("History statuses were not updated"));
       const accountWallet = wallet.getAccountByName(account.name);
       let histories = [];
       histories = await accountWallet.getPrivacyTokenTxHistoryByTokenID(token?.id);
