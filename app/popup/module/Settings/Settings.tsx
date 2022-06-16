@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "@components/Header";
 import WrapContent from "@components/Content/Content";
-import { Network } from "./features/Items";
+import { CacheScanCoins, Network } from "./features/Items";
 
 const Settings: React.FC = React.memo(() => {
   return (
@@ -9,6 +9,7 @@ const Settings: React.FC = React.memo(() => {
       <Header title="Settings" />
       <WrapContent className="default-padding-horizontal">
         <Network />
+        <CacheScanCoins />
       </WrapContent>
     </>
   );

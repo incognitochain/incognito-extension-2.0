@@ -21,6 +21,7 @@ export enum AccountActionType {
   ACTION_FETCHING_NFT = `ACCOUNT/ACTION_FETCHING_NFT`,
   ACTION_FETCHED_NFT = `ACCOUNT/ACTION_FETCHED_NFT`,
   ACTION_TOGGLE_MODAL_MINT_MORE_NFT = `ACCOUNT/ACTION_TOGGLE_MODAL_MINT_MORE_NFT`,
+  ACTION_LOGOUT = `ACCOUNT/ACTION_LOGOUT`,
 }
 
 //----------------------------------------------
@@ -125,6 +126,10 @@ export interface AccounFetchedNFTAction extends Action {
   payload: any;
 }
 
+export interface AccountLogoutAction extends Action {
+  type: AccountActionType.ACTION_LOGOUT;
+}
+
 //-----------------------------------
 
 export type AccountActions =
@@ -147,6 +152,7 @@ export type AccountActions =
   | AccounGetBurnerAddressAction
   | AccounFetchingNFTAction
   | AccounToggleModalMintMoreNFTAction
-  | AccounFetchedNFTAction;
+  | AccounFetchedNFTAction
+  | AccountLogoutAction;
 
 export default {};

@@ -1,5 +1,7 @@
 import { ScanCoinsActionType } from "@redux/scanCoins/scanCoins.constants";
 import {
+  ReScanCoinsAction,
+  RescanCoinsPayload,
   ScanCoinsFetchingAction,
   ScanCoinsFetchingPayload,
   ScanCoinsFirstTimeAction,
@@ -19,4 +21,10 @@ const actionFistTimeScanCoins = (payload: ScanCoinsFirstTimePayload): ScanCoinsF
   payload,
 });
 
-export { actionFetchingScanCoins, actionFistTimeScanCoins };
+// Store status scan coins, if first time, show loading on UX
+const actionReScanCoins = (payload: RescanCoinsPayload): ReScanCoinsAction => ({
+  type: ScanCoinsActionType.RESCAN_COINS,
+  payload,
+});
+
+export { actionFetchingScanCoins, actionFistTimeScanCoins, actionReScanCoins };

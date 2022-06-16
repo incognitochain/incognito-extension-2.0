@@ -203,6 +203,11 @@ export const reducer: Reducer<AccountState, AccountActions> = (
         toggleModalMintMoreNFT: action.payload,
       };
     }
+    case AccountActionType.ACTION_LOGOUT: {
+      return {
+        ...cloneDeep(initialState),
+      };
+    }
     default:
       return state;
   }

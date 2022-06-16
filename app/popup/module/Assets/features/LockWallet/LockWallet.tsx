@@ -7,6 +7,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { LockIcon } from "@components/Icons";
+import { actionLogout } from "@redux/account";
 
 const Container = styled.div`
   margin-right: 10px;
@@ -25,6 +26,7 @@ const LockWallet = React.memo(() => {
       progress: { message: "locking wallet..." },
       success: { message: "Wallet locked" },
       onSuccess: () => {
+        actionLogout();
         showLoading({ value: false });
         history.push(Paths.unlockPage);
       },

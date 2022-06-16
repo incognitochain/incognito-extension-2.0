@@ -18,7 +18,7 @@ const Styled = styled.div<{ isTransparent: boolean }>`
   justify-content: center;
   align-items: center;
   background-color: ${({ theme, isTransparent }: { theme: ITheme; isTransparent: boolean }) =>
-    isTransparent ? `rgb(25, 25, 25, 0.4)` : theme.body};
+    isTransparent ? `rgb(25, 25, 25, 0.8)` : theme.body};
   .modal-content-wrapper {
     position: absolute;
     overflow: hidden;

@@ -50,7 +50,7 @@ const BoxScanCoin = React.memo((props: IProps) => {
   return (
     <Styled>
       <p className="label fs-supermedium fw-medium">Confirm</p>
-      <p className="label fs-regular fw-medium sub-title">Do you want to scan coins?</p>
+      <p className="label fs-regular fw-medium sub-title">Do you want scan coins?</p>
       <Row>
         <SecondaryButton onClick={onCancelPress}>Cancel</SecondaryButton>
         <div style={{ width: 14 }} />

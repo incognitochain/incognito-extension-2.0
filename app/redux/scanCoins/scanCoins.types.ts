@@ -28,6 +28,10 @@ export interface ScanCoinsFirstTimePayload {
   otaKey: string;
 }
 
+export interface RescanCoinsPayload {
+  otaKey: string;
+}
+
 //----------------------------------------------
 // Action Definition here!
 //----------------------------------------------
@@ -41,5 +45,10 @@ export interface ScanCoinsFirstTimeAction extends Action {
   payload: ScanCoinsFirstTimePayload;
 }
 
+export interface ReScanCoinsAction extends Action {
+  type: ScanCoinsActionType.RESCAN_COINS;
+  payload: RescanCoinsPayload;
+}
+
 //-----------------------------------
-export type ScanCoinsActions = ScanCoinsFetchingAction | ScanCoinsFirstTimeAction;
+export type ScanCoinsActions = ScanCoinsFetchingAction | ScanCoinsFirstTimeAction | ReScanCoinsAction;

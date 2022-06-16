@@ -42,7 +42,6 @@ export const getAccountWallet = (account: any, wallet: any) => {
     const API_SERVICE = "https://api-service.incognito.org";
 
     accountWallet.setRPCClient(FULL_NODE);
-    // accountWallet.setStorageServices(wallet.Storage);
     accountWallet.setRPCCoinServices(COIN_SERVICE);
     accountWallet.setRPCTxServices(PUBSUB);
     accountWallet.setRPCRequestServices(PUBSUB);

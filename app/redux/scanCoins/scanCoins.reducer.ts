@@ -33,6 +33,19 @@ export const reducer: Reducer<IScanCoinsState, ScanCoinsActions> = (state = init
         },
       };
     }
+    case ScanCoinsActionType.RESCAN_COINS: {
+      const { otaKey } = action.payload;
+      let scanStatus = state.scanStatus;
+      if (scanStatus && scanStatus[otaKey]) {
+        delete scanStatus[otaKey];
+      }
+      return {
+        ...state,
+        scanStatus: {
+          ...scanStatus,
+        },
+      };
+    }
     default:
       return state;
   }

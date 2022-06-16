@@ -448,3 +448,7 @@ export const actionToggleModalMintMoreNFT = (payload: any) => ({
   type: AccountActionType.ACTION_TOGGLE_MODAL_MINT_MORE_NFT,
   payload,
 });
+
+export const actionLogout = () => ({
+  type: AccountActionType.ACTION_LOGOUT,
+});
