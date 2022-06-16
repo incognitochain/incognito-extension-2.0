@@ -16,11 +16,11 @@ const NetworkPage: React.FC = () => {
   const { request } = useBackground();
   const { showLoading } = useLoading();
 
-  const [networkList, setNetowrkList] = useState<ServerModel[]>([]);
+  const [networkList, setNetworkList] = useState<ServerModel[]>([]);
 
   const getServerList = async () => {
     let serverList = (await serverService.getServerList()) || [];
-    setNetowrkList(serverList);
+    setNetworkList(serverList);
   };
 
   const handleSetDefaultNetwork = async (network: ServerModel) => {
