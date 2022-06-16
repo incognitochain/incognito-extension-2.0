@@ -150,30 +150,6 @@ export const defaultAccountWalletSelector = createSelector(
   (defaultAccount, wallet) => defaultAccount && wallet && getAccountWallet(defaultAccount, wallet),
 );
 
-// const getValidRealAmountNFTSelector = createSelector(nftTokenDataSelector, (nftData) => (nftId) => {
-//   const { list } = nftData;
-//   let _nftToken;
-//   if (nftId) {
-//     const nft = (list || []).find(({ nftToken: _nftToken, realAmount }) => nftId === _nftToken && parseInt(realAmount));
-//     if (nft) {
-//       _nftToken = nft.nftToken;
-//     }
-//   }
-//   return _nftToken;
-// });
-
-// const getValidAmountNFTSelector = createSelector(nftTokenDataSelector, (nftData) => (nftId) => {
-//   const { list, nftToken } = nftData;
-//   let _nftToken = nftToken;
-//   if (nftId) {
-//     const nft = (list || []).find(({ nftToken: _nftToken, amount }) => nftId === _nftToken && parseInt(amount));
-//     if (nft) {
-//       _nftToken = nft.nftToken;
-//     }
-//   }
-//   return _nftToken;
-// });
-
 export const isFetchingNFTSelector = createSelector(accountSelector, ({ isFetchingNFT }) => isFetchingNFT);
 
 export default {
@@ -181,9 +157,7 @@ export default {
   listAccount,
   defaultAccount,
   isGettingBalance,
-  // getAccountByName,
   getAccountByName1,
-  // getAccountByPublicKey,
   getAccountByPublicKey1,
   listAccountSelector,
   defaultAccountNameSelector,
@@ -193,7 +167,6 @@ export default {
   switchAccountSelector,
   createAccountSelector,
   importAccountSelector,
-  // getAccountByNameSelector,
   getAccountByNameSelector1,
   signPublicKeyEncodeSelector,
   burnerAddressSelector,
@@ -201,6 +174,4 @@ export default {
   nftTokenDataSelector,
   defaultAccountWalletSelector,
   isFetchingNFTSelector,
-  // getValidRealAmountNFTSelector,
-  // getValidAmountNFTSelector,
 };
