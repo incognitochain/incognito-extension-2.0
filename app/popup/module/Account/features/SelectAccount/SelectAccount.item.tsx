@@ -14,7 +14,7 @@ interface AccountItemProps {
 const AccountItem: React.FC<AccountItemProps> = (props: AccountItemProps) => {
   const { title = "", description = "", onClick = () => {}, radioBtnOnClick = () => {}, isSelected = false } = props;
   return (
-    <AccountItemStyled className="" hover-with-cursor>
+    <AccountItemStyled className="hover-with-cursor" hover-with-cursor>
       <div className="left-view">
         <RadioButton isChecked={isSelected} onClick={radioBtnOnClick} />
       </div>

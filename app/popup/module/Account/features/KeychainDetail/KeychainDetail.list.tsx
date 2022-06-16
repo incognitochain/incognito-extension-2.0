@@ -14,7 +14,6 @@ const parseShard = (bytes: any) => {
 
 const KeychainDetailList = React.memo(() => {
   const location = useLocation();
-  console.log(location);
   const PaymentAddressSelected = (location.state as any).PaymentAddress;
   if (!PaymentAddressSelected) return null;
   const selectedAccount = useSelector(getAccountWithPaymentAddress(PaymentAddressSelected));
