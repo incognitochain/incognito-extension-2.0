@@ -12,7 +12,7 @@ import { sendDataSelector } from "@module/Send/Send.selector";
 import { AppThunkDispatch } from "@redux/store";
 import { useLoading } from "@popup/context/loading";
 import { useHistory } from "react-router-dom";
-import { route as routeAddressBook } from "@module/AddressBook";
+import { route as routeAddressBook } from "@module/Account/features/AddressBook";
 import { route as routeTokenDetail } from "@module/TokenDetail";
 
 export interface IMergeProps extends InjectedFormProps<any, any>, TInnerInit, TInnerAmount, TInnerAddress, TInnerSend {
