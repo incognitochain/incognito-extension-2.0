@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import Header from "@components/Header";
 import WrapContent from "@components/Content/Content";
-import withImport from "@module/ImportToken/ImportToken.enhance";
+import withImport from "@module/AddToken/AddToken.enhance";
 import TextInput from "@components/Inputs/TextInput";
-import { TInner } from "@module/ImportToken/ImportToken.types";
+import { TInner } from "@module/AddToken/AddToken.types";
 import { Button } from "@components/Core";
 import TextArea from "@components/Inputs/TextArea";
 
@@ -28,11 +28,11 @@ interface IProps {
 
 export interface IMergeProps extends TInner, IProps {}
 
-const ImportToken = React.memo((props: IMergeProps) => {
+const AddToken = React.memo((props: IMergeProps) => {
   const { tokenID, symbol, network, name, contractID, pDecimals, error, onChangeTokenID, onAddToken } = props;
   return (
     <Styled>
-      <Header title="Import Tokens" />
+      <Header title="Add Token" />
       <WrapContent paddingTop={true} className="default-padding-horizontal">
         <TextArea
           value={tokenID || ""}
@@ -52,4 +52,4 @@ const ImportToken = React.memo((props: IMergeProps) => {
   );
 });
 
-export default withImport(ImportToken);
+export default withImport(AddToken);

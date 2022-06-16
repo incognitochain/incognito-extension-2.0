@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { TInner } from "@module/ImportToken/ImportToken.types";
+import { TInner } from "@module/AddToken/AddToken.types";
 import { getTokensInfo } from "@services/api/token";
 import debounce from "lodash/debounce";
 import first from "lodash/first";
