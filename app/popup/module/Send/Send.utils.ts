@@ -78,7 +78,7 @@ const getSendData = ({
   // Ignore case send internal
   const burnFeeToken = getDataByTokenID(_sendSelector.burnFeeToken);
   const burnFeeAmount = _sendSelector.burnFee;
-  const { amount: burnUserBalance } = burnFeeToken;
+  // const { amount: burnUserBalance } = burnFeeToken;
 
   // Form Selector
   const formSelector = formValueSelector(FORM_CONFIGS.formName);

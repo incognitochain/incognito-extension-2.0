@@ -4,7 +4,7 @@ const Styled = styled.div``;
 
 const AddressBookItemStyled = styled.div`
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   padding: 14px 4px;
   border-radius: 8px;
   display: flex;

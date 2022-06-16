@@ -7,7 +7,7 @@ const Settings: React.FC = React.memo(() => {
   return (
     <>
       <Header title="Settings" />
-      <WrapContent className="default-padding-horizontal">
+      <WrapContent className="default-padding-horizontal default-padding-top">
         <Network />
         <CacheScanCoins />
       </WrapContent>
