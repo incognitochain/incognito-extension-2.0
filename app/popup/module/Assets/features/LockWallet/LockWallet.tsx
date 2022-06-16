@@ -1,4 +1,3 @@
-import LockIcon from "@popup/components/Icons/LockIcon";
 import { Paths } from "@popup/components/routes/paths";
 import { useBackground } from "@popup/context/background";
 import { useLoading } from "@popup/context/loading";
@@ -7,9 +6,11 @@ import { throttle } from "lodash";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import { LockIcon } from "@components/Icons";
 
 const Container = styled.div`
   margin-right: 10px;
+  margin-left: 10px;
 `;
 
 const LockWallet = React.memo(() => {
@@ -19,16 +20,12 @@ const LockWallet = React.memo(() => {
   const { showLoading } = useLoading();
 
   const onLockPressed = throttle(() => {
-    showLoading({
-      value: true,
-    });
+    showLoading({ value: true });
     callAsync(request("popup_lockWallet", {}), {
       progress: { message: "locking wallet..." },
       success: { message: "Wallet locked" },
-      onSuccess: (result) => {
-        showLoading({
-          value: false,
-        });
+      onSuccess: () => {
+        showLoading({ value: false });
         history.push(Paths.unlockPage);
       },
     });

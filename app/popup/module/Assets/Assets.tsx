@@ -11,13 +11,18 @@ const Assets = React.memo(() => {
   const navigateImportTokens = () => {
     history.push(routeImportToken);
   };
+
+  const navigateSetting = () => {
+    history.push(routeSettings);
+  };
+
   return (
     <>
       <Header
         showBack={false}
         rightHeader={
           <>
-            <SettingIcon onClick={() => history.push(routeSettings)} />
+            <SettingIcon onClick={navigateSetting} />
             <LockWallet />
           </>
         }

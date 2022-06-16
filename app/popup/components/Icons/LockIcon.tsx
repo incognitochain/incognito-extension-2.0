@@ -1,7 +1,8 @@
 import * as React from "react";
 import { SVGProps } from "react";
+import styled from "styled-components";
 
-const LockIcon = (props: SVGProps<SVGSVGElement>) => (
+const LockVector = (props: SVGProps<SVGSVGElement>) => (
   <svg width={40} height={40} fill="none" {...props}>
     <circle cx={20} cy={20} r={20} fill="#303030" />
     <path
@@ -11,4 +12,20 @@ const LockIcon = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default LockIcon;
+interface IProps {}
+
+const Styled = styled.button`
+  width: 40px;
+  height: 40px;
+`;
+
+const Lock = (props: IProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+  const { className = "" } = props;
+  return (
+    <Styled type="button" className={`icon ${className || ""}`} {...props}>
+      <LockVector />
+    </Styled>
+  );
+};
+
+export default Lock;
