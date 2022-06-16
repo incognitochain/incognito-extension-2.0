@@ -5,7 +5,6 @@ import { createLogger, isInternalProcess } from "@core/utils";
 import LocalStore from "./lib/local-store";
 import IncognitoController from "./incognito.controller";
 import { initialState } from "./store";
-import { actionClearAllModal } from "@module/Modal";
 const { init } = require("incognito-chain-web-js/build/web/wallet");
 
 window.store = store;
@@ -141,15 +140,6 @@ function setupController(versionedData: VersionedData) {
 
   chrome.runtime.onConnect.addListener(connectRemote);
   chrome.runtime.onConnectExternal.addListener(connectExternal);
-
-  // clear all modals when close popup
-  chrome.runtime.onConnect.addListener(function (port) {
-    if (port.name === "popup") {
-      port.onDisconnect.addListener(function () {
-        dispatch(actionClearAllModal());
-      });
-    }
-  });
 
   return Promise.resolve();
 }

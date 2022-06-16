@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppThunkDispatch } from "@redux/store";
 import { compose } from "recompose";
 import { useHistory } from "react-router-dom";
-import { actionToggleModal, useModal } from "@module/Modal";
+import { useModal } from "@module/Modal";
 import { isFirstTimeScanCoinsSelector, isShowConfirmScanCoins } from "@redux/scanCoins";
 import { otaKeyOfDefaultAccountSelector } from "@redux/account/account.selectors";
 import { useBackground } from "@popup/context/background";
@@ -36,13 +36,9 @@ const withPToken = (WrappedComponent: FunctionComponent) => {
 
 const withRouteChange = (WrappedComponent: any) => {
   return (props: any) => {
-    const dispatch: AppThunkDispatch = useDispatch();
     const history = useHistory();
-    const handleClose = () => dispatch(actionToggleModal({}));
     React.useEffect(() => {
-      const listener = history.listen(() => {
-        handleClose();
-      });
+      const listener = history.listen(() => {});
       return () => {
         listener();
       };
