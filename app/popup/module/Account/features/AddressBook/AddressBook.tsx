@@ -1,8 +1,9 @@
 import React from "react";
 import withAddressBook, { IMergeProps } from "./AddressBook.enhance";
-import MasterKeyItem from "@module/Account/features/MasterKeyItem";
 import Header from "@components/Header";
 import WrapContent from "@components/Content/Content";
+import { IAddressBookItem } from "@module/Account/features/AddressBook/AddressBook.interface";
+import AddressBookItem from "@module/Account/features/AddressBook/AddressBook.item";
 
 const AddressBook = React.memo((props: IMergeProps & any) => {
   const { addressBook, onSelectedItem } = props;
@@ -10,12 +11,17 @@ const AddressBook = React.memo((props: IMergeProps & any) => {
     masterKeyName: item.title,
     listAccount: item.data,
   }));
+  console.log(factories);
+
+  const renderKeyChain = (item: IAddressBookItem) => (
+    <AddressBookItem address={item.address} name={item.name} onSelectedItem={onSelectedItem} key={item.address} />
+  );
   return (
     <>
       <Header title="Address Book" />
-      <WrapContent className="default-padding-horizontal default-padding0-top">
+      <WrapContent className="default-padding-horizontal default-padding-top">
         {factories.map((account: any) => (
-          <MasterKeyItem onSelectedItem={onSelectedItem} {...account} key={account.masterKeyName} />
+          <div key={account.masterKeyName}>{account.listAccount.map(renderKeyChain)}</div>
         ))}
       </WrapContent>
     </>
