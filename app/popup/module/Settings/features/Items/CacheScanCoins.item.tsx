@@ -49,9 +49,7 @@ const CacheScanCoins: React.FC = () => {
 
   const showConfirm = () => {
     setModal({
-      data: (
-        <ConfirmBox onConfirm={clearStorageScanCoins} title="Rescan coins" desc="Clear storage scan coins and rescan" />
-      ),
+      data: <ConfirmBox onConfirm={clearStorageScanCoins} title="Rescan coins" desc="Clear storage coins and rescan" />,
       title: "",
       isTransparent: true,
       closable: true,
@@ -63,7 +61,7 @@ const CacheScanCoins: React.FC = () => {
       onClick={showConfirm}
       leftView={<NetworkIcon />}
       title="Rescan coins"
-      description="Clear storage scan coins and rescan"
+      description="Clear storage coins and rescan"
       rightView={<RightArrowIcon />}
     />
   );
