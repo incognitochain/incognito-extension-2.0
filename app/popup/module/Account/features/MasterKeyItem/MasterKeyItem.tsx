@@ -1,5 +1,5 @@
 import React from "react";
-import KeyChainItem, { IKeyChainItemProps } from "@module/Account/features/KeyChainItem/KeyChainItem";
+import KeyChainItem, { IKeyChainItemProps } from "@module/Account/features/Keychain/KeyChain.item";
 import styled, { ITheme } from "styled-components";
 
 const Styled = styled.div`

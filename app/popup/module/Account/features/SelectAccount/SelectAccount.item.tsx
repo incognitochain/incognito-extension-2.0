@@ -1,7 +1,7 @@
 import { RadioButton } from "@/popup/components/RadioButton/RadioButton";
 import RightArrowIcon from "@popup/components/Icons/RightArrowIcon";
 import React from "react";
-import { Container, Description, LeftView, MiddleView, RightView, Title } from "./AccountItem.styled";
+import { AccountItemStyled } from "@module/Account/features/SelectAccount/SelectAccount.styled";
 
 interface AccountItemProps {
   title?: string;
@@ -14,18 +14,18 @@ interface AccountItemProps {
 const AccountItem: React.FC<AccountItemProps> = (props: AccountItemProps) => {
   const { title = "", description = "", onClick = () => {}, radioBtnOnClick = () => {}, isSelected = false } = props;
   return (
-    <Container className={"hover-with-cursor"}>
-      <LeftView>
+    <AccountItemStyled className="" hover-with-cursor>
+      <div className="left-view">
         <RadioButton isChecked={isSelected} onClick={radioBtnOnClick} />
-      </LeftView>
-      <MiddleView onClick={onClick}>
-        <Title className="fs-regular fw-medium">{title}</Title>
-        <Description className="fs-small fw-medium">{description}</Description>
-        <RightView>
+      </div>
+      <button className="middle-view" onClick={onClick}>
+        <p className="title fs-regular fw-medium">{title}</p>
+        <p className="desc fs-small fw-medium">{description}</p>
+        <div className="right-view">
           <RightArrowIcon />
-        </RightView>
-      </MiddleView>
-    </Container>
+        </div>
+      </button>
+    </AccountItemStyled>
   );
 };
 export default AccountItem;

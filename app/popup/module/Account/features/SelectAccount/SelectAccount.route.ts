@@ -1,12 +1,12 @@
 import { lazy } from "react";
 import { IRouteProps } from "@popup/module";
 
-const accountRoute: IRouteProps = {
-  path: "/select-account-page",
+const routeSelectAccount: IRouteProps = {
+  path: "/select-account",
   exact: true,
-  component: lazy(() => import("./SelectAccountPage")),
+  component: lazy(() => import("./SelectAccount")),
 };
 
-export const route = "/select-account-page";
+export const route = "/select-account";
 
-export default accountRoute;
+export default routeSelectAccount;

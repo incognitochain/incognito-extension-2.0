@@ -10,7 +10,6 @@ export const Paths = {
   welcome: "/welcome",
   authorizedWebsites: "/authorized-websites",
   tokens: "/tokens",
-  accountDetail: "/accounts/:accountAddress/:signerAddress",
   accounts: "/accounts",
   notifications: "/notifications",
   lockWallet: "/lock-wallet",
@@ -31,7 +30,6 @@ export const Paths = {
   unlockPage: "/unlock-page",
   createAccountPage: "/create-account-page",
   restoreWalletPage: "/restore-wallet-page",
-  selectAccountPage: "/select-account-page",
   accountDetailPage: "/account-detail-page",
 };
 
@@ -51,7 +49,6 @@ export const Links = {
   authorizedWebsites: compile(Paths.authorizedWebsites),
   tokens: compile(Paths.tokens),
   accounts: compile(Paths.accounts),
-  accountDetail: compile(Paths.accountDetail),
   transactionDetail: compile(Paths.transactionDetail),
   getStatedPage: compile(Paths.getStatedPage),
   createNewKeyPage: compile(Paths.createNewKeyPage),

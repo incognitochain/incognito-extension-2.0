@@ -1,9 +1,9 @@
-import { Paths } from "@popup/components/routes/paths";
 import { defaultAccountSelector } from "@redux/account/account.selectors";
 import React from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled, { ITheme } from "styled-components";
+import { route as routeSelectAccount } from "@module/Account/features/SelectAccount";
 
 const AccountNameButtonStyled = styled.button`
   padding: 9px 16px;
@@ -21,7 +21,7 @@ export const BtnSelectAccount = () => {
 
   return (
     <AccountNameButtonStyled
-      onClick={() => history.push(Paths.selectAccountPage)}
+      onClick={() => history.push(routeSelectAccount)}
       className="btn-select-account fw-medium ellipsis hover"
     >
       {accountNameSelectedTrim}

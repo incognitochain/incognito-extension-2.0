@@ -9,8 +9,6 @@ import HomeRouteStack from "@popup/pages/Home/HomeRouteStack";
 import ImportMasterKeyRouteStack from "@popup/pages/Import/ImportMasterKeyRouteStack";
 import RestoreWalletPage from "@popup/pages/RestoreWallet/RestoreWalletPage";
 import { UnlockPage } from "@popup/pages/Unlock/UnlockPage";
-import SelectAccountPage from "@popup/module/Account/features/SelectAccount/SelectAccountPage";
-import AccountDetailPage from "@popup/module/Account/features/AccountDetail/AccountDetailPage";
 import React, { Suspense } from "react";
 import { RouteProps } from "react-router";
 import { Redirect, Route, RouteComponentProps, Switch } from "react-router-dom";
@@ -76,8 +74,6 @@ const MainRoute = () => {
           <Route exact path={Paths.restoreWalletPage} component={RestoreWalletPage} />
           <Route exact path={Paths.getStatedPage} component={GetStartedPage} />
           <Route exact path={Paths.unlockPage} component={UnlockPage} />
-          <Route exact path={Paths.selectAccountPage} component={SelectAccountPage} />
-          <Route exact path={Paths.accountDetailPage} component={AccountDetailPage} />
           {defaultRoute(`default-route`, {}, popupState, isNotification)}
         </Switch>
       </Suspense>

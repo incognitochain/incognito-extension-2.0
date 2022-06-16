@@ -1,6 +1,4 @@
 import { AddButton } from "@components/AddButton/AddButton";
-import Header from "@components/BaseComponent/Header";
-import BodyLayout from "@components/layout/BodyLayout";
 import { Paths } from "@components/routes/paths";
 import { useBackground } from "@popup/context/background";
 import { useLoading } from "@popup/context/loading";
@@ -11,10 +9,13 @@ import { trim } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import AccountItem from "./AccountItem/AccountItem";
 import { useSnackbar } from "notistack";
+import { route as routeKeychainDetail } from "@module/Account/features/KeychainDetail";
+import { AccountItem } from "@module/Account/features/SelectAccount";
+import Header from "@components/Header";
+import WrapContent from "@components/Content";
 
-const SelectAccountPage = React.memo(() => {
+const SelectAccount = React.memo(() => {
   const { enqueueSnackbar } = useSnackbar();
   const { request } = useBackground();
   const callAsync = useCallAsync();
@@ -46,21 +47,15 @@ const SelectAccountPage = React.memo(() => {
 
   const accountItemOnClick = (accountItem: any) => {
     history.push({
-      pathname: Paths.accountDetailPage,
-      state: {
-        PaymentAddress: accountItem.PaymentAddress,
-      },
+      pathname: routeKeychainDetail,
+      state: { PaymentAddress: accountItem.PaymentAddress },
     });
   };
 
   return (
     <>
-      <Header
-        title="Keychain"
-        onBackClick={() => history.goBack()}
-        rightView={<AddButton onClick={() => history.push(Paths.createAccountPage)} />}
-      />
-      <BodyLayout className="scroll-view">
+      <Header title="Keychain" rightHeader={<AddButton onClick={() => history.push(Paths.createAccountPage)} />} />
+      <WrapContent className="default-padding-horizontal default-padding-top">
         {listAccount &&
           listAccount.map((accountItem) => {
             const name = accountItem.AccountName || accountItem.name;
@@ -81,9 +76,9 @@ const SelectAccountPage = React.memo(() => {
               />
             );
           })}
-      </BodyLayout>
+      </WrapContent>
     </>
   );
 });
 
-export default SelectAccountPage;
+export default SelectAccount;
