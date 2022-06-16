@@ -24,16 +24,15 @@ const LeftView = styled.div`
 
 const MiddleView = styled.button`
   display: flex;
-  width: 80%;
+  width: 100%;
   flex-direction: column;
   justify-content: center;
 `;
 
 const RightView = styled.div`
-  width: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: absolute;
+  align-self: center;
+  right: 40px;
 `;
 
 const Title = styled.p`

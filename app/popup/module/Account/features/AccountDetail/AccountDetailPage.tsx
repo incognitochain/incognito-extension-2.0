@@ -3,6 +3,8 @@ import BodyLayout from "@components/layout/BodyLayout";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import AccountDetailItem from "./AccountDetailItem/AccountDetailItem";
+import { useSelector } from "react-redux";
+import { getAccountWithPaymentAddress } from "@redux/account/account.selectors";
 
 const parseShard = (bytes: any) => {
   const arr = bytes.split(",");
@@ -13,8 +15,10 @@ const parseShard = (bytes: any) => {
 const AccountDetailPage = React.memo(() => {
   const history = useHistory();
   const location = useLocation();
-  const accountDetail = (location.state as any).accountDetail;
-  if (!accountDetail) return null;
+  const PaymentAddressSelected = (location.state as any).PaymentAddress;
+  if (!PaymentAddressSelected) return null;
+  const selectedAccount = useSelector(getAccountWithPaymentAddress(PaymentAddressSelected));
+  if (!selectedAccount) return null;
   const {
     AccountName,
     name,
@@ -27,7 +31,7 @@ const AccountDetailPage = React.memo(() => {
     OTAKey = "",
     ID = "",
     PublicKeyBytes,
-  } = accountDetail as any;
+  } = selectedAccount as any;
   const headerName = `${AccountName || name || "Anon"}'s keys`;
 
   return (
