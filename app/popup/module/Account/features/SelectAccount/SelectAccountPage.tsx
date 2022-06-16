@@ -22,7 +22,6 @@ const SelectAccountPage = React.memo(() => {
   const { showLoading } = useLoading();
   const defaultAccount: any = useSelector(defaultAccountSelector);
   const listAccount = useSelector(listAccountSelector);
-
   const switchAccount = (accountItem: any) => {
     const accountName = accountItem.AccountName || accountItem.name;
     if (accountName && (accountName != defaultAccount.AccountName || accountName != defaultAccount?.name)) {
@@ -45,9 +44,12 @@ const SelectAccountPage = React.memo(() => {
     }
   };
 
-  const accountItemOnClick = async (accountItem: any) => {
-    history.push(Paths.accountDetailPage, {
-      accountDetail: accountItem,
+  const accountItemOnClick = (accountItem: any) => {
+    history.push({
+      pathname: Paths.accountDetailPage,
+      state: {
+        PaymentAddress: accountItem.PaymentAddress,
+      },
     });
   };
 

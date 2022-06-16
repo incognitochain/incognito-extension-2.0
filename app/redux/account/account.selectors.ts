@@ -4,6 +4,10 @@ import { getAccountWallet } from "@services/wallet/wallet.shared";
 import { memoize } from "lodash";
 import { createSelector } from "reselect";
 
+export const getAccountWithPaymentAddress = (paymentAddress: string) => (state: RootState) => {
+  return state.account.list.find((acc) => acc.PaymentAddress === paymentAddress);
+};
+
 export const accountSelector = createSelector(
   (state: RootState) => state.account,
   (account) => account,

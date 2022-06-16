@@ -21,10 +21,10 @@ const AccountItem: React.FC<AccountItemProps> = (props: AccountItemProps) => {
       <MiddleView onClick={onClick}>
         <Title className="fs-regular fw-medium">{title}</Title>
         <Description className="fs-small fw-medium">{description}</Description>
+        <RightView>
+          <RightArrowIcon />
+        </RightView>
       </MiddleView>
-      <RightView>
-        <RightArrowIcon />
-      </RightView>
     </Container>
   );
 };
