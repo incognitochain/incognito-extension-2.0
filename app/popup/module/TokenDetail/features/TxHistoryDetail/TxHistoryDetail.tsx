@@ -1,5 +1,5 @@
 import React from "react";
-import HistoryItem, { IHistoryItem } from "@module/History/features/HistoryItem";
+import HistoryItem, { IHistoryItem } from "@module/TokenDetail/features/HistoryItem";
 import WrapContent from "@components/Content/Content";
 import Header from "@components/Header";
 import enhance from "@module/TokenDetail/features/TxHistoryDetail/TxHistoryDetail.enhance";

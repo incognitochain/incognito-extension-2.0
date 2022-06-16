@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router";
 import { IHistory } from "@module/TokenDetail/features/TxsHistory";
-import { IHistoryItem } from "@module/History/features/HistoryItem";
+import { IHistoryItem } from "@module/TokenDetail/features/HistoryItem";
 
 const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
   const { state }: { state: any } = useLocation();

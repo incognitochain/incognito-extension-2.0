@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Redirect, useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import HistoryItem, { IHistoryItem } from "@module/History/features/HistoryItem";
+import HistoryItem, { IHistoryItem } from "@module/TokenDetail/features/HistoryItem";
 import { route as routeTokenDetail } from "@module/TokenDetail";
 import Header from "@components/Header";
 import { selectedPrivacyToken } from "@redux/selectedPrivacy";
@@ -58,7 +58,6 @@ const ConfirmTx = () => {
         {itemsFactories.map((item: IHistoryItem) => (
           <HistoryItem key={item.title} {...item} />
         ))}
-        {/*<BtnAction data={confirmTx} />*/}
       </WrapContent>
     </Styled>
   );
