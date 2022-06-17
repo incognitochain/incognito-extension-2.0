@@ -11,12 +11,18 @@ import { NetworkItem } from "@module/Settings/features/Network";
 import Header from "@components/Header";
 import { route as routeAddNetwork } from "@module/Settings/features/Network/Add";
 import { PrimaryButtonContaniner } from "./Network.styled";
+import { actionLogout } from "@redux/account";
+import { Paths } from "@components/routes/paths";
+import { AppThunkDispatch } from "@redux/store";
+import { useDispatch } from "react-redux";
+import { actionUpdateNetwork } from "@popup/configs";
 
 const NetworkPage: React.FC = () => {
   const history = useHistory();
   const callAsync = useCallAsync();
   const { request } = useBackground();
   const { showLoading } = useLoading();
+  const dispatch: AppThunkDispatch = useDispatch();
 
   const [networkList, setNetworkList] = useState<ServerModel[]>([]);
 
@@ -30,13 +36,25 @@ const NetworkPage: React.FC = () => {
 
     await serverService.setDefaultServer(network);
     await changeBaseUrl();
-
+    dispatch(actionLogout());
     callAsync(request("popup_switchNetwork", {}), {
       progress: { message: "Switching..." },
       success: { message: "Switch Network Done" },
       onSuccess: () => {
-        showLoading({ value: false });
-        history.replace(routeAssets);
+        setTimeout(() => {
+          history.push(Paths.unlockPage);
+          callAsync(request("popup_lockWallet", {}), {
+            progress: { message: "locking wallet..." },
+            success: { message: "Wallet locked" },
+            onSuccess: () => {
+              dispatch(actionLogout());
+              dispatch(actionUpdateNetwork({ network: network.address }));
+              showLoading({ value: false });
+            },
+          });
+        }, 200);
+        // showLoading({ value: false });
+        // history.replace(routeAssets);
       },
     });
   };

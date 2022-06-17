@@ -7,7 +7,11 @@ import uniqBy from "lodash/uniqBy";
 import { IBalance } from "@core/types";
 import { actionFetchedFollowBalance, actionFetchingFollowBalance } from "@module/Assets";
 import { isFetchingAssetsSelector } from "@module/Assets";
-import { defaultAccountSelector, defaultAccountWalletSelector } from "@redux/account/account.selectors";
+import {
+  defaultAccountSelector,
+  defaultAccountWalletSelector,
+  keyDefineAccountSelector,
+} from "@redux/account/account.selectors";
 import uniq from "lodash/uniq";
 const { PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 
@@ -28,14 +32,24 @@ export const configAccount = async () => {
   // const { coinServices: COIN_SERVICE, address: FULL_NODE } = server;
   const accountSender = defaultAccountWalletSelector(store.getState());
   accountSender.setStorageServices(Storage);
-  return accountSender;
+  console.log("SNG TEST::", accountSender);
+  let keyDefine = "";
+  try {
+    if (accountSender?.rpc?.rpcHttpService?.url) {
+      keyDefine = `${accountSender.getOTAKey()}-${accountSender?.rpc?.rpcHttpService?.url}`;
+    }
+  } catch (e) {
+    // Handle error
+  }
+  return { accountSender, keyDefine };
 };
 
 export const scanCoins = async () => {
-  const accountSender = await configAccount();
+  const { accountSender, keyDefine } = (await configAccount()) as any;
   const isFetching = isFetchingScanCoinsSelector(store.getState());
+
   // Validate data
-  if (!accountSender || isFetching) return;
+  if (!accountSender || isFetching || !keyDefine) return;
 
   try {
     const otaKey = accountSender.getOTAKey();
@@ -44,7 +58,7 @@ export const scanCoins = async () => {
     const coinsStore = await accountSender.getStorageCoinsScan();
 
     if (!coinsStore) {
-      dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey }));
+      dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey: keyDefine }));
     }
 
     dispatch(actionFetchingScanCoins({ isFetching: true }));
@@ -56,7 +70,7 @@ export const scanCoins = async () => {
     });
 
     if (!coinsStore) {
-      dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey }));
+      dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
       // getFollowTokensBalance().then();
     }
 
@@ -70,11 +84,9 @@ export const scanCoins = async () => {
 
 export const getFollowTokensBalance = async () => {
   const isFetching = isFetchingAssetsSelector(store.getState());
-  const accountSender = await configAccount();
-
+  const { accountSender, keyDefine } = (await configAccount()) as any;
   if (!accountSender || isFetching) return;
-  const otaKey = accountSender.getOTAKey();
-  if (!otaKey) return;
+  if (!keyDefine) return;
 
   try {
     dispatch(actionFetchingFollowBalance({ isFetching: true }));
@@ -84,7 +96,7 @@ export const getFollowTokensBalance = async () => {
       version: PrivacyVersion.ver3,
     });
     const _balance = uniqBy(balance, "id");
-    dispatch(actionFetchedFollowBalance({ balance: _balance, OTAKey: otaKey }));
+    dispatch(actionFetchedFollowBalance({ balance: _balance, OTAKey: keyDefine }));
   } catch (error) {
     log("LOAD FOLLOW TOKENS BALANCE ERROR: ", error);
   } finally {

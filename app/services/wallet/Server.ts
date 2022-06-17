@@ -28,7 +28,7 @@ export interface AddNetworkProps {
 export interface ServerModel {
   id: string;
   default?: boolean;
-  address?: string;
+  address: string;
   name?: string;
   coinServices?: any;
   pubsubServices?: any;
@@ -113,7 +113,7 @@ export default class Server {
       serverList = await Server.getServerListFromStorage();
       if (serverList && serverList.length < 1) {
         serverList = DEFAULT_LIST_SERVER;
-        storage.setItem(KEY.SERVER, JSON.stringify(serverList));
+        await storage.setItem(KEY.SERVER, JSON.stringify(serverList));
       }
     } catch (error) {
       console.log("[getServerList] ERROR: ", error);

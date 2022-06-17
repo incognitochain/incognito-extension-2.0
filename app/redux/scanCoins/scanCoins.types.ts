@@ -29,7 +29,7 @@ export interface ScanCoinsFirstTimePayload {
 }
 
 export interface RescanCoinsPayload {
-  otaKey: string;
+  keyDefine: string;
 }
 
 //----------------------------------------------

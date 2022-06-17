@@ -29,6 +29,8 @@ import { PopupStateResolver } from "./lib/popup-state-resolver";
 import { dispatch, store as reduxStore } from "@redux/store/store";
 import { actionFetchingScanCoins, isShowConfirmScanCoins } from "@redux/scanCoins";
 import { scanCoins } from "@background/worker.scanCoins";
+import serverService, { MAINNET_FULLNODE } from "@services/wallet/Server";
+import { actionUpdateNetwork } from "@popup/configs";
 
 const createEngineStream = require("json-rpc-middleware-stream/engineStream");
 const PortStream = require("extension-port-stream");
@@ -94,8 +96,6 @@ export default class IncognitoController {
       scanCoinHandler: this.scanCoinHandler.bind(this),
     });
     this.connections = {};
-    // this.saveStore();
-    this.scanCoinHandler();
   }
 
   setPopupOpen() {
@@ -338,6 +338,11 @@ export default class IncognitoController {
       dispatch(actionFetchingScanCoins({ isFetching: false }));
       scanCoinInterval && clearInterval(scanCoinInterval);
     }
+  }
+
+  async updateNetwork() {
+    const server = (await serverService.getDefault()) || {};
+    dispatch(actionUpdateNetwork({ network: server.address || MAINNET_FULLNODE }));
   }
 }
 

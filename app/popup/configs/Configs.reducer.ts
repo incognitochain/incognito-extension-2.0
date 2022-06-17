@@ -1,11 +1,12 @@
 import { Reducer } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
 import autoMergeLevel2 from "redux-persist/es/stateReconciler/autoMergeLevel2";
-import storage from "redux-persist/lib/storage";
-import { IConfigsState } from "@popup/configs";
+import { ConfigsActionType, IConfigsState } from "@popup/configs";
+import storage from "@services/storage";
 
 const initialState: IConfigsState = {
   language: "en",
+  network: "",
 };
 
 const configReducer = (
@@ -16,15 +17,21 @@ const configReducer = (
   },
 ): Reducer & any => {
   switch (action.type) {
+    case ConfigsActionType.UPDATE_NETWORK:
+      const { network } = action.payload;
+      return {
+        ...state,
+        network,
+      };
     default:
       return state;
   }
 };
 
 const persistConfig = {
-  key: "config",
+  key: "configReducer",
   storage,
-  whitelist: ["auth"],
+  whitelist: ["network"],
   stateReconciler: autoMergeLevel2,
 };
 

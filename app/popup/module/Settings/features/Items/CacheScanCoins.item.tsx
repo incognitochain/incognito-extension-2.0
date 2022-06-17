@@ -5,7 +5,7 @@ import { SettingItem } from "@module/Settings";
 import { useModal } from "@module/Modal";
 import ConfirmBox from "@module/Modal/features/ConfirmBox/ConfirmBox";
 import { useDispatch, useSelector } from "react-redux";
-import { defaultAccountWalletSelector } from "@redux/account/account.selectors";
+import { defaultAccountWalletSelector, keyDefineAccountSelector } from "@redux/account/account.selectors";
 import { Paths } from "@components/routes/paths";
 import { useBackground } from "@popup/context/background";
 import { useCallAsync } from "@popup/utils/notifications";
@@ -23,11 +23,12 @@ const CacheScanCoins: React.FC = () => {
   const callAsync = useCallAsync();
   const history = useHistory();
   const dispatch: AppThunkDispatch = useDispatch();
+  const keyDefine = useSelector(keyDefineAccountSelector);
 
   const clearStorageScanCoins = () => {
     try {
       const otaKey = accountSender.getOTAKey();
-      if (!otaKey) return;
+      if (!otaKey || !keyDefine) return;
       showLoading({ value: true });
       callAsync(request("popup_lockWallet", {}), {
         progress: { message: "locking wallet..." },
@@ -36,7 +37,7 @@ const CacheScanCoins: React.FC = () => {
           dispatch(actionLogout());
           setTimeout(async () => {
             await accountSender.clearStorageCoinsScan();
-            dispatch(actionReScanCoins({ otaKey }));
+            dispatch(actionReScanCoins({ keyDefine }));
             history.push(Paths.unlockPage);
             showLoading({ value: false });
           }, 3000);

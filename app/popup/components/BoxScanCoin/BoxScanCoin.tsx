@@ -5,7 +5,7 @@ import { Row } from "@popup/theme";
 import { useDispatch, useSelector } from "react-redux";
 import { AppThunkDispatch } from "@redux/store";
 import { useModal } from "@module/Modal";
-import { defaultAccountWalletSelector } from "@redux/account/account.selectors";
+import { defaultAccountWalletSelector, keyDefineAccountSelector } from "@redux/account/account.selectors";
 import { useBackground } from "@popup/context/background";
 import { dispatch } from "@redux/store/store";
 import { actionFistTimeScanCoins } from "@redux/scanCoins";
@@ -23,6 +23,7 @@ interface IProps {}
 const BoxScanCoin = React.memo((props: IProps) => {
   const dispatch: AppThunkDispatch = useDispatch();
   const accountSender = useSelector(defaultAccountWalletSelector);
+  const keyDefine = useSelector(keyDefineAccountSelector);
   const { closeModal } = useModal();
   const { request } = useBackground();
 
@@ -33,17 +34,17 @@ const BoxScanCoin = React.memo((props: IProps) => {
   const onCancelPress = async () => {
     onButtonPress();
     const otaKey = accountSender.getOTAKey();
-    if (!otaKey) return;
+    if (!otaKey || !keyDefine) return;
     await accountSender.setNewAccountCoinsScan();
-    dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey }));
+    dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
     request("popup_request_scan_coins", {});
   };
 
   const onScanPress = async () => {
     onButtonPress();
     const otaKey = accountSender.getOTAKey();
-    if (!otaKey) return;
-    dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey }));
+    if (!otaKey || !keyDefine) return;
+    dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey: keyDefine }));
     request("popup_request_scan_coins", {});
   };
 

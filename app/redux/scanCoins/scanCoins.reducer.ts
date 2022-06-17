@@ -34,10 +34,10 @@ export const reducer: Reducer<IScanCoinsState, ScanCoinsActions> = (state = init
       };
     }
     case ScanCoinsActionType.RESCAN_COINS: {
-      const { otaKey } = action.payload;
+      const { keyDefine } = action.payload;
       let scanStatus = state.scanStatus;
-      if (scanStatus && scanStatus[otaKey]) {
-        delete scanStatus[otaKey];
+      if (scanStatus && scanStatus[keyDefine]) {
+        delete scanStatus[keyDefine];
       }
       return {
         ...state,

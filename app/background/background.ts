@@ -1,4 +1,4 @@
-import { store, persistor, dispatch } from "@redux/store/store";
+import { store, persistor } from "@redux/store/store";
 import { enableLogger } from "@core/utils";
 import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP, StoredData, VersionedData } from "@core/types";
 import { createLogger, isInternalProcess } from "@core/utils";

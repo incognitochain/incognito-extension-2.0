@@ -9,8 +9,10 @@ import { isFirstTimeScanCoinsSelector, isShowConfirmScanCoins } from "@redux/sca
 import { otaKeyOfDefaultAccountSelector } from "@redux/account/account.selectors";
 import { useBackground } from "@popup/context/background";
 import throttle from "lodash/throttle";
-import { Loading } from "@popup/context/loading";
+import { Loading, useLoading } from "@popup/context/loading";
 import BoxScanCoin from "@components/BoxScanCoin";
+import { actionUpdateNetwork, networkSelector } from "@popup/configs";
+import serverService, { MAINNET_FULLNODE } from "@services/wallet/Server";
 
 const withBackgroundState = (WrappedComponent: FunctionComponent) => {
   return (props: any) => {
@@ -20,15 +22,41 @@ const withBackgroundState = (WrappedComponent: FunctionComponent) => {
   };
 };
 
+const withInit = (WrappedComponent: FunctionComponent) => {
+  return (props: any) => {
+    const dispatch: AppThunkDispatch = useDispatch();
+    const { showLoading } = useLoading();
+    const [init, setInit] = React.useState(false);
+    const updateNetwork = async () => {
+      showLoading({ value: true });
+      const server = (await serverService.getDefault()) || {};
+      dispatch(actionUpdateNetwork({ network: server.address || MAINNET_FULLNODE }));
+
+      setTimeout(() => {
+        showLoading({ value: false });
+        setInit(true);
+      }, 500);
+    };
+
+    React.useEffect(() => {
+      updateNetwork();
+    }, []);
+
+    if (!init) return null;
+    return <WrappedComponent {...props} />;
+  };
+};
+
 const withPToken = (WrappedComponent: FunctionComponent) => {
   return (props: any) => {
     const dispatch: AppThunkDispatch = useDispatch();
+    const network = useSelector(networkSelector);
 
     const getTokensList = () => dispatch(getPTokenList());
 
     React.useEffect(() => {
       getTokensList().then();
-    }, []);
+    }, [network]);
 
     return <WrappedComponent {...props} />;
   };
@@ -96,4 +124,4 @@ export const withBalance = (WrappedComponent: FunctionComponent) => (props: any)
   return <WrappedComponent {...{ ...props, loadFollowTokensBalance }} />;
 };
 
-export default compose(withBackgroundState, withPToken, withRouteChange, withLoading, withBalance);
+export default compose(withBackgroundState, withInit, withPToken, withRouteChange, withLoading, withBalance);

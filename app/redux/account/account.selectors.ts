@@ -3,6 +3,7 @@ import { walletSelector } from "@redux/wallet/wallet.selectors";
 import { getAccountWallet } from "@services/wallet/wallet.shared";
 import { memoize } from "lodash";
 import { createSelector } from "reselect";
+import { networkSelector } from "@popup/configs";
 
 export const getAccountWithPaymentAddress = (paymentAddress: string) => (state: RootState) => {
   return state.account.list.find((acc) => acc.PaymentAddress === paymentAddress);
@@ -125,6 +126,15 @@ export const signPublicKeyEncodeSelector = createSelector(
 export const burnerAddressSelector = createSelector(accountSelector, ({ burnerAddress }) => burnerAddress);
 
 export const otaKeyOfDefaultAccountSelector = createSelector(defaultAccountSelector, (account: any) => account.OTAKey);
+
+export const keyDefineAccountSelector = createSelector(
+  otaKeyOfDefaultAccountSelector,
+  networkSelector,
+  (OTAKey, network) => {
+    if (!OTAKey || !network) return undefined;
+    return `${OTAKey}-${network}`;
+  },
+);
 
 export const paymentAddressOfDefaultAccountSelector = createSelector(
   defaultAccountSelector,
