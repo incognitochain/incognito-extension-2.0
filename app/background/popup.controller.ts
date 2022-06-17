@@ -12,7 +12,6 @@ import {
   Notification,
   PopupActions,
   SignatureResult,
-  StoredData,
 } from "@core/types";
 import { Account, Connection, PublicKey, SystemProgram } from "@solana/web3.js";
 import { Web3Connection } from "@core/connection";
@@ -27,7 +26,7 @@ import {
   masterKeySwitchNetwork,
   unlockMasterKey,
 } from "@redux/masterKey";
-import { dispatch, persistor, store } from "@redux/store/store";
+import { dispatch, store } from "@redux/store/store";
 import Storage from "@services/storage";
 import { APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@constants/common";
 import { actionFetchCreateAccount, actionSwitchAccount } from "@redux/account";

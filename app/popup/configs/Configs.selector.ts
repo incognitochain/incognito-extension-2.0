@@ -9,3 +9,5 @@ export const configsSelector = createSelector(
 );
 
 export const translateSelector = createSelector(configsSelector, (configs) => translateByLanguage(configs.language));
+
+export const networkSelector = createSelector(configsSelector, (configs) => configs.network);

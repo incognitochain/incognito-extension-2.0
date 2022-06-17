@@ -8,6 +8,8 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { LockIcon } from "@components/Icons";
 import { actionLogout } from "@redux/account";
+import { useDispatch } from "react-redux";
+import { AppThunkDispatch } from "@redux/store";
 
 const Container = styled.div`
   margin-right: 10px;
@@ -19,6 +21,7 @@ const LockWallet = React.memo(() => {
   const callAsync = useCallAsync();
   const history = useHistory();
   const { showLoading } = useLoading();
+  const dispatch: AppThunkDispatch = useDispatch();
 
   const onLockPressed = throttle(() => {
     showLoading({ value: true });
@@ -26,7 +29,7 @@ const LockWallet = React.memo(() => {
       progress: { message: "locking wallet..." },
       success: { message: "Wallet locked" },
       onSuccess: () => {
-        actionLogout();
+        dispatch(actionLogout());
         showLoading({ value: false });
         history.push(Paths.unlockPage);
       },
