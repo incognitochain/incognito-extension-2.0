@@ -2,7 +2,7 @@ import { Reducer } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
 import autoMergeLevel2 from "redux-persist/es/stateReconciler/autoMergeLevel2";
 import { ConfigsActionType, IConfigsState } from "@popup/configs";
-import storage from "@services/storage";
+import storage from "redux-persist/lib/storage";
 
 const initialState: IConfigsState = {
   language: "en",
@@ -30,7 +30,7 @@ const configReducer = (
 
 const persistConfig = {
   key: "configReducer",
-  storage,
+  storage: storage,
   whitelist: ["network"],
   stateReconciler: autoMergeLevel2,
 };
