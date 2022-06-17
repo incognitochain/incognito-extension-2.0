@@ -7,11 +7,7 @@ import uniqBy from "lodash/uniqBy";
 import { IBalance } from "@core/types";
 import { actionFetchedFollowBalance, actionFetchingFollowBalance } from "@module/Assets";
 import { isFetchingAssetsSelector } from "@module/Assets";
-import {
-  defaultAccountSelector,
-  defaultAccountWalletSelector,
-  keyDefineAccountSelector,
-} from "@redux/account/account.selectors";
+import { defaultAccountSelector, defaultAccountWalletSelector } from "@redux/account/account.selectors";
 import uniq from "lodash/uniq";
 const { PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 

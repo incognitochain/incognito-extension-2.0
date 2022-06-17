@@ -34,7 +34,6 @@ export const getAccountWallet = (account: any, wallet: any) => {
     accountWallet.setRPCClient(wallet.RpcClient);
     accountWallet.setStorageServices(Storage);
     accountWallet.setRPCCoinServices(wallet.RpcCoinService);
-    accountWallet.setRPCRequestServices(wallet.RpcRequestService);
     accountWallet.setRPCPortalServices(wallet.PortalService);
 
     return accountWallet;

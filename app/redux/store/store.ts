@@ -15,7 +15,7 @@ export default function configStore(preloadedState?: any): Store {
   const persistConfig = {
     key: "root",
     storage: storage,
-    whitelist: ["scanCoinsReducer"],
+    whitelist: ["scanCoinsReducer", "configReducer"],
     blacklist: [],
     stateReconciler: autoMergeLevel2,
   };
