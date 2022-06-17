@@ -58,6 +58,7 @@ interface TextInputProps {
   disabled?: boolean;
   marginTop?: number;
   refInput?: any;
+  type?: any;
 }
 
 const TextInput = (props: TextInputProps) => {
@@ -73,6 +74,7 @@ const TextInput = (props: TextInputProps) => {
     onChange = () => {},
     onKeyDown = () => {},
     refInput,
+    type = "text",
   } = props;
 
   return (
@@ -80,7 +82,7 @@ const TextInput = (props: TextInputProps) => {
       {!!header && <p className="header-title">{header}</p>}
       <TextInputStyled
         placeholder={placeholder}
-        type={"text"}
+        type={type}
         className="full-width"
         onChange={onChange}
         value={value}

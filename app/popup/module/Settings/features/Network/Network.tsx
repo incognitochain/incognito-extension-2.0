@@ -9,6 +9,8 @@ import { changeBaseUrl } from "@services/http";
 import WrapContent from "@components/Content/Content";
 import { NetworkItem } from "@module/Settings/features/Network";
 import Header from "@components/Header";
+import { route as routeAddNetwork } from "@module/Settings/features/Network/Add";
+import { PrimaryButtonContaniner } from "./Network.styled";
 
 const NetworkPage: React.FC = () => {
   const history = useHistory();
@@ -39,6 +41,10 @@ const NetworkPage: React.FC = () => {
     });
   };
 
+  const addNetwork = () => {
+    history.push(routeAddNetwork);
+  };
+
   useEffect(() => {
     getServerList().then();
   }, []);
@@ -56,6 +62,7 @@ const NetworkPage: React.FC = () => {
             onClick={() => handleSetDefaultNetwork(network)}
           />
         ))}
+        <PrimaryButtonContaniner onClick={addNetwork}>{"Add Network"}</PrimaryButtonContaniner>
       </WrapContent>
     </>
   );
