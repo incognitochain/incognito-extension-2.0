@@ -8,7 +8,7 @@ import { ArrowCircleIcon } from "@components/Icons";
 import { Extra, ActionsGroup } from "@module/TokenDetail/features";
 import { useHistory } from "react-router-dom";
 import { route as routeWallet } from "@module/Assets/Assets.route";
-import withHistory, { TxsHistory } from "@module/TokenDetail/features/TxsHistory";
+import { TxsHistory } from "@module/TokenDetail/features/TxsHistory";
 import { compose } from "recompose";
 import withBalance from "@module/MainRoute/MainRoute.withBalance";
 
@@ -20,16 +20,17 @@ const Styled = styled.div`
 `;
 
 const TokenDetail = React.memo((props: any) => {
-  const { loadFollowTokensBalance, handleLoadHistory } = props;
+  const { loadFollowTokensBalance } = props;
   const tokenSelected = useSelector(selectedPrivacyToken);
   const [isLoading, setIsLoading] = React.useState(false);
   const history = useHistory();
+  const historyRef = React.useRef<any>(null);
 
   const onReload = async () => {
     try {
-      if (isLoading) return;
+      if (isLoading || !historyRef.current) return;
       setIsLoading(true);
-      await Promise.all([loadFollowTokensBalance(), handleLoadHistory()]);
+      await Promise.all([loadFollowTokensBalance(), historyRef.current.reloadHistory()]);
     } catch (e) {
       // Ignore Error
     } finally {
@@ -47,10 +48,10 @@ const TokenDetail = React.memo((props: any) => {
       <WrapContent>
         <Extra />
         <ActionsGroup />
-        <TxsHistory />
+        <TxsHistory ref={historyRef} />
       </WrapContent>
     </Styled>
   );
 });
 
-export default compose(withBalance, withHistory)(TokenDetail);
+export default compose(withBalance)(TokenDetail);

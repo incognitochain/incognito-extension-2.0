@@ -9,7 +9,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
 
   React.useEffect(() => {
     handleFetchFee().then();
-  }, [handleFetchFee]);
+  }, []);
 
   return <WrappedComponent {...props} />;
 };

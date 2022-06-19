@@ -13,29 +13,45 @@ export interface TInner {
   history: IHistory[];
 }
 
-const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
-  const accountSender = useSelector(defaultAccountWalletSelector);
-  const selectedPrivacy = useSelector(selectedPrivacyToken);
-  const [history, setHistory] = React.useState<IHistory[]>([]);
-  const colors = useSelector(colorsSelector);
+const enhance = (WrappedComponent: React.FunctionComponent) =>
+  React.forwardRef((props: any, ref: any) => {
+    const accountSender = useSelector(defaultAccountWalletSelector);
+    const selectedPrivacy = useSelector(selectedPrivacyToken);
+    const [history, setHistory] = React.useState<IHistory[]>([]);
+    const colors = useSelector(colorsSelector);
+    const interval = React.useRef<any>(null);
 
-  const handleLoadHistory = async () => {
-    const { txsTransactor }: { txsTransactor: IHistoryFromSDK[] } = await accountSender.getTxsHistory({
-      tokenID: selectedPrivacy.tokenId,
-      isPToken: false,
-      version: PrivacyVersion.ver3,
-    });
-    const history = getTxsHistoryBuilder({ txsHistory: txsTransactor, selectedPrivacy, colors });
-    setHistory(history);
-  };
+    const handleLoadHistory = async () => {
+      const { txsTransactor }: { txsTransactor: IHistoryFromSDK[] } = await accountSender.getTxsHistory({
+        tokenID: selectedPrivacy.tokenId,
+        isPToken: false,
+        version: PrivacyVersion.ver3,
+      });
+      const history = getTxsHistoryBuilder({ txsHistory: txsTransactor, selectedPrivacy, colors });
+      setHistory(history);
+    };
 
-  const _debounceLoadHistory = debounce(React.useCallback(handleLoadHistory, [selectedPrivacy.tokenId]), 200);
+    const _debounceLoadHistory = debounce(React.useCallback(handleLoadHistory, [selectedPrivacy.tokenId]), 200);
 
-  React.useEffect(() => {
-    _debounceLoadHistory();
-  }, [selectedPrivacy.tokenId]);
+    React.useImperativeHandle(ref, () => ({
+      reloadHistory: () => {
+        return handleLoadHistory();
+      },
+    }));
 
-  return <WrappedComponent {...{ ...props, handleLoadHistory: _debounceLoadHistory, history }} />;
-};
+    React.useEffect(() => {
+      if (interval.current) return;
+      _debounceLoadHistory();
+      interval.current = setInterval(() => {
+        _debounceLoadHistory();
+      }, 20000);
+      return () => {
+        clearInterval(interval.current);
+        interval.current = null;
+      };
+    }, [selectedPrivacy.tokenId]);
+
+    return <WrappedComponent {...{ ...props, handleLoadHistory: _debounceLoadHistory, history }} />;
+  });
 
 export default enhance;
