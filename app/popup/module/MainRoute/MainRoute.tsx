@@ -1,6 +1,5 @@
 import CreateNewKeyRouteStack from "@/popup/pages/CreateNewKey/CreateNewKeyRouteStack";
 import { PopupState } from "@core/types";
-import enhance from "@module/MainRoute/MainRoute.enhance";
 import { Paths } from "@popup/components/routes/paths";
 import { useBackground } from "@popup/context/background";
 import CreateAccountPage from "@popup/pages/CreateAccount/CreateAccountPage";
@@ -15,6 +14,12 @@ import { Redirect, Route, RouteComponentProps, Switch } from "react-router-dom";
 import styled from "styled-components";
 import { IRouteProps } from "..";
 import { route as AssetsRoute } from "@module/Assets/Assets.route";
+import { useModal } from "@module/Modal";
+import { useSelector } from "react-redux";
+import { isFirstTimeScanCoinsSelector, isShowConfirmScanCoins } from "@redux/scanCoins";
+import BoxScanCoin from "@components/BoxScanCoin";
+import { Loading } from "@popup/context/loading";
+import throttle from "lodash/throttle";
 
 const context = require.context("@popup/module", true, /\.route.tsx?/);
 
@@ -47,38 +52,64 @@ const defaultRoute = (key: string, props: RouteProps, popupState: PopupState, is
 const MainRoute = () => {
   const { popupState, isNotification } = useBackground();
   const [routes, setRoutes] = React.useState<Array<IRouteProps>>([]);
+
+  const { setModal } = useModal();
+  const isScanCoins = useSelector(isFirstTimeScanCoinsSelector);
+  const showConfirmScanCoins = useSelector(isShowConfirmScanCoins);
+
   const handleGetRoutes = () => {
     const allRoutes: IRouteProps[] = [];
     context.keys().map((path: string) => allRoutes.push(context(`${path}`).default));
     setRoutes([...allRoutes]);
   };
 
+  const throttleShowModal = throttle(
+    () =>
+      setModal({
+        data: <BoxScanCoin />,
+        title: "",
+        isTransparent: true,
+        closable: false,
+      }),
+    500,
+  );
+
   React.useEffect(() => {
     handleGetRoutes();
   }, []);
 
+  React.useEffect(() => {
+    if (showConfirmScanCoins) {
+      throttleShowModal();
+    }
+  }, [showConfirmScanCoins]);
+
   if (!popupState) {
     return null;
   }
+
   return (
-    <Styled className="full-screen">
-      <Suspense fallback="loading">
-        <Switch>
-          {routes.map((route) => (
-            <Route {...route} key={route.path} />
-          ))}
-          <Route exact path={Paths.homeRouteStack} component={HomeRouteStack} />
-          <Route exact path={Paths.createNewKeyStack} component={CreateNewKeyRouteStack} />
-          <Route exact path={Paths.importMasterKeyStack} component={ImportMasterKeyRouteStack} />
-          <Route exact path={Paths.createAccountPage} component={CreateAccountPage} />
-          <Route exact path={Paths.restoreWalletPage} component={RestoreWalletPage} />
-          <Route exact path={Paths.getStatedPage} component={GetStartedPage} />
-          <Route exact path={Paths.unlockPage} component={UnlockPage} />
-          {defaultRoute(`default-route`, {}, popupState, isNotification)}
-        </Switch>
-      </Suspense>
-    </Styled>
+    <>
+      <Styled className="full-screen">
+        <Suspense fallback="loading">
+          <Switch>
+            {routes.map((route) => (
+              <Route {...route} key={route.path} />
+            ))}
+            <Route exact path={Paths.homeRouteStack} component={HomeRouteStack} />
+            <Route exact path={Paths.createNewKeyStack} component={CreateNewKeyRouteStack} />
+            <Route exact path={Paths.importMasterKeyStack} component={ImportMasterKeyRouteStack} />
+            <Route exact path={Paths.createAccountPage} component={CreateAccountPage} />
+            <Route exact path={Paths.restoreWalletPage} component={RestoreWalletPage} />
+            <Route exact path={Paths.getStatedPage} component={GetStartedPage} />
+            <Route exact path={Paths.unlockPage} component={UnlockPage} />
+            {defaultRoute(`default-route`, {}, popupState, isNotification)}
+          </Switch>
+        </Suspense>
+      </Styled>
+      {isScanCoins && <Loading message="Scanning coins, please wait a few minutes" />}
+    </>
   );
 };
 
-export default enhance(React.memo(MainRoute));
+export default MainRoute;

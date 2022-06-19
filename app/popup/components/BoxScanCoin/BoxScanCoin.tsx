@@ -24,11 +24,11 @@ const BoxScanCoin = React.memo((props: IProps) => {
   const dispatch: AppThunkDispatch = useDispatch();
   const accountSender = useSelector(defaultAccountWalletSelector);
   const keyDefine = useSelector(keyDefineAccountSelector);
-  const { closeModal } = useModal();
+  const { clearAllModal } = useModal();
   const { request } = useBackground();
 
   const onButtonPress = () => {
-    if (closeModal) closeModal();
+    if (clearAllModal) clearAllModal();
   };
 
   const onCancelPress = async () => {

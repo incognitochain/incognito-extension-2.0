@@ -94,6 +94,7 @@ export default class IncognitoController {
       extensionManager: this.extensionManager,
       persistData: this.saveStore.bind(this),
       scanCoinHandler: this.scanCoinHandler.bind(this),
+      updateNetworkHandler: this.updateNetworkHandler.bind(this),
     });
     this.connections = {};
   }
@@ -340,7 +341,7 @@ export default class IncognitoController {
     }
   }
 
-  async updateNetwork() {
+  async updateNetworkHandler() {
     const server = (await serverService.getDefault()) || {};
     dispatch(actionUpdateNetwork({ network: server.address || MAINNET_FULLNODE }));
   }

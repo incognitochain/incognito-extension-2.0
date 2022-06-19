@@ -48,6 +48,7 @@ export interface PopupControllerOpt {
   extensionManager: ExtensionManager;
   persistData: any;
   scanCoinHandler: any;
+  updateNetworkHandler: any;
 }
 
 export class PopupController {
@@ -59,6 +60,7 @@ export class PopupController {
   private popupState: PopupStateResolver;
   private persistData: any;
   private scanCoinHandler: any;
+  private updateNetworkHandler: any;
 
   constructor(opts: PopupControllerOpt) {
     const {
@@ -70,6 +72,7 @@ export class PopupController {
       popupState,
       persistData,
       scanCoinHandler,
+      updateNetworkHandler,
     } = opts;
     this.store = store;
     this.actionManager = actionManager;
@@ -79,6 +82,7 @@ export class PopupController {
     this.extensionManager = extensionManager;
     this.persistData = persistData;
     this.scanCoinHandler = scanCoinHandler;
+    this.updateNetworkHandler = updateNetworkHandler;
   }
 
   createMiddleware() {
@@ -92,6 +96,7 @@ export class PopupController {
           {
             try {
               await this.initMasterKey(req.params as InitMasterKeyPayload);
+              await this.updateNetworkHandler();
               // await this.scanCoinHandler();
               this._notifyAll({
                 type: "stateChanged",
@@ -128,6 +133,7 @@ export class PopupController {
           break;
         case "popup_importWallet":
           await this.importMasterKey(req.params as InitMasterKeyPayload);
+          await this.updateNetworkHandler();
           // await this.scanCoinHandler();
           this._notifyAll({
             type: "stateChanged",
@@ -151,6 +157,7 @@ export class PopupController {
               //   type: "stateChanged",
               //   data: { state: "unlocked" },
               // });
+              await this.updateNetworkHandler();
               await this.unlockWallet(req.params);
               await this.scanCoinHandler();
             } catch (err) {

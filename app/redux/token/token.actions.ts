@@ -7,6 +7,7 @@ import { TokenActionType } from "@redux/token/token.types";
 import PTokenModel from "@model/pTokenModel";
 import { followsTokenAssetsSelector } from "@module/Assets";
 import { IBalance } from "@core/types";
+import { networkSelector } from "@popup/configs";
 const { PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
 
 export const getBalanceStart = (tokenSymbol: any) => ({
@@ -31,9 +32,11 @@ export const setListPToken = (tokens: PTokenModel[]) => {
 
 export const getPTokenList =
   ({ expiredTime = EXPIRED_TIME } = {}) =>
-  async (dispatch: AppThunkDispatch) => {
+  async (dispatch: AppThunkDispatch, getState: AppGetState) => {
     try {
-      const [pTokens] = await Promise.all([await getTokenList({ expiredTime })]);
+      const state = getState();
+      const network = networkSelector(state);
+      const [pTokens] = await Promise.all([await getTokenList({ expiredTime, network })]);
       const tokens = uniqBy([...pTokens], "tokenId");
       dispatch(setListPToken(tokens));
       return tokens;

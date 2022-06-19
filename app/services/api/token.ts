@@ -3,6 +3,7 @@ import http from "@services/http";
 import http1 from "@services/http1";
 import PTokenModel from "@model/pTokenModel";
 import IncognitoCoinInfoModel from "@model/IncognitoCoinInfoModel";
+import { MAINNET_FULLNODE } from "@services/wallet/Server";
 
 const getTokenListNoCache = () => {
   return http1.get("coins/tokenlist").then((res: any) => res.map((token: any) => new PTokenModel(token, res)));
@@ -18,8 +19,8 @@ export const getTokensInfo = ({ tokenIDs }: { tokenIDs: string[] }) => {
     });
 };
 
-export const getTokenList = ({ expiredTime = EXPIRED_TIME } = {}) => {
-  return cachePromise(KEYS.P_TOKEN, getTokenListNoCache, expiredTime);
+export const getTokenList = ({ expiredTime = EXPIRED_TIME, network = MAINNET_FULLNODE } = {}) => {
+  return cachePromise(`${KEYS.P_TOKEN}-${network ? network : ""}`, getTokenListNoCache, expiredTime);
 };
 
 const getTokenInfoNoCache =

@@ -5,6 +5,9 @@ import { SearchIcon, SettingIcon } from "@components/Icons";
 import { useHistory } from "react-router-dom";
 import { route as routeImportToken } from "@module/AddToken";
 import { route as routeSettings } from "@module/Settings/Settings.route";
+import { compose } from "recompose";
+import withPToken from "@module/MainRoute/MainRoute.withPToken";
+import withBalance from "@module/MainRoute/MainRoute.withBalance";
 
 const Assets = React.memo(() => {
   const history = useHistory();
@@ -36,4 +39,4 @@ const Assets = React.memo(() => {
   );
 });
 
-export default Assets;
+export default compose(withPToken, withBalance)(Assets);

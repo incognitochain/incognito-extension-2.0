@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 import { route as routeWallet } from "@module/Assets/Assets.route";
 import withHistory, { TxsHistory } from "@module/TokenDetail/features/TxsHistory";
 import { compose } from "recompose";
-import { withBalance } from "@module/MainRoute/MainRoute.enhance";
+import withBalance from "@module/MainRoute/MainRoute.withBalance";
 
 const Styled = styled.div`
   height: 100%;
