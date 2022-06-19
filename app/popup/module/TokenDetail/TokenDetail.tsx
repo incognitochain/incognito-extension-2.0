@@ -11,6 +11,7 @@ import { route as routeWallet } from "@module/Assets/Assets.route";
 import { TxsHistory } from "@module/TokenDetail/features/TxsHistory";
 import { compose } from "recompose";
 import withBalance from "@module/MainRoute/MainRoute.withBalance";
+import { sleep } from "@popup/utils/utils";
 
 const Styled = styled.div`
   height: 100%;
@@ -30,7 +31,7 @@ const TokenDetail = React.memo((props: any) => {
     try {
       if (isLoading || !historyRef.current) return;
       setIsLoading(true);
-      await Promise.all([loadFollowTokensBalance(), historyRef.current.reloadHistory()]);
+      await Promise.all([loadFollowTokensBalance(), historyRef.current.reloadHistory(), sleep(1000)]);
     } catch (e) {
       // Ignore Error
     } finally {
