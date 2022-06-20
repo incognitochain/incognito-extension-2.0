@@ -5,6 +5,7 @@ import { FollowTokenItem } from "@module/Assets/features";
 import { useSelector } from "react-redux";
 import sharedSelectors from "@redux/shared/shared.selectors";
 import SelectedPrivacy from "@model/SelectedPrivacyModel";
+import Loading from "@components/Icons/Loading";
 
 const FollowTokensList = React.memo(() => {
   const followTokens = useSelector(sharedSelectors.followTokensFormatedSelector);
@@ -12,9 +13,11 @@ const FollowTokensList = React.memo(() => {
   return (
     <MainStyled>
       <WrapContent>
-        {followTokens.map((item: SelectedPrivacy) => (
-          <FollowTokenItem {...item} key={item.tokenId} />
-        ))}
+        {followTokens && followTokens.length > 0 ? (
+          followTokens.map((item: SelectedPrivacy) => <FollowTokenItem {...item} key={item.tokenId} />)
+        ) : (
+          <Loading />
+        )}
       </WrapContent>
     </MainStyled>
   );
