@@ -1,8 +1,8 @@
-import Header from "@components/BaseComponent/Header";
 import BodyLayout from "@components/layout/BodyLayout";
 import PasswordInput from "@popup/components/Inputs/PasswordInput";
 import React, { useState, useLayoutEffect, useRef, useEffect } from "react";
 import { DescriptionText, PasswordLabel, VerifyLabel, PrimaryButtonContaniner } from "./PasswordPage.styled";
+import Header from "@components/Header";
 
 let passwordValidator = require("password-validator");
 let schema = new passwordValidator();
@@ -97,7 +97,7 @@ export const PasswordPage: React.FC<PasswordPageBaseProps> = (props: PasswordPag
 
   return (
     <>
-      <Header title={headerTitle} onBackClick={onBack} />
+      <Header title="Master key phrase" onGoBack={onBack} />
       <BodyLayout className="scroll-view">
         <DescriptionText className="fs-regular fw-regular">{descriptionText}</DescriptionText>
         <PasswordLabel className="fs-small fw-regular">{"Password"}</PasswordLabel>

@@ -1,4 +1,3 @@
-import Header from "@components/BaseComponent/Header";
 import BodyLayout from "@components/layout/BodyLayout";
 import PasswordInput from "@popup/components/Inputs/PasswordInput";
 import TextArea from "@popup/components/Inputs/TextArea";
@@ -16,6 +15,7 @@ import {
   VerifyLabel,
 } from "./RestoreWalletPage.styled";
 import { route as AssetsRoute } from "@module/Assets/Assets.route";
+import Header from "@components/Header";
 
 const { validateMnemonic } = require("incognito-chain-web-js/build/web/wallet");
 
@@ -126,7 +126,7 @@ const RestoreWalletPage: React.FC = () => {
 
   return (
     <>
-      <Header title={"Reset Wallet"} onBackClick={onBack} />
+      <Header title={"Reset Wallet"} onGoBack={onBack} />
       <BodyLayout className="scroll-view">
         <DescriptionText className="fs-regular fw-regular">
           {

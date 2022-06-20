@@ -1,5 +1,3 @@
-// import Header from "@components/Header";
-import Header from "@components/BaseComponent/Header";
 import BodyLayout from "@components/layout/BodyLayout";
 import TextInput from "@popup/components/Inputs/TextInput";
 import React, { useCallback, useLayoutEffect, useState } from "react";
@@ -12,7 +10,7 @@ import {
   CheckBoxDescription,
   PrimaryButtonContaniner,
 } from "./CreateNewKeyPage.styled";
-
+import Header from "@components/Header";
 import CheckBox from "@popup/components/CheckBox/index";
 
 const NAME_PATTERN = /^[A-Za-z0-9]*$/;
@@ -51,7 +49,7 @@ export const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateN
   const readyButtonDisable: boolean = !checkBoxAcceptLocal || !masterKeyNameLocal || masterKeyNameLocal.length < 0;
   return (
     <>
-      <Header title="Create new key" onBackClick={onBack} />
+      <Header title="Create new key" onGoBack={onBack} />
       <BodyLayout className="scroll-view">
         <MasterKeyNameText className="fs-small  fw-regular">{"Master key name"}</MasterKeyNameText>
         <TextInputWraper>

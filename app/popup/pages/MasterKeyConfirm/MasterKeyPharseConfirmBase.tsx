@@ -1,4 +1,3 @@
-import Header from "@components/BaseComponent/Header";
 import BodyLayout from "@components/layout/BodyLayout";
 import MnemonicItem from "@components/Mnemonic/MnemonicItem";
 import { shuffle } from "lodash";
@@ -10,6 +9,7 @@ import {
   MnemonicTextPickArea,
   PrimaryButtonContaniner,
 } from "./MasterKeyPharseConfirm.styled";
+import Header from "@components/Header";
 
 export interface MasterKeyPharseConfirmPageBaseProps {
   onBack?: () => void;
@@ -48,7 +48,7 @@ const MasterKeyPharseConfirmBase: React.FC<MasterKeyPharseConfirmPageBaseProps> 
   };
   return (
     <>
-      <Header title="Master key phrase" onBackClick={onBack} />
+      <Header title="Master key phrase" onGoBack={onBack} />
       <BodyLayout>
         <DescriptionText className="fs-regular fw-regular">
           {"Click on these words in the correct order. If you make a mistake, click again to undo."}

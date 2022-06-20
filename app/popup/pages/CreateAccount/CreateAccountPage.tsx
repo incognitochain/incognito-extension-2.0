@@ -1,4 +1,3 @@
-import Header from "@components/BaseComponent/Header";
 import BodyLayout from "@components/layout/BodyLayout";
 import TextInput from "@popup/components/Inputs/TextInput";
 import { useBackground } from "@popup/context/background";
@@ -8,6 +7,8 @@ import { trim } from "lodash";
 import React, { useCallback, useState, useRef, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { KeyChainLabel, PrimaryButtonContaniner, TextInputWraper } from "./CreateAccountPage.styled";
+import Header from "@components/Header";
+
 let accountNameValidator = require("password-validator");
 
 let schema = new accountNameValidator();
@@ -80,7 +81,7 @@ const CreateAccountPage: React.FC = () => {
 
   return (
     <>
-      <Header title="Create keychain" onBackClick={onBack} />
+      <Header title="Create keychain" onGoBack={onBack} />
       <BodyLayout>
         <KeyChainLabel className="fs-regular fw-regular">{"Keychain name"}</KeyChainLabel>
         <TextInputWraper>

@@ -1,5 +1,4 @@
 import { BookmarkIcon } from "@popup/components/Icons";
-import Header from "@components/BaseComponent/Header";
 import BodyLayout from "@components/layout/BodyLayout";
 import MnemonicItem from "@components/Mnemonic/MnemonicItem";
 import React, { useLayoutEffect, useState } from "react";
@@ -16,6 +15,7 @@ import {
 } from "./MasterKeyPage.styled";
 import copy from "copy-to-clipboard";
 import { useSnackbar } from "notistack";
+import Header from "@components/Header";
 
 const { newMnemonic } = require("incognito-chain-web-js/build/web/wallet");
 
@@ -55,7 +55,7 @@ const MasterKeyPageBase: React.FC<MasterKeyPharsePageBaseProps> = (props: Master
 
   return (
     <>
-      <Header title="Master key phrase" onBackClick={onBack} />
+      <Header title="Master key phrase" onGoBack={onBack} />
       <BodyLayout className="scroll-view">
         <YellowBox>
           <BookMarkContainer>

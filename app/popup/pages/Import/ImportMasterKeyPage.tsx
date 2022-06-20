@@ -1,4 +1,3 @@
-import Header from "@components/BaseComponent/Header";
 import BodyLayout from "@components/layout/BodyLayout";
 import TextArea from "@popup/components/Inputs/TextArea";
 import TextInput from "@popup/components/Inputs/TextInput";
@@ -11,7 +10,7 @@ import {
   PrimaryButtonContaniner,
   TextInputWraper,
 } from "./ImportMasterKeyPage.styled";
-
+import Header from "@components/Header";
 const { validateMnemonic } = require("incognito-chain-web-js/build/web/wallet");
 
 const NAME_PATTERN = /^[A-Za-z0-9]*$/;
@@ -72,7 +71,7 @@ export const ImportMasterKeyPage: React.FC<ImportMasterKeyPageProps> = (props: I
 
   return (
     <>
-      <Header title="Master key" onBackClick={onBack} />
+      <Header title="Master key" onGoBack={onBack} />
       <BodyLayout>
         <DescriptionText className="fs-regular fw-regular">{""}</DescriptionText>
         <MasterKeyNameLabel className="fs-small fw-regular">{"Master key name"}</MasterKeyNameLabel>
