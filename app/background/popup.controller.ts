@@ -171,7 +171,7 @@ export class PopupController {
           try {
             // await this.store.lockSecretBox();
             await this.lockWalletAction();
-            // await this.scanCoinHandler();
+            await this.scanCoinHandler();
             this._notifyAll({
               type: "stateChanged",
               data: { state: "locked" },

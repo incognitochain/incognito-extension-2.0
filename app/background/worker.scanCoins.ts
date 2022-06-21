@@ -100,9 +100,6 @@ export const getFollowTokensBalance = async () => {
 
   try {
     const tokens = await getTokensDefault();
-    console.log("SANG TEST:: ", {
-      tokens,
-    });
     dispatch(actionFetchingFollowBalance({ isFetching: true }));
     // follow tokens balance
     const { balance }: { balance: IBalance[] } = await accountSender.getFollowTokensBalance({

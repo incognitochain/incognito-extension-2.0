@@ -333,11 +333,12 @@ export default class IncognitoController {
             console.log("SCAN COINS ERROR: ", e);
             // Handle error
           }
-        }, 40000);
+        }, 20000);
       }
     } else {
       dispatch(actionFetchingScanCoins({ isFetching: false }));
       scanCoinInterval && clearInterval(scanCoinInterval);
+      scanCoinInterval = undefined;
     }
   }
 
