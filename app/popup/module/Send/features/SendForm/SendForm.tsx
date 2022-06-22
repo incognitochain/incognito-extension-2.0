@@ -31,7 +31,8 @@ const SendForm = React.memo((props: IMergeProps & any) => {
     isInitingForm,
     onClickAddressBook,
   } = props;
-  const { networkFeeSymbol, networkFeeText, showMemo, btnSubmit, disabledForm } = useSelector(sendDataSelector);
+  const { networkFeeSymbol, networkFeeText, showMemo, btnSubmit, disabledForm, accountBalanceStr } =
+    useSelector(sendDataSelector);
 
   const renderMemo = () => {
     if (!showMemo) return null;
@@ -50,6 +51,7 @@ const SendForm = React.memo((props: IMergeProps & any) => {
             type: "number",
           }}
           leftTitle="Amount"
+          rightTitle={accountBalanceStr}
           onClickMax={onClickMax}
           validate={validateAmount}
         />

@@ -141,6 +141,11 @@ const getSendData = ({
 
   const enoughNetworkFee = new BigNumber(networkUserBalance).isGreaterThanOrEqualTo(networkFeeAmount);
 
+  const accountBalanceStr = `${format.amountVer2({
+    decimals: tokenPDecimals,
+    originalAmount: tokenAmount,
+  })} ${tokenSymbol}`;
+
   const isMainCrypto = selectedPrivacy.isMainCrypto;
 
   const disabledForm =
@@ -180,6 +185,7 @@ const getSendData = ({
 
     minAmount,
     minAmountText,
+    accountBalanceStr,
   };
 };
 

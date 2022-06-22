@@ -1,37 +1,27 @@
 import React from "react";
-import { makeStyles } from "@mui/styles";
-import MenuIcon from "@material-ui/icons/Menu";
-import { Typography } from "@mui/material";
-import { Theme } from "@mui/material";
+import styled from "styled-components";
 
 export interface EmptyProps {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
-  empty: {
-    textAlign: "center",
-  },
-  icon: {
-    fontSize: "50px",
-  },
-  title: {},
-  description: {},
-}));
+const Styled = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 30px;
+  .desc {
+    margin-top: 24px;
+  }
+`;
 
-export const Empty: React.FC<EmptyProps> = ({ title, description }) => {
-  const classes: any = useStyles();
-
+export const Empty: React.FC<EmptyProps> = ({ description }) => {
   return (
-    <div className={classes.empty}>
-      <MenuIcon className={classes.icon} />
-      <Typography variant="h6" className={classes.title}>
-        {title}
-      </Typography>
-      <Typography variant="body1" className={classes.description}>
-        {description}
-      </Typography>
-    </div>
+    <Styled>
+      <img src="../../../icons/ic_empty.png" width="70" height="70" alt="empty" />
+      {!!description && <p className="desc">{description}</p>}
+    </Styled>
   );
 };

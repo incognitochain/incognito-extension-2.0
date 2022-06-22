@@ -32,6 +32,7 @@ export interface ISendData {
   inputOriginalAmount: string;
   isMainCrypto: boolean;
   networkFeeToken: SelectedPrivacy;
+  accountBalanceStr: string;
 }
 
 export interface ISendState {
