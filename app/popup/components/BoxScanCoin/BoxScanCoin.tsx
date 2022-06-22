@@ -35,8 +35,8 @@ const BoxScanCoin = React.memo((props: IProps) => {
     onButtonPress();
     const otaKey = accountSender.getOTAKey();
     if (!otaKey || !keyDefine) return;
-    await accountSender.setNewAccountCoinsScan();
     dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
+    await accountSender.setNewAccountCoinsScan();
     request("popup_request_scan_coins", {});
   };
 

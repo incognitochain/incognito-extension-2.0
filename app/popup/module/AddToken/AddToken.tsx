@@ -37,7 +37,7 @@ const AddToken = React.memo((props: IMergeProps) => {
       <WrapContent paddingTop={true} className="default-padding-horizontal">
         <TextArea
           value={tokenID || ""}
-          header="Token ID Address"
+          header="Token ID"
           onChange={onChangeTokenID}
           errorEnable={true}
           errorText={error}
