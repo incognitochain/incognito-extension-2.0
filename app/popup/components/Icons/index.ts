@@ -18,3 +18,4 @@ export { default as EyeOpenIcon } from "./EyeOpenIcon";
 export { default as EyeCloseIcon } from "./EyeCloseIcon";
 export { default as BackIcon } from "./BackIcon";
 export { default as OpenLinkIcon } from "./OpenLink";
+export { default as AskIcon } from "./Ask";

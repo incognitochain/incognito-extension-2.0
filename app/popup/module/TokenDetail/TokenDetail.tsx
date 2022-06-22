@@ -4,7 +4,7 @@ import Header from "@components/Header";
 import { useSelector } from "react-redux";
 import { selectedPrivacyToken } from "@redux/selectedPrivacy";
 import WrapContent from "@components/Content/Content";
-import { ArrowCircleIcon } from "@components/Icons";
+import { ArrowCircleIcon, AskIcon } from "@components/Icons";
 import { Extra, ActionsGroup } from "@module/TokenDetail/features";
 import { useHistory } from "react-router-dom";
 import { route as routeWallet } from "@module/Assets/Assets.route";
@@ -12,6 +12,7 @@ import { TxsHistory } from "@module/TokenDetail/features/TxsHistory";
 import { compose } from "recompose";
 import withBalance from "@module/MainRoute/MainRoute.withBalance";
 import { sleep } from "@popup/utils/utils";
+import { route } from "@module/TokenDetail/features/TokenInfo";
 
 const Styled = styled.div`
   height: 100%;
@@ -39,10 +40,13 @@ const TokenDetail = React.memo((props: any) => {
     }
   };
 
+  const navTokenInfo = () => history.push(route);
+
   return (
     <Styled>
       <Header
         onGoBack={() => history.push(routeWallet)}
+        customHeader={<AskIcon onClick={navTokenInfo} />}
         rightHeader={<ArrowCircleIcon className="hover" onClick={onReload} isLoading={isLoading} />}
         title={tokenSelected.symbol}
       />

@@ -3,6 +3,7 @@ import { useLocation } from "react-router";
 import { IHistory } from "@module/TokenDetail/features/TxsHistory";
 import { IHistoryItem } from "@module/TokenDetail/features/HistoryItem";
 import { ellipsisCenter } from "@popup/utils";
+import CONSTANT_CONFIGS from "@constants/config";
 
 const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
   const { state }: { state: any } = useLocation();
@@ -12,8 +13,9 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
     return [
       {
         title: "TxID:",
-        desc: ellipsisCenter({ limit: 8, str: history.txID }),
+        desc: ellipsisCenter({ limit: 7, str: history.txID }),
         copyData: history.txID,
+        link: `${CONSTANT_CONFIGS.EXPLORER_CONSTANT_CHAIN_URL}/tx/${history.txID}`,
       },
       {
         title: "Receiver:",

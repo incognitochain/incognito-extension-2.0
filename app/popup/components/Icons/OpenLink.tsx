@@ -1,32 +1,30 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 interface IProps {}
 
 const Styled = styled.button`
-    width: 14px;
-    height: 15px;
+  width: 24px;
+  height: 24px;
 `;
 
 const OpenLinkVector = React.memo((props: any) => {
-    return (
-        <svg width={14} height={15}>
-            <path
-                d="M1.059 13.158a.74.74 0 00.553-.237l8.728-8.719 1.45-1.643-.158 4.104v3.252c0 .413.36.8.79.8.423 0 .8-.36.8-.835l-.008-8.842c0-.5-.325-.852-.853-.852H3.52a.803.803 0 00-.827.8c0 .421.378.782.791.782h3.059l4.289-.141L9.197 3.06l-8.71 8.727a.8.8 0 00-.246.554c0 .422.378.817.818.817z"
-                fill="#000"
-                fillRule="nonzero"
-                {...props}
-            />
-        </svg>
-    );
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" {...props}>
+      <path
+        d="M4.425 2.984a1.422 1.422 0 1 0 0 2.844h11.151a.237.237 0 0 1 .234.282.247.247 0 0 1-.063.126L3.42 18.563a1.425 1.425 0 0 0 2.01 2.02L17.757 8.256a.228.228 0 0 1 .256 0 .237.237 0 0 1 .142.218v11.104a1.422 1.422 0 1 0 2.845 0V5.354a2.37 2.37 0 0 0-.702-1.688 2.399 2.399 0 0 0-1.65-.682H4.425Z"
+        fill="#fff"
+      />
+    </svg>
+  );
 });
 
 const OpenLink = (props: IProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
-    return (
-        <Styled className="icon" {...props}>
-            <OpenLinkVector />
-        </Styled>
-    );
+  return (
+    <Styled className="icon hover" {...props}>
+      <OpenLinkVector />
+    </Styled>
+  );
 };
 
 export default OpenLink;

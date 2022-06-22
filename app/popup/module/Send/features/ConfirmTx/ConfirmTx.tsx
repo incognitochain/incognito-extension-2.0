@@ -8,6 +8,8 @@ import Header from "@components/Header";
 import { selectedPrivacyToken } from "@redux/selectedPrivacy";
 import { IConfirmTx } from "@module/Send/features/ConfirmTx";
 import WrapContent from "@components/Content/Content";
+import { ellipsisCenter } from "@popup/utils";
+import CONSTANT_CONFIGS from "@constants/config";
 
 const Styled = styled.div`
   p.confirm-title {
@@ -28,13 +30,13 @@ const ConfirmTx = () => {
   const itemsFactories: IHistoryItem[] = [
     {
       title: "TxID:",
-      desc: confirmTx.txID,
+      desc: ellipsisCenter({ str: confirmTx.txID, limit: 7 }),
       copyData: confirmTx.txID,
-      // link: `${server.exploreChainURL}/tx/${confirmTx.txId}`,
+      link: `${CONSTANT_CONFIGS.EXPLORER_CONSTANT_CHAIN_URL}/tx/${confirmTx.txID}`,
     },
     {
       title: "Receiver:",
-      desc: confirmTx.address,
+      desc: ellipsisCenter({ str: confirmTx.address, limit: 8 }),
       copyData: confirmTx.address,
     },
     {

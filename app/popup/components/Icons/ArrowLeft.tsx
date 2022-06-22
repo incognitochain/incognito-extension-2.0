@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-interface IProps {}
+interface IProps {
+  className?: string;
+}
 
 const Styled = styled.button`
   width: 12px;
@@ -22,7 +24,7 @@ const ArrowLeftVector = React.memo((props: any) => {
 
 const ArrowLeft = (props: IProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
-    <Styled {...props}>
+    <Styled {...props} className={`${props.className ? props.className : ""}`}>
       <ArrowLeftVector />
     </Styled>
   );

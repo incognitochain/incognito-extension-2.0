@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { ArrowLeftIcon } from "@components/Icons";
 import withHeader, { IMergeProps } from "./Header.enhance";
 import { BtnSelectAccount } from "@module/Account/features/SelectAccount";
+import { Row } from "@popup/theme";
 
 const Styled = styled.div`
   display: flex;
@@ -47,13 +48,23 @@ const Styled = styled.div`
 `;
 
 const Header = (props: IMergeProps & any) => {
-  const { rightHeader, showBack = true, selectAccount, handleClick, renderHeaderTitle }: IMergeProps = props;
+  const {
+    rightHeader,
+    showBack = true,
+    selectAccount,
+    handleClick,
+    renderHeaderTitle,
+    customHeader,
+  }: IMergeProps = props;
   return (
     <Styled>
-      <div className="left hover">
-        {showBack && <ArrowLeftIcon onClick={handleClick} />}
-        {renderHeaderTitle()}
-      </div>
+      <Row className="center">
+        <div className="left hover">
+          {showBack && <ArrowLeftIcon onClick={handleClick} />}
+          {renderHeaderTitle()}
+        </div>
+        {customHeader && customHeader}
+      </Row>
       <div className="right">
         {rightHeader}
         {selectAccount && <BtnSelectAccount />}

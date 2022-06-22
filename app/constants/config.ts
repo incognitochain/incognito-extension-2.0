@@ -15,9 +15,12 @@ const API_BASE_URL2 = isMainnet
   ? "https://device-network.incognito.org/"
   : "https://device-network-staging.incognito.org/";
 const API_BASE_URL3 = "https://device-network.incognito.org/";
-const ETHERSCAN_URL = isMainnet ? "https://etherscan.io" : "https://kovan.etherscan.io";
-const BSCSCAN_URL = isMainnet ? "https://bscscan.com" : "https://testnet.bscscan.com";
-const POLYGONSCAN_URL = isMainnet ? "https://polygonscan.com" : "https://mumbai.polygonscan.com/";
+// const ETHERSCAN_URL = isMainnet ? "https://etherscan.io" : "https://kovan.etherscan.io";
+// const BSCSCAN_URL = isMainnet ? "https://bscscan.com" : "https://testnet.bscscan.com";
+// const POLYGONSCAN_URL = isMainnet ? "https://polygonscan.com" : "https://mumbai.polygonscan.com/";
+const ETHERSCAN_URL = "https://etherscan.io";
+const BSCSCAN_URL = "https://bscscan.com";
+const POLYGONSCAN_URL = "https://polygonscan.com";
 const BTC_EXPLORER_URL = isMainnet ? "https://live.blockcypher.com/btc" : "https://live.blockcypher.com/btc-testnet";
 const DEX_BINANCE_TOKEN_URL = isMainnet
   ? "https://dex.binance.org/api/v1/tokens"
@@ -26,11 +29,12 @@ const BINANCE_EXPLORER_URL = isMainnet ? "https://explorer.binance.org" : "https
 const INCOGNITO_TOKEN_ICON_URL = isMainnet
   ? "https://storage.googleapis.com/incognito/wallet/tokens/icons"
   : "https://storage.googleapis.com/incognito/wallet-testnet/tokens/icons";
-const EXPLORER_CONSTANT_CHAIN_URL = isMainnet
-  ? "https://explorer.incognito.org"
-  : global.severDefault
-  ? global.severDefault.explorer
-  : "https://testnet.incognito.org"; // Change explorer
+const EXPLORER_CONSTANT_CHAIN_URL = "https://explorer.incognito.org";
+// const EXPLORER_CONSTANT_CHAIN_URL = isMainnet
+//   ? "https://explorer.incognito.org"
+//   : global.severDefault
+//   ? global.severDefault.explorer
+//   : "https://testnet.incognito.org"; // Change explorer
 const MASTER_NODE_ADDRESS = isMainnet ? MAINNET_FULLNODE : TESTNET_FULLNODE;
 const NODE_URL = "https://node.incognito.org/node.html";
 const USDT_TOKEN_ID = isMainnet

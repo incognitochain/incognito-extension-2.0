@@ -41,8 +41,8 @@ const getConfirmTxBuilder = ({
   });
 
   return {
-    txID: ellipsisCenter({ limit: 8, str: tx.hash }),
-    address: ellipsisCenter({ limit: 8, str: address }),
+    txID: tx.hash,
+    address,
     formatedAmount: `${_formatedAmount} ${sendToken.symbol}`,
     formatedNetworkFee: `${_formatedNetworkFee} ${networkFeeToken.symbol}`,
     time,

@@ -57,7 +57,6 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IProps & 
             {title}
           </a>
         )}
-        {customHeader && customHeader}
       </div>
     );
   };
