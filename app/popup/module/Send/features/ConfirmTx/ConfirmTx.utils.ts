@@ -2,6 +2,7 @@ import SelectedPrivacy from "@model/SelectedPrivacyModel";
 import format from "@utils/format";
 import convert from "@utils/convert";
 import { IConfirmTx } from "@module/Send/features/ConfirmTx/ConfirmTx.interface";
+import { ellipsisCenter } from "@popup/utils";
 
 const getConfirmTxBuilder = ({
   tx,
@@ -40,8 +41,8 @@ const getConfirmTxBuilder = ({
   });
 
   return {
-    txID: tx.hash,
-    address,
+    txID: ellipsisCenter({ limit: 8, str: tx.hash }),
+    address: ellipsisCenter({ limit: 8, str: address }),
     formatedAmount: `${_formatedAmount} ${sendToken.symbol}`,
     formatedNetworkFee: `${_formatedNetworkFee} ${networkFeeToken.symbol}`,
     time,

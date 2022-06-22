@@ -44,11 +44,12 @@ const getValidSendAmount = ({
     maxAmount = 0;
   }
 
-  const maxAmountText = format.formatAmount({
-    originalAmount: maxAmount,
-    decimals: sendTokenPDecimal,
-    clipAmount: false,
-  });
+  const maxAmountText = convert
+    .toHumanAmount({
+      originalAmount: maxAmount,
+      decimals: sendTokenPDecimal,
+    })
+    .toString();
 
   const minAmountText = format.formatAmount({
     originalAmount: minAmount,

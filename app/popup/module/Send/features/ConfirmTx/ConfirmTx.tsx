@@ -27,26 +27,26 @@ const ConfirmTx = () => {
   }
   const itemsFactories: IHistoryItem[] = [
     {
-      title: "TxID",
+      title: "TxID:",
       desc: confirmTx.txID,
       copyData: confirmTx.txID,
       // link: `${server.exploreChainURL}/tx/${confirmTx.txId}`,
     },
     {
-      title: "To address",
+      title: "Receiver:",
       desc: confirmTx.address,
       copyData: confirmTx.address,
     },
     {
-      title: "Time",
+      title: "Time:",
       desc: confirmTx.time,
     },
     {
-      title: "Amount",
+      title: "Amount:",
       desc: `${confirmTx.formatedAmount}`,
     },
     {
-      title: "Network fee",
+      title: "Network fee:",
       desc: `${confirmTx.formatedNetworkFee}`,
     },
   ];
