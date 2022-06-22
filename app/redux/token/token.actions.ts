@@ -1,6 +1,6 @@
 import { defaultAccountWalletSelector } from "@redux/account/account.selectors";
 import { AppGetState, AppThunkDispatch } from "@redux/store";
-import { getTokenList } from "@services/api/token";
+import { getTokenList, getTokensInfo } from "@services/api/token";
 import { EXPIRED_TIME } from "@services/cache";
 import { uniqBy } from "lodash";
 import { TokenActionType } from "@redux/token/token.types";
@@ -36,8 +36,15 @@ export const getPTokenList =
     try {
       const state = getState();
       const network = networkSelector(state);
-      const [pTokens] = await Promise.all([await getTokenList({ expiredTime, network })]);
-      const tokens = uniqBy([...pTokens], "tokenId");
+      const accountSender = defaultAccountWalletSelector(state);
+      const followTokens = await accountSender.getListFollowingTokens();
+
+      const [pTokens, tokensInfo] = await Promise.all([
+        await getTokenList({ expiredTime, network }),
+        await getTokensInfo({ tokenIDs: followTokens }),
+      ]);
+
+      const tokens = uniqBy([...pTokens, ...tokensInfo], "tokenId");
       dispatch(setListPToken(tokens));
       return tokens;
     } catch (e) {

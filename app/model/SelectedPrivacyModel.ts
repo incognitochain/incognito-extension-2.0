@@ -167,7 +167,7 @@ class SelectedPrivacy {
     this.isFantomErc20Token =
       this.isPrivateToken && this.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20;
     this.isBep20Token = this.isPrivateToken && this.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20;
-    this.symbol = combineData.call(this, pTokenData?.pSymbol, PRVIDSTR);
+    this.symbol = combineData.call(this, pTokenData?.pSymbol, "");
     this.name = combineData.call(this, pTokenData?.name, isUnknown ? unknownText : "Privacy");
     this.displayName = combineData.call(this, `Privacy ${pTokenData?.symbol}`, isUnknown ? unknownText : "Privacy");
 
@@ -200,9 +200,9 @@ class SelectedPrivacy {
     this.isUSDT = this.tokenId === BIG_COINS.USDT;
     this.isPRV = this.tokenId === BIG_COINS.PRV;
     this.symbol = this.externalSymbol || this.symbol || "";
-    if (!this.symbol && this.isIncognitoToken && !this.isMainCrypto) {
-      this.symbol = "INC";
-    }
+    // if (!this.symbol && this.isIncognitoToken && !this.isMainCrypto) {
+    //   this.symbol = "INC";
+    // }
     this.listChildToken = pTokenData?.listChildToken;
     this.iconUrl = getIconUrl.call(this, pTokenData.image);
     this.change = pTokenData?.change;

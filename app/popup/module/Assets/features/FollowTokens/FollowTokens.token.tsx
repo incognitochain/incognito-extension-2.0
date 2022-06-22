@@ -43,6 +43,8 @@ const Token = React.memo((props: SelectedPrivacy) => {
     history.push(routeTokenDetail);
   }, [tokenID]);
 
+  if (!symbol) return null;
+
   return (
     <Styled className="default-padding-horizontal" onClick={onTokenClick}>
       <Image className="logo noselect" iconUrl={iconUrl} alt="logo-icon" />
