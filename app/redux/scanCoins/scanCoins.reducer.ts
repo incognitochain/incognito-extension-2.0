@@ -46,6 +46,12 @@ export const reducer: Reducer<IScanCoinsState, ScanCoinsActions> = (state = init
         },
       };
     }
+    case ScanCoinsActionType.FREE_DATA: {
+      return {
+        isFetching: false,
+        scanStatus: {},
+      };
+    }
     default:
       return state;
   }

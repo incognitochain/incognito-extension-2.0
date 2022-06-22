@@ -4,7 +4,6 @@ import {
   AssetsFetchedPayload,
   AssetsFetchingAction,
   AssetsFetchingPayload,
-  AssetsFreePayload,
   AssetsFreeAction,
 } from "@module/Assets/Assets.types";
 // import { createLogger } from "@core/utils";
@@ -20,10 +19,8 @@ const actionFetchedFollowBalance = (payload: AssetsFetchedPayload): AssetsFetche
   payload,
 });
 
-// TODO: LOGOUT CLEAR DATA
-const actionFreeFollowBalance = (payload: AssetsFreePayload): AssetsFreeAction => ({
+const actionFreeAssets = (): AssetsFreeAction => ({
   type: AssetsActionType.FREE_DATA,
-  payload,
 });
 
-export { actionFetchingFollowBalance, actionFetchedFollowBalance, actionFreeFollowBalance };
+export { actionFetchingFollowBalance, actionFetchedFollowBalance, actionFreeAssets };

@@ -6,6 +6,7 @@ import {
   ScanCoinsFetchingPayload,
   ScanCoinsFirstTimeAction,
   ScanCoinsFirstTimePayload,
+  ScanCoinsFreeDataAction,
 } from "@redux/scanCoins/scanCoins.types";
 
 // Flag support check status scan coins
@@ -27,4 +28,8 @@ const actionReScanCoins = (payload: RescanCoinsPayload): ReScanCoinsAction => ({
   payload,
 });
 
-export { actionFetchingScanCoins, actionFistTimeScanCoins, actionReScanCoins };
+const actionFreeScanCoins = (): ScanCoinsFreeDataAction => ({
+  type: ScanCoinsActionType.FREE_DATA,
+});
+
+export { actionFetchingScanCoins, actionFistTimeScanCoins, actionReScanCoins, actionFreeScanCoins };

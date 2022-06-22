@@ -3,9 +3,9 @@
   "version": "1.0",
   "manifest_version": 2,
   "icons": {
-    "16": "icons/incognito-48.png",
+    "16": "icons/incognito-16.png",
     "48": "icons/incognito-48.png",
-    "128": "icons/incognito-96.png"
+    "128": "icons/incognito-128.png"
   },
   "permissions": ["storage", "unlimitedStorage","activeTab", "<all_urls>"],
   "browser_action": {

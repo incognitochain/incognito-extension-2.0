@@ -26,10 +26,6 @@ export interface AssetsFetchedPayload {
   OTAKey: string;
 }
 
-export interface AssetsFreePayload {
-  OTAKey: string;
-}
-
 //----------------------------------------------
 // Action Definition here!
 //----------------------------------------------
@@ -45,7 +41,6 @@ export interface AssetsFetchedAction extends Action {
 
 export interface AssetsFreeAction extends Action {
   type: AssetsActionType.FREE_DATA;
-  payload: AssetsFreePayload;
 }
 
 //-----------------------------------

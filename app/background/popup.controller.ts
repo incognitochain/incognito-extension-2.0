@@ -29,12 +29,15 @@ import {
 import { dispatch, store } from "@redux/store/store";
 import Storage from "@services/storage";
 import { APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@constants/common";
-import { actionFetchCreateAccount, actionSwitchAccount } from "@redux/account";
+import { actionFetchCreateAccount, actionLogout, actionSwitchAccount } from "@redux/account";
 import { getFollowTokensBalance } from "@background/worker.scanCoins";
 import { defaultAccountWalletSelector } from "@redux/account/account.selectors";
 import accountService from "@services/wallet/accountService";
 import { clearAllCaches } from "@services/cache";
 import { clearReduxStore } from "@redux/reducers";
+import { actionFreeAssets } from "@module/Assets";
+import { actionFreeScanCoins } from "@redux/scanCoins";
+import { batch } from "react-redux";
 const { setShardNumber } = require("incognito-chain-web-js/build/web/wallet");
 const log = createLogger("sol:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -142,7 +145,7 @@ export class PopupController {
           break;
         case "popup_restoreWallet":
           await this.restoreWallet(req.params);
-          // await this.scanCoinHandler();
+          await this.scanCoinHandler();
           this._notifyAll({
             type: "stateChanged",
             data: { state: "unlocked" },
@@ -359,8 +362,15 @@ export class PopupController {
     const { mnemonic, password } = params;
     // Clear All Local Data
     await Storage.clear();
+    await Storage.logAll();
     await clearAllCaches();
-    await dispatch(clearReduxStore());
+    batch(() => {
+      dispatch(clearReduxStore());
+      dispatch(actionFreeAssets());
+      dispatch(actionFreeScanCoins());
+      dispatch(actionLogout());
+    });
+    await this.updateNetworkHandler();
 
     // Create new wallet, the same flow import wallet
     const wallet = await dispatch(importMasterKey({ mnemonic, masterKeyName: "Wallet", password }));

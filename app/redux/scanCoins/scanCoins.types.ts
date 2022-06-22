@@ -50,5 +50,13 @@ export interface ReScanCoinsAction extends Action {
   payload: RescanCoinsPayload;
 }
 
+export interface ScanCoinsFreeDataAction extends Action {
+  type: ScanCoinsActionType.FREE_DATA;
+}
+
 //-----------------------------------
-export type ScanCoinsActions = ScanCoinsFetchingAction | ScanCoinsFirstTimeAction | ReScanCoinsAction;
+export type ScanCoinsActions =
+  | ScanCoinsFetchingAction
+  | ScanCoinsFirstTimeAction
+  | ReScanCoinsAction
+  | ScanCoinsFreeDataAction;

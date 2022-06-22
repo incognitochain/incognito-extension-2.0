@@ -5,6 +5,7 @@ import { createLogger, isInternalProcess } from "@core/utils";
 import LocalStore from "./lib/local-store";
 import IncognitoController from "./incognito.controller";
 import { initialState } from "./store";
+import Storage from "@services/storage";
 const { init } = require("incognito-chain-web-js/build/web/wallet");
 
 window.store = store;
@@ -30,6 +31,8 @@ async function initialize() {
 
   const versionedData = await loadStateFromPersistence();
   setupController(versionedData).then();
+
+  await Storage.logAll();
 }
 
 async function loadWasmConfig(): Promise<void | Error> {

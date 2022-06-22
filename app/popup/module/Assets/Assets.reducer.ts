@@ -32,6 +32,13 @@ const reducer: Reducer<IAssetsState, AssetsActions> = (state = initialState, act
         },
       };
     }
+    case AssetsActionType.FREE_DATA: {
+      return {
+        ...state,
+        isFetching: false,
+        data: {},
+      };
+    }
     default:
       return state;
   }

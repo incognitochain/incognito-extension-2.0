@@ -41,6 +41,7 @@ export const configAccount = async () => {
   if (!accountData || !accountData.PrivateKey) return;
   const accountSender = defaultAccountWalletSelector(store.getState());
   accountSender.setStorageServices(Storage);
+  Storage.logAll();
   let keyDefine = "";
   try {
     if (accountSender?.rpc?.rpcHttpService?.url) {
