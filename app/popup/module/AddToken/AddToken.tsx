@@ -30,6 +30,7 @@ export interface IMergeProps extends TInner, IProps {}
 
 const AddToken = React.memo((props: IMergeProps) => {
   const { tokenID, symbol, network, name, contractID, pDecimals, error, onChangeTokenID, onAddToken } = props;
+  console.log(pDecimals);
   return (
     <Styled>
       <Header title="Add Token" />
@@ -41,11 +42,11 @@ const AddToken = React.memo((props: IMergeProps) => {
           errorEnable={true}
           errorText={error}
         />
-        {symbol && <TextInput value={symbol || ""} header="Token Symbol" disabled={true} />}
-        {name && <TextInput value={name || ""} header="Token Name" disabled={true} />}
-        {network && <TextInput value={network || ""} header="Network Name" disabled={true} />}
-        {pDecimals && <TextInput value={pDecimals.toString() || ""} header="Token pDecimal" disabled={true} />}
-        {contractID && <TextArea value={contractID || ""} header="Token Contract Address" disabled={true} rows={2} />}
+        {!!symbol && <TextInput value={symbol || ""} header="Token Symbol" disabled={true} />}
+        {!!name && <TextInput value={name || ""} header="Token Name" disabled={true} />}
+        {!!network && <TextInput value={network || ""} header="Network Name" disabled={true} />}
+        {!!pDecimals && <TextInput value={pDecimals.toString() || ""} header="Token pDecimal" disabled={true} />}
+        {!!contractID && <TextArea value={contractID || ""} header="Token Contract Address" disabled={true} rows={2} />}
         <Button disabled={!!error || !symbol} title="Add Token" className="btn-add-token" onClick={onAddToken} />
       </WrapContent>
     </Styled>
