@@ -119,7 +119,7 @@ const getPassphraseNoCache = async (): Promise<PassphraseProps> => {
       salt = createNewSalt();
 
       //save Salt to Local Storage
-      Storage.setItem(APP_SALT_KEY, salt);
+      await Storage.setItem(APP_SALT_KEY, salt);
     }
     const password = await getCache(APP_PASSWORD_KEY);
     const aesKey = getAesKeyFromSalt({ salt, password });

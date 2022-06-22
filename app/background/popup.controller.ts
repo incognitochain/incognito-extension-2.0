@@ -362,7 +362,7 @@ export class PopupController {
     const { mnemonic, password } = params;
     // Clear All Local Data
     await Storage.clear();
-    await Storage.logAll();
+    // await Storage.logAll();
     await clearAllCaches();
     batch(() => {
       dispatch(clearReduxStore());
