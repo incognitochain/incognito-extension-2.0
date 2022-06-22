@@ -243,11 +243,10 @@ export const ThemedGlobalStyle = createGlobalStyle`
     .scroll-view {
       position: relative;
       overflow-x: hidden;
-      overflow-y: scroll;
+      overflow-y: scroll !important;
       max-height: 536px;
       min-height: 536px;
       padding-bottom: 30px;
-      display: block;
     }
 
     .noselect {
