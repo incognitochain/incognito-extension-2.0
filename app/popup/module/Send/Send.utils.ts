@@ -9,7 +9,7 @@ import format from "@utils/format";
 import isEmpty from "lodash/isEmpty";
 const { isPaymentAddress } = require("incognito-chain-web-js/build/web/wallet");
 
-interface IMaxSend {
+interface IValidSend {
   sendTokenID: string;
   sendTokenAmount: number;
   sendTokenPDecimal: number;
@@ -20,7 +20,7 @@ interface IMaxSend {
   screen: TypeSend;
 }
 
-const getMaxSendAmount = ({
+const getValidSendAmount = ({
   sendTokenID,
   sendTokenAmount,
   sendTokenPDecimal,
@@ -29,26 +29,39 @@ const getMaxSendAmount = ({
   burnFee,
   burnFeeTokenID,
   screen,
-}: IMaxSend) => {
+}: IValidSend) => {
   let maxAmount: number = new BigNumber(sendTokenAmount)
     .minus(sendTokenID === networkFeeTokenID ? networkFee : 0)
     .toNumber();
 
+  let minAmount: number = new BigNumber(sendTokenID === networkFeeTokenID ? 1 + networkFee : 1).toNumber();
+
   if (screen === TypeSend.UNSHIELD) {
     maxAmount = new BigNumber(maxAmount).minus(sendTokenID === burnFeeTokenID ? burnFee : 0).toNumber();
+    minAmount = new BigNumber(minAmount).plus(sendTokenID === burnFeeTokenID ? burnFee : 0).toNumber();
   }
   if (maxAmount <= 0) {
     maxAmount = 0;
   }
-  const maxAmountText = convert
-    .toHumanAmount({
-      originalAmount: maxAmount,
-      decimals: sendTokenPDecimal,
-    })
-    .toString();
+
+  const maxAmountText = format.formatAmount({
+    originalAmount: maxAmount,
+    decimals: sendTokenPDecimal,
+    clipAmount: false,
+  });
+
+  const minAmountText = format.formatAmount({
+    originalAmount: minAmount,
+    decimals: sendTokenPDecimal,
+    clipAmount: false,
+  });
+
   return {
     maxAmount,
     maxAmountText,
+
+    minAmount,
+    minAmountText,
   };
 };
 
@@ -86,7 +99,7 @@ const getSendData = ({
   const screen = _sendSelector.screen;
   const isSend = screen === TypeSend.SEND;
 
-  const { maxAmount, maxAmountText } = getMaxSendAmount({
+  const { maxAmount, maxAmountText, minAmount, minAmountText } = getValidSendAmount({
     sendTokenID: tokenID,
     sendTokenAmount: tokenAmount,
     sendTokenPDecimal: tokenPDecimals,
@@ -163,6 +176,9 @@ const getSendData = ({
 
     isMainCrypto,
     networkFeeToken,
+
+    minAmount,
+    minAmountText,
   };
 };
 

@@ -10,6 +10,8 @@ export enum TypeSend {
 export interface ISendData {
   maxAmount: number;
   maxAmountText: string;
+  minAmount: number;
+  minAmountText: string;
   screen: TypeSend;
   networkFeeText: string;
   networkFeeAmount: number;
