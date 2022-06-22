@@ -12,9 +12,9 @@ export const getToken = async () => {
 };
 
 export const login = async () => {
-  const token = await getToken();
-  setTokenHeader(token);
-  return token;
+  // const token = await getToken();
+  // setTokenHeader(token);
+  // return token;
 };
 
 export default {

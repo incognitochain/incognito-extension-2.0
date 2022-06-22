@@ -137,7 +137,7 @@ export const migrateData = async () => {
 };
 export const masterKeySwitchNetwork = (): AppThunk => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
   await updateNetwork();
-  await login();
+  // await login();
   const masterKey = currentMasterKeySelector(getState());
   const wallet = masterKey.wallet || {};
   // TO DO (after)
@@ -179,7 +179,7 @@ export const unlockMasterKey =
     await cachePassword(password);
     await getPassphrase();
     await updateNetwork();
-    await login();
+    // await login();
     const servers = await serverService.getServerList();
     if (!servers || servers?.length === 0) {
       await serverService.setDefaultList();
@@ -197,7 +197,7 @@ export const initMasterKey =
     await cachePassword(password);
     await getPassphrase();
     await updateNetwork();
-    await login();
+    // await login();
     const defaultMasterKey = new MasterKeyModel(DEFAULT_MASTER_KEY);
     let wallet = await importWallet(mnemonic, defaultMasterKey.getStorageName());
     defaultMasterKey.mnemonic = wallet.Mnemonic;
@@ -248,14 +248,14 @@ export const importMasterKey =
     await updateNetwork();
     await cachePassword(password);
     await getPassphrase();
-    await login();
+    // await login();
     try {
       const newMasterKey = new MasterKeyModel({
         name: masterKeyName,
         mnemonic,
       });
       wallet = await importWallet(mnemonic, newMasterKey.getStorageName());
-      await login();
+      // await login();
       await syncServerAccounts(wallet);
       await loadListAccount(wallet);
       newMasterKey.wallet = wallet;
@@ -302,7 +302,7 @@ export const getWalletInstanceByImportMasterKey = async (data: any) => {
 
 export const loadWallet = () => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
   try {
-    await login();
+    // await login();
     const servers = await serverService.getServerList();
     if (!servers || servers?.length === 0) {
       await serverService.setDefaultList();
