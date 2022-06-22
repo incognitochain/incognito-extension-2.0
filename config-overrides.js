@@ -2,28 +2,32 @@ const helper = require("./config/helper");
 const createRewireWebex = require("./config/rewire-webex");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 const { alias, configPaths } = require("react-app-rewire-alias");
-const { override, babelExclude } = require("customize-cra");
+const { override, babelExclude, addBabelPlugins } = require("customize-cra");
 const path = require("path");
 
 module.exports = {
   // The Webpack config to use whena compiling your react app for development or production.
-  webpack: override(function (config, env) {
-    const rewireWebEx = createRewireWebex({
-      manifest: {
-        common: helper.resolveApp("manifest/common.json"),
-      },
-      entry: [
-        // the order here is important  the first on is the react app, it will be built with an index.html
-        "popup/index.tsx",
-        "background/background.ts",
-        "content/content.ts",
-        "inpage/inpage.ts",
-      ],
-    });
-    config = rewireWebEx.webpack(config, env);
-    alias(configPaths("./tsconfig.paths.json"))(config);
-    return config;
-  }, babelExclude([path.resolve("node_modules/incognito-chain-web-js")])),
+  webpack: override(
+    function (config, env) {
+      const rewireWebEx = createRewireWebex({
+        manifest: {
+          common: helper.resolveApp("manifest/common.json"),
+        },
+        entry: [
+          // the order here is important  the first on is the react app, it will be built with an index.html
+          "popup/index.tsx",
+          "background/background.ts",
+          "content/content.ts",
+          "inpage/inpage.ts",
+        ],
+      });
+      config = rewireWebEx.webpack(config, env);
+      alias(configPaths("./tsconfig.paths.json"))(config);
+      return config;
+    },
+    babelExclude([path.resolve("node_modules/incognito-chain-web-js")]),
+    addBabelPlugins("transform-remove-console"),
+  ),
 
   devServer: function (craGenerateDevServerConfig) {
     return function (proxy, allowedHost) {

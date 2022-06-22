@@ -3,7 +3,7 @@ import styled, { ITheme } from "styled-components";
 
 const Styled = styled.div<{ paddingTop: boolean }>`
   flex: 1;
-  display: flex;
+  display: block;
   border-radius: 26px 26px 0 0;
   overflow: hidden;
   background: ${({ theme }: { theme: ITheme }) => theme.content};
