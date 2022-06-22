@@ -64,7 +64,6 @@ export const scanCoins = async () => {
     const _followTokens = (await accountSender.getListFollowingTokens()) || [];
     // Get coins scanned from storage, existed ignore and continue scan
     const coinsStore = await accountSender.getStorageCoinsScan();
-
     if (!coinsStore) {
       dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey: keyDefine }));
     }
@@ -73,7 +72,7 @@ export const scanCoins = async () => {
 
     const tokens = await getTokensDefault();
 
-    console.log("SCANNING COINS::: ");
+    log("SCANNING COINS::: ");
     // start scan coins
     const { elapsed, result } = await measure(accountSender, "scanCoins", {
       tokenList: uniq(tokens.concat(_followTokens)),
@@ -84,9 +83,9 @@ export const scanCoins = async () => {
       // getFollowTokensBalance().then();
     }
 
-    console.log("scanCoins: ", { elapsed, otaKey, coins: result });
+    log("scanCoins: ", { elapsed, otaKey, coins: result });
   } catch (error) {
-    console.log("SCAN COINS WITH ERROR: ", error);
+    log("SCAN COINS WITH ERROR: ", error);
   } finally {
     dispatch(actionFetchingScanCoins({ isFetching: false }));
   }
@@ -109,7 +108,7 @@ export const getFollowTokensBalance = async () => {
     const _balance = uniqBy(balance, "id");
     dispatch(actionFetchedFollowBalance({ balance: _balance, OTAKey: keyDefine }));
   } catch (error) {
-    console.log("LOAD FOLLOW TOKENS BALANCE ERROR: ", error);
+    log("LOAD FOLLOW TOKENS BALANCE ERROR: ", error);
   } finally {
     dispatch(actionFetchingFollowBalance({ isFetching: false }));
   }
