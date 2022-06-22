@@ -44,6 +44,7 @@ const followTokensFormatedSelector = createSelector(
           convert.toString({
             text: c.formatBalanceByUsd || "0",
           }),
+        (c) => c.amount || 0,
       ],
       ["desc", "desc"],
     ).filter(({ symbol }) => !!symbol);
