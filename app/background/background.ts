@@ -31,8 +31,6 @@ async function initialize() {
 
   const versionedData = await loadStateFromPersistence();
   setupController(versionedData).then();
-
-  await Storage.logAll();
 }
 
 async function loadWasmConfig(): Promise<void | Error> {
