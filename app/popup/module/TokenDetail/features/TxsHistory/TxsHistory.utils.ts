@@ -13,12 +13,10 @@ const getTxsHistoryBuilder = ({
   selectedPrivacy: SelectedPrivacy;
   colors: Colors;
 }): IHistory[] => {
-  console.log(txsHistory);
   return txsHistory.map((history) => {
-    const _formatedAmount = format.formatAmount({
+    const _formatedAmount = format.amountVer2({
       originalAmount: convert.toNumber({ text: history.amount }),
       decimals: selectedPrivacy.pDecimals,
-      clipAmount: false,
     });
 
     const _formatedFee = format.formatAmount({
