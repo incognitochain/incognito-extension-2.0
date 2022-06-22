@@ -4,8 +4,8 @@ const Storage = {
    * @param {any} value
    */
   setItem(key: string, value: string) {
-    const local = chrome.storage.local;
     return new Promise<void>((resolve, reject) => {
+      const local = chrome.storage.local;
       local.set({ [key]: value }, () => {
         if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
         resolve();
@@ -17,8 +17,9 @@ const Storage = {
    * @param { string || undefined || null} key
    */
   getItem(key?: string) {
-    const local = chrome.storage.local;
     return new Promise<any>((resolve, reject) => {
+      const local = chrome.storage.local;
+
       if (!key) {
         local.get((result) => {
           if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
@@ -38,8 +39,9 @@ const Storage = {
    * @param {string} key
    */
   removeItem(key: string) {
-    const local = chrome.storage.local;
     return new Promise<void>((resolve, reject) => {
+      const local = chrome.storage.local;
+
       local.remove([key], () => {
         if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
         resolve();
@@ -51,8 +53,8 @@ const Storage = {
    * @param {string} key
    */
   async clear() {
-    const local = chrome.storage.local;
     return new Promise<void>((resolve, reject) => {
+      const local = chrome.storage.local;
       local.clear(() => {
         if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
         resolve();
@@ -61,11 +63,10 @@ const Storage = {
   },
 
   async logAll() {
-    const local = chrome.storage.local;
     return new Promise<any>((resolve, reject) => {
+      const local = chrome.storage.local;
       local.get((result) => {
         if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
-        console.log("ALL LOCAL DATA .... ");
         console.log(result);
         resolve(result);
       });

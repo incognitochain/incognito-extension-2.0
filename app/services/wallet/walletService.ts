@@ -111,9 +111,13 @@ export async function configsWallet(wallet: any) {
 }
 
 export async function saveWallet(wallet: any) {
-  const { aesKey } = await getPassphrase();
-  wallet.Storage = storage;
-  await wallet.save(aesKey);
+  try {
+    const { aesKey } = await getPassphrase();
+    wallet.Storage = storage;
+    await wallet.save(aesKey);
+  } catch (e) {
+    console.log("[saveWallet] ", e);
+  }
 }
 
 export async function importWallet(mnemonic: string, name: string) {

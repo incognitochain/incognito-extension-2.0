@@ -244,6 +244,8 @@ export const importMasterKey =
   (data: ImportMasterKeyPayload, ignoreReloadWallet: boolean = false) =>
   async (dispatch: AppThunkDispatch, getState: AppGetState) => {
     const { masterKeyName, mnemonic, password } = data;
+
+    // console.log("[importMasterKey] params ", data);
     let wallet: any;
     await updateNetwork();
     await cachePassword(password);
@@ -256,7 +258,7 @@ export const importMasterKey =
       });
       wallet = await importWallet(mnemonic, newMasterKey.getStorageName());
       // await login();
-      await syncServerAccounts(wallet);
+      // await syncServerAccounts(wallet);
       await loadListAccount(wallet);
       newMasterKey.wallet = wallet;
       newMasterKey.mnemonic = wallet.Mnemonic;
