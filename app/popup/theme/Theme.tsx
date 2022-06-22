@@ -342,7 +342,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
     }
     
     .default-padding-top {
-      padding-top: 24px;
+      padding-top: 24px !important;
     }
     
     .no-padding {

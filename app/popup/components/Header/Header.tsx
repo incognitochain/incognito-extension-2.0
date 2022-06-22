@@ -25,7 +25,7 @@ const Styled = styled.div`
   }
 
   .left a.header-title {
-    margin-right: 10px;
+    margin-right: 5px;
     padding-left: 14px;
   }
 
