@@ -31,12 +31,20 @@ const Styled = styled(Row)`
   .desc-text {
     color: ${({ theme }: { theme: ITheme }) => theme.primaryP8};
   }
+  .network {
+    color: ${({ theme }: { theme: ITheme }) => theme.primaryP8};
+    padding-left: 4px;
+    padding-right: 4px;
+    margin-left: 6px;
+    background-color: ${({ theme }: { theme: ITheme }) => theme.primaryP9};
+    border-radius: 4px;
+  }
 `;
 
 const Token = React.memo((props: SelectedPrivacy) => {
   const dispatch: AppThunkDispatch = useDispatch();
   const history = useHistory();
-  const { symbol, name, formatAmount, formatBalanceByUsd, iconUrl, tokenId: tokenID } = props;
+  const { symbol, shortName, network, formatAmount, formatBalanceByUsd, iconUrl, tokenId: tokenID } = props;
 
   const onTokenClick = React.useCallback(() => {
     dispatch(actionSelectedPrivacySet({ tokenID }));
@@ -51,7 +59,14 @@ const Token = React.memo((props: SelectedPrivacy) => {
       <Row className="wrap-content">
         <div>
           <p className="fs-medium noselect">{symbol}</p>
-          <p className="desc-text fs-small noselect">{name}</p>
+          <Row className="center">
+            <p className="desc-text fs-small noselect">{shortName}</p>
+            {!!network && (
+              <div className="network">
+                <p className="desc-text fs-supersmall noselect">{network}</p>
+              </div>
+            )}
+          </Row>
         </div>
         <div>
           <p className="fs-medium text-align-right noselect">{`$${formatBalanceByUsd}`}</p>

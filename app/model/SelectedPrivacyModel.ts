@@ -97,6 +97,7 @@ class SelectedPrivacy {
   isBep20Token: any;
   symbol: any;
   name: any;
+  shortName: any;
   displayName: any;
   contractId: any;
   decimals: any;
@@ -210,6 +211,17 @@ class SelectedPrivacy {
     this.defaultPairToken = pTokenData?.defaultPairToken;
     this.network = pTokenData.network;
     this.hasSameSymbol = pTokenData.hasSameSymbol;
+
+    this.shortName = this.name;
+    if (this.name && this.name.includes("(")) {
+      const splitArr_1 = this.name.split("(");
+      const splitArr_2 = this.name.split(")");
+      if (splitArr_1[0] && splitArr_1[0].trim()) {
+        this.shortName = splitArr_1[0];
+      } else if (splitArr_2[1]) {
+        this.shortName = splitArr_2[1];
+      }
+    }
 
     // Native Token of Network
     this.isETH = this?.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.ETH;

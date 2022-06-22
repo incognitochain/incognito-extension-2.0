@@ -145,7 +145,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
         font-weight: 700;
     }
 
-    .fs-suppersmall {
+    .fs-supersmall {
         font-size: ${FONTS.SIZE.superSmall}px;
         line-height: ${FONTS.SIZE.superSmall + 7}px;
     }
