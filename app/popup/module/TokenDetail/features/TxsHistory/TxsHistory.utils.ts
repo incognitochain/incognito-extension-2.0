@@ -13,6 +13,7 @@ const getTxsHistoryBuilder = ({
   selectedPrivacy: SelectedPrivacy;
   colors: Colors;
 }): IHistory[] => {
+  console.log(txsHistory);
   return txsHistory.map((history) => {
     const _formatedAmount = format.formatAmount({
       originalAmount: convert.toNumber({ text: history.amount }),

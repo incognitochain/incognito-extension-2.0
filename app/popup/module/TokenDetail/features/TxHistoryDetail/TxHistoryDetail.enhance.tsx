@@ -2,6 +2,7 @@ import React from "react";
 import { useLocation } from "react-router";
 import { IHistory } from "@module/TokenDetail/features/TxsHistory";
 import { IHistoryItem } from "@module/TokenDetail/features/HistoryItem";
+import { ellipsisCenter } from "@popup/utils";
 
 const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
   const { state }: { state: any } = useLocation();
@@ -11,8 +12,13 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
     return [
       {
         title: "TxID:",
-        desc: history.txID,
+        desc: ellipsisCenter({ limit: 8, str: history.txID }),
         copyData: history.txID,
+      },
+      {
+        title: "Receiver:",
+        desc: ellipsisCenter({ limit: 8, str: history.receiverAddress }),
+        copyData: history.receiverAddress,
       },
       {
         title: "Amount:",
