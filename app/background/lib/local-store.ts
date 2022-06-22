@@ -1,5 +1,6 @@
 import { checkForError, createLogger } from "../../core/utils";
 import { VersionedData } from "../../core/types";
+import Storage from "@services/storage";
 
 const log = createLogger("ingconito:store");
 
@@ -107,10 +108,12 @@ export default class LocalStore {
     });
   }
 
-  _set(obj: VersionedData): Promise<void> {
+  async _set(obj: VersionedData): Promise<void> {
     const local = chrome.storage.local;
+    const localData = await Storage.getItem();
+    const cloneObject = { ...localData, data: obj.data, version: obj.version };
     return new Promise((resolve, reject) => {
-      local.set(obj, () => {
+      local.set(cloneObject, async () => {
         const err = checkForError();
         if (err) {
           reject(err);

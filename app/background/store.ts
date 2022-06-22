@@ -92,11 +92,14 @@ export class Store {
       log("Assets already exists in memory.. don't do anything");
       return;
     }
-
-    this.setSecretBox({
-      ...this.secretBox,
-      passphraseEncrypted: await decryptPasspharse(password),
-    });
+    try {
+      this.setSecretBox({
+        ...this.secretBox,
+        passphraseEncrypted: await decryptPasspharse(password),
+      });
+    } catch (error) {
+      console.log("unlockSecretBox ", error);
+    }
   }
 
   addAuthorizedOrigin(origin: string) {

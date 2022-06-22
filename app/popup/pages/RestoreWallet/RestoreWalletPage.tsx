@@ -54,7 +54,7 @@ const RestoreWalletPage: React.FC = () => {
       value: true,
       message: "Waiting...",
     });
-    callAsync(request("popup_restoreWallet", { mnemonic, password }), {
+    callAsync(request("popup_restoreWallet", { mnemonic: trim(mnemonic), password }), {
       progress: { message: "Restore Wallet..." },
       success: { message: "Restore Done" },
       onSuccess: (result: any) => {

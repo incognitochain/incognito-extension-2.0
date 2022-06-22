@@ -364,8 +364,8 @@ export class PopupController {
     await Storage.clear();
     // await Storage.logAll();
     await clearAllCaches();
+    await dispatch(clearReduxStore());
     batch(() => {
-      dispatch(clearReduxStore());
       dispatch(actionFreeAssets());
       dispatch(actionFreeScanCoins());
       dispatch(actionLogout());
@@ -374,6 +374,7 @@ export class PopupController {
 
     // Create new wallet, the same flow import wallet
     const wallet = await dispatch(importMasterKey({ mnemonic, masterKeyName: "Wallet", password }));
+
     const salt = await Storage.getItem(APP_SALT_KEY);
     const passphraseEncrypted = await Storage.getItem(APP_PASS_PHRASE_CIPHER);
     this.store.setSecretBox({
