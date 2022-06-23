@@ -46,7 +46,7 @@ const followTokensFormatedSelector = createSelector(
           }),
         (c) => c.amount || 0,
       ],
-      ["desc", "desc"],
+      ["desc", "desc", "desc"],
     ).filter(({ symbol }) => !!symbol);
   },
 );
