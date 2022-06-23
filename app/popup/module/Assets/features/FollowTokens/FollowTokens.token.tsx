@@ -16,6 +16,9 @@ const Styled = styled(Row)`
   border-bottom: 1px solid ${({ theme }: { theme: ITheme }) => theme.primaryP10};
   :hover {
     background: ${({ theme }: { theme: ITheme }) => theme.primaryP9};
+    .network {
+      background-color: ${({ theme }: { theme: ITheme }) => theme.content};
+    }
   }
   .logo {
     width: 40px;
