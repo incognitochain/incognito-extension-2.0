@@ -116,6 +116,7 @@ export class PopupController {
         case "popup_createAccount":
           {
             try {
+              await this.scanCoinHandler({ isClear: true });
               await this.createAccount(req.params);
             } catch (err) {
               log("error: popup_createAccount failed  with error: %s", err);

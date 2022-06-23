@@ -7,7 +7,6 @@ import { AppThunkDispatch } from "@redux/store";
 import { useModal } from "@module/Modal";
 import { defaultAccountWalletSelector, keyDefineAccountSelector } from "@redux/account/account.selectors";
 import { useBackground } from "@popup/context/background";
-import { dispatch } from "@redux/store/store";
 import { actionFistTimeScanCoins } from "@redux/scanCoins";
 
 const Styled = styled.div`
@@ -36,8 +35,16 @@ const BoxScanCoin = React.memo((props: IProps) => {
     const otaKey = accountSender.getOTAKey();
     if (!otaKey || !keyDefine) return;
     dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
-    await accountSender.setNewAccountCoinsScan();
-    request("popup_request_scan_coins", {});
+    try {
+      await accountSender.setNewAccountCoinsScan();
+    } catch (e) {
+      console.log("STORAGE ERROR: ", e);
+    }
+    try {
+      request("popup_request_scan_coins", {});
+    } catch (e) {
+      console.log("REQUEST SCAN ERROR: ", e);
+    }
   };
 
   const onScanPress = async () => {

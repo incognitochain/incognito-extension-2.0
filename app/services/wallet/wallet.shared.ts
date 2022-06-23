@@ -32,7 +32,7 @@ export const getAccountWallet = (account: any, wallet: any) => {
     new Validator("wallet.PortalService", wallet.PortalService).string();
 
     accountWallet.setRPCClient(wallet.RpcClient);
-    accountWallet.setStorageServices(Storage);
+    accountWallet.setStorageServices(wallet.Storage);
     accountWallet.setRPCCoinServices(wallet.RpcCoinService);
     accountWallet.setRPCPortalServices(wallet.PortalService);
 

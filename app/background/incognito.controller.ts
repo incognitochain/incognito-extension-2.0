@@ -315,8 +315,20 @@ export default class IncognitoController {
     chrome.browserAction.setBadgeBackgroundColor({ color: "#037DD6" });
   };
 
-  scanCoinHandler() {
+  clearScanCoins() {
+    dispatch(actionFetchingScanCoins({ isFetching: false }));
+    scanCoinInterval && clearInterval(scanCoinInterval);
+    scanCoinInterval = undefined;
+  }
+
+  scanCoinHandler(params: any) {
     const popupState = this.popupState;
+    if (params) {
+      const { isClear } = params;
+      if (isClear) {
+        return this.clearScanCoins();
+      }
+    }
     const showConfirmScanCoins = isShowConfirmScanCoins(reduxStore.getState());
     if (popupState && popupState.get().walletState === "unlocked") {
       if (!scanCoinInterval && !showConfirmScanCoins) {
@@ -336,9 +348,7 @@ export default class IncognitoController {
         }, 20000);
       }
     } else {
-      dispatch(actionFetchingScanCoins({ isFetching: false }));
-      scanCoinInterval && clearInterval(scanCoinInterval);
-      scanCoinInterval = undefined;
+      this.clearScanCoins();
     }
   }
 
