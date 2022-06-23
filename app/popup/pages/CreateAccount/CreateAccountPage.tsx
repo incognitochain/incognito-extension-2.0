@@ -8,6 +8,8 @@ import React, { useCallback, useState, useRef, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { KeyChainLabel, PrimaryButtonContaniner, TextInputWraper } from "./CreateAccountPage.styled";
 import Header from "@components/Header";
+import { useSelector } from "react-redux";
+import { listAccountSelector } from "@redux/account/account.selectors";
 
 let accountNameValidator = require("password-validator");
 
@@ -32,7 +34,8 @@ const CreateAccountPage: React.FC = () => {
 
   const [keychainName, setKeychainName] = useState("");
   const [keychainNameError, setKeychainNameError] = useState("");
-
+  const listAccount = useSelector(listAccountSelector);
+  const listAccountName = listAccount.map((acc) => acc.AccountName || acc.name) || [];
   useEffect(() => {
     keychainNameTextInput.current.focus();
   }, []);
@@ -66,15 +69,21 @@ const CreateAccountPage: React.FC = () => {
 
   const checkValid = (): boolean => {
     let checkValid = true;
-
-    const errorList: any[] = schema.validate(keychainName, { details: true }) || [];
+    let name = trim(keychainName);
+    const errorList: any[] = schema.validate(name, { details: true }) || [];
 
     if (errorList.length > 0) {
       checkValid = false;
       setKeychainNameError(errorList[0].message);
-    } else if (!keychainName.match(reg)) {
+    } else if (!name.match(reg)) {
       checkValid = false;
       setKeychainNameError(`Please use a valid account name (Ex: "Cat, Account-1,..").`);
+    } else {
+      const isAccountExist = listAccountName.find((accName) => accName === name);
+      if (isAccountExist) {
+        checkValid = false;
+        setKeychainNameError(`You already have a keychain with this name. Please try another.`);
+      }
     }
     return checkValid;
   };
