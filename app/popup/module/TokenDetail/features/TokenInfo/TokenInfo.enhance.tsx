@@ -63,13 +63,14 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any, ref:
 
     {
       title: "Coin ID",
-      desc: ellipsisCenter({ limit: 8, str: tokenId }),
+      desc: ellipsisCenter({ limit: 7, str: tokenId }),
       copyData: tokenId,
     },
     {
       title: "Contract ID",
-      desc: contractId,
+      desc: ellipsisCenter({ limit: 8, str: contractId }),
       link: link(),
+      disabled: !contractId,
     },
     {
       title: "Coin supply",
@@ -92,7 +93,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any, ref:
     if (tokenChildETH && tokenChildETH?.contractId) {
       infosFactories.push({
         title: "ETH ID",
-        desc: tokenChildETH?.contractId,
+        desc: ellipsisCenter({ limit: 8, str: tokenChildETH?.contractId }),
         link: `${CONSTANT_CONFIGS.ETHERSCAN_URL}/token/${tokenChildETH?.contractId}`,
       });
     }
@@ -100,7 +101,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any, ref:
     if (tokenChildBSC && tokenChildBSC?.contractId) {
       infosFactories.push({
         title: "BSC ID",
-        desc: tokenChildBSC?.contractId,
+        desc: ellipsisCenter({ limit: 8, str: tokenChildBSC?.contractId }),
         link: `${CONSTANT_CONFIGS.BSCSCAN_URL}/token/${tokenChildBSC?.contractId}`,
       });
     }
