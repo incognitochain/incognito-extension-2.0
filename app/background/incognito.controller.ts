@@ -345,7 +345,7 @@ export default class IncognitoController {
             console.log("SCAN COINS ERROR: ", e);
             // Handle error
           }
-        }, 20000);
+        }, 5000);
       }
     } else {
       this.clearScanCoins();

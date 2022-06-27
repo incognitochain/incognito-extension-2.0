@@ -44,7 +44,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) =>
       _debounceLoadHistory();
       interval.current = setInterval(() => {
         _debounceLoadHistory();
-      }, 20000);
+      }, 5000);
       return () => {
         clearInterval(interval.current);
         interval.current = null;

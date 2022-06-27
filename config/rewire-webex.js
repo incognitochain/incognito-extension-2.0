@@ -154,7 +154,7 @@ function createWebexRewire(params) {
         getManifestPlugin(bundles[0], isProd),
       );
 
-      // add web extention manifest plugin
+      // add web extension manifest plugin
       config.plugins = [
         ...config.plugins,
         getWebpackExtensionManifestPlugin(),

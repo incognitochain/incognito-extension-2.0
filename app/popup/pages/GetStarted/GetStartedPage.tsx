@@ -22,7 +22,7 @@ export const GetStartedPage: React.FC = () => {
       <IncognitoContainer>
         <IncognitoIcon />
       </IncognitoContainer>
-      <Title className="fs-regular fw-medium">{"Extention"}</Title>
+      <Title className="fs-regular fw-medium">{"Extension"}</Title>
       <PrimaryButtonWrapper
         onClick={() => {
           history.push(Paths.createNewKeyStack);

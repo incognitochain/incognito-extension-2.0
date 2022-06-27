@@ -25,7 +25,7 @@ const MasterKeyPharseCreatedPageBase = (props: MasterKeyPharseCreatedPageBasePro
       <IncognitoContainer>
         <IncognitoIcon />
       </IncognitoContainer>
-      <ExtensionTextContainer>{"Extention"}</ExtensionTextContainer>
+      <ExtensionTextContainer>{"Extension"}</ExtensionTextContainer>
       <PrimaryButtonContaniner
         onClick={() => {
           history.push(Paths.homeRouteStack);
