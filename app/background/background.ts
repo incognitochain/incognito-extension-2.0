@@ -13,7 +13,7 @@ window.persistor = persistor;
 
 const PortStream = require("extension-port-stream");
 const endOfStream = require("end-of-stream");
-const log = createLogger("sol:bg");
+const log = createLogger("incognito:bg");
 
 const localStore = new LocalStore();
 let versionedData: VersionedData;

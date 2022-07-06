@@ -13,7 +13,7 @@ import { Links } from "./routes/paths";
 import { useHistory } from "react-router-dom";
 import { Theme } from "@mui/material";
 
-const log = createLogger("sol:trxlist");
+const log = createLogger("incognito:trxlist");
 
 const useStyles = makeStyles((theme: Theme) => ({
   detailButton: {
@@ -28,18 +28,14 @@ interface TransactionListProp {
 
 export const TransactionList: React.FC<TransactionListProp> = ({ accountKey, signerKey }) => {
   const { connection } = useConnection();
-  const [confirmedSignatureInfos, setConfirmedSignatureInfos] = useState<ConfirmedSignatureInfo[]>(
-    [],
-  );
+  const [confirmedSignatureInfos, setConfirmedSignatureInfos] = useState<ConfirmedSignatureInfo[]>([]);
 
   useEffect(() => {
     log("fetching transaction for account: ", accountKey.toBase58());
-    connection
-      .getConfirmedSignaturesForAddress2(accountKey, { limit: 10 })
-      .then((confirmedSignatureInfos) => {
-        log("got transaction: ", confirmedSignatureInfos);
-        setConfirmedSignatureInfos(confirmedSignatureInfos);
-      });
+    connection.getConfirmedSignaturesForAddress2(accountKey, { limit: 10 }).then((confirmedSignatureInfos) => {
+      log("got transaction: ", confirmedSignatureInfos);
+      setConfirmedSignatureInfos(confirmedSignatureInfos);
+    });
   }, [accountKey, connection]);
 
   return (
@@ -80,19 +76,11 @@ interface TransactionListItemProps {
   signerKey: PublicKey;
 }
 
-const TransactionListItem: React.FC<TransactionListItemProps> = ({
-  confirmedSignatureInfo,
-  accountKey,
-  signerKey,
-}) => {
+const TransactionListItem: React.FC<TransactionListItemProps> = ({ confirmedSignatureInfo, accountKey, signerKey }) => {
   const classes: any = useStyles();
   const history = useHistory();
 
-  const transactionDetail = (
-    transactionID: string,
-    accountKey: PublicKey,
-    signerKey: PublicKey,
-  ) => {
+  const transactionDetail = (transactionID: string, accountKey: PublicKey, signerKey: PublicKey) => {
     history.push(
       Links.transactionDetail({
         transactionID,

@@ -1,7 +1,7 @@
 import { Account } from "@solana/web3.js";
 import nacl from "tweetnacl";
 
-const log = require("debug")("sol:wallet");
+const log = require("debug")("incognito:wallet");
 
 const bip32 = require("bip32");
 

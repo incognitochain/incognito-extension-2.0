@@ -10,7 +10,7 @@ const ObjectMultiplex = require("obj-multiplex");
 export const createLogger = (module: string): any => {
   return debug(module);
 };
-const log = createLogger("sol:util");
+const log = createLogger("incognito:util");
 
 export function enableLogger() {
   if (process.env.NODE_ENV === "development") {

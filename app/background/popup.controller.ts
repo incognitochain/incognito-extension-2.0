@@ -39,7 +39,7 @@ import { actionFreeAssets } from "@module/Assets";
 import { actionFreeScanCoins } from "@redux/scanCoins";
 import { batch } from "react-redux";
 const { setShardNumber } = require("incognito-chain-web-js/build/web/wallet");
-const log = createLogger("sol:popup");
+const log = createLogger("incognito:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
 
 export interface PopupControllerOpt {

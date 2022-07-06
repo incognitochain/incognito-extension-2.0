@@ -3,11 +3,11 @@ import { Cluster, clusterApiUrl, TransactionInstruction } from "@solana/web3.js"
 export const ENVIRONMENT_TYPE_POPUP = "popup";
 export const ENVIRONMENT_TYPE_BACKGROUND = "background";
 export const ENVIRONMENT_TYPE_NOTIFICATION = "notification"; // will be supported soon
-export const INPAGE_MESSAGE_STREAM = "sol.inpage";
-export const CONTENT_MESSAGE_STREAM = "sol.cs";
-export const MUX_PROVIDER_SUBSTREAM = "sol.provider";
-export const MUX_CONTROLLER_SUBSTREAM = "sol.controller";
-export const CHROME_CONN_CS = "sol.cs";
+export const INPAGE_MESSAGE_STREAM = "incognito.inpage";
+export const CONTENT_MESSAGE_STREAM = "incognito.cs";
+export const MUX_PROVIDER_SUBSTREAM = "incognito.provider";
+export const MUX_CONTROLLER_SUBSTREAM = "incognito.controller";
+export const CHROME_CONN_CS = "incognito.cs";
 export const EVENT_UPDATE_BADGE = "updateBadge";
 export const EVENT_UPDATE_ACTIONS = "updateActions";
 
@@ -195,3 +195,16 @@ export type NotificationStateChanged = {
     state: WalletState;
   };
 };
+
+const WalletActionsList = [
+  "wallet_signTransaction",
+  "wallet_requestAccounts",
+  "wallet_getState",
+  "wallet_getBalance",
+] as const;
+
+type WalletActionsType = typeof WalletActionsList[number];
+
+function isKindOfWalletAction(actionType: string): actionType is WalletActionsType {
+  return (WalletActionsList as readonly string[]).includes(actionType);
+}

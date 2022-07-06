@@ -1,7 +1,7 @@
 import ExtensionPlatform from "./extension";
 import { createLogger } from "../../core/utils";
 
-const log = createLogger("sol:ext");
+const log = createLogger("incognito:ext");
 
 const NOTIFICATION_HEIGHT = 600;
 const NOTIFICATION_WIDTH = 375;

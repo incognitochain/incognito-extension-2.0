@@ -1,39 +1,34 @@
-import pump from 'pump'
-import { createLogger, createObjectMultiplex } from '../core/utils'
-import {
-  CHROME_CONN_CS,
-  CONTENT_MESSAGE_STREAM,
-  INPAGE_MESSAGE_STREAM,
-  MUX_PROVIDER_SUBSTREAM,
-} from '../core/types'
-import { enableLogger } from '../core/utils'
-const log = createLogger('sol:cntPage')
-const LocalMessageDuplexStream = require('post-message-stream')
-const PortStream = require('extension-port-stream')
+import pump from "pump";
+import { createLogger, createObjectMultiplex } from "../core/utils";
+import { CHROME_CONN_CS, CONTENT_MESSAGE_STREAM, INPAGE_MESSAGE_STREAM, MUX_PROVIDER_SUBSTREAM } from "../core/types";
+import { enableLogger } from "../core/utils";
+const log = createLogger("incognito:cntPage");
+const LocalMessageDuplexStream = require("post-message-stream");
+const PortStream = require("extension-port-stream");
 
-enableLogger()
+enableLogger();
 
 if (shouldInjectProvider()) {
-  injectScript(chrome.runtime.getURL('static/js/inpage.js')) //"inpage.js")
-  start()
+  injectScript(chrome.runtime.getURL("static/js/inpage.js")); //"inpage.js")
+  start();
 }
 
 function injectScript(url: string) {
   try {
-    const container = document.head || document.documentElement
-    const scriptTag = document.createElement('script')
-    scriptTag.setAttribute('src', url)
-    scriptTag.setAttribute('async', 'false')
-    container.insertBefore(scriptTag, container.children[0])
+    const container = document.head || document.documentElement;
+    const scriptTag = document.createElement("script");
+    scriptTag.setAttribute("src", url);
+    scriptTag.setAttribute("async", "false");
+    container.insertBefore(scriptTag, container.children[0]);
     //container.removeChild(scriptTag)
-    log('inject page data')
+    log("inject page data");
   } catch (e) {
-    log('solana provider injection failed: %s', e)
+    log("incognito provider injection failed: %s", e);
   }
 }
 
 async function start() {
-  await setupStreams()
+  await setupStreams();
 }
 
 /**
@@ -46,30 +41,30 @@ async function setupStreams() {
   const pageStream = new LocalMessageDuplexStream({
     name: CONTENT_MESSAGE_STREAM,
     target: INPAGE_MESSAGE_STREAM,
-  })
-  const extensionPort = chrome.runtime.connect({ name: CHROME_CONN_CS })
-  const extensionStream = new PortStream(extensionPort)
+  });
+  const extensionPort = chrome.runtime.connect({ name: CHROME_CONN_CS });
+  const extensionStream = new PortStream(extensionPort);
 
   // create and connect channel muxers
   // so we can handle the channels individually
-  const pageMux = createObjectMultiplex('cs-inpage-mux')
-  pageMux.setMaxListeners(25)
-  const extensionMux = createObjectMultiplex('cs-ext-mux')
-  extensionMux.setMaxListeners(25)
+  const pageMux = createObjectMultiplex("cs-inpage-mux");
+  pageMux.setMaxListeners(25);
+  const extensionMux = createObjectMultiplex("cs-ext-mux");
+  extensionMux.setMaxListeners(25);
 
   pump(pageMux, pageStream, pageMux, (err) => {
     if (err) {
-      return logStreamDisconnectWarning('Incognito Inpage Multiplex', err);
+      return logStreamDisconnectWarning("Incognito Inpage Multiplex", err);
     }
-  })
+  });
   pump(extensionMux, extensionStream, extensionMux, (err) => {
     if (err) {
-      return logStreamDisconnectWarning('Incognito Background Multiplex', err)
+      return logStreamDisconnectWarning("Incognito Background Multiplex", err);
     }
-  })
+  });
 
   // forward communication across inpage-background for these channels only
-  forwardTrafficBetweenMuxers(MUX_PROVIDER_SUBSTREAM, pageMux, extensionMux)
+  forwardTrafficBetweenMuxers(MUX_PROVIDER_SUBSTREAM, pageMux, extensionMux);
 }
 
 // /**
@@ -86,11 +81,11 @@ async function setupStreams() {
 // }
 
 function forwardTrafficBetweenMuxers(channelName: any, muxA: any, muxB: any) {
-  const channelA = muxA.createStream(channelName)
-  const channelB = muxB.createStream(channelName)
+  const channelA = muxA.createStream(channelName);
+  const channelB = muxB.createStream(channelName);
   pump(channelA, channelB, channelA, (err: any) => {
-    log('solana muxed traffic for channel %s failed: %O', channelName, err)
-  })
+    log("incognito muxed traffic for channel %s failed: %O", channelName, err);
+  });
 }
 
 /**
@@ -99,7 +94,7 @@ function forwardTrafficBetweenMuxers(channelName: any, muxA: any, muxB: any) {
  * @returns {boolean} {@code true} - if the provider should be injected
  */
 function shouldInjectProvider() {
-  return true
+  return true;
   // return doctypeCheck() &&
   //   suffixCheck() &&
   //   documentElementCheck()
@@ -126,11 +121,11 @@ function shouldInjectProvider() {
  * @param {Error} err - Stream connection error
  */
 function logStreamDisconnectWarning(remoteLabel: string, err: Error) {
-  let warningMsg = `IncognitoContentscript - lost connection to ${remoteLabel}`
+  let warningMsg = `IncognitoContentscript - lost connection to ${remoteLabel}`;
   if (err) {
-    warningMsg += '\n' + err.stack
+    warningMsg += "\n" + err.stack;
   }
-  console.warn(warningMsg)
+  console.warn(warningMsg);
 }
 
 // /**

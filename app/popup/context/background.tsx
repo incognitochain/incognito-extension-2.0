@@ -15,7 +15,7 @@ import RpcEngine from "json-rpc-engine";
 
 const PortStream = require("extension-port-stream");
 const createJsonRpcStream = require("json-rpc-middleware-stream");
-const log = require("debug")("sol:bgContext");
+const log = require("debug")("incognito:bgContext");
 
 let isNotification = false;
 if (window.location.hash === "#notification") {
