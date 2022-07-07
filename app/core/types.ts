@@ -196,15 +196,16 @@ export type NotificationStateChanged = {
   };
 };
 
-const WalletActionsList = [
+export const WalletActionsList = [
   "wallet_signTransaction",
   "wallet_requestAccounts",
+  "wallet_getPaymentAddress",
   "wallet_getState",
   "wallet_getBalance",
 ] as const;
 
-type WalletActionsType = typeof WalletActionsList[number];
+export type WalletActionsType = typeof WalletActionsList[number];
 
-function isKindOfWalletAction(actionType: string): actionType is WalletActionsType {
+export function isKindOfWalletAction(actionType: string): actionType is WalletActionsType {
   return (WalletActionsList as readonly string[]).includes(actionType);
 }

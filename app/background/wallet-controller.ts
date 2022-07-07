@@ -1,11 +1,14 @@
 import { Store } from "./store";
 import { createLogger, decodeSerializedMessage } from "../core/utils";
-import { Markdown, RequestAccountsResp, SignTransactionResp, WallActions } from "../core/types";
+import { Markdown, RequestAccountsResp, SignTransactionResp, WallActions, WalletActionsType } from "../core/types";
 import bs58 from "bs58";
 import { Transaction } from "@solana/web3.js";
 import { Buffer } from "buffer";
 import { ProgramPluginManager } from "../core/program-plugin";
 import { ActionManager } from "./lib/action-manager";
+import { getCurrentPaymentAddress } from "@redux/account/account.selectors";
+import { dispatch, store as storeRedux } from "@redux/store/store";
+import { RootState } from "../redux/reducers/index";
 
 const log = createLogger("incognito:walletCtr");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -45,7 +48,7 @@ export class WalletController {
 
     return createAsyncMiddleware(async (req: any, res: any, next: any) => {
       console.log("WEBAPP CALL BG1: METHOD: ", req.method);
-      const method = req.method as WallActions;
+      const method = req.method as WalletActionsType;
       console.log("WEBAPP CALL BG2---: METHOD: ", req.method);
       switch (method) {
         case "wallet_getState":
@@ -80,8 +83,20 @@ export class WalletController {
             res.error = err;
           }
           break;
+
+        case "wallet_getPaymentAddress":
+          try {
+            let resp = await this._handleGetPaymentAddress(req);
+            res.result = resp;
+          } catch (err) {
+            log("wallet_requestAccounts failed  with error: %O", err);
+            res.error = err;
+          }
+          break;
+
         default:
           console.log("wallet controller unknown method name [%s] with params: %o", req.method, req.params);
+          res.result = `unknown method name ${req.method} with params: ${req.params}`;
           // when this promise resolves, the response is on its way back
           // eslint-disable-next-line callback-return
           await next();
@@ -120,6 +135,10 @@ export class WalletController {
     return { accounts: [] };
   };
 
+  _handleGetPaymentAddress = async (req: any): Promise<string> => {
+    const result = getCurrentPaymentAddress(storeRedux.getState() as never);
+    return result || "";
+  };
   _handleSignTransaction = async (req: any): Promise<SignTransactionResp> => {
     let {
       tabId,

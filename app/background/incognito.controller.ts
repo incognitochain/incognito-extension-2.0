@@ -255,10 +255,10 @@ export default class IncognitoController {
   notifyAllConnections(notification: Notification): Promise<void> {
     const that = this;
     return new Promise((resolve, reject) => {
-      log("Notifying all connections: %O", notification);
-      if (!this.store.isUnlocked()) {
-        return;
-      }
+      console.log("Notifying all connections: %O", notification);
+      // if (!this.store.isUnlocked()) {
+      //   return;
+      // }
 
       Object.values(that.connections).forEach((conns) => {
         Object.keys(conns).forEach((connId) => {

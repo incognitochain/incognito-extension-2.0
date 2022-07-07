@@ -161,6 +161,10 @@ export const defaultAccountWalletSelector = createSelector(
 );
 
 export const isFetchingNFTSelector = createSelector(accountSelector, ({ isFetchingNFT }) => isFetchingNFT);
+export const getCurrentPaymentAddress = createSelector(
+  paymentAddressOfDefaultAccountSelector,
+  (paymentAddress) => paymentAddress || "Unknow",
+);
 
 export default {
   defaultAccountName,
@@ -184,4 +188,5 @@ export default {
   nftTokenDataSelector,
   defaultAccountWalletSelector,
   isFetchingNFTSelector,
+  getCurrentPaymentAddress,
 };

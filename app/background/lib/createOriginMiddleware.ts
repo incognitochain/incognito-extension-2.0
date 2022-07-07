@@ -1,3 +1,4 @@
+import { isKindOfWalletAction } from "@core/types";
 import { Store } from "../store";
 
 export default function createOriginMiddleware(opts: { origin: string; store: Store }) {
@@ -18,15 +19,18 @@ export default function createOriginMiddleware(opts: { origin: string; store: St
       next();
       return;
     }
-    if (
-      req.method === "wallet_requestAccounts" ||
-      req.method === "wallet_getCluster" ||
-      req.method === "wallet_getState"
-    ) {
+    if (isKindOfWalletAction(req.method)) {
       next();
       return;
     }
-
+    // if (
+    //   req.method === "wallet_requestAccounts" ||
+    //   req.method === "wallet_getCluster" ||
+    //   req.method === "wallet_getState"
+    // ) {
+    //   next();
+    //   return;
+    // }
     res.err = "authorized origin require to request: " + req.method;
     return;
   };

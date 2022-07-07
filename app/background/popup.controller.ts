@@ -157,13 +157,13 @@ export class PopupController {
           {
             try {
               // await this.store.unlockSecretBox(req.params.password);
-              // this._notifyAll({
-              //   type: "stateChanged",
-              //   data: { state: "unlocked" },
-              // });
               await this.updateNetworkHandler();
               await this.unlockWallet(req.params);
               await this.scanCoinHandler();
+              this._notifyAll({
+                type: "stateChanged",
+                data: { state: "unlocked" },
+              });
             } catch (err) {
               log("error: popup_unlockWallet failed  with error: %s", err);
               res.error = err;
@@ -172,17 +172,19 @@ export class PopupController {
 
           break;
         case "popup_lockWallet":
-          try {
-            // await this.store.lockSecretBox();
-            await this.lockWalletAction();
-            await this.scanCoinHandler();
-            this._notifyAll({
-              type: "stateChanged",
-              data: { state: "locked" },
-            });
-          } catch (err) {
-            log("error: popup_lockWallet failed  with error: %s", err);
-            res.error = err;
+          {
+            try {
+              // await this.store.lockSecretBox();
+              await this.lockWalletAction();
+              await this.scanCoinHandler();
+              this._notifyAll({
+                type: "stateChanged",
+                data: { state: "locked" },
+              });
+            } catch (err) {
+              log("error: popup_lockWallet failed  with error: %s", err);
+              res.error = err;
+            }
           }
           break;
         case "popup_switchNetwork":
@@ -569,8 +571,10 @@ export class PopupController {
   }
 
   _notifyAll(notification: Notification) {
-    log("Notifying all domains");
+    console.log("Notifying all domains");
+    console.log(this._notifyAllDomains);
     if (this._notifyAllDomains) {
+      console.log("notification ", notification);
       this._notifyAllDomains(notification)
         .then(() => {
           log("Notifying domains completed");

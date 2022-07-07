@@ -15,8 +15,6 @@ const createJsonRpcStream = require("json-rpc-middleware-stream");
 const { duplex: isDuplex } = require("is-stream");
 const log = createLogger("incognito:inPage");
 
-enableLogger();
-
 export interface RequestArgs {
   method: WallActions;
   params?: unknown[] | object;
@@ -102,11 +100,11 @@ const csStream = new LocalMessageDuplexStream({
 });
 
 function initProvider() {
-  log("initializing provider");
+  console.log("initializing provider");
   const provider = new Provider(csStream);
   // @ts-ignore
   window.incognito = provider;
-  log("dispatching window event 'incognito#initialized'");
+  console.log("dispatching window event 'incognito#initialized'");
   window.dispatchEvent(new Event("incognito#initialized"));
 }
 
