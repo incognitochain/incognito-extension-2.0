@@ -9,6 +9,7 @@ import { ActionManager } from "./lib/action-manager";
 import { getCurrentPaymentAddress } from "@redux/account/account.selectors";
 import { dispatch, store as storeRedux } from "@redux/store/store";
 import { RootState } from "../redux/reducers/index";
+import { getFollowTokensBalance } from "./worker.scanCoins";
 
 const log = createLogger("incognito:walletCtr");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -89,11 +90,15 @@ export class WalletController {
             let resp = await this._handleGetPaymentAddress(req);
             res.result = resp;
           } catch (err) {
-            log("wallet_requestAccounts failed  with error: %O", err);
+            log("wallet_getPaymentAddress failed  with error: %O", err);
             res.error = err;
           }
           break;
-
+        case "wallet_showPopup":
+          {
+            this._showPopup();
+          }
+          break;
         default:
           console.log("wallet controller unknown method name [%s] with params: %o", req.method, req.params);
           res.result = `unknown method name ${req.method} with params: ${req.params}`;
@@ -104,24 +109,52 @@ export class WalletController {
     });
   }
 
-  _handleRequestAccounts = async (req: any): Promise<RequestAccountsResp> => {
+  // _handleRequestAccounts = async (req: any): Promise<RequestAccountsResp> => {
+  //   const { tabId, origin } = req;
+  //   const { promptAuthorization } = req.params;
+  //   log("Handling request accounts tabId: %s origin: %s, prompt user: %s)", tabId, origin, promptAuthorization);
+
+  //   //todo: popup only if user never agree to request account for this origin
+  //   if (this.store.isOriginAuthorized(origin) && this.store.getWalletState() === "unlocked") {
+  //     return { accounts: this.store.wallet ? this.store.wallet.getPublicKeysAsBs58() : [] };
+  //   }
+
+  //   if (!promptAuthorization) {
+  //     throw new Error("Unauthorized, you must request permissions first to access accounts.");
+  //   }
+
+  //   this._showPopup();
+
+  //   if (!this.store.isOriginAuthorized(origin)) {
+  //     return new Promise<RequestAccountsResp>((resolve, reject) => {
+  //       this.actionManager.addAction(origin, tabId, {
+  //         type: "request_accounts",
+  //         resolve: resolve,
+  //         reject: reject,
+  //         tabId: tabId,
+  //         origin: origin,
+  //       });
+  //     });
+  //   }
+
+  //   return { accounts: [] };
+  // };
+
+  _handleRequestAccounts = async (req: any): Promise<any> => {
     const { tabId, origin } = req;
-    const { promptAuthorization } = req.params;
-    log("Handling request accounts tabId: %s origin: %s, prompt user: %s)", tabId, origin, promptAuthorization);
-
-    //todo: popup only if user never agree to request account for this origin
-    if (this.store.isOriginAuthorized(origin) && this.store.getWalletState() === "unlocked") {
-      return { accounts: this.store.wallet ? this.store.wallet.getPublicKeysAsBs58() : [] };
-    }
-
-    if (!promptAuthorization) {
-      throw new Error("Unauthorized, you must request permissions first to access accounts.");
+    // const { promptAuthorization } = req.params;
+    if (this.store.getWalletState() === "unlocked") {
+      const accountDefault = await getFollowTokensBalance();
+      return {
+        accounts: [accountDefault],
+      };
     }
 
     this._showPopup();
 
     if (!this.store.isOriginAuthorized(origin)) {
       return new Promise<RequestAccountsResp>((resolve, reject) => {
+        console.log("WTF 1111 ");
         this.actionManager.addAction(origin, tabId, {
           type: "request_accounts",
           resolve: resolve,

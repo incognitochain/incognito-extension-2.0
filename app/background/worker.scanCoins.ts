@@ -91,6 +91,7 @@ export const scanCoins = async () => {
 };
 
 export const getFollowTokensBalance = async () => {
+  const accountData = defaultAccountSelector(store.getState());
   const isFetching = isFetchingAssetsSelector(store.getState());
   const { accountSender, keyDefine } = (await configAccount()) as any;
   if (!accountSender || isFetching) return;
@@ -106,6 +107,12 @@ export const getFollowTokensBalance = async () => {
     });
     const _balance = uniqBy(balance, "id");
     dispatch(actionFetchedFollowBalance({ balance: _balance, OTAKey: keyDefine }));
+
+    return {
+      keyDefine,
+      balances: _balance,
+      paymentAddress: accountData.PaymentAddress,
+    };
   } catch (error) {
     log("LOAD FOLLOW TOKENS BALANCE ERROR: ", error);
   } finally {

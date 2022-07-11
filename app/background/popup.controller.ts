@@ -31,17 +31,18 @@ import Storage from "@services/storage";
 import { APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@constants/common";
 import { actionFetchCreateAccount, actionLogout, actionSwitchAccount } from "@redux/account";
 import { getFollowTokensBalance } from "@background/worker.scanCoins";
-import { defaultAccountWalletSelector } from "@redux/account/account.selectors";
+import { defaultAccountWalletSelector, getCurrentPaymentAddress } from "@redux/account/account.selectors";
 import accountService from "@services/wallet/accountService";
 import { clearAllCaches } from "@services/cache";
 import { clearReduxStore } from "@redux/reducers";
 import { actionFreeAssets } from "@module/Assets";
 import { actionFreeScanCoins } from "@redux/scanCoins";
 import { batch } from "react-redux";
+import { accountSelector } from "../redux/account/account.selectors";
+import sharedSelectors from "@redux/shared/shared.selectors";
 const { setShardNumber } = require("incognito-chain-web-js/build/web/wallet");
 const log = createLogger("incognito:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
-
 export interface PopupControllerOpt {
   store: Store;
   actionManager: ActionManager;
@@ -118,6 +119,17 @@ export class PopupController {
             try {
               await this.scanCoinHandler({ isClear: true });
               await this.createAccount(req.params);
+              const paymentAddress = await getCurrentPaymentAddress(store.getState() as never);
+              // const totalShield = await sharedSelectors.followTokensUSDAmountSelector(store.getState());
+              this._notifyAll({
+                type: "accountsChanged",
+                data: [
+                  {
+                    paymentAddress,
+                    balance: Math.random(),
+                  },
+                ],
+              });
             } catch (err) {
               log("error: popup_createAccount failed  with error: %s", err);
               res.error = err;
@@ -129,6 +141,19 @@ export class PopupController {
           {
             try {
               await this.switchAccount(req.params);
+              const paymentAddress = await getCurrentPaymentAddress(store.getState() as never);
+              // const totalShield = await sharedSelectors.followTokensUSDAmountSelector(store.getState());
+
+              this._notifyAll({
+                type: "accountsChanged",
+                data: [
+                  {
+                    paymentAddress,
+                    // balance: totalShield,
+                    balance: Math.random(),
+                  },
+                ],
+              });
             } catch (err) {
               log("error: popup_switchAccount failed  with error: %s", err);
               res.error = err;

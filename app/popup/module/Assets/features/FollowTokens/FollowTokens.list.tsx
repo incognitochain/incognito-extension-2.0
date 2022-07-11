@@ -9,7 +9,6 @@ import Loading from "@components/Icons/Loading";
 
 const FollowTokensList = React.memo(() => {
   const followTokens = useSelector(sharedSelectors.followTokensFormatedSelector);
-
   return (
     <MainStyled>
       <WrapContent>

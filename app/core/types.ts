@@ -17,6 +17,11 @@ export const DEFAULT_NETWORK: Network = {
   endpoint: clusterApiUrl("devnet"),
 };
 
+export type AccountInfo = {
+  paymentAddress: string;
+  balance: number;
+};
+
 export const AVAILABLE_NETWORKS: Network[] = [
   { title: "Mainnet Beta", cluster: "mainnet-beta", endpoint: clusterApiUrl("mainnet-beta") },
   { title: "Devnet", cluster: "devnet", endpoint: clusterApiUrl("devnet") },
@@ -181,7 +186,7 @@ export type NotificationNetworkChanged = {
 
 export type NotificationAccountsChanged = {
   type: "accountsChanged";
-  data: string[];
+  data: AccountInfo[];
 };
 
 export type NotificationPopupStateChanged = {
@@ -202,6 +207,7 @@ export const WalletActionsList = [
   "wallet_getPaymentAddress",
   "wallet_getState",
   "wallet_getBalance",
+  "wallet_showPopup",
 ] as const;
 
 export type WalletActionsType = typeof WalletActionsList[number];

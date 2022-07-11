@@ -158,7 +158,7 @@ export const actionSwitchAccount =
       const masterKey: MasterKeyModel = currentMasterKeySelector(state);
       const defaultAccountName = accountSelector.defaultAccountNameSelector(state);
       if (defaultAccountName !== account?.name) {
-        dispatch(switchMasterKey(masterKey?.name, accountName));
+        await dispatch(switchMasterKey(masterKey?.name, accountName));
       }
       return account;
     } catch (error) {
