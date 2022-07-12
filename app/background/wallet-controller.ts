@@ -159,9 +159,9 @@ export class WalletController {
       };
     }
 
-    if (!promptAuthorization) {
-      throw new Error("Unauthorized, you must request permissions first to access accounts.");
-    }
+    // if (!promptAuthorization) {
+    //   throw new Error("Unauthorized, you must request permissions first to access accounts.");
+    // }
 
     this._showPopup();
 
