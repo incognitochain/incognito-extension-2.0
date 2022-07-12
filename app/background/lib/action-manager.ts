@@ -70,4 +70,8 @@ export class ActionManager extends events.EventEmitter {
       }
     });
   };
+
+  clearAllAction = () => {
+    this.actions.clear();
+  };
 }

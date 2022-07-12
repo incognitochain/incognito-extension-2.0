@@ -1,6 +1,13 @@
 import { Store } from "./store";
 import { createLogger, decodeSerializedMessage } from "../core/utils";
-import { Markdown, RequestAccountsResp, SignTransactionResp, WallActions, WalletActionsType } from "../core/types";
+import {
+  IncognitoSignTransactionResponse,
+  Markdown,
+  RequestAccountsResp,
+  SignTransactionResp,
+  WallActions,
+  WalletActionsType,
+} from "../core/types";
 import bs58 from "bs58";
 import { Transaction } from "@solana/web3.js";
 import { Buffer } from "buffer";
@@ -66,8 +73,8 @@ export class WalletController {
         //   res.result = this.store.selectedNetwork;
         //   break;
         case "wallet_signTransaction":
-          log("wallet controller middleware match: 'wallet_signTransaction'");
           try {
+            console.log("[wallet_signTransaction] resquest: ", req);
             let resp = await this._handleSignTransaction(req);
             res.result = resp;
           } catch (err) {
@@ -142,7 +149,9 @@ export class WalletController {
 
   _handleRequestAccounts = async (req: any): Promise<any> => {
     const { tabId, origin } = req;
-    // const { promptAuthorization } = req.params;
+    const { promptAuthorization } = req.params;
+    console.log("[_handleRequestAccounts] req  ", req);
+
     if (this.store.getWalletState() === "unlocked") {
       const accountDefault = await getFollowTokensBalance();
       return {
@@ -150,11 +159,14 @@ export class WalletController {
       };
     }
 
+    if (!promptAuthorization) {
+      throw new Error("Unauthorized, you must request permissions first to access accounts.");
+    }
+
     this._showPopup();
 
     if (!this.store.isOriginAuthorized(origin)) {
       return new Promise<RequestAccountsResp>((resolve, reject) => {
-        console.log("WTF 1111 ");
         this.actionManager.addAction(origin, tabId, {
           type: "request_accounts",
           resolve: resolve,
@@ -172,43 +184,62 @@ export class WalletController {
     const result = getCurrentPaymentAddress(storeRedux.getState() as never);
     return result || "";
   };
-  _handleSignTransaction = async (req: any): Promise<SignTransactionResp> => {
-    let {
-      tabId,
-      params: { message, signer },
-    } = req;
-    let markdowns: Markdown[] = [];
 
-    log("Handling sign transaction from tab [%s] with message [%s] for signer %o", tabId, message, signer);
-    try {
-      const decodedMessage = bs58.decode(message);
-      const trxMessage = decodeSerializedMessage(new Buffer(decodedMessage));
-      const trx = Transaction.populate(trxMessage, []);
-      log("transaction %O", trx);
+  // _handleSignTransaction = async (req: any): Promise<SignTransactionResp> => {
+  //   let {
+  //     tabId,
+  //     params: { message, signer },
+  //   } = req;
+  //   let markdowns: Markdown[] = [];
 
-      markdowns = await this.pluginManager.renderRicardian(trx);
-      if (!markdowns) {
-        log("Error! Decoding instructions should never fail");
-      }
-    } catch (e) {
-      log("error populating transaction %O", e);
+  //   log("Handling sign transaction from tab [%s] with message [%s] for signer %o", tabId, message, signer);
+  //   try {
+  //     const decodedMessage = bs58.decode(message);
+  //     const trxMessage = decodeSerializedMessage(new Buffer(decodedMessage));
+  //     const trx = Transaction.populate(trxMessage, []);
+  //     log("transaction %O", trx);
+
+  //     markdowns = await this.pluginManager.renderRicardian(trx);
+  //     if (!markdowns) {
+  //       log("Error! Decoding instructions should never fail");
+  //     }
+  //   } catch (e) {
+  //     log("error populating transaction %O", e);
+  //   }
+
+  //   this._showPopup();
+
+  //   return new Promise<SignTransactionResp>((resolve, reject) => {
+  //     this.actionManager.addAction(origin, tabId, {
+  //       type: "sign_transaction",
+  //       resolve: resolve,
+  //       reject: reject,
+  //       tabId: tabId,
+  //       message: message,
+  //       signers: signer,
+  //       details: markdowns,
+  //     });
+  //   });
+  // };
+
+  _handleSignTransaction = async (req: any): Promise<IncognitoSignTransactionResponse | void> => {
+    const { tabId, origin } = req;
+    // const { promptAuthorization } = req.params;
+    if (this.store.getWalletState() === "unlocked") {
+      console.log("[_handleSignTransaction] TO DO");
     }
 
     this._showPopup();
-
-    return new Promise<SignTransactionResp>((resolve, reject) => {
+    this.actionManager.clearAllAction();
+    return new Promise<IncognitoSignTransactionResponse>((resolve, reject) => {
       this.actionManager.addAction(origin, tabId, {
         type: "sign_transaction",
         resolve: resolve,
         reject: reject,
         tabId: tabId,
-        message: message,
-        signers: signer,
-        details: markdowns,
       });
     });
   };
-
   async _showPopup() {
     return this.openPopup().then(() => {});
   }

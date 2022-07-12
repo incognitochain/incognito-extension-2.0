@@ -8,6 +8,7 @@ import {
   ActionRequestAccounts,
   ActionSignTransaction,
   AVAILABLE_NETWORKS,
+  IncognitoSignTransaction,
   Network,
   Notification,
   PopupActions,
@@ -453,17 +454,51 @@ export class PopupController {
       log("Action request accounts with key %O not found", actionKey);
       return;
     }
-    action.reject("access to accounts deny");
+    action.reject(new Error("access to accounts deny"));
     this.actionManager.deleteAction(actionKey);
   }
+
+  // async signTransaction(req: any) {
+  //   log("Signing transaction request for %O", req);
+  //   const { actionKey } = req.params;
+
+  //   const pendingTransactionAction = this.actionManager.getAction<ActionSignTransaction>(actionKey);
+  //   if (!pendingTransactionAction) {
+  //     log("Unable to find sign transaction actions: %O", actionKey);
+  //     return;
+  //   }
+
+  //   if (!this.store.wallet) {
+  //     log("Unable sign transaction with out a wallet for actionKey %O", actionKey);
+  //     return;
+  //   }
+  //   const wallet = this.store.wallet;
+
+  //   const m = new Buffer(bs58.decode(pendingTransactionAction.message));
+
+  //   const signatureResults: SignatureResult[] = [];
+  //   pendingTransactionAction.signers.forEach((signerKey) => {
+  //     log("Search for signer account: %s", signerKey);
+  //     const account = wallet.findAccount(signerKey);
+  //     if (!account) {
+  //       throw new Error("no account found for signer key: " + signerKey);
+  //     }
+  //     const signature = nacl.sign.detached(m, account.secretKey);
+  //     invariant(signature.length === 64);
+  //     signatureResults.push({ publicKey: signerKey, signature: bs58.encode(signature) });
+  //   });
+
+  //   pendingTransactionAction.resolve({ signatureResults: signatureResults });
+  //   this.actionManager.deleteAction(actionKey);
+  // }
 
   async signTransaction(req: any) {
     log("Signing transaction request for %O", req);
     const { actionKey } = req.params;
 
-    const pendingTransactionAction = this.actionManager.getAction<ActionSignTransaction>(actionKey);
+    const pendingTransactionAction = this.actionManager.getAction<IncognitoSignTransaction>(actionKey);
     if (!pendingTransactionAction) {
-      log("Unable to find sign transaction actions: %O", actionKey);
+      console.log("Unable to find sign transaction actions: %O", actionKey);
       return;
     }
 
@@ -471,37 +506,30 @@ export class PopupController {
       log("Unable sign transaction with out a wallet for actionKey %O", actionKey);
       return;
     }
-    const wallet = this.store.wallet;
 
-    const m = new Buffer(bs58.decode(pendingTransactionAction.message));
+    // TO DO ...create tx, wait...
 
-    const signatureResults: SignatureResult[] = [];
-    pendingTransactionAction.signers.forEach((signerKey) => {
-      log("Search for signer account: %s", signerKey);
-      const account = wallet.findAccount(signerKey);
-      if (!account) {
-        throw new Error("no account found for signer key: " + signerKey);
-      }
-      const signature = nacl.sign.detached(m, account.secretKey);
-      invariant(signature.length === 64);
-      signatureResults.push({ publicKey: signerKey, signature: bs58.encode(signature) });
-    });
-
-    pendingTransactionAction.resolve({ signatureResults: signatureResults });
+    // return result to webapp
+    let isSuccess = true;
+    if (isSuccess) {
+      pendingTransactionAction.resolve({ data: "ABC" });
+    } else {
+      pendingTransactionAction.reject(new Error("Create Transaction failed"));
+    }
     this.actionManager.deleteAction(actionKey);
   }
 
   async declineTransaction(req: any) {
-    log("Declining transaction request for %O", req);
+    console.log("Declining transaction request for %O", req);
     const { actionKey } = req.params;
 
-    const pendingTransactionAction = this.actionManager.getAction<ActionSignTransaction>(actionKey);
+    const pendingTransactionAction = this.actionManager.getAction<IncognitoSignTransaction>(actionKey);
     if (!pendingTransactionAction) {
       log("Unable to find sign transaction actions: %O", actionKey);
       return;
     }
 
-    pendingTransactionAction.reject("Transaction declined");
+    pendingTransactionAction.reject(new Error("Transaction declined"));
     this.actionManager.deleteAction(actionKey);
   }
 

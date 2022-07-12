@@ -40,6 +40,10 @@ export type SignTransactionResp = {
   signatureResults: SignatureResult[];
 };
 
+export type IncognitoSignTransactionResponse = {
+  data: any;
+};
+
 export type Network = {
   title: string;
   cluster: Cluster | string;
@@ -89,7 +93,7 @@ export type ActionKey = {
 };
 
 export type OrderedAction = { key: ActionKey; action: Action };
-export type Action = ActionSignTransaction | ActionRequestAccounts;
+export type Action = ActionSignTransaction | ActionRequestAccounts | IncognitoSignTransaction;
 
 export type ActionRequestAccounts = BaseAction<RequestAccountsResp> & {
   type: "request_accounts";
@@ -107,9 +111,14 @@ export type ActionSignTransaction = BaseAction<SignTransactionResp> & {
   tabId: string;
 };
 
+export type IncognitoSignTransaction = BaseAction<any> & {
+  type: "sign_transaction";
+  tabId: string;
+};
+
 export type BaseAction<T> = {
   resolve: (resp: T) => void;
-  reject: any;
+  reject: (error: Error) => void;
 };
 export type WallActions = "wallet_signTransaction" | "wallet_requestAccounts" | "wallet_getCluster" | "wallet_getState";
 

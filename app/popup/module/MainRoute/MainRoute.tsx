@@ -14,6 +14,7 @@ import { Redirect, Route, RouteComponentProps, Switch } from "react-router-dom";
 import styled from "styled-components";
 import { IRouteProps } from "..";
 import { route as AssetsRoute } from "@module/Assets/Assets.route";
+import { route as SignTransactionRoute } from "@module/SignTransaction/SignTransaction.route";
 import { useModal } from "@module/Modal";
 import { useSelector } from "react-redux";
 import { isFirstTimeScanCoinsSelector, isShowConfirmScanCoins } from "@redux/scanCoins";
@@ -32,6 +33,7 @@ const Styled = styled.div`
 const defaultRoute = (key: string, props: RouteProps, popupState: PopupState, isNotification: boolean) => {
   const rest = Object.assign({}, props);
   delete rest.component;
+  // console.log("popupState.walletState ", popupState.walletState);
   return (
     <Route
       key={key}
@@ -42,13 +44,21 @@ const defaultRoute = (key: string, props: RouteProps, popupState: PopupState, is
             return <Redirect to={{ pathname: Paths.unlockPage }} />;
           case "uninitialized":
             return <Redirect to={{ pathname: Paths.getStatedPage }} />;
-          case "unlocked":
+          case "unlocked": {
+            const actionObj = popupState.actions && popupState.actions[0];
+            if (isNotification) {
+              if (actionObj.action.type === "sign_transaction") {
+                return <Redirect to={{ pathname: SignTransactionRoute }} />;
+              }
+            }
             return <Redirect to={{ pathname: AssetsRoute }} />;
+          }
         }
       }}
     />
   );
 };
+
 const MainRoute = () => {
   const { popupState, isNotification } = useBackground();
   const [routes, setRoutes] = React.useState<Array<IRouteProps>>([]);
