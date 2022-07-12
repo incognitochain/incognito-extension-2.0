@@ -306,13 +306,13 @@ export default class IncognitoController {
   }
 
   updateBadge = () => {
-    let label = "";
-    const actionCount = this.actionManager.getCount();
-    if (actionCount) {
-      label = String(actionCount);
-    }
-    chrome.browserAction.setBadgeText({ text: label });
-    chrome.browserAction.setBadgeBackgroundColor({ color: "#037DD6" });
+    // let label = "";
+    // const actionCount = this.actionManager.getCount();
+    // if (actionCount) {
+    //   label = String(actionCount);
+    // }
+    // chrome.browserAction.setBadgeText({ text: label });
+    // chrome.browserAction.setBadgeBackgroundColor({ color: "#037DD6" });
   };
 
   clearScanCoins() {
