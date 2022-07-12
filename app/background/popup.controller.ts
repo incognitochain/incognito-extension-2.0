@@ -120,16 +120,10 @@ export class PopupController {
             try {
               await this.scanCoinHandler({ isClear: true });
               await this.createAccount(req.params);
-              const paymentAddress = await getCurrentPaymentAddress(store.getState() as never);
-              // const totalShield = await sharedSelectors.followTokensUSDAmountSelector(store.getState());
+              const accountDefault = await getFollowTokensBalance();
               this._notifyAll({
                 type: "accountsChanged",
-                data: [
-                  {
-                    paymentAddress,
-                    balance: Math.random(),
-                  },
-                ],
+                data: accountDefault ? [accountDefault] : [],
               });
             } catch (err) {
               log("error: popup_createAccount failed  with error: %s", err);
@@ -142,18 +136,10 @@ export class PopupController {
           {
             try {
               await this.switchAccount(req.params);
-              const paymentAddress = await getCurrentPaymentAddress(store.getState() as never);
-              // const totalShield = await sharedSelectors.followTokensUSDAmountSelector(store.getState());
-
+              const accountDefault = await getFollowTokensBalance();
               this._notifyAll({
                 type: "accountsChanged",
-                data: [
-                  {
-                    paymentAddress,
-                    // balance: totalShield,
-                    balance: Math.random(),
-                  },
-                ],
+                data: accountDefault ? [accountDefault] : [],
               });
             } catch (err) {
               log("error: popup_switchAccount failed  with error: %s", err);

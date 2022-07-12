@@ -19,7 +19,8 @@ export const DEFAULT_NETWORK: Network = {
 
 export type AccountInfo = {
   paymentAddress: string;
-  balance: number;
+  keyDefine: string;
+  balances: any[];
 };
 
 export const AVAILABLE_NETWORKS: Network[] = [
