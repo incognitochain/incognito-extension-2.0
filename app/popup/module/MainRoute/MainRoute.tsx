@@ -21,6 +21,8 @@ import { isFirstTimeScanCoinsSelector, isShowConfirmScanCoins } from "@redux/sca
 import BoxScanCoin from "@components/BoxScanCoin";
 import { Loading } from "@popup/context/loading";
 import throttle from "lodash/throttle";
+import { route as SendRoute } from "@module/Send";
+import { PRV_ID } from "@constants/common";
 
 const context = require.context("@popup/module", true, /\.route.tsx?/);
 
@@ -48,7 +50,7 @@ const defaultRoute = (key: string, props: RouteProps, popupState: PopupState, is
             const actionObj = popupState.actions && popupState.actions[0];
             if (isNotification) {
               if (actionObj.action.type === "sign_transaction") {
-                return <Redirect to={{ pathname: SignTransactionRoute }} />;
+                return <Redirect to={{ pathname: SendRoute }} />;
               }
             }
             return <Redirect to={{ pathname: AssetsRoute }} />;

@@ -14,6 +14,7 @@ import { useLoading } from "@popup/context/loading";
 import { useHistory } from "react-router-dom";
 import { route as routeAddressBook } from "@module/Account/features/AddressBook";
 import { route as routeTokenDetail } from "@module/TokenDetail";
+import enhanceUnshield from "@module/Send/Send.enhanceUnshield";
 
 export interface IMergeProps extends InjectedFormProps<any, any>, TInnerInit, TInnerAmount, TInnerAddress, TInnerSend {
   onClickMax: () => any;
@@ -61,8 +62,9 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergePro
       showLoading({ value: true });
       if (isSend) {
         await handleSendAnonymously();
+      } else {
+        await handleUnShieldCrypto();
       }
-      await handleUnShieldCrypto();
     } catch (error) {
       // Handle error
     } finally {
@@ -95,5 +97,6 @@ export default compose<IMergeProps, any>(
   withValAmount,
   withFee,
   withSend,
+  enhanceUnshield,
   enhance,
 );

@@ -42,7 +42,7 @@ const ActionsGroup = React.memo(() => {
   };
 
   const navigateSendRoute = () => {
-    history.push(`${SendRoute}/${tokenID}`);
+    history.push(`${SendRoute}`);
     batch(() => {
       dispatch(actionFreeData());
       dispatch(reset(FORM_CONFIGS.formName));

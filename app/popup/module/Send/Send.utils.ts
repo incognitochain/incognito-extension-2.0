@@ -8,6 +8,7 @@ import convert from "@utils/convert";
 import format from "@utils/format";
 import isEmpty from "lodash/isEmpty";
 const { isPaymentAddress } = require("incognito-chain-web-js/build/web/wallet");
+const log = require("debug")("incognito:SendUntil");
 
 interface IValidSend {
   sendTokenID: string;
@@ -36,7 +37,7 @@ const getValidSendAmount = ({
 
   let minAmount: number = new BigNumber(sendTokenID === networkFeeTokenID ? 1 + networkFee : 1).toNumber();
 
-  if (screen === TypeSend.UNSHIELD) {
+  if (screen === TypeSend.CONFIRM_UNSHIELD) {
     maxAmount = new BigNumber(maxAmount).minus(sendTokenID === burnFeeTokenID ? burnFee : 0).toNumber();
     minAmount = new BigNumber(minAmount).plus(sendTokenID === burnFeeTokenID ? burnFee : 0).toNumber();
   }
@@ -79,7 +80,6 @@ const getSendData = ({
 }): ISendData => {
   // Send Selector
   const _sendSelector = send;
-
   // Send Token
   const { amount: tokenAmount, pDecimals: tokenPDecimals, tokenId: tokenID, symbol: tokenSymbol } = selectedPrivacy;
 
@@ -90,8 +90,18 @@ const getSendData = ({
 
   // Burn Token Fee
   // Ignore case send internal
+  let burnFeeSymbol = "";
+  const burnFeeAmount = _sendSelector.burnFee || 0;
   const burnFeeToken = getDataByTokenID(_sendSelector.burnFeeToken);
-  const burnFeeAmount = _sendSelector.burnFee;
+  const burnFeeText = format.formatAmount({
+    originalAmount: burnFeeAmount,
+    decimals: networkFeeToken.pDecimals,
+    clipAmount: false,
+  });
+  if (burnFeeToken && burnFeeToken.symbol) {
+    burnFeeSymbol = burnFeeToken.symbol;
+  }
+
   // const { amount: burnUserBalance } = burnFeeToken;
 
   // Form Selector
@@ -108,7 +118,7 @@ const getSendData = ({
     networkFee: networkFeeAmount,
     networkFeeTokenID: networkFeeToken.tokenId,
 
-    burnFee: burnFeeAmount,
+    burnFee: new BigNumber(burnFeeAmount).toNumber(),
     burnFeeTokenID: burnFeeToken.tokenId,
     screen,
   });
@@ -154,7 +164,7 @@ const getSendData = ({
     !inputOriginalAmount ||
     !networkFeeAmount ||
     !enoughNetworkFee ||
-    (!isSend && !!burnFeeAmount) ||
+    (!isSend && !burnFeeAmount) ||
     (isSend && isExternalAddress) ||
     (!isSend && isIncognitoAddress);
 
@@ -186,6 +196,20 @@ const getSendData = ({
     minAmount,
     minAmountText,
     accountBalanceStr,
+
+    burnFee: String(burnFeeAmount),
+    burnFeeText,
+    burnFeeToken,
+    burnFeeSymbol,
+    isUnified: _sendSelector.isUnified,
+    burnFeeID: _sendSelector.burnFeeID,
+
+    receiverTokenID: _sendSelector.receiverTokenID,
+    receiverAddress: _sendSelector.receiverAddress,
+    feeAddress: _sendSelector.feeAddress,
+
+    estimatedBurnAmount: _sendSelector.estimatedBurnAmount,
+    estimatedExpectedAmount: _sendSelector.estimatedExpectedAmount,
   };
 };
 

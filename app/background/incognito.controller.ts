@@ -35,7 +35,7 @@ import { actionUpdateNetwork } from "@popup/configs";
 const createEngineStream = require("json-rpc-middleware-stream/engineStream");
 const PortStream = require("extension-port-stream");
 const RpcEngine = require("json-rpc-engine");
-const log = createLogger("sol:ctr");
+const log = createLogger("incognito:ctr");
 
 let scanCoinInterval: any;
 

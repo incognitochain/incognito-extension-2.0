@@ -4,7 +4,7 @@ import SelectedPrivacy from "@model/SelectedPrivacyModel";
 
 export enum TypeSend {
   SEND = "SEND",
-  UNSHIELD = "UNSHIELD",
+  CONFIRM_UNSHIELD = "CONFIRM_UNSHIELD",
 }
 
 export interface ISendData {
@@ -33,14 +33,23 @@ export interface ISendData {
   isMainCrypto: boolean;
   networkFeeToken: SelectedPrivacy;
   accountBalanceStr: string;
+
+  burnFee: string;
+  burnFeeText: string;
+  burnFeeToken: SelectedPrivacy;
+  burnFeeSymbol: string;
+
+  isUnified: boolean;
+  burnFeeID: string;
+  receiverTokenID: string;
+  receiverAddress: string;
+  feeAddress: string;
+
+  estimatedBurnAmount: number;
+  estimatedExpectedAmount: number;
 }
 
-export interface ISendState {
-  isFetching: boolean;
-
-  init: boolean;
-  screen: TypeSend;
-
+export interface IUnshield {
   // Native Token -> PRV
   networkFee: number;
   networkFeeToken: string;
@@ -48,6 +57,28 @@ export interface ISendState {
   // Token | PRV
   burnFee: number;
   burnFeeToken: string;
+
+  isUnified: boolean;
+
+  burnFeeID: string;
+
+  burnAmount: string;
+  burnToken: string;
+
+  receiverAddress: string;
+  feeAddress: string;
+
+  receiverTokenID: string;
+
+  estimatedBurnAmount: number;
+  estimatedExpectedAmount: number;
+  screen: TypeSend;
+}
+
+export interface ISendState extends IUnshield {
+  isFetching: boolean;
+
+  init: boolean;
 }
 
 //----------------------------------------------
@@ -75,6 +106,8 @@ export interface SendSetBurnFeePayload {
 export interface SendSetInitFormPayload {
   init: boolean;
 }
+
+export interface SendSetUnshieldPayload extends IUnshield {}
 
 //----------------------------------------------
 // Action Definition here!
@@ -107,6 +140,11 @@ export interface SendFreeDataAction extends Action {
   type: SendActionTypes.FREE_DATA;
 }
 
+export interface SendSetUnshieldAction extends Action {
+  type: SendActionTypes.UNSHIELD;
+  payload: SendSetUnshieldPayload;
+}
+
 //-----------------------------------
 export type SendActions =
   | SendFetchingAction
@@ -114,4 +152,5 @@ export type SendActions =
   | SendSetNetworkFeeAction
   | SendSetBurnFeeAction
   | SendSetInitFormAction
-  | SendFreeDataAction;
+  | SendFreeDataAction
+  | SendSetUnshieldAction;

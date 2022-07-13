@@ -41,7 +41,18 @@ import { actionFreeScanCoins } from "@redux/scanCoins";
 import { batch } from "react-redux";
 import { accountSelector } from "../redux/account/account.selectors";
 import sharedSelectors from "@redux/shared/shared.selectors";
-const { setShardNumber } = require("incognito-chain-web-js/build/web/wallet");
+const {
+  setShardNumber,
+  Validator,
+  PrivacyVersion,
+  ACCOUNT_CONSTANT,
+  BurningFantomRequestMeta,
+  BurningPBSCRequestMeta,
+  BurningPLGRequestMeta,
+  BurningPRVBEP20RequestMeta,
+  BurningPRVERC20RequestMeta,
+  BurningRequestMeta,
+} = require("incognito-chain-web-js/build/web/wallet");
 const log = createLogger("incognito:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
 export interface PopupControllerOpt {
@@ -492,13 +503,99 @@ export class PopupController {
       log("Unable sign transaction with out a wallet for actionKey %O", actionKey);
       return;
     }
+    let tx: any;
+    try {
+      const {
+        networkFee,
 
-    // TO DO ...create tx, wait...
+        isUnshield,
+        isUnified,
 
-    // return result to webapp
-    let isSuccess = true;
-    if (isSuccess) {
-      pendingTransactionAction.resolve({ data: "ABC" });
+        burnFee,
+        burnFeeToken,
+        burnFeeID,
+
+        burnAmount,
+        burnToken,
+
+        receiverAddress,
+        feeAddress,
+
+        receiverTokenID,
+
+        estimatedBurnAmount, // estimate fee unified
+        estimatedExpectedAmount, // estimate fee unified
+      } = req.params;
+
+      const accountSender = defaultAccountWalletSelector(store.getState());
+      new Validator("signTransaction-networkFee", networkFee).amount();
+      new Validator("signTransaction-isUnified", isUnified).boolean();
+
+      let tokenPayments: any = [];
+      let prvPayments: any = [];
+      if (isUnshield) {
+        new Validator("signTransaction-burnAmount", burnAmount).required().amount();
+        new Validator("signTransaction-burnToken", burnToken).required().string();
+        new Validator("signTransaction-burnFee", burnFee).required().amount();
+        new Validator("signTransaction-burnFeeToken", burnFeeToken).required().string();
+        new Validator("signTransaction-receiverAddress", receiverAddress).required().string();
+        new Validator("signTransaction-feeAddress", feeAddress).required().string();
+        new Validator("signTransaction-receiverTokenID", receiverTokenID).required().string();
+        new Validator("signTransaction-burnFeeID", burnFeeID).required().string();
+        const isUseTokenFee = burnFeeToken === burnToken;
+        const paymentInfo = [
+          {
+            paymentAddress: feeAddress,
+            amount: burnFee,
+          },
+        ];
+        if (isUseTokenFee) {
+          tokenPayments = paymentInfo;
+        } else {
+          prvPayments = paymentInfo;
+        }
+        if (isUnified) {
+          new Validator("signTransaction-receiverTokenID", receiverTokenID).required().string();
+          new Validator("signTransaction-estimatedBurnAmount", estimatedBurnAmount).required().number();
+          new Validator("signTransaction-estimatedExpectedAmount", estimatedExpectedAmount).required().number();
+          const burningInfos = [
+            {
+              incTokenID: receiverTokenID,
+              burningAmount: estimatedBurnAmount,
+              expectedAmount: estimatedExpectedAmount,
+              remoteAddress: receiverAddress,
+            },
+          ];
+          tx = await accountService.createAndSendBurnUnifiedTokenRequestTx({
+            accountSender,
+            prvPayments,
+            tokenPayments,
+            burningInfos,
+            fee: networkFee,
+            info: String(burnFeeID),
+            version: PrivacyVersion.ver3,
+            tokenId: burnToken,
+          });
+        } else {
+          tx = await accountService.createBurningRequest({
+            accountSender,
+            fee: networkFee,
+            prvPayments,
+            tokenPayments,
+            info: String(burnFeeID),
+            tokenId: burnToken,
+            version: PrivacyVersion.ver3,
+            remoteAddress: receiverAddress,
+            burningType: BurningRequestMeta,
+          });
+        }
+      }
+    } catch (error) {
+      pendingTransactionAction.reject(error);
+    }
+
+    if (tx && tx.hash) {
+      pendingTransactionAction.resolve({ data: tx.hash });
     } else {
       pendingTransactionAction.reject(new Error("Create Transaction failed"));
     }

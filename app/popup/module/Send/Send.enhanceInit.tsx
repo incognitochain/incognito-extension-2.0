@@ -21,7 +21,9 @@ const enhanceInit = (WrappedComp: React.FunctionComponent) => (props: any) => {
     } catch (error) {
       console.log("INIT DATA ERROR: ", error);
     } finally {
-      setInit(true);
+      setTimeout(() => {
+        setInit(true);
+      }, 200);
     }
   }, []);
 

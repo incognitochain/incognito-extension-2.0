@@ -17,6 +17,11 @@ import { getCurrentPaymentAddress } from "@redux/account/account.selectors";
 import { dispatch, store as storeRedux } from "@redux/store/store";
 import { RootState } from "../redux/reducers/index";
 import { getFollowTokensBalance } from "./worker.scanCoins";
+import { actionSetUnshieldData, FORM_CONFIGS, TypeSend } from "@module/Send";
+import { actionSelectedPrivacySet } from "@redux/selectedPrivacy";
+import { change } from "redux-form";
+import { getPTokenList } from "@redux/token";
+import { batch } from "react-redux";
 
 const log = createLogger("incognito:walletCtr");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -74,11 +79,11 @@ export class WalletController {
         //   break;
         case "wallet_signTransaction":
           try {
-            console.log("[wallet_signTransaction] resquest: ", req);
+            log("[wallet_signTransaction] resquest: ", req);
             let resp = await this._handleSignTransaction(req);
             res.result = resp;
           } catch (err) {
-            log("error: wallet_signTransaction failed  with error: %s", err);
+            log("error: wallet_signTransaction failed  with error: %s", JSON.stringify(err));
             res.error = err;
           }
           break;
@@ -224,9 +229,21 @@ export class WalletController {
 
   _handleSignTransaction = async (req: any): Promise<IncognitoSignTransactionResponse | void> => {
     const { tabId, origin } = req;
-    // const { promptAuthorization } = req.params;
-    if (this.store.getWalletState() === "unlocked") {
-      console.log("[_handleSignTransaction] TO DO");
+    if (this.store.getWalletState() === "unlocked" && req.params) {
+      const params = req.params;
+      const { isUnshield, receiverAddress, burnAmountText } = params;
+      batch(() => {
+        dispatch(getPTokenList());
+        dispatch(actionSelectedPrivacySet({ tokenID: params.burnToken }));
+        dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, receiverAddress));
+        dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.amount, burnAmountText));
+        dispatch(
+          actionSetUnshieldData({
+            ...params,
+            screen: isUnshield ? TypeSend.CONFIRM_UNSHIELD : TypeSend.SEND,
+          }),
+        );
+      });
     }
 
     this._showPopup();

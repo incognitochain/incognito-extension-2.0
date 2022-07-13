@@ -197,6 +197,41 @@ export default class Account {
     });
     return result;
   }
+
+  static async createAndSendBurnUnifiedTokenRequestTx({
+    accountSender,
+    fee,
+    tokenId,
+    burningInfos,
+    prvPayments,
+    tokenPayments,
+    info,
+    txHashHandler,
+    version,
+  }: any = {}) {
+    new Validator("createBurningRequestForUnifiedToken-accountSender", accountSender).required();
+    new Validator("createBurningRequestForUnifiedToken-fee", fee).required().amount();
+    new Validator("createBurningRequestForUnifiedToken-tokenId", tokenId).required().string();
+    new Validator("createBurningRequestForUnifiedToken-prvPayments", prvPayments).required().array();
+    new Validator("createBurningRequestForUnifiedToken-tokenPayments", tokenPayments).required().array();
+    new Validator("createBurningRequestForUnifiedToken-info", info).string();
+    new Validator("createBurningRequestForUnifiedToken-burningInfos", burningInfos).required().array();
+    return accountSender.createAndSendBurnUnifiedTokenRequestTx({
+      transfer: {
+        fee,
+        tokenID: tokenId,
+        prvPayments,
+        tokenPayments,
+        info,
+      },
+      extra: {
+        burningInfos,
+        txHashHandler,
+        version,
+      },
+    });
+  }
+
   static async createAndSendTradeRequestTx({
     account,
     wallet,
@@ -823,8 +858,7 @@ export default class Account {
   }
 
   static async createBurningRequest({
-    wallet,
-    account,
+    accountSender,
     fee,
     tokenId,
     burnAmount,
@@ -836,19 +870,17 @@ export default class Account {
     burningType,
     version = PrivacyVersion.ver2,
   }: any = {}) {
-    new Validator("account", account).required();
-    new Validator("wallet", wallet).required();
-    new Validator("fee", fee).required().amount();
-    new Validator("tokenId", tokenId).required().string();
-    new Validator("burnAmount", burnAmount).required().amount();
-    new Validator("prvPayments", prvPayments).required().array();
-    new Validator("tokenPayments", tokenPayments).required().array();
-    new Validator("remoteAddress", remoteAddress).required().string();
-    new Validator("info", info).string();
-    new Validator("burningType", burningType).required().number();
+    new Validator("createBurningRequest-accountSender", accountSender).required();
+    new Validator("createBurningRequest-fee", fee).required().amount();
+    new Validator("createBurningRequest-tokenId", tokenId).required().string();
+    new Validator("createBurningRequest-burnAmount", burnAmount).required().amount();
+    new Validator("createBurningRequest-prvPayments", prvPayments).required().array();
+    new Validator("createBurningRequest-tokenPayments", tokenPayments).required().array();
+    new Validator("createBurningRequest-remoteAddress", remoteAddress).required().string();
+    new Validator("createBurningRequest-info", info).string();
+    new Validator("createBurningRequest-burningType", burningType).required().number();
 
-    const accountWallet = getAccountWallet(account, wallet);
-    return accountWallet.createAndSendBurningRequestTx({
+    return accountSender.createAndSendBurningRequestTx({
       transfer: {
         fee,
         tokenID: tokenId,

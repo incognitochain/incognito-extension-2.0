@@ -9,6 +9,8 @@ import {
   SendSetInitFormPayload,
   SendSetNetworkFeeAction,
   SendSetNetworkFeePayload,
+  SendSetUnshieldAction,
+  SendSetUnshieldPayload,
 } from "@module/Send";
 import { AppThunkDispatch } from "@redux/store";
 import { RootState } from "@redux/reducers";
@@ -62,4 +64,9 @@ const actionFreeData = (): SendFreeDataAction => ({
   type: SendActionTypes.FREE_DATA,
 });
 
-export { actionFetching, actionSetBurnFee, actionFetchFee, actionFreeData };
+const actionSetUnshieldData = (payload: SendSetUnshieldPayload): SendSetUnshieldAction => ({
+  type: SendActionTypes.UNSHIELD,
+  payload,
+});
+
+export { actionFetching, actionSetBurnFee, actionFetchFee, actionFreeData, actionSetUnshieldData };

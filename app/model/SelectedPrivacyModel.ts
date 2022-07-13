@@ -194,9 +194,6 @@ class SelectedPrivacy {
     this.isCentralized = this.isToken && !this.isDecentralized;
     this.incognitoTotalSupply = (this.isIncognitoToken && Number(pTokenData?.totalSupply)) || 0;
     this.isVerified = combineData.call(this, pTokenData?.verified, !isUnknown); // PRV always is verified
-    if (tokenId === "4946b16a08a9d4afbdf416edf52ef15073db0fc4a63e78eb9de80f94f6c0852a") {
-      console.log("SANG TEST: ", pTokenData, pTokenData?.verified, this.isVerified);
-    }
     this.priceUsd = pTokenData?.priceUsd || 0;
     this.externalPriceUSD = pTokenData?.externalPriceUSD || 0;
     this.pricePrv = pTokenData?.pricePrv || 0;

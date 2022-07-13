@@ -1,18 +1,28 @@
 import { Reducer } from "redux";
 import { ISendState, TypeSend, SendActions } from "@module/Send/Send.types";
 import { SendActionTypes } from "@module/Send/Send.constant";
+const { PRVIDSTR, ACCOUNT_CONSTANT } = require("incognito-chain-web-js/build/web/wallet");
 
 const _initialState: ISendState = {
-  isFetching: false,
-
-  init: false,
+  init: true,
   screen: TypeSend.SEND,
 
-  networkFee: 0,
-  networkFeeToken: "",
+  networkFee: ACCOUNT_CONSTANT.MAX_FEE_PER_TX,
+  networkFeeToken: PRVIDSTR,
 
   burnFee: 0,
   burnFeeToken: "",
+
+  burnAmount: "0",
+  burnFeeID: "",
+  burnToken: "",
+  estimatedBurnAmount: 0,
+  estimatedExpectedAmount: 0,
+  feeAddress: "",
+  isUnified: false,
+  receiverAddress: "",
+  receiverTokenID: "",
+  isFetching: false,
 };
 
 export const initialState: ISendState = { ..._initialState };
@@ -53,6 +63,13 @@ const reducer: Reducer<ISendState, SendActions> = (state = initialState, action:
       return {
         ...state,
         init,
+      };
+    }
+    case SendActionTypes.UNSHIELD: {
+      const payload = action.payload;
+      return {
+        ...state,
+        ...payload,
       };
     }
     case SendActionTypes.FREE_DATA: {
