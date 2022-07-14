@@ -47,6 +47,8 @@ export interface ISendData {
 
   estimatedBurnAmount: number;
   estimatedExpectedAmount: number;
+
+  buyToken: SelectedPrivacy;
 }
 
 export interface IUnshield {

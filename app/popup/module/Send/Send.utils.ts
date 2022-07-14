@@ -168,6 +168,7 @@ const getSendData = ({
     (isSend && isExternalAddress) ||
     (!isSend && isIncognitoAddress);
 
+  const buyToken = getDataByTokenID(_sendSelector.receiverTokenID);
   return {
     maxAmount,
     maxAmountText,
@@ -210,6 +211,8 @@ const getSendData = ({
 
     estimatedBurnAmount: _sendSelector.estimatedBurnAmount,
     estimatedExpectedAmount: _sendSelector.estimatedExpectedAmount,
+
+    buyToken,
   };
 };
 

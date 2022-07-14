@@ -1,1 +1,1 @@
-export { default as rpcClient } from './rpcClient';
+export { default as rpcClient } from "./rpcSubmit";

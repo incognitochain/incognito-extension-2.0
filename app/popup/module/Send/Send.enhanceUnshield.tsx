@@ -46,6 +46,7 @@ const enhanceUnshield = (WrappedComponent: React.FunctionComponent) => (props: a
 
     estimatedBurnAmount,
     estimatedExpectedAmount,
+    buyToken,
   } = useSelector(sendDataSelector);
   const { showLoading } = useLoading();
   const { popupState, request } = useBackground();
@@ -60,24 +61,15 @@ const enhanceUnshield = (WrappedComponent: React.FunctionComponent) => (props: a
       showLoading({ value: true });
       let network = "";
       let burningRequestMeta = BurningRequestMeta;
-      if (selectedPrivacy.isErc20Token || selectedPrivacy.isETH) {
+      if (buyToken.isErc20Token || buyToken.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.ETH) {
         network = "eth";
-      } else if (
-        selectedPrivacy.isPolygonErc20Token ||
-        selectedPrivacy.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.MATIC
-      ) {
+      } else if (buyToken.isPolygonErc20Token || buyToken.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.MATIC) {
         network = "plg";
         burningRequestMeta = BurningPLGRequestMeta;
-      } else if (
-        selectedPrivacy.isFantomErc20Token ||
-        selectedPrivacy.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.FTM
-      ) {
+      } else if (buyToken.isFantomErc20Token || buyToken.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.FTM) {
         network = "ftm";
         burningRequestMeta = BurningFantomRequestMeta;
-      } else if (
-        selectedPrivacy.isBep20Token ||
-        selectedPrivacy.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB
-      ) {
+      } else if (buyToken.isBep20Token || buyToken.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB) {
         network = "bsc";
         burningRequestMeta = BurningPBSCRequestMeta;
       }
