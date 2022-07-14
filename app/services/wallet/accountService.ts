@@ -216,6 +216,20 @@ export default class Account {
     new Validator("createBurningRequestForUnifiedToken-tokenPayments", tokenPayments).required().array();
     new Validator("createBurningRequestForUnifiedToken-info", info).string();
     new Validator("createBurningRequestForUnifiedToken-burningInfos", burningInfos).required().array();
+    console.log("BURN DATA ", {
+      transfer: {
+        fee,
+        tokenID: tokenId,
+        prvPayments,
+        tokenPayments,
+        info,
+      },
+      extra: {
+        burningInfos,
+        txHashHandler,
+        version,
+      },
+    });
     return accountSender.createAndSendBurnUnifiedTokenRequestTx({
       transfer: {
         fee,

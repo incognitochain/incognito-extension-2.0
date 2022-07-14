@@ -41,6 +41,7 @@ import { actionFreeScanCoins } from "@redux/scanCoins";
 import { batch } from "react-redux";
 import { accountSelector } from "../redux/account/account.selectors";
 import sharedSelectors from "@redux/shared/shared.selectors";
+import rpcSubmit from "@services/wallet/rpcSubmit";
 const {
   setShardNumber,
   Validator,
@@ -507,7 +508,6 @@ export class PopupController {
     try {
       const {
         networkFee,
-
         isUnshield,
         isUnified,
 
@@ -554,6 +554,25 @@ export class PopupController {
         } else {
           prvPayments = paymentInfo;
         }
+
+        const submitHash = async ({ txId }: { txId: string }) => {
+          try {
+            const payload = {
+              Network: "eth",
+              UserFeeLevel: 1,
+              ID: Number(burnFeeID),
+              IncognitoAmount: burnAmount,
+              IncognitoTx: txId,
+              PaymentAddress: receiverAddress,
+              PrivacyTokenAddress: receiverTokenID,
+              UserFeeSelection: 1,
+              WalletAddress: accountSender.getPaymentAddress(),
+            };
+            await rpcSubmit.submitUnshieldTx(payload);
+          } catch (e) {
+            console.log("SUBMIT HASH ERROR ", e);
+          }
+        };
         if (isUnified) {
           new Validator("signTransaction-receiverTokenID", receiverTokenID).required().string();
           new Validator("signTransaction-estimatedBurnAmount", estimatedBurnAmount).required().number();
@@ -575,6 +594,7 @@ export class PopupController {
             info: String(burnFeeID),
             version: PrivacyVersion.ver3,
             tokenId: burnToken,
+            txHashHandler: submitHash,
           });
         } else {
           tx = await accountService.createBurningRequest({
@@ -587,6 +607,7 @@ export class PopupController {
             version: PrivacyVersion.ver3,
             remoteAddress: receiverAddress,
             burningType: BurningRequestMeta,
+            txHashHandler: submitHash,
           });
         }
       }

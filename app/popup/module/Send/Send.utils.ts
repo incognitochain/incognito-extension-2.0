@@ -35,11 +35,11 @@ const getValidSendAmount = ({
     .minus(sendTokenID === networkFeeTokenID ? networkFee : 0)
     .toNumber();
 
-  let minAmount: number = new BigNumber(sendTokenID === networkFeeTokenID ? 1 + networkFee : 1).toNumber();
-
+  // let minAmount: number = new BigNumber(sendTokenID === networkFeeTokenID ? 1 + networkFee : 1).toNumber();
+  const minAmount = 1;
   if (screen === TypeSend.CONFIRM_UNSHIELD) {
     maxAmount = new BigNumber(maxAmount).minus(sendTokenID === burnFeeTokenID ? burnFee : 0).toNumber();
-    minAmount = new BigNumber(minAmount).plus(sendTokenID === burnFeeTokenID ? burnFee : 0).toNumber();
+    // minAmount = new BigNumber(minAmount).plus(sendTokenID === burnFeeTokenID ? burnFee : 0).toNumber();
   }
   if (maxAmount <= 0) {
     maxAmount = 0;
@@ -129,9 +129,9 @@ const getSendData = ({
     clipAmount: false,
   });
 
-  const headerTitle: string = `${isSend ? "Send" : "Unshield"} ${tokenSymbol}`;
+  const headerTitle: string = `${isSend ? "Send" : "Swap"} ${tokenSymbol}`;
   const showMemo: boolean = isSend || selectedPrivacy.currencyType === 4 || selectedPrivacy.isBep2Token;
-  const btnSubmit: string = isSend ? "Send anonymously" : "Unshield my crypto";
+  const btnSubmit: string = isSend ? "Send anonymously" : "Swap my crypto";
 
   const valid = isValid(FORM_CONFIGS.formName)(state);
   const submitting = isSubmitting(FORM_CONFIGS.formName)(state);

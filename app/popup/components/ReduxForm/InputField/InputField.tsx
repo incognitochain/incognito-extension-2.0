@@ -20,6 +20,8 @@ export interface IInputFieldProps {
   errorCustom?: string;
   leftTitle: string;
   rightTitle?: string;
+  showMax?: boolean;
+  showAddressBook?: boolean;
 }
 
 interface IInputProps {
@@ -57,6 +59,8 @@ const InputField = (props: IInputFieldProps) => {
     errorCustom,
     leftTitle,
     rightTitle,
+    showMax = true,
+    showAddressBook = true,
   } = props;
   const { error: errorMeta, touched, submitting } = meta;
   const error = errorMeta || errorCustom;
@@ -102,20 +106,24 @@ const InputField = (props: IInputFieldProps) => {
     switch (inputType) {
       case INPUT_FIELD.amount:
         return (
-          <div className="input-container input-amount">
+          <div className={`input-container ${showAddressBook ? "input-amount" : ""}`}>
             <Input {...{ input, componentProps }} />
-            <div className="sub-icon">
-              <MaxBtn onClick={onClickMax} />
-            </div>
+            {showMax && (
+              <div className="sub-icon">
+                <MaxBtn onClick={onClickMax} />
+              </div>
+            )}
           </div>
         );
       case INPUT_FIELD.address:
         return (
-          <div className="input-container input-address">
+          <div className={`input-container ${showAddressBook ? "input-address" : ""}`}>
             <Input {...{ input, componentProps }} />
-            <div className="sub-icon">
-              <AddressBookIcon onClick={onClickAddressBook} />
-            </div>
+            {showAddressBook && (
+              <div className="sub-icon">
+                <AddressBookIcon onClick={onClickAddressBook} />
+              </div>
+            )}
             {/*<div className="sub-icon">*/}
             {/*  <ScanIcon onClick={onClickScan} />*/}
             {/*</div>*/}

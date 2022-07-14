@@ -43,11 +43,7 @@ export const Styled = styled.div`
     min-height: 76px;
     position: relative;
   }
-  .input-container > input,
-  .textarea-container > textarea {
-    //position: absolute;
-    //left: 0;
-    //top: 0;
+  .input-container > input {
     width: 100%;
     height: 100%;
     max-height: 32px;
@@ -58,8 +54,10 @@ export const Styled = styled.div`
     }
   }
   .textarea-container > textarea {
-    padding: 10px;
     resize: none;
+    border: none;
+    color: ${({ theme }) => theme.primaryP7};
+    background-color: transparent;
   }
   .input-container > input:read-only {
   }

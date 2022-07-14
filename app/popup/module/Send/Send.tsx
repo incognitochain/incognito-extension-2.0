@@ -12,7 +12,7 @@ const Send = React.memo((props: IMergeProps & any) => {
   const { headerTitle, isSend } = sendData;
   return (
     <>
-      <Header showBack={true} title={headerTitle} onGoBack={onGoBack} />
+      <Header showBack={isSend} title={headerTitle} onGoBack={onGoBack} />
       {isSend ? <SendForm {...props} /> : <ConfirmCreateTx {...props} />}
     </>
   );

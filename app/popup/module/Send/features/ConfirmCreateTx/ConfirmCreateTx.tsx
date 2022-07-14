@@ -49,20 +49,26 @@ const ConfirmCreateTx = React.memo((props: IMergeProps & any) => {
           inputType={INPUT_FIELD.amount}
           componentProps={{
             type: "number",
+            readonly: "readonly",
           }}
           leftTitle="Amount"
           rightTitle={accountBalanceStr}
           onClickMax={onClickMax}
           validate={validateAmount}
+          showMax={false}
         />
         <Field
           component={InputField}
           name={FORM_CONFIGS.toAddress}
-          inputType={INPUT_FIELD.address}
+          inputType={INPUT_FIELD.textArea}
           leftTitle="To"
           validate={validateAddress}
           warning={warningAddress}
           onClickAddressBook={onClickAddressBook}
+          componentProps={{
+            readonly: "readonly",
+          }}
+          showAddressBook={false}
         />
         {renderMemo()}
         <Field
@@ -79,7 +85,7 @@ const ConfirmCreateTx = React.memo((props: IMergeProps & any) => {
         <Field
           component={InputField}
           name={FORM_CONFIGS.burnFee}
-          leftTitle="Unshield Fee"
+          leftTitle="Outchain Fee (Est.)"
           inputType={INPUT_FIELD.leftTitleDisplayPTag}
           componentProps={{
             value: burnFeeSymbol,
