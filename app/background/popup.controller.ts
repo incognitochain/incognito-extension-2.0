@@ -105,7 +105,6 @@ export class PopupController {
               res.error = err;
             }
           }
-
           break;
 
         case "popup_createAccount":
@@ -165,6 +164,11 @@ export class PopupController {
               await this.updateNetworkHandler();
               await this.unlockWallet(req.params);
               await this.scanCoinHandler();
+              const accountDefault = await getFollowTokensBalance();
+              this._notifyAll({
+                type: "accountsChanged",
+                data: accountDefault ? [accountDefault] : [],
+              });
               this._notifyAll({
                 type: "stateChanged",
                 data: { state: "unlocked" },
@@ -182,6 +186,7 @@ export class PopupController {
               // await this.store.lockSecretBox();
               await this.lockWalletAction();
               await this.scanCoinHandler();
+
               this._notifyAll({
                 type: "stateChanged",
                 data: { state: "locked" },
