@@ -1,18 +1,12 @@
 import { Store } from "./store";
 import { createLogger } from "@core/utils";
-import { Buffer } from "buffer";
-import bs58 from "bs58";
-import nacl from "tweetnacl";
-import invariant from "assert";
 import {
   ActionRequestAccounts,
-  ActionSignTransaction,
   AVAILABLE_NETWORKS,
   IncognitoSignTransaction,
   Network,
   Notification,
   PopupActions,
-  SignatureResult,
 } from "@core/types";
 import { Account, Connection, PublicKey, SystemProgram } from "@solana/web3.js";
 import { Web3Connection } from "@core/connection";
@@ -39,21 +33,8 @@ import { clearReduxStore } from "@redux/reducers";
 import { actionFreeAssets } from "@module/Assets";
 import { actionFreeScanCoins } from "@redux/scanCoins";
 import { batch } from "react-redux";
-import { accountSelector } from "../redux/account/account.selectors";
-import sharedSelectors from "@redux/shared/shared.selectors";
 import rpcSubmit from "@services/wallet/rpcSubmit";
-const {
-  setShardNumber,
-  Validator,
-  PrivacyVersion,
-  ACCOUNT_CONSTANT,
-  BurningFantomRequestMeta,
-  BurningPBSCRequestMeta,
-  BurningPLGRequestMeta,
-  BurningPRVBEP20RequestMeta,
-  BurningPRVERC20RequestMeta,
-  BurningRequestMeta,
-} = require("incognito-chain-web-js/build/web/wallet");
+const { setShardNumber, Validator, PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 const log = createLogger("incognito:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
 export interface PopupControllerOpt {
@@ -525,6 +506,8 @@ export class PopupController {
 
         estimatedBurnAmount, // estimate fee unified
         estimatedExpectedAmount, // estimate fee unified
+        network,
+        burningRequestMeta,
       } = req.params;
 
       const accountSender = defaultAccountWalletSelector(store.getState());
@@ -558,7 +541,7 @@ export class PopupController {
         const submitHash = async ({ txId }: { txId: string }) => {
           try {
             const payload = {
-              Network: "eth",
+              Network: network,
               UserFeeLevel: 1,
               ID: Number(burnFeeID),
               IncognitoAmount: burnAmount,
@@ -606,7 +589,7 @@ export class PopupController {
             tokenId: burnToken,
             version: PrivacyVersion.ver3,
             remoteAddress: receiverAddress,
-            burningType: BurningRequestMeta,
+            burningType: burningRequestMeta,
             txHashHandler: submitHash,
           });
         }

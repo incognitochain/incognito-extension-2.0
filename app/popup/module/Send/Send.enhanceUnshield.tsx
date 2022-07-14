@@ -8,8 +8,16 @@ import { useHistory } from "react-router-dom";
 import { useCallAsync } from "@popup/utils/notifications";
 import { useBackground } from "@popup/context/background";
 import { throttle } from "lodash";
+import { common } from "@/constants";
 const { PrivacyVersion, ACCOUNT_CONSTANT } = require("incognito-chain-web-js/build/web/wallet");
-
+const {
+  BurningFantomRequestMeta,
+  BurningPBSCRequestMeta,
+  BurningPLGRequestMeta,
+  BurningPRVBEP20RequestMeta,
+  BurningPRVERC20RequestMeta,
+  BurningRequestMeta,
+} = require("incognito-chain-web-js/build/wallet");
 export interface TInner {
   handleSendAnonymously: () => any;
 }
@@ -50,6 +58,29 @@ const enhanceUnshield = (WrappedComponent: React.FunctionComponent) => (props: a
         return;
       }
       showLoading({ value: true });
+      let network = "";
+      let burningRequestMeta = BurningRequestMeta;
+      if (selectedPrivacy.isErc20Token || selectedPrivacy.isETH) {
+        network = "eth";
+      } else if (
+        selectedPrivacy.isPolygonErc20Token ||
+        selectedPrivacy.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.MATIC
+      ) {
+        network = "plg";
+        burningRequestMeta = BurningPLGRequestMeta;
+      } else if (
+        selectedPrivacy.isFantomErc20Token ||
+        selectedPrivacy.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.FTM
+      ) {
+        network = "ftm";
+        burningRequestMeta = BurningFantomRequestMeta;
+      } else if (
+        selectedPrivacy.isBep20Token ||
+        selectedPrivacy.currencyType === common.PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB
+      ) {
+        network = "bsc";
+        burningRequestMeta = BurningPBSCRequestMeta;
+      }
       await request("popup_authoriseTransaction", {
         actionKey: action?.key,
         networkFee: networkFeeAmount,
@@ -72,6 +103,8 @@ const enhanceUnshield = (WrappedComponent: React.FunctionComponent) => (props: a
 
         estimatedBurnAmount, // estimate fee unified
         estimatedExpectedAmount, // estimate fee unified
+        network,
+        burningRequestMeta,
       });
     } catch (e) {
       showLoading({ value: false });
