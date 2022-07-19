@@ -49,6 +49,13 @@ export class ActionManager extends events.EventEmitter {
     this.emit(EVENT_UPDATE_ACTIONS);
   };
 
+  deleteCurrentAction = () => {
+    this.actions.forEach((action: any, key: any) => {
+      action.reject(new Error("Action Reject"));
+      this.deleteAction(key);
+    });
+  };
+
   getActionsWithOriginAndType = <T extends Action>(origin: string, type: string): Map<ActionKey, T> => {
     log("Getting actions with origin %s and type %s", origin, type);
     const out = new Map<ActionKey, T>();

@@ -141,6 +141,12 @@ function setupController(versionedData: VersionedData) {
 
   chrome.runtime.onConnect.addListener(connectRemote);
   chrome.runtime.onConnectExternal.addListener(connectExternal);
-
+  chrome.runtime.onConnect.addListener(function (port) {
+    if (port.name === "notification") {
+      port.onDisconnect.addListener(function () {
+        incognitoController.actionManager.deleteCurrentAction();
+      });
+    }
+  });
   return Promise.resolve();
 }
