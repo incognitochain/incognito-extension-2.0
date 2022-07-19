@@ -11,6 +11,7 @@ const _initialState: ISendState = {
   networkFeeToken: PRVIDSTR,
 
   burnFee: 0,
+  extraFee: 0,
   burnFeeToken: "",
 
   burnAmount: "0",

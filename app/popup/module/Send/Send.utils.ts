@@ -19,6 +19,7 @@ interface IValidSend {
   burnFee: number;
   burnFeeTokenID: string;
   screen: TypeSend;
+  extraFee?: number;
 }
 
 const getValidSendAmount = ({
@@ -29,10 +30,12 @@ const getValidSendAmount = ({
   networkFeeTokenID,
   burnFee,
   burnFeeTokenID,
+  extraFee,
   screen,
 }: IValidSend) => {
   let maxAmount: number = new BigNumber(sendTokenAmount)
     .minus(sendTokenID === networkFeeTokenID ? networkFee : 0)
+    .minus(extraFee || 0)
     .toNumber();
 
   // let minAmount: number = new BigNumber(sendTokenID === networkFeeTokenID ? 1 + networkFee : 1).toNumber();
@@ -94,7 +97,7 @@ const getSendData = ({
   const burnFeeAmount = _sendSelector.burnFee || 0;
   const burnFeeToken = getDataByTokenID(_sendSelector.burnFeeToken);
   const burnFeeText = format.formatAmount({
-    originalAmount: burnFeeAmount,
+    originalAmount: new BigNumber(burnFeeAmount).plus(_sendSelector.extraFee || 0).toNumber(),
     decimals: networkFeeToken.pDecimals,
     clipAmount: false,
   });
@@ -119,6 +122,7 @@ const getSendData = ({
     networkFeeTokenID: networkFeeToken.tokenId,
 
     burnFee: new BigNumber(burnFeeAmount).toNumber(),
+    extraFee: _sendSelector.extraFee,
     burnFeeTokenID: burnFeeToken.tokenId,
     screen,
   });

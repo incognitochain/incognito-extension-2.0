@@ -58,6 +58,7 @@ export interface IUnshield {
 
   // Token | PRV
   burnFee: number;
+  extraFee: number;
   burnFeeToken: string;
 
   isUnified: boolean;

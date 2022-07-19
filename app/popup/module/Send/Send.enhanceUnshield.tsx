@@ -85,7 +85,7 @@ const enhanceUnshield = (WrappedComponent: React.FunctionComponent) => (props: a
         burnFeeToken: burnFeeToken.tokenId,
         burnFeeID,
 
-        burnAmount: inputOriginalAmount,
+        burnAmount: estimatedBurnAmount || inputOriginalAmount,
         burnToken: selectedPrivacy.tokenId,
 
         receiverAddress,
