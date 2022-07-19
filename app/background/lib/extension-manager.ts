@@ -3,7 +3,7 @@ import { createLogger } from "../../core/utils";
 
 const log = createLogger("incognito:ext");
 
-const NOTIFICATION_HEIGHT = 600;
+const NOTIFICATION_HEIGHT = 618;
 const NOTIFICATION_WIDTH = 375;
 
 export class ExtensionManager {
