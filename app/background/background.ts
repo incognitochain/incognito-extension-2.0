@@ -1,4 +1,4 @@
-import { store, persistor } from "@redux/store/store";
+import { store, persistor, dispatch } from "@redux/store/store";
 import { enableLogger } from "@core/utils";
 import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP, StoredData, VersionedData } from "@core/types";
 import { createLogger, isInternalProcess } from "@core/utils";
@@ -6,6 +6,7 @@ import LocalStore from "./lib/local-store";
 import IncognitoController from "./incognito.controller";
 import { initialState } from "./store";
 import Storage from "@services/storage";
+import { actionFreeData } from "@module/Send";
 const { init } = require("incognito-chain-web-js/build/web/wallet");
 
 window.store = store;
@@ -145,6 +146,7 @@ function setupController(versionedData: VersionedData) {
     if (port.name === "notification") {
       port.onDisconnect.addListener(function () {
         incognitoController.actionManager.deleteCurrentAction();
+        dispatch(actionFreeData());
       });
     }
   });
