@@ -13,7 +13,8 @@ import React, { ReactElement, useCallback, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { CreateNewKeyContext, CreateNewKeyRouteContextType } from "./CreateNewKeyContext";
 import { CreateNewKeyPage } from "./CreateNewKeyPage";
-
+import { getEnvironmentType } from "@popup/context/background";
+import { ENVIRONMENT_TYPE_NOTIFICATION } from "@core/types";
 interface RouteDataProps {
   mnemonic?: string;
   masterKeyName?: string;
@@ -40,11 +41,14 @@ const CreateNewKeyBase: React.FC = () => {
       progress: { message: "Creating wallet..." },
       success: { message: "Wallet created" },
       onSuccess: (result) => {
-        // history.push(Paths.homeRouteStack);
-        showLoading({
-          value: false,
-        });
-        history.push(AssetsRoute);
+        if (getEnvironmentType() === ENVIRONMENT_TYPE_NOTIFICATION) {
+          window.close();
+        } else {
+          showLoading({
+            value: false,
+          });
+          history.push(AssetsRoute);
+        }
       },
     });
   };

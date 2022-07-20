@@ -9,7 +9,8 @@ import React, { useCallback, useState, useLayoutEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { useLoading } from "@popup/context/loading";
 import CircleIcon from "@components/Icons/CircleIcon";
-
+import { getEnvironmentType } from "@popup/context/background";
+import { ENVIRONMENT_TYPE_NOTIFICATION } from "@core/types";
 import {
   CircleIconContainer,
   ForgotYourPasswordStyled,
@@ -41,10 +42,14 @@ export const UnlockPageBase: React.FC = () => {
             progress: { message: "Unlocking wallet..." },
             success: { message: "Wallet unlocked" },
             onSuccess: () => {
-              showLoading({
-                value: false,
-              });
-              history.push(AssetsRoute);
+              if (getEnvironmentType() === ENVIRONMENT_TYPE_NOTIFICATION) {
+                window.close();
+              } else {
+                showLoading({
+                  value: false,
+                });
+                history.push(AssetsRoute);
+              }
             },
           });
         }

@@ -16,7 +16,8 @@ import {
 } from "./RestoreWalletPage.styled";
 import { route as AssetsRoute } from "@module/Assets/Assets.route";
 import Header from "@components/Header";
-
+import { getEnvironmentType } from "@popup/context/background";
+import { ENVIRONMENT_TYPE_NOTIFICATION } from "@core/types";
 const { validateMnemonic } = require("incognito-chain-web-js/build/web/wallet");
 
 let validator = require("password-validator");
@@ -58,11 +59,14 @@ const RestoreWalletPage: React.FC = () => {
       progress: { message: "Restore Wallet..." },
       success: { message: "Restore Done" },
       onSuccess: (result: any) => {
-        // history.push(Paths.homeRouteStack);
-        showLoading({
-          value: false,
-        });
-        history.push(AssetsRoute);
+        if (getEnvironmentType() === ENVIRONMENT_TYPE_NOTIFICATION) {
+          window.close();
+        } else {
+          showLoading({
+            value: false,
+          });
+          history.push(AssetsRoute);
+        }
       },
     });
   };

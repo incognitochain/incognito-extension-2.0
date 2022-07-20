@@ -39,7 +39,7 @@ interface BackgroundContextType {
 
 export const BackgroundContext = createContext<BackgroundContextType | null>(null);
 
-const getEnvironmentType = () => {
+export const getEnvironmentType = () => {
   if (isNotification) {
     return ENVIRONMENT_TYPE_NOTIFICATION;
   } else {

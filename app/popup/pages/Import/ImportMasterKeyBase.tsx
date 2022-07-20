@@ -9,6 +9,9 @@ import { useCallAsync } from "@popup/utils/notifications";
 import React, { ReactElement, useCallback, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { ImportMasterKeyRouteType } from "./ImportMasterKeyContext";
+import { getEnvironmentType } from "@popup/context/background";
+import { ENVIRONMENT_TYPE_NOTIFICATION } from "@core/types";
+
 interface ImportMasterKeyBaseProps {
   mnemonic?: string;
   masterKeyName?: string;
@@ -33,11 +36,14 @@ const ImportMasterKeyBase: React.FC = () => {
       progress: { message: "Import wallet..." },
       success: { message: "Assets Imported" },
       onSuccess: (result: any) => {
-        // history.push(Paths.homeRouteStack);
-        showLoading({
-          value: false,
-        });
-        history.push(AssetsRoute);
+        if (getEnvironmentType() === ENVIRONMENT_TYPE_NOTIFICATION) {
+          window.close();
+        } else {
+          showLoading({
+            value: false,
+          });
+          history.push(AssetsRoute);
+        }
       },
     });
   };
