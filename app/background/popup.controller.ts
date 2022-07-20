@@ -549,7 +549,7 @@ export class PopupController {
               Network: network,
               UserFeeLevel: 1,
               ID: Number(burnFeeID),
-              IncognitoAmount: burnAmount,
+              IncognitoAmount: String(burnAmount),
               IncognitoTx: txId,
               PaymentAddress: receiverAddress,
               PrivacyTokenAddress: receiverTokenID,
@@ -559,6 +559,7 @@ export class PopupController {
             await rpcSubmit.submitUnshieldTx(payload);
           } catch (e) {
             console.log("SUBMIT HASH ERROR ", e);
+            throw e;
           }
         };
         if (isUnified) {
