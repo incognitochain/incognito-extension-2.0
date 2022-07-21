@@ -559,6 +559,8 @@ export class PopupController {
             };
             await rpcSubmit.submitUnshieldTx(payload);
           } catch (e) {
+            pendingTransactionAction.reject(new Error("Create Transaction failed"));
+            this.actionManager.deleteAction(actionKey);
             console.log("SUBMIT HASH ERROR ", e);
             throw e;
           }

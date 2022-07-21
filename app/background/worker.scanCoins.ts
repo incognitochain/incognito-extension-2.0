@@ -54,7 +54,6 @@ export const configAccount = async () => {
 export const scanCoins = async () => {
   const { accountSender, keyDefine } = (await configAccount()) as any;
   const isFetching = isFetchingScanCoinsSelector(store.getState());
-
   // Validate data
   if (!accountSender || isFetching || !keyDefine) return;
 

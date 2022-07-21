@@ -333,6 +333,7 @@ export default class IncognitoController {
     if (popupState && popupState.get().walletState === "unlocked") {
       if (!scanCoinInterval && !showConfirmScanCoins) {
         try {
+          dispatch(actionFetchingScanCoins({ isFetching: false }));
           scanCoins().then();
         } catch (e) {
           console.log("SCAN COINS ERROR: ", e);
