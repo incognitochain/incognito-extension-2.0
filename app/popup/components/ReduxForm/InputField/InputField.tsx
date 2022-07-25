@@ -36,12 +36,12 @@ interface ITextAreaProps {
 
 export const Input = React.memo((props: IInputProps) => {
   const { input: inputProps, componentProps } = props;
-  return <input className="fs-large" type="text" autoComplete="off" {...inputProps} {...componentProps} />;
+  return <input className="h5" type="text" autoComplete="off" {...inputProps} {...componentProps} />;
 });
 
 export const TextArea = React.memo((props: ITextAreaProps) => {
   const { input: inputProps, componentProps } = props;
-  return <textarea className="fs-large" autoComplete="off" {...inputProps} {...componentProps} />;
+  return <textarea className="h5" autoComplete="off" {...inputProps} {...componentProps} />;
 });
 
 const InputField = (props: IInputFieldProps) => {
@@ -133,8 +133,8 @@ const InputField = (props: IInputFieldProps) => {
         const value = componentProps?.value || input?.value || "";
         return (
           <div className="hook-row-space-between wrapper">
-            <p className="fs-large">{subtitle}</p>
-            <p className="fs-large">{value}</p>
+            <p className="h5">{subtitle}</p>
+            <p className="h5">{value}</p>
             {/*<div className="wrap-content">*/}
             {/*  {suffix && <p className="suffix ellipsis">{suffix}</p>}*/}
             {/*</div>*/}

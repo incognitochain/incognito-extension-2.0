@@ -347,6 +347,17 @@ export const ThemedGlobalStyle = createGlobalStyle`
     .no-padding {
       padding: 0px 0px 0px 0px;
     }
+
+    .no-padding {
+      padding: 0px 0px 0px 0px;
+    }
+
+    .h5 {
+      font-weight: 500;
+      font-size: 20px;
+      line-height: 30px;
+      letter-spacing: -0.02em;
+    }
 `;
 
 export const Row = styled.div`
