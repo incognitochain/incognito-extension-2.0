@@ -1,5 +1,4 @@
 import { dispatch, store } from "@redux/store/store";
-import Storage from "@services/storage";
 import { measure } from "@utils/func";
 import { actionFetchingScanCoins, actionFistTimeScanCoins, isFetchingScanCoinsSelector } from "@redux/scanCoins";
 import { createLogger } from "@core/utils";
@@ -13,15 +12,15 @@ import Server, { TESTNET_FULLNODE } from "@services/wallet/Server";
 const { PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 
 const MAINNET_TOKEN: any[] = [
-  "ffd8d42dc40a8d166ea4848baf8b5f6e912ad79875f4373070b59392b1756c8f",
-  "b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696",
-  "b2655152784e8639fa19521a7035f331eea1f1e911b2f3200a507ebb4554387b",
-  "c01e7dc1d1aba995c19b257412340b057f8ad1482ccb6a9bb0adce61afbf05d4",
   "3ee31eba6376fc16cadb52c8765f20b6ebff92c0b1c5ab5fc78c8c25703bb19e", //-> pETH
   "076a4423fa20922526bd50b0d7b0dc1c593ce16e15ba141ede5fb5a28aa3f229", //-> pUSDT
   "545ef6e26d4d428b16117523935b6be85ec0a63e8c2afeb0162315eb0ce3d151", //-> pUSDC
   "0d953a47a7a488cee562e64c80c25d3dbe29d3b477ccd2b54408c0553a93f126", //-> pDAI
   "26df4d1bca9fd1a8871a24b9b84fc97f3dd62ca8809975c6d971d1b79d1d9f31", //-> MATIC
+  "ffd8d42dc40a8d166ea4848baf8b5f6e912ad79875f4373070b59392b1756c8f",
+  "b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696",
+  "b2655152784e8639fa19521a7035f331eea1f1e911b2f3200a507ebb4554387b",
+  "c01e7dc1d1aba995c19b257412340b057f8ad1482ccb6a9bb0adce61afbf05d4",
 ];
 
 const TESTNET_TOKEN: any[] = [

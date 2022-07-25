@@ -1,18 +1,26 @@
 import createAxiosInstance from "@services/wallet/axios";
 import { AxiosInstance } from "axios";
-import { isMainnet } from "@popup/configs";
+import Server from "@services/wallet/Server";
 
 class RpcSubmit {
   http: AxiosInstance;
   constructor() {
-    const url = isMainnet ? "https://api-webapp.incognito.org/" : "https://api-webapp-staging.incognito.org/";
+    const url = "https://api-webapp.incognito.org/";
     this.http = createAxiosInstance({ baseURL: url });
   }
 
-  submitUnshieldTx(payload: any) {
+  async submitUnshieldTx(payload: any) {
+    await changeBaseUrl();
     return this.http.post("submitunshieldtx", payload);
   }
 }
+
+export const changeBaseUrl = async () => {
+  const isMainnet = await Server.isMainnetDefault();
+  rpcSubmit.http.defaults.baseURL = isMainnet
+    ? "https://api-webapp.incognito.org/"
+    : "https://api-webapp-staging.incognito.org/";
+};
 
 const rpcSubmit = new RpcSubmit();
 export default rpcSubmit;

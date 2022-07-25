@@ -516,6 +516,8 @@ export class PopupController {
         burningRequestMeta,
       } = req.params;
 
+      console.log("SANG TEST: ", req.params);
+
       const accountSender = defaultAccountWalletSelector(store.getState());
       new Validator("signTransaction-networkFee", networkFee).amount();
       new Validator("signTransaction-isUnified", isUnified).boolean();
@@ -594,6 +596,7 @@ export class PopupController {
             fee: networkFee,
             prvPayments,
             tokenPayments,
+            burnAmount: burnAmount,
             info: String(burnFeeID),
             tokenId: burnToken,
             version: PrivacyVersion.ver3,
@@ -604,6 +607,7 @@ export class PopupController {
         }
       }
     } catch (error) {
+      console.log("CREATE TRANSACTION ERROR: ", error);
       pendingTransactionAction.reject(error);
     }
 
