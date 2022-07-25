@@ -515,9 +515,6 @@ export class PopupController {
         network,
         burningRequestMeta,
       } = req.params;
-
-      console.log("SANG TEST: ", req.params);
-
       const accountSender = defaultAccountWalletSelector(store.getState());
       new Validator("signTransaction-networkFee", networkFee).amount();
       new Validator("signTransaction-isUnified", isUnified).boolean();
