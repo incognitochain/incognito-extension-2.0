@@ -5,7 +5,8 @@ import { INPUT_FIELD } from "./InputField.constant";
 import { Styled } from "./InputField.styled";
 import MaxBtn from "@components/Max/Max";
 import { Row } from "@popup/theme";
-
+import { shortenAddress } from "@utils/format";
+import { CopyIcon } from "@components/Icons";
 export interface IInputFieldProps {
   meta: WrappedFieldMetaProps;
   input: WrappedFieldInputProps;
@@ -62,6 +63,8 @@ const InputField = (props: IInputFieldProps) => {
     showMax = true,
     showAddressBook = true,
   } = props;
+
+  console.log("PROPS 11111 : ", props);
   const { error: errorMeta, touched, submitting } = meta;
   const error = errorMeta || errorCustom;
   const [togglePassword, setTogglePassword] = React.useState(false);
@@ -157,9 +160,13 @@ const InputField = (props: IInputFieldProps) => {
         );
       }
       case INPUT_FIELD.textArea: {
+        const value = componentProps?.value || input?.value || "";
+        const addressShortend = shortenAddress(value);
+        // return <TextArea {...{ input, componentProps }} />;
         return (
-          <div className="textarea-container ">
-            <TextArea {...{ input, componentProps }} />
+          <div className="hook-row-space-between wrapper">
+            <p className="h5">{addressShortend}</p>
+            <CopyIcon text={value} />
           </div>
         );
       }
