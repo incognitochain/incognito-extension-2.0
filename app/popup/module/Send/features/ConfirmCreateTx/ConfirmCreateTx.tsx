@@ -60,7 +60,7 @@ const ConfirmCreateTx = React.memo((props: IMergeProps & any) => {
         <Field
           component={InputField}
           name={FORM_CONFIGS.toAddress}
-          inputType={INPUT_FIELD.textArea}
+          inputType={INPUT_FIELD.shortAddress}
           leftTitle="To"
           validate={validateAddress}
           warning={warningAddress}

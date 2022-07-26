@@ -48,6 +48,7 @@ const Copy = (props: IProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => 
       className="copy-icon hover"
       onClick={handleCopyText}
       {...props}
+      type="button"
       onMouseOver={handleHover}
       onMouseOut={handleHoverOut}
     >

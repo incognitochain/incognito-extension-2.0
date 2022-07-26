@@ -160,9 +160,11 @@ const InputField = (props: IInputFieldProps) => {
         );
       }
       case INPUT_FIELD.textArea: {
+        return <TextArea {...{ input, componentProps }} />;
+      }
+      case INPUT_FIELD.shortAddress: {
         const value = componentProps?.value || input?.value || "";
         const addressShortend = shortenAddress(value);
-        // return <TextArea {...{ input, componentProps }} />;
         return (
           <div className="hook-row-space-between wrapper">
             <p className="h5">{addressShortend}</p>
