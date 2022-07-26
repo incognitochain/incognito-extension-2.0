@@ -7,6 +7,7 @@ import { sendDataSelector } from "@module/Send/Send.selector";
 import { useHistory } from "react-router-dom";
 import { useCallAsync } from "@popup/utils/notifications";
 import { useBackground } from "@popup/context/background";
+import rpcMetric, { METRIC_TYPE } from "@services/wallet/rpcMetric";
 const { PrivacyVersion, ACCOUNT_CONSTANT } = require("incognito-chain-web-js/build/web/wallet");
 
 export interface TInner {
@@ -15,6 +16,8 @@ export interface TInner {
 
 const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
   const accountSender = useSelector(defaultAccountWalletSelector);
+  const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.SEND });
+
   const {
     inputMemo,
     networkFeeAmount,
@@ -36,6 +39,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
       if (!inputOriginalAmount || !inputAddress || disabledForm) {
         return;
       }
+      updateMetric().then();
       showLoading({ value: true });
       let payload: any = {
         accountSender,

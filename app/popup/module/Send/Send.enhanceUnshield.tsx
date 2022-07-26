@@ -9,6 +9,7 @@ import { useCallAsync } from "@popup/utils/notifications";
 import { useBackground } from "@popup/context/background";
 import { throttle } from "lodash";
 import { common } from "@/constants";
+import rpcMetric, { METRIC_TYPE } from "@services/wallet/rpcMetric";
 const { PrivacyVersion, ACCOUNT_CONSTANT } = require("incognito-chain-web-js/build/web/wallet");
 const {
   BurningFantomRequestMeta,
@@ -52,12 +53,14 @@ const enhanceUnshield = (WrappedComponent: React.FunctionComponent) => (props: a
   const { popupState, request } = useBackground();
   const callAsync = useCallAsync();
   const action = popupState && popupState.actions && popupState.actions[0];
+  const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.CONFIRM_SWAP });
 
   const handleUnShieldCrypto = throttle(async () => {
     try {
       if (!inputOriginalAmount || !inputAddress || disabledForm) {
         return;
       }
+      updateMetric().then();
       showLoading({ value: true });
       let network = "";
       let burningRequestMeta = BurningRequestMeta;

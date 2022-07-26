@@ -23,6 +23,8 @@ import { Loading } from "@popup/context/loading";
 import throttle from "lodash/throttle";
 import { route as SendRoute } from "@module/Send";
 import { PRV_ID } from "@constants/common";
+import rpcMetric, { METRIC_TYPE } from "@services/wallet/rpcMetric";
+import Storage from "@services/storage";
 
 const context = require.context("@popup/module", true, /\.route.tsx?/);
 
@@ -86,8 +88,22 @@ const MainRoute = () => {
     500,
   );
 
+  const updateMetric = async () => {
+    try {
+      const KEY = "FIRST_TIME_INSTALL";
+      const isInstalled = await Storage.getItem(KEY);
+      if (!isInstalled) {
+        rpcMetric.updateMetric({ type: METRIC_TYPE.INSTALL }).then(() => Storage.setItem(KEY, "success"));
+      }
+    } catch (e) {
+      console.log("METRIC INSTALL ERROR: ", e);
+    }
+    rpcMetric.updateMetric({ type: METRIC_TYPE.OPEN }).then();
+  };
+
   React.useEffect(() => {
     handleGetRoutes();
+    updateMetric().then();
   }, []);
 
   React.useEffect(() => {
