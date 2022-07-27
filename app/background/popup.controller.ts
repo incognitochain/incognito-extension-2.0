@@ -553,7 +553,7 @@ export class PopupController {
               IncognitoTx: txId,
               PaymentAddress: receiverAddress,
               PrivacyTokenAddress: receiverTokenID,
-              UserFeeSelection: 1,
+              UserFeeSelection: isUseTokenFee ? 1 : 2,
               WalletAddress: accountSender.getPaymentAddress(),
             };
             await rpcSubmit.submitUnshieldTx(payload);
