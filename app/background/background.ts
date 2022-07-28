@@ -1,3 +1,4 @@
+import "./lib/window-polyfill";
 import { store, persistor, dispatch } from "@redux/store/store";
 import { enableLogger } from "@core/utils";
 import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP, StoredData, VersionedData } from "@core/types";
@@ -11,7 +12,6 @@ const { init } = require("incognito-chain-web-js/build/web/wallet");
 
 window.store = store;
 window.persistor = persistor;
-
 const PortStream = require("extension-port-stream");
 const endOfStream = require("end-of-stream");
 const log = createLogger("incognito:bg");
@@ -26,7 +26,7 @@ initialize().catch((err) => {
 });
 
 async function initialize() {
-  enableLogger();
+  // enableLogger();
   await loadWasmConfig();
   await loadStoreRedux();
 
@@ -37,7 +37,9 @@ async function initialize() {
 async function loadWasmConfig(): Promise<void | Error> {
   try {
     // new method load wasm
-    await init(null, 8);
+    // await init(null, 8);
+    const privacyWasmUrl = chrome.runtime.getURL("assets/privacy.wasm");
+    await init(privacyWasmUrl, 8);
   } catch (error) {
     console.log("loadWasmConfig Error ", error);
   }

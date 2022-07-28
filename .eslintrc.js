@@ -33,6 +33,7 @@ module.exports = {
   globals: {
     chrome: true,
     window: true,
+    globalThis: true,
   },
   rules: {
     "@typescript-eslint/explicit-function-return-type": [

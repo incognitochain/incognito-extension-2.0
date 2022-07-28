@@ -77,26 +77,26 @@ export const closeCurrentTab = () => {
 };
 
 export const handleClassForTab = () => {
-  try {
-    const root: any = document.querySelector("#root");
-    if (!root.classList.contains("incognito-extension-tab")) {
-      root.classList.add("incognito-extension-tab");
-    }
-  } catch (error) {
-    console.debug(error);
-  }
+  // try {
+  //   const root: any = document.querySelector("#root");
+  //   if (!root.classList.contains("incognito-extension-tab")) {
+  //     root.classList.add("incognito-extension-tab");
+  //   }
+  // } catch (error) {
+  //   console.debug(error);
+  // }
 };
 
 export const handleClassForEdge = () => {
-  try {
-    const className = "edge-browser";
-    const root: any = document.querySelector("#root");
-    if (!root.classList.contains(className)) {
-      root.classList.add(className);
-    }
-  } catch (error) {
-    console.debug(error);
-  }
+  // try {
+  //   const className = "edge-browser";
+  //   const root: any = document.querySelector("#root");
+  //   if (!root.classList.contains(className)) {
+  //     root.classList.add(className);
+  //   }
+  // } catch (error) {
+  //   console.debug(error);
+  // }
 };
 
 export const reloadApp = () => {
