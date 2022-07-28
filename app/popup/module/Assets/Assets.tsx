@@ -10,6 +10,7 @@ import withPToken from "@module/MainRoute/MainRoute.withPToken";
 import withBalance from "@module/MainRoute/MainRoute.withBalance";
 import Storage from "@services/storage";
 import rpcMetric, { METRIC_TYPE } from "@services/wallet/rpcMetric";
+import { AddButton } from "@components/AddButton/AddButton";
 
 let isUpdated = false;
 const Assets = React.memo(() => {
@@ -51,7 +52,7 @@ const Assets = React.memo(() => {
             <LockWallet />
           </>
         }
-        customHeader={<SearchIcon onClick={navigateImportTokens} />}
+        customHeader={<AddButton onClick={navigateImportTokens} />}
         selectAccount
       />
       <TotalBalance />

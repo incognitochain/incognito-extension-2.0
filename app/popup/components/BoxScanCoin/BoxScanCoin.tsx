@@ -58,9 +58,12 @@ const BoxScanCoin = React.memo((props: IProps) => {
   return (
     <Styled>
       <p className="label fs-supermedium fw-medium">Confirm</p>
-      <p className="label fs-regular fw-medium sub-title">Do you want scan coins?</p>
+      <p className="label fs-regular fw-medium sub-title">
+        If this is an old keychain, scanning coins helps to recalculate your private balance. Otherwise, you can skip
+        this step.
+      </p>
       <Row>
-        <SecondaryButton onClick={onCancelPress}>Cancel</SecondaryButton>
+        <SecondaryButton onClick={onCancelPress}>Skip</SecondaryButton>
         <div style={{ width: 14 }} />
         <PrimaryButton onClick={onScanPress}>Sure</PrimaryButton>
       </Row>
