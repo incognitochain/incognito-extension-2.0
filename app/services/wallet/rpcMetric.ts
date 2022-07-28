@@ -21,6 +21,7 @@ class RpcMetric {
       await this.http.post("churn", {
         created_at: now,
         type_id: type,
+        app: "extension",
       });
     } catch (e) {
       console.log("UPDATE METRIC WITH ERROR: ", e);
