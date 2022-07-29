@@ -11756,6 +11756,11 @@ redux@*, "redux@^3.6.0 || ^4.0.0", redux@^4.0.0, redux@^4.0.5, redux@^4.1.2:
   dependencies:
     "@babel/runtime" "^7.9.2"
 
+reduxed-chrome-storage@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/reduxed-chrome-storage/-/reduxed-chrome-storage-2.5.0.tgz#7ac9d664127fb7f0017bb45214dbb8feb7189df9"
+  integrity sha512-Q6/vfInuzYBT2iHq0Acx9A2aUiCsDC8J81AoqoCS3eAURLP8kSE979o6YKcxEB1mDm9PF9omy7F5hBgOURHHng==
+
 regenerate-unicode-properties@^10.0.1:
   version "10.0.1"
   resolved "https://registry.yarnpkg.com/regenerate-unicode-properties/-/regenerate-unicode-properties-10.0.1.tgz#7f442732aa7934a3740c779bb9b3340dccc1fb56"
