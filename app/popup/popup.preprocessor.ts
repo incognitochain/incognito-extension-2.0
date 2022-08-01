@@ -20,3 +20,5 @@ const checkSupport = (): BackgroundEnvProps | Error => {
 const { store, persistor } = checkSupport() as BackgroundEnvProps;
 
 export { store, persistor };
+
+export default {};

@@ -4,12 +4,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import { Store } from "redux";
 import logger from "redux-logger";
 import { persistReducer, persistStore } from "redux-persist";
-import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
+// import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 import thunkMiddleware from "redux-thunk";
 import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
-
-export default function configStore(preloadedState?: any): Store {
-  // const middlewares = [thunkMiddleware, logger];
+import storage from "redux-persist/lib/storage";
+// import Storage from "@services/storage";
+export default function configStore(preloadedState?: any): Store | any {
+  console.log("configStore ---- ");
   const middlewares = [thunkMiddleware];
   const persistConfig = {
     key: "root",
@@ -18,7 +19,7 @@ export default function configStore(preloadedState?: any): Store {
     blacklist: [],
     stateReconciler: autoMergeLevel2,
   };
-  const persistedReducer = persistReducer(persistConfig, superRootReducer as any);
+  const persistedReducer = persistReducer(persistConfig, superRootReducer);
   const store = configureStore({
     reducer: persistedReducer,
     middleware: middlewares,

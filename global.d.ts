@@ -12,8 +12,8 @@ declare global {
     }
   }
   interface Window {
-    store: Store;
-    persistor: Persistor;
+    store: Store | any;
+    persistor: Persistor | any;
     Go: any;
     network: any;
   }

@@ -47,11 +47,11 @@
     "./app/**/*.ts"
   ],
   "include": [
-    "app",
     "types",
     "global.d.ts"
   ],
   "exclude": [
+    "app",
     "bin",
     "build",
     "node_modules"
