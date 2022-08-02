@@ -17,7 +17,7 @@ const {
   PRVIDSTR,
   ACCOUNT_CONSTANT,
 } = require("incognito-chain-web-js/build/web/wallet");
-Storage.logAll();
+
 const { init } = require("incognito-chain-web-js/build/web/wallet");
 
 console.log("Background running ... ", Math.random().toFixed(2));
