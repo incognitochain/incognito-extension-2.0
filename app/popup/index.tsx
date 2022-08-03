@@ -2,17 +2,17 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import "./reset.css";
-// import { AppHotReload, App } from "@popup/app";
-// import { App as AppTest } from "@popup/pages/app";
+import { AppHotReload, App } from "@popup/app";
+import { App as AppTest } from "@popup/pages/app";
 // import { unregisterServiceWorker } from "./core/service-worker";
-// import { Provider } from "react-redux";
-// import { PersistGate } from "redux-persist/integration/react";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 
-// const useHotReload = false;
-
+const useHotReload = false;
+const { store, persistor } = require("@popup/popup.preprocessor");
 ReactDOM.render(
   <React.StrictMode>
-    <div style={{ width: 300, height: 300, backgroundColor: "red" }}></div>
+    <div style={{ width: 300, height: 300, backgroundColor: "lightgrey" }}></div>
   </React.StrictMode>,
   document.getElementById("root"),
 );
@@ -27,6 +27,8 @@ ReactDOM.render(
 //   );
 // } else {
 //   const { store, persistor } = require("@popup/popup.preprocessor");
+//   console.log("1 store ", store);
+//   console.log("1 persistor ", persistor);
 //   ReactDOM.render(
 //     <React.StrictMode>
 //       <Provider store={store}>

@@ -1,5 +1,5 @@
 import "./lib/window-polyfill";
-// import { store, persistor, dispatch } from "@redux/store/store";
+import { store, persistor, dispatch } from "@redux/store/store";
 import { enableLogger } from "@core/utils";
 import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP, StoredData, VersionedData } from "@core/types";
 import { createLogger, isInternalProcess } from "@core/utils";
@@ -21,10 +21,11 @@ Storage.logAll();
 const { init } = require("incognito-chain-web-js/build/web/wallet");
 
 console.log("Background running ... ", Math.random().toFixed(2));
-console.log("Background running window ", window);
+console.log("STORE ", store);
+console.log("STATE ", store.getState());
+window.store = store;
 
-// window.store = store;
-
+console.log("Background running 2 window ", window);
 // window.persistor = {};
 // const PortStream = require("extension-port-stream");
 // const endOfStream = require("end-of-stream");
@@ -52,7 +53,7 @@ async function loadWasmConfig(): Promise<void | Error> {
     const privacyWasmUrl = chrome.runtime.getURL("assets/privacy.wasm");
     console.log("privacyWasmUrl ", privacyWasmUrl);
     await init(privacyWasmUrl, 8);
-    handleScanCoins();
+    // handleScanCoins();
   } catch (error) {
     console.log("loadWasmConfig Error ", error);
   }
@@ -196,4 +197,5 @@ const handleScanCoins = async () => {
     console.log("SCAN COINS ERROR: ", error);
   }
 };
+
 export default {};
