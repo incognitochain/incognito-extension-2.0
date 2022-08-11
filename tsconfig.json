@@ -2,7 +2,17 @@
   "extends": "./tsconfig.paths.json",
   "compilerOptions": {
     "target": "ES2020",
-    "lib": ["es5", "es6", "dom", "dom.iterable", "esnext", "es2016", "es2017", "es2018", "ES2020"],
+    "lib": [
+      "es5",
+      "es6",
+      "dom",
+      "dom.iterable",
+      "esnext",
+      "es2016",
+      "es2017",
+      "es2018",
+      "ES2020"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -24,11 +34,27 @@
     "declarationDir": "dist/types",
     "outDir": "dist/lib",
     "downlevelIteration": true,
-    "typeRoots": ["./node_modules/@types", "global.d.ts", "types"]
+    "typeRoots": [
+      "./node_modules/@types",
+      "global.d.ts",
+      "types"
+    ]
   },
-  "files": ["app/popup/index.tsx"],
-  "includes": ["./app/**/*.ts"],
-  "include": ["types", "global.d.ts"],
-  "exclude": ["app", "bin", "build", "node_modules"],
+  "files": [
+    "app/popup/index.tsx"
+  ],
+  "includes": [
+    "./app/**/*.ts"
+  ],
+  "include": [
+    "app",
+    "types",
+    "global.d.ts"
+  ],
+  "exclude": [
+    "bin",
+    "build",
+    "node_modules"
+  ],
   "compileOnSave": true
 }

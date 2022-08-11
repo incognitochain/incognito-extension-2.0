@@ -7,16 +7,12 @@ interface BackgroundEnvProps {
 }
 
 const checkSupport = (): BackgroundEnvProps | Error | any => {
-  const backgroundEnv = chrome.runtime.getBackgroundPage((window: any) => {
-    console.log("333 window ", window);
-  });
-
-  console.log("2222 backgroundEnv ", backgroundEnv);
+  // chrome.runtime.getBackgroundPage((window: any) => {
+  //   console.log("getBackgroundPage window ", window);
+  // });
 };
 
 // const { store, persistor } = checkSupport() as BackgroundEnvProps;
 checkSupport();
-
-// export { store, persistor };
 
 export default {};

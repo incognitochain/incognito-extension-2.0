@@ -24,13 +24,13 @@ import {
 import { dispatch, store } from "@redux/store/store";
 import Storage from "@services/storage";
 import { APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@constants/common";
-import { actionFetchCreateAccount, actionLogout, actionSwitchAccount } from "@redux/account";
+import { actionFetchCreateAccount, actionLogout, actionSwitchAccount } from "@redux/account/account.actions";
 import { getFollowTokensBalance } from "@background/worker.scanCoins";
 import { defaultAccountWalletSelector, getCurrentPaymentAddress } from "@redux/account/account.selectors";
 import accountService from "@services/wallet/accountService";
 import { clearAllCaches } from "@services/cache";
 import { clearReduxStore } from "@redux/reducers";
-import { actionFreeAssets } from "@module/Assets";
+import { actionFreeAssets } from "@module/Assets/Assets.actions";
 import { actionFreeScanCoins } from "@redux/scanCoins";
 import { batch } from "react-redux";
 import rpcSubmit from "@services/wallet/rpcSubmit";
@@ -39,6 +39,7 @@ const { setShardNumber, Validator, PrivacyVersion } = require("incognito-chain-w
 const log = createLogger("incognito:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
 export interface PopupControllerOpt {
+  reduxStore: any;
   store: Store;
   actionManager: ActionManager;
   popupState: PopupStateResolver;
@@ -51,6 +52,7 @@ export interface PopupControllerOpt {
 }
 
 export class PopupController {
+  private reduxStore: any;
   private store: Store;
   private actionManager: ActionManager;
   private _notifyAllDomains: ((payload: Notification) => Promise<void>) | null;
@@ -63,6 +65,7 @@ export class PopupController {
 
   constructor(opts: PopupControllerOpt) {
     const {
+      reduxStore,
       store,
       notifyAllDomains,
       connection,
@@ -73,6 +76,7 @@ export class PopupController {
       scanCoinHandler,
       updateNetworkHandler,
     } = opts;
+    this.reduxStore = reduxStore;
     this.store = store;
     this.actionManager = actionManager;
     this.popupState = popupState;
@@ -164,16 +168,16 @@ export class PopupController {
               // await this.store.unlockSecretBox(req.params.password);
               await this.updateNetworkHandler();
               await this.unlockWallet(req.params);
-              await this.scanCoinHandler();
-              const accountDefault = await getFollowTokensBalance();
-              this._notifyAll({
-                type: "accountsChanged",
-                data: accountDefault ? [accountDefault] : [],
-              });
-              this._notifyAll({
-                type: "stateChanged",
-                data: { state: "unlocked" },
-              });
+              // await this.scanCoinHandler();
+              // const accountDefault = await getFollowTokensBalance();
+              // this._notifyAll({
+              //   type: "accountsChanged",
+              //   data: accountDefault ? [accountDefault] : [],
+              // });
+              // this._notifyAll({
+              //   type: "stateChanged",
+              //   data: { state: "unlocked" },
+              // });
             } catch (err) {
               log("error: popup_unlockWallet failed  with error: %s", err);
               res.error = err;
@@ -318,17 +322,17 @@ export class PopupController {
   }
 
   async createAccount({ accountName }: { accountName: string }) {
-    await dispatch(actionFetchCreateAccount({ accountName }));
+    await this.reduxStore.dispatch(actionFetchCreateAccount({ accountName }));
   }
 
   async switchAccount({ accountName }: { accountName: string }) {
-    await dispatch(actionSwitchAccount(accountName));
+    await this.reduxStore.dispatch(actionSwitchAccount(accountName));
   }
 
   async unlockWallet({ password }: { password: string }) {
     try {
       await this.store.unlockSecretBox(password);
-      const wallet = await dispatch(unlockMasterKey(password));
+      const wallet = await this.reduxStore.dispatch(unlockMasterKey(password));
       this.store.setWallet(wallet);
       // this.persistData();
     } catch (e) {
@@ -338,7 +342,7 @@ export class PopupController {
 
   async switchNetwork() {
     try {
-      const wallet = await dispatch(masterKeySwitchNetwork());
+      const wallet = await this.reduxStore.dispatch(masterKeySwitchNetwork());
       this.store.setWallet(wallet);
     } catch (e) {
       console.log("switchNetwork ERROR ", e);
@@ -348,7 +352,7 @@ export class PopupController {
   async initMasterKey(data: InitMasterKeyPayload) {
     const { mnemonic, masterKeyName, password } = data;
 
-    const wallet = await dispatch(initMasterKey({ mnemonic, masterKeyName, password }));
+    const wallet = await this.reduxStore.dispatch(initMasterKey({ mnemonic, masterKeyName, password }));
     const salt = await Storage.getItem(APP_SALT_KEY);
     const passphraseEncrypted = await Storage.getItem(APP_PASS_PHRASE_CIPHER);
     this.store.setSecretBox({
@@ -361,7 +365,7 @@ export class PopupController {
 
   async importMasterKey(data: ImportMasterKeyPayload) {
     const { mnemonic, masterKeyName, password } = data;
-    const wallet = await dispatch(importMasterKey({ mnemonic, masterKeyName, password }));
+    const wallet = await this.reduxStore.dispatch(importMasterKey({ mnemonic, masterKeyName, password }));
     const salt = await Storage.getItem(APP_SALT_KEY);
     const passphraseEncrypted = await Storage.getItem(APP_PASS_PHRASE_CIPHER);
     this.store.setSecretBox({
@@ -378,16 +382,16 @@ export class PopupController {
     await Storage.clear();
     // await Storage.logAll();
     await clearAllCaches();
-    await dispatch(clearReduxStore());
+    await this.reduxStore.dispatch(clearReduxStore());
     batch(() => {
-      dispatch(actionFreeAssets());
-      dispatch(actionFreeScanCoins());
-      dispatch(actionLogout());
+      this.reduxStore.dispatch(actionFreeAssets());
+      this.reduxStore.dispatch(actionFreeScanCoins());
+      this.reduxStore.dispatch(actionLogout());
     });
     await this.updateNetworkHandler();
 
     // Create new wallet, the same flow import wallet
-    const wallet = await dispatch(importMasterKey({ mnemonic, masterKeyName: "Wallet", password }));
+    const wallet = await this.reduxStore.dispatch(importMasterKey({ mnemonic, masterKeyName: "Wallet", password }));
 
     const salt = await Storage.getItem(APP_SALT_KEY);
     const passphraseEncrypted = await Storage.getItem(APP_PASS_PHRASE_CIPHER);

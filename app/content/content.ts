@@ -6,7 +6,7 @@ const log = createLogger("incognito:cntPage");
 const LocalMessageDuplexStream = require("post-message-stream");
 const PortStream = require("extension-port-stream");
 
-enableLogger();
+// enableLogger();
 
 if (shouldInjectProvider()) {
   injectScript(chrome.runtime.getURL("static/js/inpage.js")); //"inpage.js")

@@ -16,11 +16,15 @@ import { ActionManager } from "./lib/action-manager";
 import { getCurrentPaymentAddress } from "@redux/account/account.selectors";
 import { dispatch, store as storeRedux } from "@redux/store/store";
 import { RootState } from "../redux/reducers/index";
+
 import { getFollowTokensBalance } from "./worker.scanCoins";
-import { actionSetUnshieldData, FORM_CONFIGS, TypeSend } from "@module/Send";
+import { FORM_CONFIGS } from "@module/Send/Send.constant";
+import { TypeSend } from "@module/Send/Send.types";
+import { actionSetUnshieldData } from "@module/Send/Send.actions";
+
 import { actionSelectedPrivacySet } from "@redux/selectedPrivacy";
 import { change } from "redux-form";
-import { getPTokenList } from "@redux/token";
+import { getPTokenList } from "@redux/token/token.actions";
 import { batch } from "react-redux";
 
 const log = createLogger("incognito:walletCtr");
@@ -31,6 +35,7 @@ interface WalletControllerOpt {
   pluginManager: ProgramPluginManager;
   actionManager: ActionManager;
   openPopup: () => Promise<void>;
+  reduxStore: any;
 }
 
 interface MiddlewareOpts {
@@ -43,9 +48,11 @@ export class WalletController {
   private actionManager: ActionManager;
   private openPopup: any;
   private pluginManager: ProgramPluginManager;
+  private reduxStore: any;
 
   constructor(opts: WalletControllerOpt) {
-    const { store, openPopup, pluginManager, actionManager } = opts;
+    const { store, openPopup, pluginManager, actionManager, reduxStore } = opts;
+    this.reduxStore = reduxStore;
     this.store = store;
     this.actionManager = actionManager;
     this.openPopup = openPopup;
@@ -54,7 +61,6 @@ export class WalletController {
 
   createMiddleware(opts: MiddlewareOpts) {
     const { origin } = opts;
-
     if (typeof origin !== "string" || !origin.length) {
       throw new Error("Must provide non-empty string origin.");
     }
@@ -233,11 +239,11 @@ export class WalletController {
       const params = req.params;
       const { isUnshield, receiverAddress, burnAmountText } = params;
       batch(() => {
-        dispatch(getPTokenList());
-        dispatch(actionSelectedPrivacySet({ tokenID: params.burnToken }));
-        dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, receiverAddress));
-        dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.amount, burnAmountText));
-        dispatch(
+        this.reduxStore.dispatch(getPTokenList());
+        this.reduxStore.dispatch(actionSelectedPrivacySet({ tokenID: params.burnToken }));
+        this.reduxStore.dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, receiverAddress));
+        this.reduxStore.dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.amount, burnAmountText));
+        this.reduxStore.dispatch(
           actionSetUnshieldData({
             ...params,
             screen: isUnshield ? TypeSend.CONFIRM_UNSHIELD : TypeSend.SEND,

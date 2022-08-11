@@ -23,7 +23,12 @@ interface ImportMasterKeyPageProps {
 }
 
 export const ImportMasterKeyPage: React.FC<ImportMasterKeyPageProps> = (props: ImportMasterKeyPageProps) => {
-  const { masterKeyName = "", onBack = () => {}, continueOnClick = () => {}, mnemonic = "" } = props;
+  const {
+    masterKeyName = "ABCDE",
+    onBack = () => {},
+    continueOnClick = () => {},
+    mnemonic = "identify hollow edge tilt enrich actress radio february zone song host recycle",
+  } = props;
 
   const masterKeyNameTextInput = useRef<any>(null);
   const phraseTextInput = useRef<any>(null);

@@ -15,6 +15,9 @@ export const reducer = (state: AppStateExample = initialState, action: any = {})
     case "TODO": {
       return { ...state, test: action.payload };
     }
+    case "ABCDE": {
+      return { ...state, test: Math.random().toFixed(3) };
+    }
     default:
       return state;
   }

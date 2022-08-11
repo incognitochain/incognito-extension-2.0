@@ -7,7 +7,7 @@
     "48": "icons/incognito-48.png",
     "128": "icons/incognito-128.png"
   },
-  "permissions": ["tabs", "storage", "unlimitedStorage"],
+  "permissions": ["tabs", "storage", "unlimitedStorage", "scripting", "webRequest", "webNavigation"],
   "host_permissions": ["*://*/*"],
   "action": {
     "default_title": "Incognito Wallet",

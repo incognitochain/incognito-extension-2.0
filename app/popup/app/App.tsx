@@ -15,10 +15,15 @@ import { Router } from "react-router";
 import { createBrowserHistory, createMemoryHistory } from "history";
 import { isMainnet } from "@popup/configs";
 import { LoadingProvider } from "@popup/context/loading";
+import { useSelector, useStore } from "react-redux";
+import { appSelectors } from "@redux/app";
 
 const history = !isMainnet ? createBrowserHistory() : createMemoryHistory(); // Instead of createBrowserHistory();
 
 const App: React.FunctionComponent = () => {
+  console.log("App render");
+  // const appSelectorsData = useSelector(appSelectors);
+  // console.log("appSelectorsData ", appSelectorsData);
   const useStyles = makeStyles({
     success: { backgroundColor: "#25c2a0" },
     error: { backgroundColor: "#B45BDC" },
@@ -63,3 +68,4 @@ const App: React.FunctionComponent = () => {
 };
 
 export default withApp(React.memo(App));
+// export default App;

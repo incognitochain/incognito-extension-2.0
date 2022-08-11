@@ -15,7 +15,7 @@ export const getLastFocusedWindow = () => {
 };
 
 export const closeExtensionPopup = () => {
-  return chrome.windows.getCurrent((windowDetails) => {
+  return chrome.windows.getCurrent((windowDetails: any) => {
     if (windowDetails?.type === "popup") {
       return chrome.windows.remove(windowDetails.id);
     }

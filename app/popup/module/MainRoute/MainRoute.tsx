@@ -16,7 +16,7 @@ import { IRouteProps } from "..";
 import { route as AssetsRoute } from "@module/Assets/Assets.route";
 import { route as SignTransactionRoute } from "@module/SignTransaction/SignTransaction.route";
 import { useModal } from "@module/Modal";
-import { useSelector } from "react-redux";
+import { useSelector, useStore } from "react-redux";
 import { isFirstTimeScanCoinsSelector, isShowConfirmScanCoins } from "@redux/scanCoins";
 import BoxScanCoin from "@components/BoxScanCoin";
 import { Loading } from "@popup/context/loading";
@@ -37,7 +37,6 @@ const Styled = styled.div`
 const defaultRoute = (key: string, props: RouteProps, popupState: PopupState, isNotification: boolean) => {
   const rest = Object.assign({}, props);
   delete rest.component;
-  // console.log("popupState.walletState ", popupState.walletState);
   return (
     <Route
       key={key}

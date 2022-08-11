@@ -14,6 +14,7 @@ import assetsReducer from "@module/Assets/Assets.reducer";
 import { reducer as themeReducer } from "@popup/theme";
 import { reducer as sendReducer } from "@module/Send";
 import { reducer as formReducer } from "redux-form";
+import { reducer as test } from "@redux/test";
 import { $CombinedState, combineReducers } from "redux";
 
 const rootReducers = combineReducers({
@@ -30,6 +31,7 @@ const rootReducers = combineReducers({
   selectedPrivacy,
   sendReducer,
   form: formReducer,
+  test,
 });
 
 export type RootState = ReturnType<typeof rootReducers> & {

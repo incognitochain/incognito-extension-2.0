@@ -1,14 +1,15 @@
-import { dispatch, store } from "@redux/store/store";
+// import { dispatch, store } from "@redux/store/store";
 import { measure } from "@utils/func";
 import { actionFetchingScanCoins, actionFistTimeScanCoins, isFetchingScanCoinsSelector } from "@redux/scanCoins";
 import { createLogger } from "@core/utils";
 import uniqBy from "lodash/uniqBy";
 import { IBalance } from "@core/types";
-import { actionFetchedFollowBalance, actionFetchingFollowBalance } from "@module/Assets";
-import { isFetchingAssetsSelector } from "@module/Assets";
+// import { actionFetchedFollowBalance, actionFetchingFollowBalance } from "@module/Assets";
+// import { isFetchingAssetsSelector } from "@module/Assets";
 import { defaultAccountSelector, defaultAccountWalletSelector } from "@redux/account/account.selectors";
 import uniq from "lodash/uniq";
 import Server, { TESTNET_FULLNODE } from "@services/wallet/Server";
+import getReduxStore from "@redux/store/chrome-storage";
 const { PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 
 const MAINNET_TOKEN: any[] = [
@@ -49,6 +50,7 @@ const getTokensDefault = async () => {
 const log = createLogger("background:scanCoins");
 
 export const configAccount = async () => {
+  const { store } = await getReduxStore();
   const accountData = defaultAccountSelector(store.getState());
   if (!accountData || !accountData.PrivateKey) return;
   const accountSender = defaultAccountWalletSelector(store.getState());
@@ -64,6 +66,8 @@ export const configAccount = async () => {
 };
 
 export const scanCoins = async () => {
+  const { store } = await getReduxStore();
+  const dispatch = store.dispatch;
   const { accountSender, keyDefine } = (await configAccount()) as any;
   const isFetching = isFetchingScanCoinsSelector(store.getState());
   // Validate data
@@ -82,7 +86,7 @@ export const scanCoins = async () => {
 
     const tokens = await getTokensDefault();
 
-    log("SCANNING COINS::: ");
+    console.log("SCANNING COINS::: ");
     // start scan coins
     const { elapsed, result } = await measure(accountSender, "scanCoins", {
       tokenList: uniq(tokens.concat(_followTokens)),
@@ -102,22 +106,24 @@ export const scanCoins = async () => {
 };
 
 export const getFollowTokensBalance = async () => {
+  const { store } = await getReduxStore();
   const accountData = defaultAccountSelector(store.getState());
-  const isFetching = isFetchingAssetsSelector(store.getState());
+  // const isFetching = isFetchingAssetsSelector(store.getState());
+  const isFetching = true;
   const { accountSender, keyDefine } = (await configAccount()) as any;
   if (!accountSender || isFetching) return;
   if (!keyDefine) return;
 
   try {
     const tokens = await getTokensDefault();
-    dispatch(actionFetchingFollowBalance({ isFetching: true }));
+    // dispatch(actionFetchingFollowBalance({ isFetching: true }));
     // follow tokens balance
     const { balance }: { balance: IBalance[] } = await accountSender.getFollowTokensBalance({
       defaultTokens: tokens,
       version: PrivacyVersion.ver3,
     });
     const _balance = uniqBy(balance, "id");
-    dispatch(actionFetchedFollowBalance({ balance: _balance, OTAKey: keyDefine }));
+    // dispatch(actionFetchedFollowBalance({ balance: _balance, OTAKey: keyDefine }));
 
     return {
       keyDefine,
@@ -127,6 +133,6 @@ export const getFollowTokensBalance = async () => {
   } catch (error) {
     log("LOAD FOLLOW TOKENS BALANCE ERROR: ", error);
   } finally {
-    dispatch(actionFetchingFollowBalance({ isFetching: false }));
+    // dispatch(actionFetchingFollowBalance({ isFetching: false }));
   }
 };

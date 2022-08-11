@@ -30,7 +30,7 @@ import { dispatch, store as reduxStore } from "@redux/store/store";
 import { actionFetchingScanCoins, isShowConfirmScanCoins } from "@redux/scanCoins";
 import { scanCoins } from "@background/worker.scanCoins";
 import serverService, { MAINNET_FULLNODE } from "@services/wallet/Server";
-import { actionUpdateNetwork } from "@popup/configs";
+import { actionUpdateNetwork } from "@popup/configs/Configs.actions";
 
 const createEngineStream = require("json-rpc-middleware-stream/engineStream");
 const PortStream = require("extension-port-stream");
@@ -42,6 +42,7 @@ let scanCoinInterval: any;
 interface IncognitoControllerOpts {
   storedData: StoredData;
   persistData: (data: StoredData) => Promise<boolean>;
+  reduxStore: any;
 }
 
 interface RemoteConnection {
@@ -60,12 +61,14 @@ export default class IncognitoController {
   private popupState: PopupStateResolver;
   private persistData: (data: StoredData) => Promise<boolean>;
   private connection: Web3Connection;
+  private reduxStore: any;
 
   constructor(opts: IncognitoControllerOpts) {
-    const { storedData, persistData } = opts;
+    const { storedData, persistData, reduxStore } = opts;
     const store = new Store(storedData);
     const connection = new Web3Connection(store.selectedNetwork);
 
+    this.reduxStore = reduxStore;
     this.store = store;
     this.connection = connection;
     this.extensionManager = new ExtensionManager();
@@ -74,18 +77,18 @@ export default class IncognitoController {
     this.actionManager.on(EVENT_UPDATE_ACTIONS, this.notifyNotificationStateChange.bind(this));
     this.popupState = new PopupStateResolver(this.store, this.actionManager);
     this.persistData = persistData;
-
     const pluginManager = new ProgramPluginManager({
       getConnection: this.getWeb3Connection.bind(this),
     });
-
     this.walletController = new WalletController({
+      reduxStore,
       store,
       pluginManager,
       actionManager: this.actionManager,
       openPopup: this.triggerUi.bind(this),
     });
     this.popupController = new PopupController({
+      reduxStore,
       store,
       connection,
       popupState: this.popupState,
@@ -198,7 +201,6 @@ export default class IncognitoController {
     if (!this.connections[origin]) {
       this.connections[origin] = {};
     }
-
     const id = nanoid();
     this.connections[origin][id] = {
       engine,
@@ -316,7 +318,7 @@ export default class IncognitoController {
   };
 
   clearScanCoins() {
-    dispatch(actionFetchingScanCoins({ isFetching: false }));
+    this.reduxStore.dispatch(actionFetchingScanCoins({ isFetching: false }));
     scanCoinInterval && clearInterval(scanCoinInterval);
     scanCoinInterval = undefined;
   }
@@ -333,7 +335,7 @@ export default class IncognitoController {
     if (popupState && popupState.get().walletState === "unlocked") {
       if (!scanCoinInterval && !showConfirmScanCoins) {
         try {
-          dispatch(actionFetchingScanCoins({ isFetching: false }));
+          this.reduxStore.dispatch(actionFetchingScanCoins({ isFetching: false }));
           scanCoins().then();
         } catch (e) {
           console.log("SCAN COINS ERROR: ", e);
@@ -355,7 +357,7 @@ export default class IncognitoController {
 
   async updateNetworkHandler() {
     const server = (await serverService.getDefault()) || {};
-    dispatch(actionUpdateNetwork({ network: server.address || MAINNET_FULLNODE }));
+    this.reduxStore.dispatch(actionUpdateNetwork({ network: server.address || MAINNET_FULLNODE }));
   }
 }
 
