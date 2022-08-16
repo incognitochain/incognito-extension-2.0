@@ -11,7 +11,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { createStore } from "redux";
 import rootReducers, { superRootReducer } from "@redux/reducers/index";
 import { render } from "react-dom";
-import { persistor } from "@/redux/store/store";
+import { persistor } from "@redux/store/store";
 // import { getReduxSyncStorage } from "@redux/store/chrome-storage";
 import { persistReducer, persistStore } from "redux-persist";
 import { FULL_NODE, TESTNET_TOKENS } from "@background/MainRoute.constants";

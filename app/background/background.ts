@@ -10,7 +10,6 @@ import LocalStore from "./lib/local-store";
 import { initialState } from "./store";
 import { testHandleScanCoins } from "./test/scanCoin";
 import { store } from "@redux/store/store";
-import { setAccountDefauntName } from "@/redux-sync-storage/account";
 const { init } = require("incognito-chain-web-js/build/web/wallet");
 const PortStream = require("extension-port-stream");
 const endOfStream = require("end-of-stream");

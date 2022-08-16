@@ -1,5 +1,11 @@
 import { RootState } from "@redux-sync-storage/reducers/index";
 
-export const accountSelectors = (state: RootState): any => state.account;
+export const getAccountDefaultName = (state: RootState): any => state.account.defaultAccountName || "";
+export const getCurrentAccount = (state: RootState): any => state.account.currentAccount || undefined;
+export const getAccountList = (state: RootState): any => state.account.accountList || [];
 
-export default {};
+export default {
+  getAccountDefaultName,
+  getCurrentAccount,
+  getAccountList,
+};

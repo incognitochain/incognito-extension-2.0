@@ -1,4 +1,4 @@
-import MasterKeyModel from "@/model/MasterKeyModel";
+import MasterKeyModel from "@model/MasterKeyModel";
 import AccountModel from "@model/account";
 import {
   burnerAddressSelector,

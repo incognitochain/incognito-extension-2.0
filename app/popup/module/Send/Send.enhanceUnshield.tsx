@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom";
 import { useCallAsync } from "@popup/utils/notifications";
 import { useBackground } from "@popup/context/background";
 import { throttle } from "lodash";
-import { common } from "@/constants";
+import { common } from "@constants/index";
 import rpcMetric, { METRIC_TYPE } from "@services/wallet/rpcMetric";
 const { PrivacyVersion, ACCOUNT_CONSTANT } = require("incognito-chain-web-js/build/web/wallet");
 const {

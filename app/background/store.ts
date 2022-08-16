@@ -2,7 +2,7 @@ import { createLogger } from "@core/utils";
 // import { Wallet } from "./lib/wallet";
 
 import { DEFAULT_NETWORK, Network, SecretBox, StoredData, WalletState } from "@core/types";
-import { decryptPasspharse } from "@/services/wallet/passwordService";
+import { decryptPasspharse } from "@services/wallet/passwordService";
 
 export const initialState: StoredData = {
   secretBox: undefined,

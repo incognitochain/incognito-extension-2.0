@@ -1,4 +1,4 @@
-import MasterKeyModel from "@/model/MasterKeyModel";
+import MasterKeyModel from "@model/MasterKeyModel";
 import { Action } from "redux";
 
 export enum MasterKeyActionType {

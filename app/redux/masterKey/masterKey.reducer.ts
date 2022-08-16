@@ -1,5 +1,5 @@
-import { KEYS } from "@/constants/keys";
-import MasterKeyModel from "@/model/MasterKeyModel";
+import { KEYS } from "@constants/keys";
+import MasterKeyModel from "@model/MasterKeyModel";
 import algorithms from "@utils/algorithms";
 import Storage from "@services/storage";
 // import typesAccount from "@src/redux/types/account";

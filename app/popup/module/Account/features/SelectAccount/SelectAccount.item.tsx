@@ -1,4 +1,4 @@
-import { RadioButton } from "@/popup/components/RadioButton/RadioButton";
+import { RadioButton } from "@popup/components/RadioButton/RadioButton";
 import RightArrowIcon from "@popup/components/Icons/RightArrowIcon";
 import React from "react";
 import { AccountItemStyled } from "@module/Account/features/SelectAccount/SelectAccount.styled";

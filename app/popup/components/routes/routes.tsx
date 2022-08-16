@@ -1,4 +1,4 @@
-import CreateNewKeyRouteStack from "@/popup/pages/CreateNewKey/CreateNewKeyRouteStack";
+import CreateNewKeyRouteStack from "@popup/pages/CreateNewKey/CreateNewKeyRouteStack";
 import { GetStartedPage } from "@popup/pages/GetStarted/GetStartedPage";
 import HomeRouteStack from "@popup/pages/Home/HomeRouteStack";
 import ImportMasterKeyRouteStack from "@popup/pages/Import/ImportMasterKeyRouteStack";

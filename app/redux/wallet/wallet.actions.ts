@@ -1,4 +1,4 @@
-import { configsWallet } from "@/services/wallet/walletService";
+import { configsWallet } from "@services/wallet/walletService";
 import AccountModel from "@model/account";
 import {
   actionSetSignPublicKeyEncode,

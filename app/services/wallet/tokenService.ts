@@ -1,4 +1,4 @@
-import Account from "@/model/AccountModel";
+import Account from "@model/AccountModel";
 import { PRIORITY_LIST } from "@constants/dexV2";
 import CONSTANT_KEYS from "@constants/keys";
 import { getTokenInfo } from "@services/api/token";

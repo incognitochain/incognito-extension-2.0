@@ -1,4 +1,4 @@
-import CreateNewKeyRouteStack from "@/popup/pages/CreateNewKey/CreateNewKeyRouteStack";
+import CreateNewKeyRouteStack from "@popup/pages/CreateNewKey/CreateNewKeyRouteStack";
 import { PopupState } from "@core/types";
 import { Paths } from "@popup/components/routes/paths";
 import { useBackground } from "@popup/context/background";

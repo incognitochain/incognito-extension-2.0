@@ -2,7 +2,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["app/*"],
       "@background/*": ["app/background/*"],
       "@core/*": ["app/core/*"],
       "@content/*": ["app/content/*"],
