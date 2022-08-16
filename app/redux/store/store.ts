@@ -6,9 +6,10 @@ import { persistReducer, persistStore } from "redux-persist";
 import thunkMiddleware from "redux-thunk";
 import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 import Storage from "@services/storage";
+import logger from "redux-logger";
 
 export default function configStore(preloadedState?: any): Store | any {
-  const middlewares = [thunkMiddleware];
+  const middlewares = [thunkMiddleware, logger];
   const persistConfig = {
     key: "root",
     storage: Storage as any,

@@ -4,7 +4,7 @@ import { useBackground } from "@popup/context/background";
 import { useLoading } from "@popup/context/loading";
 import { ellipsisCenter } from "@popup/utils";
 import { useCallAsync } from "@popup/utils/notifications";
-import { defaultAccountSelector, listAccountSelector } from "@redux/account/account.selectors";
+// import { defaultAccountSelector } from "@redux/account/account.selectors";
 import { trim } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -14,6 +14,7 @@ import { route as routeKeychainDetail } from "@module/Account/features/KeychainD
 import { AccountItem } from "@module/Account/features/SelectAccount";
 import Header from "@components/Header";
 import WrapContent from "@components/Content";
+import { getAccountList, getAccountDefaultName } from "@redux-sync-storage/account/account.selectors";
 
 const SelectAccount = React.memo(() => {
   const { enqueueSnackbar } = useSnackbar();
@@ -21,11 +22,14 @@ const SelectAccount = React.memo(() => {
   const callAsync = useCallAsync();
   const history = useHistory();
   const { showLoading } = useLoading();
-  const defaultAccount: any = useSelector(defaultAccountSelector);
-  const listAccount = useSelector(listAccountSelector);
+  // const defaultAccount: any = useSelector(defaultAccountSelector);
+  // const listAccount = useSelector(listAccountSelector);
+  const defaultAccountName: string = useSelector(getAccountDefaultName);
+  const listAccount = useSelector(getAccountList);
+
   const switchAccount = (accountItem: any) => {
     const accountName = accountItem.AccountName || accountItem.name;
-    if (accountName && (accountName != defaultAccount.AccountName || accountName != defaultAccount?.name)) {
+    if (accountName && (accountName != defaultAccountName || accountName != defaultAccountName)) {
       showLoading({
         value: true,
       });
@@ -58,9 +62,9 @@ const SelectAccount = React.memo(() => {
       <WrapContent className="default-padding-horizontal default-padding-top">
         {listAccount &&
           listAccount.map((accountItem) => {
-            const name = accountItem.AccountName || accountItem.name;
+            const name = accountItem.name;
             const paymentAddress = accountItem.paymentAddress;
-            const isSelected = name == defaultAccount?.AccountName || name == defaultAccount?.name;
+            const isSelected = name == defaultAccountName || name == defaultAccountName;
             const paymentAddressEllipsis = ellipsisCenter({
               str: paymentAddress || "",
               limit: 13,

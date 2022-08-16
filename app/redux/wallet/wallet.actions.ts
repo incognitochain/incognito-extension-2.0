@@ -14,6 +14,8 @@ import accountService from "@services/wallet/accountService";
 import { isEqual } from "lodash";
 import { batch } from "react-redux";
 import { WalletActionType } from "./wallet.types";
+import { AccountInfo, setAccountList } from "@redux-sync-storage/account";
+import { actionHandler } from "@redux-sync-storage/store/store";
 
 const { Validator } = require("incognito-chain-web-js/build/web/wallet");
 
@@ -61,7 +63,12 @@ export const reloadWallet =
       if (wallet?.Name) {
         listAccount = (await wallet.listAccount()) || [];
         defaultAccount = listAccount.find((item) => isEqual(item?.accountName, accountName)) || listAccount[0];
-
+        const accountListStorage = listAccount.map((item) => {
+          return {
+            name: item.name || item.accountName,
+            paymentAddress: item.PaymentAddress,
+          } as AccountInfo;
+        });
         if (!defaultAccount?.accountName) {
           throw new Error(`Can not get default account ${accountName}`);
         }
@@ -69,6 +76,7 @@ export const reloadWallet =
         batch(() => {
           dispatch(setWallet(wallet));
           dispatch(setListAccount(listAccount));
+          actionHandler(setAccountList(accountListStorage));
           dispatch(setAccount(defaultAccount));
           dispatch(setDefaultAccount(defaultAccount));
         });

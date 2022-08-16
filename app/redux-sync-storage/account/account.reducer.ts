@@ -8,7 +8,7 @@ export interface AccountState {
 }
 
 const initialState: AccountState = {
-  defaultAccountName: "",
+  defaultAccountName: "Anon",
   currentAccount: undefined,
   accountList: [],
 };
