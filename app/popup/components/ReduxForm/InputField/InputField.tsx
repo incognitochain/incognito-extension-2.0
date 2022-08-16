@@ -64,7 +64,6 @@ const InputField = (props: IInputFieldProps) => {
     showAddressBook = true,
   } = props;
 
-  console.log("PROPS 11111 : ", props);
   const { error: errorMeta, touched, submitting } = meta;
   const error = errorMeta || errorCustom;
   const [togglePassword, setTogglePassword] = React.useState(false);

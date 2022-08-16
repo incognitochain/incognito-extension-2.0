@@ -1,8 +1,19 @@
 import { RootState } from "@redux-sync-storage/reducers/index";
+import { createSelector } from "reselect";
+export const getAccountDefaultName = createSelector(
+  (state: RootState) => state.account,
+  (account) => account.defaultAccountName || "",
+);
 
-export const getAccountDefaultName = (state: RootState): any => state.account.defaultAccountName || "";
-export const getCurrentAccount = (state: RootState): any => state.account.currentAccount || undefined;
-export const getAccountList = (state: RootState): any => state.account.accountList || [];
+export const getCurrentAccount = createSelector(
+  (state: RootState) => state,
+  (state) => state.account.currentAccount || undefined,
+);
+
+export const getAccountList = createSelector(
+  (state: RootState) => state,
+  (state) => state.account.accountList || [],
+);
 
 export default {
   getAccountDefaultName,

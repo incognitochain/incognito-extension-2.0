@@ -4,7 +4,6 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled, { ITheme } from "styled-components";
-
 const AccountNameButtonStyled = styled.button`
   padding: 9px 16px;
   border: 1px solid ${({ theme }: { theme: ITheme }) => theme.primaryP7};
@@ -19,7 +18,6 @@ export const BtnSelectAccount = () => {
   // const accountNameSelected = defaultAccount?.AccountName || defaultAccount?.name || "";
   // const accountNameSelectedTrim =
   //   accountNameSelected.length > 8 ? accountNameSelected.substring(0, 8) + "..." : accountNameSelected;
-
   return (
     <AccountNameButtonStyled
       onClick={() => history.push(routeSelectAccount)}
