@@ -18,17 +18,17 @@ import { actionLogout } from "@redux/account";
 const CacheScanCoins: React.FC = () => {
   const { setModal } = useModal();
   const { showLoading } = useLoading();
-  const accountSender = useSelector(defaultAccountWalletSelector);
+  // const accountSender = useSelector(defaultAccountWalletSelector);
   const { request } = useBackground();
   const callAsync = useCallAsync();
   const history = useHistory();
   const dispatch: AppThunkDispatch = useDispatch();
-  const keyDefine = useSelector(keyDefineAccountSelector);
+  // const keyDefine = useSelector(keyDefineAccountSelector);
 
   const clearStorageScanCoins = () => {
     try {
-      const otaKey = accountSender.getOTAKey();
-      if (!otaKey || !keyDefine) return;
+      // const otaKey = accountSender.getOTAKey();
+      // if (!otaKey || !keyDefine) return;
       showLoading({ value: true });
       callAsync(request("popup_lockWallet", {}), {
         progress: { message: "locking wallet..." },
@@ -36,8 +36,8 @@ const CacheScanCoins: React.FC = () => {
         onSuccess: () => {
           dispatch(actionLogout());
           setTimeout(async () => {
-            await accountSender.clearStorageCoinsScan();
-            dispatch(actionReScanCoins({ keyDefine }));
+            // await accountSender.clearStorageCoinsScan();
+            // dispatch(actionReScanCoins({ keyDefine }));
             history.push(Paths.unlockPage);
             showLoading({ value: false });
           }, 3000);

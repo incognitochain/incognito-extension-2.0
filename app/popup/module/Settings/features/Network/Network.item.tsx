@@ -9,7 +9,7 @@ interface NetworkItemProps {
   isSelected?: boolean;
 }
 
-const Styled = styled.button`
+const Styled = styled.div`
   width: 100%;
   margin-top: 10px;
   margin-bottom: 10px;
