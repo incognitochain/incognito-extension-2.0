@@ -9,7 +9,9 @@ import { useHistory } from "react-router-dom";
 import { KeyChainLabel, PrimaryButtonContaniner, TextInputWraper } from "./CreateAccountPage.styled";
 import Header from "@components/Header";
 import { useSelector } from "react-redux";
-import { listAccountSelector } from "@redux/account/account.selectors";
+// import { listAccountSelector } from "@redux/account/account.selectors";
+import { getAccountList } from "@redux-sync-storage/account/account.selectors";
+import { AccountInfo } from "@redux-sync-storage/account/account.types";
 
 let accountNameValidator = require("password-validator");
 
@@ -34,8 +36,12 @@ const CreateAccountPage: React.FC = () => {
 
   const [keychainName, setKeychainName] = useState("");
   const [keychainNameError, setKeychainNameError] = useState("");
-  const listAccount = useSelector(listAccountSelector);
-  const listAccountName = listAccount.map((acc) => acc.AccountName || acc.name) || [];
+  // const listAccount = useSelector(listAccountSelector);
+  // const listAccountName = listAccount.map((acc) => acc.AccountName || acc.name) || [];
+
+  const listAccount: AccountInfo[] = useSelector(getAccountList);
+  const listAccountName = listAccount.map((acc) => acc.name) || [];
+
   useEffect(() => {
     keychainNameTextInput.current.focus();
   }, []);

@@ -1,5 +1,6 @@
 import { RootState } from "@redux-sync-storage/reducers/index";
 import { createSelector } from "reselect";
+
 export const getAccountDefaultName = createSelector(
   (state: RootState) => state.account,
   (account) => account.defaultAccountName || "",
