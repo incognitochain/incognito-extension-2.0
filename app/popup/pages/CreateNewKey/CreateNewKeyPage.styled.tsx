@@ -3,12 +3,14 @@ import styled, { ITheme } from "styled-components";
 
 const TextInputWraper = styled.div`
   margin-top: 8px;
+  width: 100%;
 `;
 
 const MasterKeyNameText = styled.p`
   color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
   margin-top: 24px;
   text-align: left;
+  width: 100%;
 `;
 
 const ContentText1 = styled.p`

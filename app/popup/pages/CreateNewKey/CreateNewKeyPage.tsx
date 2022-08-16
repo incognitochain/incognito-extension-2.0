@@ -49,7 +49,7 @@ export const CreateNewKeyPage: React.FC<CreateNewKeyPageProps> = (props: CreateN
   const readyButtonDisable: boolean = !checkBoxAcceptLocal || !masterKeyNameLocal || masterKeyNameLocal.length < 0;
   return (
     <>
-      <Header title="Create new key" onGoBack={onBack} />
+      <Header title="Create new key 111" onGoBack={onBack} />
       <BodyLayout className="scroll-view">
         <MasterKeyNameText className="fs-small  fw-regular">{"Master key name"}</MasterKeyNameText>
         <TextInputWraper>
