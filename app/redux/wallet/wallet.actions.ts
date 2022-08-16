@@ -65,12 +65,14 @@ export const reloadWallet =
         if (!defaultAccount?.accountName) {
           throw new Error(`Can not get default account ${accountName}`);
         }
+
         batch(() => {
           dispatch(setWallet(wallet));
           dispatch(setListAccount(listAccount));
           dispatch(setAccount(defaultAccount));
           dispatch(setDefaultAccount(defaultAccount));
         });
+
         setTimeout(() => {
           batch(() => {
             dispatch(actionSetSignPublicKeyEncode());

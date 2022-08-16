@@ -3,20 +3,22 @@ import "./background-keep-alive";
 import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP, StoredData, VersionedData } from "@core/types";
 import { isInternalProcess } from "@core/utils";
 import { actionFreeData } from "@module/Send/Send.actions";
-import getReduxStore from "@redux/store/chrome-storage";
+import { getReduxSyncStorage } from "@redux-sync-storage/store/store";
 import Storage from "@services/storage";
 import IncognitoController from "./incognito.controller";
 import LocalStore from "./lib/local-store";
 import { initialState } from "./store";
 import { testHandleScanCoins } from "./test/scanCoin";
-import { testAction } from "./test/redux";
 import { store } from "@redux/store/store";
+import { setAccountDefauntName } from "@/redux-sync-storage/account";
 const { init } = require("incognito-chain-web-js/build/web/wallet");
 const PortStream = require("extension-port-stream");
 const endOfStream = require("end-of-stream");
 
 const localStore = new LocalStore();
 let versionedData: VersionedData;
+
+let reduxSyncStorage: any;
 let reduxStore: any;
 
 initialize().catch((err) => {
@@ -25,15 +27,31 @@ initialize().catch((err) => {
 
 async function initialize() {
   await Storage.logAll();
-  const { store } = await getReduxStore();
+  const { reduxSyncStorage: reduxSyncStorageInstance } = await getReduxSyncStorage();
+  reduxSyncStorage = reduxSyncStorageInstance;
   reduxStore = store;
-  console.log("Background store: ", reduxStore);
+
+  console.log("Background reduxSyncStore STATE: ", reduxSyncStorage.getState());
+  console.log("Background reduxStore STATE: ", reduxStore.getState());
+
   await loadWasmConfig();
+  await loadStoreRedux();
   const versionedData = await loadStateFromPersistence();
 
   // testHandleScanCoins();
   // testAction();
+  // reduxStore.dispatch(testModelAction());
   setupController(versionedData).then();
+}
+
+async function loadStoreRedux(): Promise<void> {
+  try {
+    setTimeout(() => {
+      return Promise.resolve();
+    }, 1000);
+  } catch (error) {
+    return Promise.resolve();
+  }
 }
 
 async function loadWasmConfig(): Promise<void | Error> {
@@ -86,11 +104,10 @@ function setupController(versionedData: VersionedData) {
     return false;
   };
 
-  console.log("versionedData ", versionedData);
   const incognitoController = new IncognitoController({
     storedData: versionedData.data,
     persistData: persistData,
-    reduxStore: reduxStore,
+    reduxSyncStorage: reduxSyncStorage,
   });
 
   function connectRemote(remotePort: chrome.runtime.Port) {
@@ -104,7 +121,7 @@ function setupController(versionedData: VersionedData) {
       const portStream = new PortStream(remotePort);
       // console.log(`connect internal process: %o`, {
       //   processName: processName,
-      //   tabId: tabId,
+      //   tabId: tabId,mm
       //   url: url,
       //   origin: origin,
       // });

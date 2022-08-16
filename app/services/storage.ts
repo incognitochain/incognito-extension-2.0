@@ -67,6 +67,7 @@ const Storage = {
       const local = chrome.storage.local;
       local.get((result) => {
         if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
+        console.log("ALL DATA LOCAL STORAGE CHROME => ");
         console.log(result);
         resolve(result);
       });

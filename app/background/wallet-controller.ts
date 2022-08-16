@@ -14,7 +14,7 @@ import { Buffer } from "buffer";
 import { ProgramPluginManager } from "../core/program-plugin";
 import { ActionManager } from "./lib/action-manager";
 import { getCurrentPaymentAddress } from "@redux/account/account.selectors";
-import { dispatch, store as storeRedux } from "@redux/store/store";
+import { dispatch, store as reduxStore } from "@redux/store/store";
 import { RootState } from "../redux/reducers/index";
 
 import { getFollowTokensBalance } from "./worker.scanCoins";
@@ -35,7 +35,7 @@ interface WalletControllerOpt {
   pluginManager: ProgramPluginManager;
   actionManager: ActionManager;
   openPopup: () => Promise<void>;
-  reduxStore: any;
+  reduxSyncStorage: any;
 }
 
 interface MiddlewareOpts {
@@ -48,11 +48,11 @@ export class WalletController {
   private actionManager: ActionManager;
   private openPopup: any;
   private pluginManager: ProgramPluginManager;
-  private reduxStore: any;
+  private reduxSyncStorage: any;
 
   constructor(opts: WalletControllerOpt) {
-    const { store, openPopup, pluginManager, actionManager, reduxStore } = opts;
-    this.reduxStore = reduxStore;
+    const { store, openPopup, pluginManager, actionManager, reduxSyncStorage } = opts;
+    this.reduxSyncStorage = reduxSyncStorage;
     this.store = store;
     this.actionManager = actionManager;
     this.openPopup = openPopup;
@@ -192,7 +192,7 @@ export class WalletController {
   };
 
   _handleGetPaymentAddress = async (req: any): Promise<string> => {
-    const result = getCurrentPaymentAddress(storeRedux.getState() as never);
+    const result = getCurrentPaymentAddress(reduxStore.getState() as never);
     return result || "";
   };
 
@@ -239,11 +239,11 @@ export class WalletController {
       const params = req.params;
       const { isUnshield, receiverAddress, burnAmountText } = params;
       batch(() => {
-        this.reduxStore.dispatch(getPTokenList());
-        this.reduxStore.dispatch(actionSelectedPrivacySet({ tokenID: params.burnToken }));
-        this.reduxStore.dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, receiverAddress));
-        this.reduxStore.dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.amount, burnAmountText));
-        this.reduxStore.dispatch(
+        reduxStore.dispatch(getPTokenList());
+        reduxStore.dispatch(actionSelectedPrivacySet({ tokenID: params.burnToken }));
+        reduxStore.dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, receiverAddress));
+        reduxStore.dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.amount, burnAmountText));
+        reduxStore.dispatch(
           actionSetUnshieldData({
             ...params,
             screen: isUnshield ? TypeSend.CONFIRM_UNSHIELD : TypeSend.SEND,

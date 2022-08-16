@@ -40,14 +40,10 @@ const initialState: Test = {
 export const reducer = (state: Test = initialState, action: any = {}): Test => {
   switch (action.type) {
     case "TEST_MODEL": {
-      const newP = new People(Math.random().toFixed(4).toString());
-      newP.getName();
-      console.log("newP ", newP);
-      console.log("change ", newP.changeName());
       return {
         ...state,
         nameTmp: Math.random().toFixed(2),
-        people: newP,
+        people: undefined,
         data: {
           abc: {
             a: Math.random().toFixed(2),

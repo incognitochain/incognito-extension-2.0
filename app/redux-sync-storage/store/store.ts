@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-import rootReducers, { superRootReducer } from "@redux/reducers/index";
+import rootReducers from "@redux-sync-storage/reducers/index";
 import { applyMiddleware, createStore } from "redux";
 import logger from "redux-logger";
 import thunkMiddleware from "redux-thunk";

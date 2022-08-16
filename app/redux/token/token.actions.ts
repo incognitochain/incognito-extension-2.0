@@ -8,7 +8,6 @@ import PTokenModel from "@model/pTokenModel";
 import { followsTokenAssetsSelector } from "@module/Assets/Assets.selector";
 import { IBalance } from "@core/types";
 import { networkSelector } from "@popup/configs/Configs.selector";
-import getReduxStore from "../store/chrome-storage";
 const { PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
 
 export const getBalanceStart = (tokenSymbol: any) => ({
@@ -35,13 +34,7 @@ export const getPTokenList =
   ({ expiredTime = EXPIRED_TIME } = {}) =>
   async (dispatch: AppThunkDispatch, getState: AppGetState) => {
     try {
-      const state2 = getState();
-      const { store } = await getReduxStore();
-      const state = store.getState();
-
-      console.log("getPTokenList state ", state);
-      console.log("getPTokenList state2 ", state2);
-
+      const state = getState();
       const network = networkSelector(state);
       const accountSender = defaultAccountWalletSelector(state);
       const followTokens = await accountSender.getListFollowingTokens();

@@ -11753,10 +11753,10 @@ redux@4.0.5:
     loose-envify "^1.4.0"
     symbol-observable "^1.2.0"
 
-reduxed-chrome-storage@^2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/reduxed-chrome-storage/-/reduxed-chrome-storage-2.5.0.tgz#7ac9d664127fb7f0017bb45214dbb8feb7189df9"
-  integrity sha512-Q6/vfInuzYBT2iHq0Acx9A2aUiCsDC8J81AoqoCS3eAURLP8kSE979o6YKcxEB1mDm9PF9omy7F5hBgOURHHng==
+reduxed-chrome-storage@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/reduxed-chrome-storage/-/reduxed-chrome-storage-2.6.0.tgz#66b6a53eae9f44de8e252ef8cd5353713801c507"
+  integrity sha512-u2bV3K3RtlOLgVecuxiob6WuCVuwBRzmAnGGjplyDGEah6pD9qtnbdqjWRKdesprigmSilxfVyuzJXs8ZzJgnA==
 
 regenerate-unicode-properties@^10.0.1:
   version "10.0.1"

@@ -67,8 +67,8 @@ const MainRoute = () => {
   const [routes, setRoutes] = React.useState<Array<IRouteProps>>([]);
 
   const { setModal } = useModal();
-  const isScanCoins = useSelector(isFirstTimeScanCoinsSelector);
-  const showConfirmScanCoins = useSelector(isShowConfirmScanCoins);
+  // const isScanCoins = useSelector(isFirstTimeScanCoinsSelector);
+  // const showConfirmScanCoins = useSelector(isShowConfirmScanCoins);
 
   const handleGetRoutes = () => {
     const allRoutes: IRouteProps[] = [];
@@ -105,11 +105,11 @@ const MainRoute = () => {
     updateMetric().then();
   }, []);
 
-  React.useEffect(() => {
-    if (showConfirmScanCoins) {
-      throttleShowModal();
-    }
-  }, [showConfirmScanCoins]);
+  // React.useEffect(() => {
+  //   if (showConfirmScanCoins) {
+  //     throttleShowModal();
+  //   }
+  // }, [showConfirmScanCoins]);
 
   if (!popupState) {
     return null;
@@ -134,7 +134,7 @@ const MainRoute = () => {
           </Switch>
         </Suspense>
       </Styled>
-      {isScanCoins && <Loading message="Scanning coins, please wait a few minutes" />}
+      {/* {isScanCoins && <Loading message="Scanning coins, please wait a few minutes" />} */}
     </>
   );
 };

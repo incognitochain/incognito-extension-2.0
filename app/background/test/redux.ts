@@ -1,17 +1,12 @@
-import getReduxStore from "@redux/store/chrome-storage";
-import { testModelAction } from "@/redux/test";
+import { getReduxSyncStorage } from "@redux/store/chrome-storage";
 
 let reduxStore: any;
 
-const initRdux = async () => {
-  const { store } = await getReduxStore();
-  reduxStore = store;
+const initRedux = async () => {
+  const { reduxSyncStorage } = await getReduxSyncStorage();
+  reduxStore = reduxSyncStorage;
 };
 
-const testAction = async () => {
-  reduxStore.dispatch(testModelAction());
-};
+initRedux();
 
-initRdux();
-
-export { testAction };
+export {};

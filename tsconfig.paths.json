@@ -16,7 +16,8 @@
       "@redux/*": ["app/redux/*"],
       "@utils/*": ["app/utils/*"],
       "@constants/*": ["app/constants/*"],
-      "@resources/*": ["app/resources/*"]
+      "@resources/*": ["app/resources/*"],
+      "@redux-sync-storage/*": ["app/redux-sync-storage/*"]
     }
   }
 }

@@ -3,7 +3,7 @@ let lifeline: any;
 keepAlive();
 async function retryOnTabUpdate(tabId: any, info: any, tab: any) {
   if (info.url && /^(file|https?):/.test(info.url)) {
-    console.log("call keepAlive() ");
+    // console.log("call keepAlive() ");
     keepAlive();
   }
 }
@@ -16,7 +16,7 @@ chrome.runtime.onConnect.addListener((port: any) => {
 });
 
 function keepAliveForced() {
-  console.log("call keepAliveForced ");
+  // console.log("call keepAliveForced ");
   lifeline?.disconnect();
   lifeline = null;
   keepAlive();
@@ -24,9 +24,9 @@ function keepAliveForced() {
 
 async function keepAlive() {
   if (lifeline) return;
-  console.log("call keepAlive ");
+  // console.log("call keepAlive ");
   for (const tab of await chrome.tabs.query({ url: "*://*/*" })) {
-    console.log("keepAlive tab ", tab);
+    // console.log("keepAlive tab ", tab);
     try {
       await chrome.scripting.executeScript({
         target: { tabId: tab.id || 0 },
@@ -36,7 +36,7 @@ async function keepAlive() {
       chrome.tabs.onUpdated.removeListener(retryOnTabUpdate);
       return;
     } catch (e) {
-      console.log("EEEE ", e);
+      // console.log("EEEE ", e);
     }
   }
   chrome.tabs.onUpdated.addListener(retryOnTabUpdate);

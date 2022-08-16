@@ -12,19 +12,19 @@ import { createStore } from "redux";
 import rootReducers, { superRootReducer } from "@redux/reducers/index";
 import { render } from "react-dom";
 import { persistor } from "@/redux/store/store";
-import getReduxStore from "@redux/store/chrome-storage";
+// import { getReduxSyncStorage } from "@redux/store/chrome-storage";
 import { persistReducer, persistStore } from "redux-persist";
 import { FULL_NODE, TESTNET_TOKENS } from "@background/MainRoute.constants";
+import { getReduxSyncStorage } from "@redux-sync-storage/store/store";
 // const useHotReload = false;
 // const { store, persistor } = require("@popup/popup.preprocessor");
 
 chrome.tabs.query({ active: true, currentWindow: true }, (_tab) => {
   (async () => {
-    console.log("POPUP ==> OPEN");
     chrome.runtime.connect();
-    const { store } = await getReduxStore();
+    const { reduxSyncStorage } = await getReduxSyncStorage();
     ReactDOM.render(
-      <Provider store={store}>
+      <Provider store={reduxSyncStorage}>
         <App />
       </Provider>,
       document.getElementById("root"),

@@ -39,6 +39,7 @@ import { MasterKeyImportAction, MasterKeyRemoveAction } from ".";
 import { uniqBy } from "lodash";
 import { loadMasterKeys } from "./masterKey.reducer";
 import { walletSelector } from "@redux/wallet/wallet.selectors";
+
 const { Validator } = require("incognito-chain-web-js/build/web/wallet");
 //--------------------------------------------------------------------
 // Pure Functions (Pure Action)
@@ -270,11 +271,11 @@ export const importMasterKey =
       batch(async () => {
         await dispatch(importMasterKeySuccess(newMasterKey));
         await dispatch(switchMasterKeySuccess(data.masterKeyName));
-        !!ignoreReloadWallet && dispatch(reloadWallet());
+        !!ignoreReloadWallet && (await dispatch(reloadWallet()));
         // dispatch(actionRequestAirdropNFTForListAccount(wallet));
-        dispatch(syncUnlinkWithNewMasterKey(newMasterKey));
-        dispatch(loadAllMasterKeyAccounts());
-        dispatch(reloadWallet());
+        await dispatch(syncUnlinkWithNewMasterKey(newMasterKey));
+        await dispatch(loadAllMasterKeyAccounts());
+        await dispatch(reloadWallet());
       });
     } catch (error) {
       throw error;

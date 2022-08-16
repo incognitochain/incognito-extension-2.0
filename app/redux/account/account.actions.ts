@@ -108,7 +108,7 @@ export const actionSetSignPublicKeyEncode =
         account,
       });
       if (signPublicKeyEncode) {
-        dispatch(setSignPublicKeyEncode(signPublicKeyEncode));
+        // dispatch(setSignPublicKeyEncode(signPublicKeyEncode));
       }
     } catch (error) {
       new ExHandler(error).showErrorToast();

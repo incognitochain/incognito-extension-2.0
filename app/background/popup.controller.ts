@@ -21,7 +21,9 @@ import {
   masterKeySwitchNetwork,
   unlockMasterKey,
 } from "@redux/masterKey";
-import { dispatch, store } from "@redux/store/store";
+import serverService, { MAINNET_FULLNODE } from "@services/wallet/Server";
+import { actionUpdateNetwork } from "@redux/configs/Configs.actions";
+import { dispatch, store as reduxStore } from "@redux/store/store";
 import Storage from "@services/storage";
 import { APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@constants/common";
 import { actionFetchCreateAccount, actionLogout, actionSwitchAccount } from "@redux/account/account.actions";
@@ -39,7 +41,6 @@ const { setShardNumber, Validator, PrivacyVersion } = require("incognito-chain-w
 const log = createLogger("incognito:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
 export interface PopupControllerOpt {
-  reduxStore: any;
   store: Store;
   actionManager: ActionManager;
   popupState: PopupStateResolver;
@@ -49,10 +50,10 @@ export interface PopupControllerOpt {
   persistData: any;
   scanCoinHandler: any;
   updateNetworkHandler: any;
+  reduxSyncStorage: any;
 }
 
 export class PopupController {
-  private reduxStore: any;
   private store: Store;
   private actionManager: ActionManager;
   private _notifyAllDomains: ((payload: Notification) => Promise<void>) | null;
@@ -62,10 +63,10 @@ export class PopupController {
   private persistData: any;
   private scanCoinHandler: any;
   private updateNetworkHandler: any;
+  private reduxSyncStorage: any;
 
   constructor(opts: PopupControllerOpt) {
     const {
-      reduxStore,
       store,
       notifyAllDomains,
       connection,
@@ -75,8 +76,9 @@ export class PopupController {
       persistData,
       scanCoinHandler,
       updateNetworkHandler,
+      reduxSyncStorage,
     } = opts;
-    this.reduxStore = reduxStore;
+    this.reduxSyncStorage = reduxSyncStorage;
     this.store = store;
     this.actionManager = actionManager;
     this.popupState = popupState;
@@ -312,8 +314,9 @@ export class PopupController {
       // if any of the above popup commands did not error
       // out make sure to return the state, the popup expects it!
       if (!res.error) {
+        const popupStateData = this.popupState.get();
         res.result = {
-          ...this.popupState.get(),
+          ...popupStateData,
           reqResponse,
         };
       }
@@ -322,17 +325,17 @@ export class PopupController {
   }
 
   async createAccount({ accountName }: { accountName: string }) {
-    await this.reduxStore.dispatch(actionFetchCreateAccount({ accountName }));
+    await reduxStore.dispatch(actionFetchCreateAccount({ accountName }));
   }
 
   async switchAccount({ accountName }: { accountName: string }) {
-    await this.reduxStore.dispatch(actionSwitchAccount(accountName));
+    await reduxStore.dispatch(actionSwitchAccount(accountName));
   }
 
   async unlockWallet({ password }: { password: string }) {
     try {
       await this.store.unlockSecretBox(password);
-      const wallet = await this.reduxStore.dispatch(unlockMasterKey(password));
+      const wallet = await reduxStore.dispatch(unlockMasterKey(password));
       this.store.setWallet(wallet);
       // this.persistData();
     } catch (e) {
@@ -342,7 +345,7 @@ export class PopupController {
 
   async switchNetwork() {
     try {
-      const wallet = await this.reduxStore.dispatch(masterKeySwitchNetwork());
+      const wallet = await reduxStore.dispatch(masterKeySwitchNetwork());
       this.store.setWallet(wallet);
     } catch (e) {
       console.log("switchNetwork ERROR ", e);
@@ -352,7 +355,7 @@ export class PopupController {
   async initMasterKey(data: InitMasterKeyPayload) {
     const { mnemonic, masterKeyName, password } = data;
 
-    const wallet = await this.reduxStore.dispatch(initMasterKey({ mnemonic, masterKeyName, password }));
+    const wallet = await reduxStore.dispatch(initMasterKey({ mnemonic, masterKeyName, password }));
     const salt = await Storage.getItem(APP_SALT_KEY);
     const passphraseEncrypted = await Storage.getItem(APP_PASS_PHRASE_CIPHER);
     this.store.setSecretBox({
@@ -365,7 +368,7 @@ export class PopupController {
 
   async importMasterKey(data: ImportMasterKeyPayload) {
     const { mnemonic, masterKeyName, password } = data;
-    const wallet = await this.reduxStore.dispatch(importMasterKey({ mnemonic, masterKeyName, password }));
+    const wallet = await reduxStore.dispatch(importMasterKey({ mnemonic, masterKeyName, password }));
     const salt = await Storage.getItem(APP_SALT_KEY);
     const passphraseEncrypted = await Storage.getItem(APP_PASS_PHRASE_CIPHER);
     this.store.setSecretBox({
@@ -382,16 +385,16 @@ export class PopupController {
     await Storage.clear();
     // await Storage.logAll();
     await clearAllCaches();
-    await this.reduxStore.dispatch(clearReduxStore());
+    await reduxStore.dispatch(clearReduxStore());
     batch(() => {
-      this.reduxStore.dispatch(actionFreeAssets());
-      this.reduxStore.dispatch(actionFreeScanCoins());
-      this.reduxStore.dispatch(actionLogout());
+      reduxStore.dispatch(actionFreeAssets());
+      reduxStore.dispatch(actionFreeScanCoins());
+      reduxStore.dispatch(actionLogout());
     });
     await this.updateNetworkHandler();
 
     // Create new wallet, the same flow import wallet
-    const wallet = await this.reduxStore.dispatch(importMasterKey({ mnemonic, masterKeyName: "Wallet", password }));
+    const wallet = await reduxStore.dispatch(importMasterKey({ mnemonic, masterKeyName: "Wallet", password }));
 
     const salt = await Storage.getItem(APP_SALT_KEY);
     const passphraseEncrypted = await Storage.getItem(APP_PASS_PHRASE_CIPHER);
@@ -519,7 +522,7 @@ export class PopupController {
         network,
         burningRequestMeta,
       } = req.params;
-      const accountSender = defaultAccountWalletSelector(store.getState());
+      const accountSender = defaultAccountWalletSelector(reduxStore.getState());
       new Validator("signTransaction-networkFee", networkFee).amount();
       new Validator("signTransaction-isUnified", isUnified).boolean();
 
@@ -639,7 +642,7 @@ export class PopupController {
   }
 
   async createAndSendTransaction({ isMainCrypto = true, payload = null }: { isMainCrypto: Boolean; payload: any }) {
-    const accountSender = defaultAccountWalletSelector(store.getState());
+    const accountSender = defaultAccountWalletSelector(reduxStore.getState());
     if (!accountSender) return null;
     let tx;
     if (typeof setShardNumber === "function") {

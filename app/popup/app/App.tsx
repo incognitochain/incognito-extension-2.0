@@ -67,5 +67,5 @@ const App: React.FunctionComponent = () => {
   );
 };
 
-export default withApp(React.memo(App));
-// export default App;
+// export default withApp(React.memo(App));
+export default App;
