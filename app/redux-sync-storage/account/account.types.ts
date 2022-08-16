@@ -1,5 +1,18 @@
 import { Action } from "redux";
 
+export type AccountDetail = {
+  name: string;
+  paymentAddress: string;
+  privateKey: string;
+  publicKeyCheckEncode: string;
+  readonlyKey: string;
+  validatorKey: string;
+  blsPublicKey: string;
+  otaKey: string;
+  id: number;
+  publicKeyBytes: any;
+};
+
 export type AccountInfo = {
   name: string;
   paymentAddress: string;

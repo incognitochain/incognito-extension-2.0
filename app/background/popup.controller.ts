@@ -28,7 +28,11 @@ import Storage from "@services/storage";
 import { APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@constants/common";
 import { actionFetchCreateAccount, actionLogout, actionSwitchAccount } from "@redux/account/account.actions";
 import { getFollowTokensBalance } from "@background/worker.scanCoins";
-import { defaultAccountWalletSelector, getCurrentPaymentAddress } from "@redux/account/account.selectors";
+import {
+  defaultAccountWalletSelector,
+  getAccountWithPaymentAddress,
+  getCurrentPaymentAddress,
+} from "@redux/account/account.selectors";
 import accountService from "@services/wallet/accountService";
 import { clearAllCaches } from "@services/cache";
 import { clearReduxStore } from "@redux/reducers";
@@ -94,6 +98,7 @@ export class PopupController {
     return createAsyncMiddleware(async (req: any, res: any, next: any) => {
       const method = req.method as PopupActions;
       let reqResponse;
+      let accountDetail;
       switch (method) {
         case "popup_getState":
           break;
@@ -306,6 +311,28 @@ export class PopupController {
             res.error = err;
           }
           break;
+        case "popup_request_account_detail":
+          try {
+            const { paymentAddress } = req.params;
+            const selectedAccount = getAccountWithPaymentAddress(paymentAddress)(reduxStore.getState());
+            accountDetail = {
+              name: selectedAccount?.AccountName || "",
+              paymentAddress: selectedAccount?.PaymentAddress,
+              privateKey: selectedAccount?.PrivateKey,
+              publicKeyCheckEncode: selectedAccount?.PublicKeyCheckEncode,
+              readonlyKey: selectedAccount?.ReadonlyKey,
+              validatorKey: selectedAccount?.ValidatorKey,
+              blsPublicKey: selectedAccount?.BLSPublicKey,
+              otaKey: selectedAccount?.OTAKey,
+              id: selectedAccount?.ID,
+              publicKeyBytes: selectedAccount?.PublicKeyBytes,
+            };
+          } catch (err) {
+            log("error: popup_request_account_detail failed  with error: %s", err);
+            res.error = err;
+          }
+          break;
+
         default:
           log("popup controller middleware did not match method name %s", req.method);
           await next();
@@ -317,10 +344,12 @@ export class PopupController {
         const popupStateData = this.popupState.get();
         res.result = {
           ...popupStateData,
+          accountDetail,
           reqResponse,
         };
       }
       reqResponse = null;
+      accountDetail = undefined;
     });
   }
 

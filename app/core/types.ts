@@ -1,4 +1,5 @@
 import { Cluster, clusterApiUrl, TransactionInstruction } from "@solana/web3.js";
+import { AccountDetail } from "@redux-sync-storage/account/account.types";
 
 export const ENVIRONMENT_TYPE_POPUP = "popup";
 export const ENVIRONMENT_TYPE_BACKGROUND = "background";
@@ -85,6 +86,7 @@ export type PopupState = {
   actions: OrderedAction[];
   storeData?: any;
   reqResponse: null;
+  accountDetail?: AccountDetail;
 };
 
 export type ActionKey = {
@@ -149,7 +151,8 @@ export type PopupActions =
   | "popup_followTokensBalance"
   | "popup_switchNetwork"
   | "popup_create_and_send_transaction"
-  | "popup_request_scan_coins";
+  | "popup_request_scan_coins"
+  | "popup_request_account_detail";
 
 export type PendingSignTransaction = {
   message: string;

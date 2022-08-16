@@ -22,6 +22,7 @@ export class PopupStateResolver {
       actions: this.actionManager.getOrderedActions(),
       storeData: {},
       reqResponse: null,
+      accountDetail: undefined,
     };
 
     if (this.store.hasSecretBox()) {

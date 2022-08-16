@@ -52,7 +52,7 @@ const SelectAccount = React.memo(() => {
   const accountItemOnClick = (accountItem: any) => {
     history.push({
       pathname: routeKeychainDetail,
-      state: { PaymentAddress: accountItem.PaymentAddress },
+      state: { PaymentAddress: accountItem.paymentAddress },
     });
   };
 
