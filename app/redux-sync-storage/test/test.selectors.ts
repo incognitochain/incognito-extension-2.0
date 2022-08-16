@@ -1,4 +1,3 @@
-import { RootState } from "@redux/reducers";
-import { People } from "./test.reducer";
+import { RootState } from "@redux-sync-storage/reducers";
 
-export const peopleSelectors = (state: RootState): People | undefined => state.test.people;
+export const testSelectors = (state: RootState) => state.test;

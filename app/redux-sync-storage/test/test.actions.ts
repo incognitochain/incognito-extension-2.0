@@ -1,5 +1,5 @@
-export const testModelAction = () => ({
-  type: "TEST_MODEL",
+export const tesAction = () => ({
+  type: "TEST_ACTION",
 });
 
 export default {};

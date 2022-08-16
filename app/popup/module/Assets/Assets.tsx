@@ -12,7 +12,7 @@ import withBalance from "@module/MainRoute/MainRoute.withBalance";
 const Assets = React.memo(() => {
   const history = useHistory();
   const navigateImportTokens = () => {
-    history.push(routeImportToken);
+    // history.push(routeImportToken);
   };
 
   const navigateSetting = () => {
