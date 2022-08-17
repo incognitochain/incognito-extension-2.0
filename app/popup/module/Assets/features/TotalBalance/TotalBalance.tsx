@@ -12,7 +12,7 @@ const Styled = styled.p`
 const TotalBalance = React.memo(() => {
   // const totalShield = useSelector(sharedSelectors.followTokensUSDAmountSelector);
   // return <Styled className="fs-avglarge fw-medium">{`$${totalShield}`}</Styled>;
-  return <Styled className="fs-avglarge fw-medium">{`TO DO`}</Styled>;
+  return <Styled className="fs-avglarge fw-medium">{`$0`}</Styled>;
 });
 
 export default TotalBalance;

@@ -16,8 +16,17 @@ export const getAccountList = createSelector(
   (state) => state.account.accountList || [],
 );
 
+export const getPaymentAddress = createSelector(
+  getAccountDefaultName,
+  getAccountList,
+  (accDefaultName, accountList) => {
+    return accountList.find((acc) => acc.name === accDefaultName)?.paymentAddress || "";
+  },
+);
+
 export default {
   getAccountDefaultName,
   getCurrentAccount,
   getAccountList,
+  getPaymentAddress,
 };

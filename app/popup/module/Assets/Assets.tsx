@@ -32,9 +32,9 @@ const Assets = React.memo(() => {
         customHeader={<SearchIcon onClick={navigateImportTokens} />}
         selectAccount
       />
-      {/* <TotalBalance />
+      <TotalBalance />
       <AddressBar />
-      <FollowTokensList /> */}
+      {/* <FollowTokensList /> */}
     </>
   );
 });

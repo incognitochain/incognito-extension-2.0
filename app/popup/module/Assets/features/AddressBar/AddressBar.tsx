@@ -4,9 +4,10 @@ import { CopyIcon, QrCodeIcon } from "@components/Icons";
 import { Row } from "@popup/theme";
 import { ellipsisCenter } from "@popup/utils";
 import { useSelector } from "react-redux";
-import { paymentAddressOfDefaultAccountSelector } from "@redux/account/account.selectors";
+// import { paymentAddressOfDefaultAccountSelector } from "@redux/account/account.selectors";
 import { useHistory } from "react-router-dom";
 import { route as QRCodeRoute } from "@module/QRCode";
+import { getPaymentAddress } from "@redux-sync-storage/account/account.selectors";
 
 const Styled = styled.div`
   padding: 8px 16px;
@@ -27,7 +28,8 @@ const Styled = styled.div`
 
 const AddressBar = React.memo(() => {
   const history = useHistory();
-  const paymentAddress = useSelector(paymentAddressOfDefaultAccountSelector);
+  // const paymentAddress = useSelector(paymentAddressOfDefaultAccountSelector);
+  const paymentAddress = useSelector(getPaymentAddress);
   const addressEllipsis = ellipsisCenter({
     str: paymentAddress,
     limit: 11,
