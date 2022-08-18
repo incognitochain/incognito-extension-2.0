@@ -2,7 +2,6 @@ import CreateNewKeyRouteStack from "@popup/pages/CreateNewKey/CreateNewKeyRouteS
 import { GetStartedPage } from "@popup/pages/GetStarted/GetStartedPage";
 import HomeRouteStack from "@popup/pages/Home/HomeRouteStack";
 import ImportMasterKeyRouteStack from "@popup/pages/Import/ImportMasterKeyRouteStack";
-// import NotFoundPage from "@popup/pages/NotFound/NotFoundPage";
 import React from "react";
 import { RouteProps } from "react-router";
 import { Redirect, Route, RouteComponentProps, Switch } from "react-router-dom";

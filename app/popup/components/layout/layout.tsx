@@ -1,5 +1,4 @@
 import React from "react";
-import { NavigationFrame } from "../navigation-frame";
 import { useBackground } from "../../context/background";
 import { Helmet } from "react-helmet";
 import BaseComponent from "@components/BaseComponent/BaseComponent";
@@ -26,8 +25,7 @@ export const Layout: BaseComponent = ({ children }) => {
     <>
       {/* <Helmet>
         <title>{isNotification ? "Incognito Notification" : "Incognito Assets"}</title>
-      </Helmet>
-      <NavigationFrame /> */}
+      </Helmet> */}
       {children}
     </>
   );

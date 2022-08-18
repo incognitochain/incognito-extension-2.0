@@ -1,5 +1,4 @@
 import CssBaseline from "@mui/material/CssBaseline";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { SnackbarProvider } from "notistack";
 import React, { Suspense, useEffect, useMemo } from "react";
 import { BrowserRouter, Router } from "react-router-dom";
@@ -7,7 +6,6 @@ import { LoadingIndicator } from "../components/loading-indicator";
 import { Routes } from "../components/routes/routes";
 import { BackgroundProvider } from "../context/background";
 import { ConnectionProvider } from "../context/connection";
-import { ProgramPluginsManagerProvider } from "../context/plugins";
 import { themeHelper } from "../helper/index";
 // import { history } from "../utils/history";
 import { makeStyles } from "@mui/styles";
@@ -42,22 +40,20 @@ export const App: React.FC = () => {
         <CssBaseline />
         <BackgroundProvider>
           <ConnectionProvider>
-            <ProgramPluginsManagerProvider>
-              <SnackbarProvider
-                maxSnack={5}
-                autoHideDuration={2000}
-                classes={{
-                  variantSuccess: classes.success,
-                  variantError: classes.error,
-                  variantWarning: classes.warning,
-                  variantInfo: classes.info,
-                }}
-              >
-                <BrowserRouter>
-                  <Routes />
-                </BrowserRouter>
-              </SnackbarProvider>
-            </ProgramPluginsManagerProvider>
+            <SnackbarProvider
+              maxSnack={5}
+              autoHideDuration={2000}
+              classes={{
+                variantSuccess: classes.success,
+                variantError: classes.error,
+                variantWarning: classes.warning,
+                variantInfo: classes.info,
+              }}
+            >
+              <BrowserRouter>
+                <Routes />
+              </BrowserRouter>
+            </SnackbarProvider>
           </ConnectionProvider>
         </BackgroundProvider>
       </ThemeProvider>

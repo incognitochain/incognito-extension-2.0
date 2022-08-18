@@ -8,8 +8,6 @@ import {
   Notification,
   PopupActions,
 } from "@core/types";
-import { Account, Connection, PublicKey, SystemProgram } from "@solana/web3.js";
-import { Web3Connection } from "@core/connection";
 import { ExtensionManager } from "./lib/extension-manager";
 import { ActionManager } from "./lib/action-manager";
 import { PopupStateResolver } from "./lib/popup-state-resolver";
@@ -49,7 +47,6 @@ export interface PopupControllerOpt {
   store: Store;
   actionManager: ActionManager;
   popupState: PopupStateResolver;
-  connection: Web3Connection;
   notifyAllDomains: ((payload: Notification) => Promise<void>) | null;
   extensionManager: ExtensionManager;
   persistData: any;
@@ -62,7 +59,6 @@ export class PopupController {
   private store: Store;
   private actionManager: ActionManager;
   private _notifyAllDomains: ((payload: Notification) => Promise<void>) | null;
-  private connection: Web3Connection;
   private extensionManager: ExtensionManager;
   private popupState: PopupStateResolver;
   private persistData: any;
@@ -74,7 +70,6 @@ export class PopupController {
     const {
       store,
       notifyAllDomains,
-      connection,
       extensionManager,
       actionManager,
       popupState,
@@ -87,7 +82,6 @@ export class PopupController {
     this.store = store;
     this.actionManager = actionManager;
     this.popupState = popupState;
-    this.connection = connection;
     this._notifyAllDomains = notifyAllDomains;
     this.extensionManager = extensionManager;
     this.persistData = persistData;
@@ -257,14 +251,6 @@ export class PopupController {
             await this.declineTransaction(req);
           } catch (err) {
             log("popup_declineTransaction failed with error: %s", err);
-            res.error = err;
-          }
-          break;
-        case "popup_sendSolToken":
-          try {
-            await this.sendSolToken(req);
-          } catch (err) {
-            log("popup_sendSolToken failed with error: %s", err);
             res.error = err;
           }
           break;
@@ -711,7 +697,6 @@ export class PopupController {
 
     const onExit = (network: Network) => {
       // change the connection network option
-      this.connection.changeNetwork(network);
       this._notifyAll({
         type: "clusterChanged",
         data: network,
@@ -783,46 +768,6 @@ export class PopupController {
         .catch((err) => {
           log("Error notifying domains: %s", err);
         });
-    }
-  }
-
-  async sendSolToken(req: any) {
-    log(`send token for req %O`, req);
-    const transfer = req.params.transfer;
-
-    if (!this.store.wallet) {
-      throw new Error(`Unable sign and send transaction with out a wallet`);
-    }
-
-    let signingAccount: Account | undefined;
-    this.store.wallet.accounts.forEach((a: Account) => {
-      if (a.publicKey.toBase58() === req.params.transfer.fromPubkey) {
-        signingAccount = a;
-      }
-    });
-
-    if (!signingAccount) {
-      throw new Error(`no account found in wallet for pubkey: ${req.params.transfer}`);
-    }
-
-    const lamports = req.params.transfer.lamports;
-    log("lamports for transaction: %O", lamports);
-    const transaction = SystemProgram.transfer({
-      fromPubkey: new PublicKey(transfer.fromPubkey),
-      toPubkey: new PublicKey(transfer.toPubkey),
-      lamports: lamports,
-    });
-
-    log("creating connection with address: ", this.store.selectedNetwork.endpoint);
-    const connection = new Connection(this.store.selectedNetwork.endpoint);
-
-    log("sending transaction %O", transaction);
-
-    try {
-      const signature = await connection.sendTransaction(transaction, [signingAccount]);
-      log("Got signature:", signature);
-    } catch (e) {
-      throw new Error("Failed to send transaction: " + e);
     }
   }
 }

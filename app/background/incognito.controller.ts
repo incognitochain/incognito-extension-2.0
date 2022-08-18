@@ -21,9 +21,6 @@ import {
   Token,
 } from "../core/types";
 import { ExtensionManager } from "./lib/extension-manager";
-import { ProgramPluginManager } from "../core/program-plugin";
-import { Web3Connection } from "../core/connection";
-import { Connection, PublicKey } from "@solana/web3.js";
 import { ActionManager } from "./lib/action-manager";
 import { PopupStateResolver } from "./lib/popup-state-resolver";
 import { dispatch, store as reduxStore } from "@redux/store/store";
@@ -60,37 +57,30 @@ export default class IncognitoController {
   public actionManager: ActionManager;
   private popupState: PopupStateResolver;
   private persistData: (data: StoredData) => Promise<boolean>;
-  private connection: Web3Connection;
   private reduxSyncStorage: any;
 
   constructor(opts: IncognitoControllerOpts) {
     const { storedData, persistData, reduxSyncStorage } = opts;
     const store = new Store(storedData);
-    const connection = new Web3Connection(store.selectedNetwork);
 
     this.reduxSyncStorage = reduxSyncStorage;
     this.store = store;
-    this.connection = connection;
     this.extensionManager = new ExtensionManager();
     this.actionManager = new ActionManager();
     this.actionManager.on(EVENT_UPDATE_BADGE, this.updateBadge);
     this.actionManager.on(EVENT_UPDATE_ACTIONS, this.notifyNotificationStateChange.bind(this));
     this.popupState = new PopupStateResolver(this.store, this.actionManager);
     this.persistData = persistData;
-    const pluginManager = new ProgramPluginManager({
-      getConnection: this.getWeb3Connection.bind(this),
-    });
+
     this.walletController = new WalletController({
       reduxSyncStorage,
       store,
-      pluginManager,
       actionManager: this.actionManager,
       openPopup: this.triggerUi.bind(this),
     });
     this.popupController = new PopupController({
       reduxSyncStorage,
       store,
-      connection,
       popupState: this.popupState,
       actionManager: this.actionManager,
       notifyAllDomains: this.notifyAllConnections.bind(this),
@@ -268,14 +258,6 @@ export default class IncognitoController {
         });
       });
     });
-  }
-
-  getWeb3Connection(): Connection {
-    return this.connection.conn;
-  }
-
-  getNetwork(): Network {
-    return this.connection.network;
   }
 
   async triggerUi() {

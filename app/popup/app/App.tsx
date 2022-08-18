@@ -5,7 +5,6 @@ import { MainRoute } from "@module/MainRoute";
 import withApp from "@popup/app/App.enhance";
 import { BackgroundProvider } from "@popup/context/background";
 import { ConnectionProvider } from "@popup/context/connection";
-import { ProgramPluginsManagerProvider } from "@popup/context/plugins";
 import { makeStyles } from "@mui/styles";
 import { SnackbarProvider } from "notistack";
 import { themeHelper } from "../helper/index";
@@ -40,26 +39,24 @@ const App: React.FunctionComponent = () => {
         <ThemedGlobalStyle />
         <BackgroundProvider>
           <ConnectionProvider>
-            <ProgramPluginsManagerProvider>
-              <LoadingProvider>
-                <ModalProvider>
-                  <SnackbarProvider
-                    maxSnack={5}
-                    autoHideDuration={2000}
-                    classes={{
-                      variantSuccess: classes.success,
-                      variantError: classes.error,
-                      variantWarning: classes.warning,
-                      variantInfo: classes.info,
-                    }}
-                  >
-                    <Router history={history}>
-                      <MainRoute />
-                    </Router>
-                  </SnackbarProvider>
-                </ModalProvider>
-              </LoadingProvider>
-            </ProgramPluginsManagerProvider>
+            <LoadingProvider>
+              <ModalProvider>
+                <SnackbarProvider
+                  maxSnack={5}
+                  autoHideDuration={2000}
+                  classes={{
+                    variantSuccess: classes.success,
+                    variantError: classes.error,
+                    variantWarning: classes.warning,
+                    variantInfo: classes.info,
+                  }}
+                >
+                  <Router history={history}>
+                    <MainRoute />
+                  </Router>
+                </SnackbarProvider>
+              </ModalProvider>
+            </LoadingProvider>
           </ConnectionProvider>
         </BackgroundProvider>
       </ThemeProviderMUI>

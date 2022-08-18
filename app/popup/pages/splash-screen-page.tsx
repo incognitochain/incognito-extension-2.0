@@ -1,6 +1,5 @@
 import React from "react";
 import Container from "@mui/material/Container";
-import { IncognitoIcon } from "../components/solana-icon";
 import { makeStyles } from "@mui/styles";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -31,7 +30,7 @@ const SplashScreenPageBase: BaseComponent = ({ children }) => {
         </Toolbar>
       </AppBar>
       <Container maxWidth="sm" style={{ textAlign: "center" }}>
-        <IncognitoIcon size={"50px"} />
+        {/* <IncognitoIcon size={"50px"} /> */}
       </Container>
     </>
   );

@@ -138,7 +138,6 @@ export type PopupActions =
   | "popup_deleteAuthorizedWebsite"
   | "popup_declineRequestAccounts"
   | "popup_addWalletAccount"
-  | "popup_sendSolToken"
   | "popup_sendSplToken"
   | "popup_sendTransaction"
   | "popup_changeNetwork"

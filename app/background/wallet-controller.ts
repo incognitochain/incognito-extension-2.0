@@ -1,5 +1,5 @@
 import { Store } from "./store";
-import { createLogger, decodeSerializedMessage } from "../core/utils";
+import { createLogger } from "../core/utils";
 import {
   IncognitoSignTransactionResponse,
   Markdown,
@@ -8,10 +8,6 @@ import {
   WallActions,
   WalletActionsType,
 } from "../core/types";
-import bs58 from "bs58";
-import { Transaction } from "@solana/web3.js";
-import { Buffer } from "buffer";
-import { ProgramPluginManager } from "../core/program-plugin";
 import { ActionManager } from "./lib/action-manager";
 import { getCurrentPaymentAddress } from "@redux/account/account.selectors";
 import { dispatch, store as reduxStore } from "@redux/store/store";
@@ -32,7 +28,6 @@ const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware
 
 interface WalletControllerOpt {
   store: Store;
-  pluginManager: ProgramPluginManager;
   actionManager: ActionManager;
   openPopup: () => Promise<void>;
   reduxSyncStorage: any;
@@ -47,16 +42,14 @@ export class WalletController {
   private store: Store;
   private actionManager: ActionManager;
   private openPopup: any;
-  private pluginManager: ProgramPluginManager;
   private reduxSyncStorage: any;
 
   constructor(opts: WalletControllerOpt) {
-    const { store, openPopup, pluginManager, actionManager, reduxSyncStorage } = opts;
+    const { store, openPopup, actionManager, reduxSyncStorage } = opts;
     this.reduxSyncStorage = reduxSyncStorage;
     this.store = store;
     this.actionManager = actionManager;
     this.openPopup = openPopup;
-    this.pluginManager = pluginManager;
   }
 
   createMiddleware(opts: MiddlewareOpts) {
@@ -66,9 +59,7 @@ export class WalletController {
     }
 
     return createAsyncMiddleware(async (req: any, res: any, next: any) => {
-      console.log("WEBAPP CALL BG1: METHOD: ", req.method);
       const method = req.method as WalletActionsType;
-      console.log("WEBAPP CALL BG2---: METHOD: ", req.method);
       switch (method) {
         case "wallet_getState":
           let resp = { state: "uninitialized" };
