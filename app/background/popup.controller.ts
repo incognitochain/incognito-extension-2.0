@@ -654,9 +654,9 @@ export class PopupController {
           });
         }
       }
-    } catch (error: any) {
+    } catch (error) {
       console.log("CREATE TRANSACTION ERROR: ", error);
-      pendingTransactionAction.reject(error);
+      pendingTransactionAction.reject(error as any);
     }
 
     if (tx && tx.hash) {

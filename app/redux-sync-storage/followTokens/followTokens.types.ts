@@ -111,6 +111,6 @@ export interface SetFollowTokenListAction extends Action {
 
 //----------------------------------------------
 
-export type FollowTokenActions =                                                                                           ;
+export type FollowTokenActions = SetFollowTokenListAction;
 
 export {};

@@ -24,13 +24,14 @@ chrome.tabs.query({ active: true, currentWindow: true }, (_tab) => {
     chrome.runtime.connect();
     const { reduxSyncStorage } = await getReduxSyncStorage();
     console.log("[POPUP] reduxSyncStorage ", reduxSyncStorage);
-    ReactDOM.render(
+    return ReactDOM.render(
       <Provider store={reduxSyncStorage}>
         <App />
       </Provider>,
       document.getElementById("root"),
     );
   })();
+  return null;
 });
 
 // ReactDOM.render(
