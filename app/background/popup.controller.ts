@@ -40,7 +40,8 @@ import { actionFreeAssets } from "@module/Assets/Assets.actions";
 import { actionFreeScanCoins } from "@redux/scanCoins";
 import { batch } from "react-redux";
 import rpcSubmit from "@services/wallet/rpcSubmit";
-
+import sharedSelectors from "@redux/shared/shared.selectors";
+import { getPTokenList } from "@redux/token/token.actions";
 const { setShardNumber, Validator, PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 const log = createLogger("incognito:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -332,7 +333,14 @@ export class PopupController {
             res.error = err;
           }
           break;
-
+        case "popup_getFollowTokenList":
+          try {
+            this.getFollowTokenList();
+          } catch (err) {
+            log("error: popup_getFollowTokenList failed  with error: %s", err);
+            res.error = err;
+          }
+          break;
         default:
           log("popup controller middleware did not match method name %s", req.method);
           await next();
@@ -351,6 +359,13 @@ export class PopupController {
       reqResponse = null;
       accountDetail = undefined;
     });
+  }
+
+  async getFollowTokenList() {
+    console.log("[getFollowTokenList] START");
+    // await reduxStore.dispatch(getPTokenList());
+    // const followTokens = sharedSelectors.followTokensFormatedSelector(reduxStore.getState());
+    // console.log("[getFollowTokenList] followTokens ", followTokens);
   }
 
   async createAccount({ accountName }: { accountName: string }) {
@@ -639,7 +654,7 @@ export class PopupController {
           });
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log("CREATE TRANSACTION ERROR: ", error);
       pendingTransactionAction.reject(error);
     }

@@ -152,8 +152,8 @@ export type PopupActions =
   | "popup_switchNetwork"
   | "popup_create_and_send_transaction"
   | "popup_request_scan_coins"
-  | "popup_request_account_detail";
-
+  | "popup_request_account_detail"
+  | "popup_getFollowTokenList";
 export type PendingSignTransaction = {
   message: string;
   signers: string[];
