@@ -12,6 +12,7 @@ import { reducer as themeReducer } from "@popup/theme";
 import { reducer as sendReducer } from "@module/Send";
 import { reducer as formReducer } from "redux-form";
 import { $CombinedState, combineReducers } from "redux";
+import { reducer as signTransactionReducer } from "@module/SignTransaction";
 
 const rootReducers = combineReducers({
   appReducer,
@@ -26,6 +27,7 @@ const rootReducers = combineReducers({
   themeReducer,
   selectedPrivacy,
   sendReducer,
+  signTransactionReducer,
   form: formReducer,
 });
 

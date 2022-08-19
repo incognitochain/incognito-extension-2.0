@@ -15,13 +15,14 @@ import { ProgramPluginManager } from "../core/program-plugin";
 import { ActionManager } from "./lib/action-manager";
 import { getCurrentPaymentAddress } from "@redux/account/account.selectors";
 import { dispatch, store as storeRedux } from "@redux/store/store";
-import { RootState } from "../redux/reducers/index";
 import { getFollowTokensBalance } from "./worker.scanCoins";
-import { actionSetUnshieldData, FORM_CONFIGS, TypeSend } from "@module/Send";
 import { actionSelectedPrivacySet } from "@redux/selectedPrivacy";
 import { change } from "redux-form";
 import { getPTokenList } from "@redux/token";
 import { batch } from "react-redux";
+import { FORM_CONFIGS } from "@/popup/module/SignTransaction/SignTransaction.constant";
+import { actionSetSignTransactionData } from "@module/SignTransaction/SignTransaction.actions";
+import { IPaymentInfo, ISignTransactionParams } from "@module/SignTransaction";
 
 const log = createLogger("incognito:walletCtr");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -231,16 +232,14 @@ export class WalletController {
     const { tabId, origin } = req;
     if (this.store.getWalletState() === "unlocked" && req.params) {
       const params = req.params;
-      const { isUnshield, receiverAddress, burnAmountText } = params;
+      const { receiverAddress, tokenID } = params as ISignTransactionParams;
       batch(() => {
         dispatch(getPTokenList());
-        dispatch(actionSelectedPrivacySet({ tokenID: params.burnToken }));
+        dispatch(actionSelectedPrivacySet({ tokenID }));
         dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, receiverAddress));
-        dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.amount, burnAmountText));
         dispatch(
-          actionSetUnshieldData({
+          actionSetSignTransactionData({
             ...params,
-            screen: isUnshield ? TypeSend.CONFIRM_UNSHIELD : TypeSend.SEND,
           }),
         );
       });

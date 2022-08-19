@@ -49,7 +49,7 @@ const defaultRoute = (key: string, props: RouteProps, popupState: PopupState, is
             const actionObj = popupState.actions && popupState.actions[0];
             if (isNotification) {
               if (actionObj.action.type === "sign_transaction") {
-                return <Redirect to={{ pathname: SendRoute }} />;
+                return <Redirect to={{ pathname: SignTransactionRoute }} />;
               }
             }
             return <Redirect to={{ pathname: AssetsRoute }} />;
