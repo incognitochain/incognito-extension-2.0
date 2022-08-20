@@ -35,11 +35,13 @@ import accountService from "@services/wallet/accountService";
 import { clearAllCaches } from "@services/cache";
 import { clearReduxStore } from "@redux/reducers";
 import { actionFreeAssets } from "@module/Assets/Assets.actions";
-import { actionFreeScanCoins } from "@redux/scanCoins";
+import { actionFreeScanCoins } from "@redux-sync-storage/scanCoins";
 import { batch } from "react-redux";
 import rpcSubmit from "@services/wallet/rpcSubmit";
 import sharedSelectors from "@redux/shared/shared.selectors";
 import { getPTokenList } from "@redux/token/token.actions";
+import { changeNetwork } from "@redux-sync-storage/network/network.actions";
+import { actionHandler } from "@redux-sync-storage/store/store";
 const { setShardNumber, Validator, PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 const log = createLogger("incognito:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -192,7 +194,7 @@ export class PopupController {
             try {
               // await this.store.lockSecretBox();
               await this.lockWalletAction();
-              await this.scanCoinHandler();
+              // await this.scanCoinHandler();
 
               this._notifyAll({
                 type: "stateChanged",
@@ -327,6 +329,15 @@ export class PopupController {
             res.error = err;
           }
           break;
+        case "popup_getPTokenList":
+          try {
+            await this.getPTokenList();
+          } catch (err) {
+            log("error: getPTokenList failed  with error: %s", err);
+            res.error = err;
+          }
+          break;
+
         default:
           log("popup controller middleware did not match method name %s", req.method);
           await next();
@@ -347,9 +358,13 @@ export class PopupController {
     });
   }
 
+  async getPTokenList() {
+    console.log("Backgorund [getFollowTokenList] ");
+    await reduxStore.dispatch(getPTokenList());
+  }
+
   async getFollowTokenList() {
-    console.log("[getFollowTokenList] START");
-    // await reduxStore.dispatch(getPTokenList());
+    console.log("Backgorund [getFollowTokenList] ");
     // const followTokens = sharedSelectors.followTokensFormatedSelector(reduxStore.getState());
     // console.log("[getFollowTokenList] followTokens ", followTokens);
   }
@@ -376,6 +391,8 @@ export class PopupController {
   async switchNetwork() {
     try {
       const wallet = await reduxStore.dispatch(masterKeySwitchNetwork());
+      const currentServer = await serverService.getDefault();
+      await actionHandler(changeNetwork(currentServer));
       this.store.setWallet(wallet);
     } catch (e) {
       console.log("switchNetwork ERROR ", e);
@@ -418,7 +435,8 @@ export class PopupController {
     await reduxStore.dispatch(clearReduxStore());
     batch(() => {
       reduxStore.dispatch(actionFreeAssets());
-      reduxStore.dispatch(actionFreeScanCoins());
+      // reduxStore.dispatch(actionFreeScanCoins());
+      actionHandler(actionFreeScanCoins());
       reduxStore.dispatch(actionLogout());
     });
     await this.updateNetworkHandler();

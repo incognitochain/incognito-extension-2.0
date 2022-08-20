@@ -46,7 +46,7 @@ export interface ServerModel {
   portalServices?: any;
 }
 
-const MAIN_NET_SERVER = {
+export const MAIN_NET_SERVER = {
   id: "mainnet",
   default: true,
   address: MAINNET_FULLNODE,

@@ -1,27 +1,34 @@
-import { AccountActionType, AccountInfo } from "./account.types";
+import {
+  AccountActionType,
+  AccountInfo,
+  SetCurrentAccountAction,
+  SetAccountDefaultNameAction,
+  SetAccountListAction,
+  AddAccountAction,
+} from "./account.types";
 
-const setAccountDefaultName = (name: string) => ({
+const setAccountDefaultName = (name: string): SetAccountDefaultNameAction => ({
   type: AccountActionType.SET_DEFAULT_NAME,
   payload: {
     name,
   },
 });
 
-const setCurrentAccount = (currentAccount: AccountInfo) => ({
+const setCurrentAccount = (currentAccount: AccountInfo): SetCurrentAccountAction => ({
   type: AccountActionType.SET_CURRENT_ACCOUNT,
   payload: {
     currentAccount,
   },
 });
 
-const setAccountList = (accountList: AccountInfo[]) => ({
+const setAccountList = (accountList: AccountInfo[]): SetAccountListAction => ({
   type: AccountActionType.SET_ACCOUNT_LIST,
   payload: {
     accountList,
   },
 });
 
-const addAccount = (newAccount: AccountInfo[]) => ({
+const addAccount = (newAccount: AccountInfo): AddAccountAction => ({
   type: AccountActionType.ADD_ACCOUNT,
   payload: {
     newAccount,

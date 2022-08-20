@@ -123,6 +123,7 @@ export type BaseAction<T> = {
   resolve: (resp: T) => void;
   reject: (error: Error) => void;
 };
+
 export type WallActions = "wallet_signTransaction" | "wallet_requestAccounts" | "wallet_getCluster" | "wallet_getState";
 
 export type PopupActions =
@@ -152,7 +153,8 @@ export type PopupActions =
   | "popup_create_and_send_transaction"
   | "popup_request_scan_coins"
   | "popup_request_account_detail"
-  | "popup_getFollowTokenList";
+  | "popup_getFollowTokenList"
+  | "popup_getPTokenList";
 export type PendingSignTransaction = {
   message: string;
   signers: string[];

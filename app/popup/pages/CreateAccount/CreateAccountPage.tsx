@@ -10,7 +10,7 @@ import { KeyChainLabel, PrimaryButtonContaniner, TextInputWraper } from "./Creat
 import Header from "@components/Header";
 import { useSelector } from "react-redux";
 // import { listAccountSelector } from "@redux/account/account.selectors";
-import { getAccountList } from "@redux-sync-storage/account/account.selectors";
+import { getAccountListSelector } from "@redux-sync-storage/account/account.selectors";
 import { AccountInfo } from "@redux-sync-storage/account/account.types";
 
 let accountNameValidator = require("password-validator");
@@ -39,7 +39,7 @@ const CreateAccountPage: React.FC = () => {
   // const listAccount = useSelector(listAccountSelector);
   // const listAccountName = listAccount.map((acc) => acc.AccountName || acc.name) || [];
 
-  const listAccount: AccountInfo[] = useSelector(getAccountList);
+  const listAccount: AccountInfo[] = useSelector(getAccountListSelector);
   const listAccountName = listAccount.map((acc) => acc.name) || [];
 
   useEffect(() => {

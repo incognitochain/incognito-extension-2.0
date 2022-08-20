@@ -16,6 +16,7 @@ export type AccountDetail = {
 export type AccountInfo = {
   name: string;
   paymentAddress: string;
+  otaKey?: string;
 };
 
 export enum AccountActionType {
@@ -32,7 +33,7 @@ export enum AccountActionType {
 // Action Definition here!
 //----------------------------------------------
 
-export interface SetAccountAction extends Action {
+export interface SetAccountDefaultNameAction extends Action {
   type: AccountActionType.SET_DEFAULT_NAME;
   payload: {
     name: string;
@@ -61,6 +62,10 @@ export interface AddAccountAction extends Action {
 
 //----------------------------------------------
 
-export type AccountActions = SetAccountAction | SetCurrentAccountAction | SetAccountListAction | AddAccountAction;
+export type AccountActions =
+  | SetAccountDefaultNameAction
+  | SetCurrentAccountAction
+  | SetAccountListAction
+  | AddAccountAction;
 
 export default {};

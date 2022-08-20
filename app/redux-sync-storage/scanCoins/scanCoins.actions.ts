@@ -1,4 +1,4 @@
-import { ScanCoinsActionType } from "@redux/scanCoins/scanCoins.constants";
+import { ScanCoinsActionType } from "@redux-sync-storage/scanCoins/scanCoins.constants";
 import {
   ReScanCoinsAction,
   RescanCoinsPayload,
@@ -7,7 +7,7 @@ import {
   ScanCoinsFirstTimeAction,
   ScanCoinsFirstTimePayload,
   ScanCoinsFreeDataAction,
-} from "@redux/scanCoins/scanCoins.types";
+} from "@redux-sync-storage/scanCoins/scanCoins.types";
 
 // Flag support check status scan coins
 // Ignore next schedule event scan coins if isFetching = true

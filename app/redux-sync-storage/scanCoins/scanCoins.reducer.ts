@@ -1,9 +1,10 @@
 import { Reducer } from "redux";
-import { ScanCoinsActions, IScanCoinsState } from "@redux/scanCoins/scanCoins.types";
-import { ScanCoinsActionType } from "@redux/scanCoins/scanCoins.constants";
+import { ScanCoinsActions, IScanCoinsState } from "@redux-sync-storage/scanCoins/scanCoins.types";
+import { ScanCoinsActionType } from "@redux-sync-storage/scanCoins/scanCoins.constants";
 import { persistReducer } from "redux-persist";
 import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 import Storage from "@services/storage";
+
 export const initialState: IScanCoinsState = {
   isFetching: false,
   scanStatus: {},

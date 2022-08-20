@@ -7,7 +7,7 @@ import { AppThunkDispatch } from "@redux/store";
 import { useModal } from "@module/Modal";
 import { defaultAccountWalletSelector, keyDefineAccountSelector } from "@redux/account/account.selectors";
 import { useBackground } from "@popup/context/background";
-import { actionFistTimeScanCoins } from "@redux/scanCoins";
+import { actionFistTimeScanCoins } from "@redux-sync-storage/scanCoins";
 
 const Styled = styled.div`
   padding: 24px 16px;
@@ -20,7 +20,7 @@ const Styled = styled.div`
 interface IProps {}
 
 const BoxScanCoin = React.memo((props: IProps) => {
-  const dispatch: AppThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
   const accountSender = useSelector(defaultAccountWalletSelector);
   const keyDefine = useSelector(keyDefineAccountSelector);
   const { clearAllModal } = useModal();

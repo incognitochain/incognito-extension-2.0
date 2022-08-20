@@ -4,7 +4,6 @@ import { useBackground } from "@popup/context/background";
 import { useLoading } from "@popup/context/loading";
 import { ellipsisCenter } from "@popup/utils";
 import { useCallAsync } from "@popup/utils/notifications";
-// import { defaultAccountSelector } from "@redux/account/account.selectors";
 import { trim } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -14,7 +13,7 @@ import { route as routeKeychainDetail } from "@module/Account/features/KeychainD
 import { AccountItem } from "@module/Account/features/SelectAccount";
 import Header from "@components/Header";
 import WrapContent from "@components/Content";
-import { getAccountList, getAccountDefaultName } from "@redux-sync-storage/account/account.selectors";
+import { getAccountListSelector, getAccountDefaultNameSelector } from "@redux-sync-storage/account/account.selectors";
 
 const SelectAccount = React.memo(() => {
   const { enqueueSnackbar } = useSnackbar();
@@ -22,10 +21,8 @@ const SelectAccount = React.memo(() => {
   const callAsync = useCallAsync();
   const history = useHistory();
   const { showLoading } = useLoading();
-  // const defaultAccount: any = useSelector(defaultAccountSelector);
-  // const listAccount = useSelector(listAccountSelector);
-  const defaultAccountName: string = useSelector(getAccountDefaultName);
-  const listAccount = useSelector(getAccountList);
+  const defaultAccountName: string = useSelector(getAccountDefaultNameSelector);
+  const listAccount = useSelector(getAccountListSelector);
 
   const switchAccount = (accountItem: any) => {
     const accountName = accountItem.AccountName || accountItem.name;

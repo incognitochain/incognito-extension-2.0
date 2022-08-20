@@ -65,8 +65,9 @@ export const reloadWallet =
         defaultAccount = listAccount.find((item) => isEqual(item?.accountName, accountName)) || listAccount[0];
         const accountListStorage = listAccount.map((item) => {
           return {
-            name: item.name || item.accountName,
-            paymentAddress: item.PaymentAddress,
+            name: item.name || item.accountName || "",
+            paymentAddress: item.PaymentAddress || "",
+            otaKey: item.OTAKey || "",
           } as AccountInfo;
         });
         if (!defaultAccount?.accountName) {

@@ -21,7 +21,7 @@ import { getPassphrase } from "@services/wallet/passwordService";
 import { batch } from "react-redux";
 import { AccountActionType } from "./account.types";
 import { actionHandler } from "@redux-sync-storage/store/store";
-import { setAccountDefaultName } from "@redux-sync-storage/account";
+import { setAccountDefaultName, setCurrentAccount } from "@redux-sync-storage/account";
 const { Validator } = require("incognito-chain-web-js/build/web/wallet");
 
 //--------------------------------------------------------------------
@@ -125,6 +125,13 @@ export const actionSetFetchingNFT = () => ({
 export const setDefaultAccount = (account: any) => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
   try {
     await dispatch(actionUpdateDefaultAccount(account));
+    await actionHandler(
+      setCurrentAccount({
+        name: account.name,
+        paymentAddress: account.PaymentAddress || account.paymentAddress || "",
+        otaKey: account.OTAKey || "",
+      }),
+    );
     await actionHandler(setAccountDefaultName(account.name));
   } catch (e) {
     new ExHandler(e).showErrorToast();

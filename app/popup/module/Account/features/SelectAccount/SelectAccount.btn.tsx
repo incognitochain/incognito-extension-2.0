@@ -1,5 +1,5 @@
 import { route as routeSelectAccount } from "@module/Account/features/SelectAccount";
-import { getAccountDefaultName } from "@redux-sync-storage/account/account.selectors";
+import { getAccountDefaultNameSelector } from "@redux-sync-storage/account/account.selectors";
 import React from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -13,17 +13,15 @@ const AccountNameButtonStyled = styled.button`
 
 export const BtnSelectAccount = () => {
   const history = useHistory();
-  const defaultAccountName = useSelector(getAccountDefaultName);
-  // const defaultAccount: any = useSelector(defaultAccountSelector);
-  // const accountNameSelected = defaultAccount?.AccountName || defaultAccount?.name || "";
-  // const accountNameSelectedTrim =
-  //   accountNameSelected.length > 8 ? accountNameSelected.substring(0, 8) + "..." : accountNameSelected;
+  const defaultAccountName = useSelector(getAccountDefaultNameSelector);
+  const accountNameTrimed =
+    defaultAccountName.length > 8 ? defaultAccountName.substring(0, 8) + "..." : defaultAccountName;
   return (
     <AccountNameButtonStyled
       onClick={() => history.push(routeSelectAccount)}
       className="btn-select-account fw-medium ellipsis hover"
     >
-      {defaultAccountName}
+      {accountNameTrimed}
     </AccountNameButtonStyled>
   );
 };

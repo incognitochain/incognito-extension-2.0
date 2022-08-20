@@ -17,7 +17,7 @@ import { route as AssetsRoute } from "@module/Assets/Assets.route";
 import { route as SignTransactionRoute } from "@module/SignTransaction/SignTransaction.route";
 import { useModal } from "@module/Modal";
 import { useSelector, useStore } from "react-redux";
-import { isFirstTimeScanCoinsSelector, isShowConfirmScanCoins } from "@redux/scanCoins";
+import { isFirstTimeScanCoinsSelector, isShowConfirmScanCoins } from "@redux-sync-storage/scanCoins";
 import BoxScanCoin from "@components/BoxScanCoin";
 import { Loading } from "@popup/context/loading";
 import throttle from "lodash/throttle";
@@ -67,6 +67,7 @@ const MainRoute = () => {
   const [routes, setRoutes] = React.useState<Array<IRouteProps>>([]);
 
   const { setModal } = useModal();
+
   // const isScanCoins = useSelector(isFirstTimeScanCoinsSelector);
   // const showConfirmScanCoins = useSelector(isShowConfirmScanCoins);
 

@@ -1,6 +1,9 @@
 import { createSelector } from "reselect";
-import { RootState } from "@redux/reducers";
-import { keyDefineAccountSelector } from "@redux/account/account.selectors";
+// import { RootState } from "@redux/reducers";
+// import { keyDefineAccountSelector } from "@redux/account/account.selectors";
+
+import { RootState } from "@redux-sync-storage/reducers/index";
+import { getKeyDefineAccountSelector } from "@redux-sync-storage/account/account.selectors";
 
 const scanCoinsReducerSelector = createSelector(
   (state: RootState) => state.scanCoinsReducer,
@@ -13,16 +16,20 @@ const isFetchingScanCoinsSelector = createSelector(scanCoinsReducerSelector, ({ 
 
 const isFirstTimeScanCoinsSelector = createSelector(
   statusScanCoinsSelector,
-  keyDefineAccountSelector,
+  getKeyDefineAccountSelector,
   (scanStatus, key) => {
     if (!key || !scanStatus[key]) return false;
     return scanStatus[key].isScanning;
   },
 );
 
-const isShowConfirmScanCoins = createSelector(statusScanCoinsSelector, keyDefineAccountSelector, (scanStatus, key) => {
-  return key && (!scanStatus || scanStatus[key] === undefined);
-});
+const isShowConfirmScanCoins = createSelector(
+  statusScanCoinsSelector,
+  getKeyDefineAccountSelector,
+  (scanStatus, key) => {
+    return key && (!scanStatus || scanStatus[key] === undefined);
+  },
+);
 
 export {
   scanCoinsReducerSelector,

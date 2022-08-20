@@ -12,7 +12,7 @@ import { useCallAsync } from "@popup/utils/notifications";
 import { useLoading } from "@popup/context/loading";
 import { useHistory } from "react-router-dom";
 import { AppThunkDispatch } from "@redux/store";
-import { actionReScanCoins } from "@redux/scanCoins";
+import { actionReScanCoins } from "@redux-sync-storage/scanCoins";
 import { actionLogout } from "@redux/account";
 
 const CacheScanCoins: React.FC = () => {

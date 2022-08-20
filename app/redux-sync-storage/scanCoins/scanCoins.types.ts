@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { ScanCoinsActionType } from "@redux/scanCoins/scanCoins.constants";
+import { ScanCoinsActionType } from "@redux-sync-storage/scanCoins/scanCoins.constants";
 
 //----------------------------------------------
 // Reducer Payload

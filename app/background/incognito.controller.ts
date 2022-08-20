@@ -24,10 +24,11 @@ import { ExtensionManager } from "./lib/extension-manager";
 import { ActionManager } from "./lib/action-manager";
 import { PopupStateResolver } from "./lib/popup-state-resolver";
 import { dispatch, store as reduxStore } from "@redux/store/store";
-import { actionFetchingScanCoins, isShowConfirmScanCoins } from "@redux/scanCoins";
+import { actionFetchingScanCoins, isShowConfirmScanCoins } from "@redux-sync-storage/scanCoins";
 import { scanCoins } from "@background/worker.scanCoins";
 import serverService, { MAINNET_FULLNODE } from "@services/wallet/Server";
 import { actionUpdateNetwork } from "@redux/configs/Configs.actions";
+import { actionHandler } from "@redux-sync-storage/store/store";
 
 const createEngineStream = require("json-rpc-middleware-stream/engineStream");
 const PortStream = require("extension-port-stream");
@@ -300,12 +301,13 @@ export default class IncognitoController {
   };
 
   clearScanCoins() {
-    reduxStore.dispatch(actionFetchingScanCoins({ isFetching: false }));
+    actionHandler(actionFetchingScanCoins({ isFetching: false }));
     scanCoinInterval && clearInterval(scanCoinInterval);
     scanCoinInterval = undefined;
   }
 
   async scanCoinHandler(params: any) {
+    console.log("scanCoinHandler ", params);
     const popupState = this.popupState;
     if (params) {
       const { isClear } = params;
@@ -318,7 +320,7 @@ export default class IncognitoController {
     if (popupState && popupStateData.walletState === "unlocked") {
       if (!scanCoinInterval && !showConfirmScanCoins) {
         try {
-          reduxStore.dispatch(actionFetchingScanCoins({ isFetching: false }));
+          actionHandler(actionFetchingScanCoins({ isFetching: false }));
           scanCoins().then();
         } catch (e) {
           console.log("SCAN COINS ERROR: ", e);

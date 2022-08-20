@@ -1,12 +1,17 @@
 import { dispatch, store as reduxStore } from "@redux/store/store";
 import { measure } from "@utils/func";
-import { actionFetchingScanCoins, actionFistTimeScanCoins, isFetchingScanCoinsSelector } from "@redux/scanCoins";
+import {
+  actionFetchingScanCoins,
+  actionFistTimeScanCoins,
+  isFetchingScanCoinsSelector,
+} from "@redux-sync-storage/scanCoins";
 import { createLogger } from "@core/utils";
 import uniqBy from "lodash/uniqBy";
 import { IBalance } from "@core/types";
 // import { actionFetchedFollowBalance, actionFetchingFollowBalance } from "@module/Assets";
 // import { isFetchingAssetsSelector } from "@module/Assets";
 import { defaultAccountSelector, defaultAccountWalletSelector } from "@redux/account/account.selectors";
+import { actionHandler } from "@redux-sync-storage/store/store";
 import uniq from "lodash/uniq";
 import Server, { TESTNET_FULLNODE } from "@services/wallet/Server";
 const { PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
@@ -78,7 +83,7 @@ export const scanCoins = async () => {
       dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey: keyDefine }));
     }
 
-    dispatch(actionFetchingScanCoins({ isFetching: true }));
+    actionHandler(actionFetchingScanCoins({ isFetching: true }));
 
     const tokens = await getTokensDefault();
 
@@ -97,7 +102,7 @@ export const scanCoins = async () => {
   } catch (error) {
     log("SCAN COINS WITH ERROR: ", error);
   } finally {
-    dispatch(actionFetchingScanCoins({ isFetching: false }));
+    actionHandler(actionFetchingScanCoins({ isFetching: false }));
   }
 };
 
