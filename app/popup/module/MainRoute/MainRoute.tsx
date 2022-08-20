@@ -50,7 +50,7 @@ const defaultRoute = (key: string, props: RouteProps, popupState: PopupState, is
           case "unlocked": {
             const actionObj = popupState.actions && popupState.actions[0];
             if (isNotification) {
-              if (actionObj.action.type === "sign_transaction") {
+              if (actionObj && actionObj.action.type === "sign_transaction") {
                 return <Redirect to={{ pathname: SendRoute }} />;
               }
             }
