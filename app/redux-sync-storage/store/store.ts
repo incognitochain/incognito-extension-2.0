@@ -7,7 +7,7 @@ import storeCreatorFactory from "reduxed-chrome-storage";
 
 const STORAGE_AREA = "local";
 const NAMESPACE = "LocalStorage";
-const STORAGE_KEY = "redux-storage";
+const STORAGE_KEY = "redux-sync-storage";
 const ACTION_HANDLE_TIME = 200;
 
 let reduxSyncStorage: any;

@@ -28,7 +28,7 @@ export const PasswordPage: React.FC<PasswordPageBaseProps> = (props: PasswordPag
     onBack = () => {},
     continuePressed = () => {},
     headerTitle = "",
-    passwordInitValue = "buitanphat",
+    passwordInitValue = "",
     descriptionText = "",
     buttonTitle = "Continue",
   } = props;

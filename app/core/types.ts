@@ -52,9 +52,6 @@ export type Network = {
   endpoint: string;
 };
 
-export type MintAddressTokens = { [mintAddress: string]: Token };
-export type NetworkTokens = { [network: string]: MintAddressTokens };
-
 export type VersionedData = {
   version: string;
   data: StoredData;
@@ -155,20 +152,8 @@ export type PopupActions =
   | "popup_request_account_detail"
   | "popup_getFollowTokenList"
   | "popup_getPTokenList";
-export type PendingSignTransaction = {
-  message: string;
-  signers: string[];
-  details?: Markdown[];
-  tabId: string;
-};
 
 export type Markdown = string;
-
-export type DecodedInstruction = {
-  instruction: TransactionInstruction;
-  instructionType: string;
-  properties: { [key: string]: any };
-};
 
 export type Token = {
   mintAddress: string;

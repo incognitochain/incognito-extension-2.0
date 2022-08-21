@@ -79,6 +79,7 @@ export default class IncognitoController {
       actionManager: this.actionManager,
       openPopup: this.triggerUi.bind(this),
     });
+
     this.popupController = new PopupController({
       reduxSyncStorage,
       store,
