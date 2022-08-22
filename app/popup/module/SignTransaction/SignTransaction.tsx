@@ -1,90 +1,93 @@
 import WrapContent from "@components/Content/Content";
 import Header from "@components/Header";
-import { useBackground } from "@popup/context/background";
-import { useCallAsync } from "@popup/utils/notifications";
-import React, { useCallback } from "react";
-// import { useHistory } from "react-router-dom";
+import React from "react";
 import { MainContent } from "./SignTransaction.styled";
-import { throttle } from "lodash";
-import { useLoading } from "@popup/context/loading";
+import enhance, { IMergeProps } from "./SignTransaction.enhance";
+import LoadingContainer from "@components/LoadingContainer";
+import styled from "styled-components";
+import { Field } from "redux-form";
+import { InputField } from "@components/ReduxForm";
+import { FORM_CONFIGS } from "@module/Send";
+import { INPUT_FIELD } from "@components/ReduxForm/InputField";
+import { Button } from "@components/Core";
+import { PRV } from "@constants/common";
 
-const SignTransaction: React.FC = React.memo(() => {
-  const { popupState, isNotification, request } = useBackground();
-  const callAsync = useCallAsync();
-  // const history = useHistory();
-  const { showLoading } = useLoading();
-  const action = popupState && popupState.actions && popupState.actions[0];
+const Styled = styled.div`
+  .scroll-view {
+    padding-top: 24px;
+    .btn-submit {
+      margin-top: 32px;
+    }
+  }
+`;
 
-  const handleApprove = useCallback(
-    throttle(async () => {
-      console.log("handleApprove ... ");
-      showLoading({
-        value: true,
-        message: "Loading...",
-      });
+const SignTransaction: React.FC = React.memo((props: IMergeProps & any) => {
+  const {
+    validateAmount,
+    validateAddress,
+    warningAddress,
+    handleSubmit,
+    handleSign,
+    isInitingForm,
+    networkFeeText,
+    maxInputAmountText,
+    selectedPrivacy,
+  } = props;
 
-      callAsync(
-        request("popup_authoriseTransaction", {
-          actionKey: action?.key,
-        }),
-        {
-          progress: { message: "Authorizing Transaction..." },
-          success: { message: "Success!" },
-          onFinish: () => {
-            showLoading({
-              value: false,
-            });
-            setTimeout(() => {
-              // TO DO
-              window.close();
-            }, 1000);
-          },
-        },
-      );
-    }, 2000),
-    [],
-  );
-
-  const handleDecline = useCallback(
-    throttle(() => {
-      console.log("handleDecline ... ");
-      callAsync(
-        request("popup_declineTransaction", {
-          actionKey: action?.key,
-        }),
-        {
-          progress: { message: "Declining Transaction..." },
-          success: { message: "Declined", variant: "error" },
-          onFinish: () => {
-            setTimeout(() => {
-              // history.push(AssetsRoute);
-              window.close();
-            }, 1000);
-          },
-        },
-      );
-    }, 2000),
-    [],
-  );
+  const renderForm = () => {
+    if (isInitingForm) return <LoadingContainer />;
+    return (
+      <form onSubmit={handleSubmit(handleSign)}>
+        <Field
+          component={InputField}
+          name={FORM_CONFIGS.amount}
+          inputType={INPUT_FIELD.amount}
+          componentProps={{
+            type: "number",
+            readonly: "readonly",
+          }}
+          leftTitle="Amount"
+          rightTitle={`${maxInputAmountText} ${selectedPrivacy.symbol}`}
+          validate={validateAmount}
+          showMax={false}
+        />
+        <Field
+          component={InputField}
+          name={FORM_CONFIGS.toAddress}
+          inputType={INPUT_FIELD.shortAddress}
+          leftTitle="To"
+          validate={validateAddress}
+          warning={warningAddress}
+          componentProps={{
+            readonly: "readonly",
+          }}
+          showAddressBook={false}
+        />
+        {/*{renderMemo()}*/}
+        <Field
+          component={InputField}
+          name={FORM_CONFIGS.fee}
+          leftTitle="Network Fee"
+          inputType={INPUT_FIELD.leftTitleDisplayPTag}
+          componentProps={{
+            value: PRV.symbol,
+          }}
+          onClickAddressBook={() => {}}
+          subtitle={networkFeeText}
+        />
+        <Button className="btn-submit" title="Sign transaction" type="submit" />
+      </form>
+    );
+  };
 
   return (
     <>
       <Header title="Sign Transaction" showBack={false} />
-      <WrapContent className="default-padding-horizontal default-padding-top">
-        <MainContent>
-          <div className="buttons-row">
-            <p className="deline-button center hover-with-cursor" onClick={handleDecline}>
-              Deline
-            </p>
-            <div className="space" />
-            <p className="approve-button center hover-with-cursor" onClick={handleApprove}>
-              Approve
-            </p>
-          </div>
-        </MainContent>
-      </WrapContent>
+      <Styled>
+        <WrapContent className="default-padding-horizontal">{renderForm()}</WrapContent>
+      </Styled>
     </>
   );
 });
 
-export default SignTransaction;
+export default enhance(SignTransaction);

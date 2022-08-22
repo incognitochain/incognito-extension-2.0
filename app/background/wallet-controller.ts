@@ -10,18 +10,16 @@ import {
 } from "../core/types";
 import { ActionManager } from "./lib/action-manager";
 import { getCurrentPaymentAddress } from "@redux/account/account.selectors";
-import { dispatch, store as reduxStore } from "@redux/store/store";
-import { RootState } from "../redux/reducers/index";
+import { store as reduxStore } from "@redux/store/store";
 
 import { getFollowTokensBalance } from "./worker.scanCoins";
-import { FORM_CONFIGS } from "@module/Send/Send.constant";
-import { TypeSend } from "@module/Send/Send.types";
-import { actionSetUnshieldData } from "@module/Send/Send.actions";
-
 import { actionSelectedPrivacySet } from "@redux/selectedPrivacy";
 import { change } from "redux-form";
 import { getPTokenList } from "@redux/token/token.actions";
 import { batch } from "react-redux";
+import { FORM_CONFIGS } from "@popup/module/SignTransaction/SignTransaction.constant";
+import { actionSetSignTransactionData } from "@module/SignTransaction/SignTransaction.actions";
+import { ISignTransactionParams } from "@module/SignTransaction/SignTransaction.types";
 
 const log = createLogger("incognito:walletCtr");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -228,16 +226,14 @@ export class WalletController {
     const { tabId, origin } = req;
     if (this.store.getWalletState() === "unlocked" && req.params) {
       const params = req.params;
-      const { isUnshield, receiverAddress, burnAmountText } = params;
+      const { receiverAddress, tokenID } = params as ISignTransactionParams;
       batch(() => {
-        reduxStore.dispatch(getPTokenList());
-        reduxStore.dispatch(actionSelectedPrivacySet({ tokenID: params.burnToken }));
-        reduxStore.dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, receiverAddress));
-        reduxStore.dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.amount, burnAmountText));
-        reduxStore.dispatch(
-          actionSetUnshieldData({
+        reduxStore(getPTokenList());
+        reduxStore(actionSelectedPrivacySet({ tokenID }));
+        reduxStore(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, receiverAddress));
+        reduxStore(
+          actionSetSignTransactionData({
             ...params,
-            screen: isUnshield ? TypeSend.CONFIRM_UNSHIELD : TypeSend.SEND,
           }),
         );
       });

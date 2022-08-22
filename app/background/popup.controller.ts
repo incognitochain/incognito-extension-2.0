@@ -536,7 +536,18 @@ export class PopupController {
 
   async signTransaction(req: any) {
     log("Signing transaction request for %O", req);
-    const { actionKey } = req.params;
+    const {
+      actionKey,
+      isSignAndSendTransaction,
+      fee,
+      tokenID,
+      txType,
+      version,
+      prvPayments,
+      tokenPayments,
+      metadata,
+      info,
+    } = req.params;
 
     const pendingTransactionAction = this.actionManager.getAction<IncognitoSignTransaction>(actionKey);
     if (!pendingTransactionAction) {
@@ -550,115 +561,21 @@ export class PopupController {
     }
     let tx: any;
     try {
-      const {
-        networkFee,
-        isUnshield,
-        isUnified,
-
-        burnFee,
-        burnFeeToken,
-        burnFeeID,
-
-        burnAmount,
-        burnToken,
-
-        receiverAddress,
-        feeAddress,
-
-        receiverTokenID,
-
-        estimatedBurnAmount, // estimate fee unified
-        estimatedExpectedAmount, // estimate fee unified
-        network,
-        burningRequestMeta,
-      } = req.params;
       const accountSender = defaultAccountWalletSelector(reduxStore.getState());
-      new Validator("signTransaction-networkFee", networkFee).amount();
-      new Validator("signTransaction-isUnified", isUnified).boolean();
-
-      let tokenPayments: any = [];
-      let prvPayments: any = [];
-      if (isUnshield) {
-        new Validator("signTransaction-burnAmount", burnAmount).required().amount();
-        new Validator("signTransaction-burnToken", burnToken).required().string();
-        new Validator("signTransaction-burnFee", burnFee).required().amount();
-        new Validator("signTransaction-burnFeeToken", burnFeeToken).required().string();
-        new Validator("signTransaction-receiverAddress", receiverAddress).required().string();
-        new Validator("signTransaction-feeAddress", feeAddress).required().string();
-        new Validator("signTransaction-receiverTokenID", receiverTokenID).required().string();
-        new Validator("signTransaction-burnFeeID", burnFeeID).required().string();
-        const isUseTokenFee = burnFeeToken === burnToken;
-        const paymentInfo = [
-          {
-            paymentAddress: feeAddress,
-            amount: burnFee,
-          },
-        ];
-        if (isUseTokenFee) {
-          tokenPayments = paymentInfo;
-        } else {
-          prvPayments = paymentInfo;
-        }
-
-        const submitHash = async ({ txId }: { txId: string }) => {
-          try {
-            const payload = {
-              Network: network,
-              UserFeeLevel: 1,
-              ID: Number(burnFeeID),
-              IncognitoAmount: String(burnAmount),
-              IncognitoTx: txId,
-              PaymentAddress: receiverAddress,
-              PrivacyTokenAddress: receiverTokenID,
-              UserFeeSelection: 1,
-              WalletAddress: accountSender.getPaymentAddress(),
-            };
-            await rpcSubmit.submitUnshieldTx(payload);
-          } catch (e) {
-            pendingTransactionAction.reject(new Error("Create Transaction failed"));
-            this.actionManager.deleteAction(actionKey);
-            console.log("SUBMIT HASH ERROR ", e);
-            throw e;
-          }
-        };
-        if (isUnified) {
-          new Validator("signTransaction-receiverTokenID", receiverTokenID).required().string();
-          new Validator("signTransaction-estimatedBurnAmount", estimatedBurnAmount).required().number();
-          new Validator("signTransaction-estimatedExpectedAmount", estimatedExpectedAmount).required().number();
-          const burningInfos = [
-            {
-              incTokenID: receiverTokenID,
-              burningAmount: estimatedBurnAmount,
-              expectedAmount: estimatedExpectedAmount,
-              remoteAddress: receiverAddress,
-            },
-          ];
-          tx = await accountService.createAndSendBurnUnifiedTokenRequestTx({
-            accountSender,
-            prvPayments,
-            tokenPayments,
-            burningInfos,
-            fee: networkFee,
-            info: String(burnFeeID),
-            version: PrivacyVersion.ver3,
-            tokenId: burnToken,
-            txHashHandler: submitHash,
-          });
-        } else {
-          tx = await accountService.createBurningRequest({
-            accountSender,
-            fee: networkFee,
-            prvPayments,
-            tokenPayments,
-            burnAmount: burnAmount,
-            info: String(burnFeeID),
-            tokenId: burnToken,
-            version: PrivacyVersion.ver3,
-            remoteAddress: receiverAddress,
-            burningType: burningRequestMeta,
-            txHashHandler: submitHash,
-          });
-        }
+      const params = {
+        fee,
+        tokenID,
+        txType,
+        version,
+        prvPayments,
+        tokenPayments,
+        metadata,
+        info,
+      };
+      if (isSignAndSendTransaction) {
+        tx = await accountSender.createAndSignTransaction({ ...params });
+      } else {
+        tx = await accountSender.createTransaction({ ...params });
       }
     } catch (error) {
       console.log("CREATE TRANSACTION ERROR: ", error);
@@ -666,7 +583,7 @@ export class PopupController {
     }
 
     if (tx && tx.hash) {
-      pendingTransactionAction.resolve({ data: tx.hash });
+      pendingTransactionAction.resolve({ txHash: tx.hash, rawData: tx.rawData });
     } else {
       pendingTransactionAction.reject(new Error("Create Transaction failed"));
     }

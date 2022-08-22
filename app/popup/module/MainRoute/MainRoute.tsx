@@ -22,9 +22,6 @@ import BoxScanCoin from "@components/BoxScanCoin";
 import { Loading } from "@popup/context/loading";
 import throttle from "lodash/throttle";
 import { route as SendRoute } from "@module/Send";
-import { PRV_ID } from "@constants/common";
-import rpcMetric, { METRIC_TYPE } from "@services/wallet/rpcMetric";
-import Storage from "@services/storage";
 
 const context = require.context("@popup/module", true, /\.route.tsx?/);
 
@@ -50,8 +47,8 @@ const defaultRoute = (key: string, props: RouteProps, popupState: PopupState, is
           case "unlocked": {
             const actionObj = popupState.actions && popupState.actions[0];
             if (isNotification) {
-              if (actionObj && actionObj.action.type === "sign_transaction") {
-                return <Redirect to={{ pathname: SendRoute }} />;
+              if (actionObj.action.type === "sign_transaction") {
+                return <Redirect to={{ pathname: SignTransactionRoute }} />;
               }
             }
             return <Redirect to={{ pathname: AssetsRoute }} />;
@@ -88,22 +85,8 @@ const MainRoute = () => {
     500,
   );
 
-  const updateMetric = async () => {
-    try {
-      const KEY = "FIRST_TIME_INSTALL";
-      const isInstalled = await Storage.getItem(KEY);
-      if (!isInstalled) {
-        rpcMetric.updateMetric({ type: METRIC_TYPE.INSTALL }).then(() => Storage.setItem(KEY, "success"));
-      }
-    } catch (e) {
-      console.log("METRIC INSTALL ERROR: ", e);
-    }
-    rpcMetric.updateMetric({ type: METRIC_TYPE.OPEN }).then();
-  };
-
   React.useEffect(() => {
     handleGetRoutes();
-    updateMetric().then();
   }, []);
 
   // React.useEffect(() => {
