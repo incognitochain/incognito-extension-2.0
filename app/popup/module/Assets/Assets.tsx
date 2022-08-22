@@ -34,11 +34,11 @@ const Assets = React.memo(() => {
       />
       <TotalBalance />
       <AddressBar />
-      {/* <FollowTokensList /> */}
+      <FollowTokensList />
     </>
   );
 });
 
-// export default compose(withPToken, withBalance)(Assets);
+export default compose(withPToken, withBalance)(Assets);
 
-export default Assets;
+// export default Assets;

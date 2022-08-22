@@ -359,14 +359,16 @@ export class PopupController {
   }
 
   async getPTokenList() {
-    console.log("Backgorund [getFollowTokenList] ");
+    console.log("Background [getPTokenList] ");
     await reduxStore.dispatch(getPTokenList());
   }
 
   async getFollowTokenList() {
-    console.log("Backgorund [getFollowTokenList] ");
-    // const followTokens = sharedSelectors.followTokensFormatedSelector(reduxStore.getState());
-    // console.log("[getFollowTokenList] followTokens ", followTokens);
+    console.log("Background [getFollowTokenList] ");
+    // console.log("reduxStore.getState() ", reduxStore.getState());
+    const followTokens = sharedSelectors.followTokensFormatedSelector(reduxStore.getState());
+    // console.log("Backgorund [getFollowTokenList] followTokens ", followTokens);
+    return followTokens;
   }
 
   async createAccount({ accountName }: { accountName: string }) {

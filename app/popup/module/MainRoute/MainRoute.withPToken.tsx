@@ -11,7 +11,7 @@ const withPToken = (WrappedComponent: FunctionComponent) => {
     // const getTokensList = async () => dispatch(getPTokenList());
     const getTokensList = async () => {
       request("popup_getPTokenList", {}).catch((err) => {
-        console.log("popup_getPTokenList %O", err);
+        console.log("popup_getPTokenList ERROR => %O", err);
       });
     };
     React.useEffect(() => {
