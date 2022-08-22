@@ -14,8 +14,7 @@ import { Router } from "react-router";
 import { createBrowserHistory, createMemoryHistory } from "history";
 import { isMainnet } from "@popup/configs";
 import { LoadingProvider } from "@popup/context/loading";
-import { useSelector, useStore } from "react-redux";
-import { appSelectors } from "@redux/app";
+// import { appSelectors } from "@redux/app";
 
 const history = !isMainnet ? createBrowserHistory() : createMemoryHistory(); // Instead of createBrowserHistory();
 
@@ -64,5 +63,5 @@ const App: React.FunctionComponent = () => {
   );
 };
 
-// export default withApp(React.memo(App));
-export default App;
+export default withApp(React.memo(App));
+// export default App;
