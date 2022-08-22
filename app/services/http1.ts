@@ -2,6 +2,7 @@ import axios from "axios";
 import CONSTANT_CONFIGS from "@constants/config";
 import { CustomError, ErrorCode, ExHandler } from "./exception";
 import Server from "@services/wallet/Server";
+import fetchAdapter from "@vespaiach/axios-fetch-adapter";
 
 const HEADERS = { "Content-Type": "application/json" };
 const TIMEOUT = 20000;
@@ -13,6 +14,7 @@ const instance = axios.create({
     ...HEADERS,
     Authorization: "",
   },
+  adapter: fetchAdapter,
 });
 
 // Add a request interceptor

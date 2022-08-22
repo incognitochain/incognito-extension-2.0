@@ -2,9 +2,9 @@ import { isKindOfWalletAction } from "@core/types";
 import { Store } from "../store";
 
 export default function createOriginMiddleware(opts: { origin: string; store: Store }) {
-  console.log("[createOriginMiddleware] ", { opts });
+  // console.log("[createOriginMiddleware] ", { opts });
   return function originMiddleware(req: any, res: any, next: any) {
-    console.log("[originMiddleware] ", { req, res, next });
+    // console.log("[originMiddleware] ", { req, res, next });
     const { origin, store } = opts;
 
     req.origin = origin;

@@ -6,7 +6,10 @@ import IncognitoCoinInfoModel from "@model/IncognitoCoinInfoModel";
 import { MAINNET_FULLNODE } from "@services/wallet/Server";
 
 const getTokenListNoCache = () => {
-  return http1.get("coins/tokenlist").then((res: any) => res.map((token: any) => new PTokenModel(token, res)));
+  return http1.get("coins/tokenlist").then((res: any) => {
+    // console.log("[getTokenListNoCache] => Raw data ", res);
+    return res.map((token: any) => new PTokenModel(token, res));
+  });
 };
 
 export const getTokensInfo = ({ tokenIDs }: { tokenIDs: string[] }) => {

@@ -15,7 +15,7 @@ const withPToken = (WrappedComponent: FunctionComponent) => {
       });
     };
     React.useEffect(() => {
-      // getTokensList();
+      getTokensList();
     }, []);
 
     return <WrappedComponent {...props} />;

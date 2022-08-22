@@ -24,6 +24,7 @@
     "@types/redux-form": "^8.3.5",
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",
+    "@vespaiach/axios-fetch-adapter": "^0.3.0",
     "bignumber.js": "^9.0.2",
     "bip32": "^2.0.5",
     "bip39": "^3.0.2",

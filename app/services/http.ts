@@ -4,6 +4,7 @@ import { CONSTANT_CONFIGS } from "@constants/index";
 // import Log from "@src/services/log";
 // import { CustomError, ErrorCode, ExHandler } from "./exception";
 import Server from "@services/wallet/Server";
+import fetchAdapter from "@vespaiach/axios-fetch-adapter";
 
 const CancelToken = axios.CancelToken;
 const HEADERS = { "Content-Type": "application/json" };
@@ -23,6 +24,7 @@ const instance = axios.create({
     ...HEADERS,
     Authorization: "",
   },
+  adapter: fetchAdapter,
 });
 
 let pendingSubscribers: any = [];
