@@ -132,9 +132,9 @@ export default class IncognitoController {
 
     pump(outStream, providerStream, outStream, (err) => {
       if (err) {
-        log("Controller '%s' disconnected with error: %O", origin, err);
+        console.log("Controller '%s' disconnected with error: %O", origin, err);
       } else {
-        log("Controller '%s' disconnected", origin);
+        console.log("Controller '%s' disconnected", origin);
       }
       connectionId && this.removeConnection(origin, connectionId);
       // engine._middleware.forEach((mid : any) => {
@@ -175,9 +175,9 @@ export default class IncognitoController {
 
     pump(outStream, providerStream, outStream, (err) => {
       if (err) {
-        log("Provider %s disconnected with error: %O", origin, err);
+        console.log("Provider %s disconnected with error: %O", origin, err);
       } else {
-        log("Provider %s disconnected", origin);
+        console.log("Provider %s disconnected", origin);
       }
       connectionId && this.removeConnection(origin, connectionId);
       //  handle any middleware cleanup

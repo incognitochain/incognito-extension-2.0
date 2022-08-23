@@ -323,7 +323,7 @@ export class PopupController {
           break;
         case "popup_getFollowTokenList":
           try {
-            this.getFollowTokenList();
+            await this.getFollowTokenList();
           } catch (err) {
             log("error: popup_getFollowTokenList failed  with error: %s", err);
             res.error = err;
@@ -337,14 +337,14 @@ export class PopupController {
             res.error = err;
           }
           break;
-
         default:
-          log("popup controller middleware did not match method name %s", req.method);
+          console.log("popup controller middleware did not match method name %s", req.method);
           await next();
           return;
       }
       // if any of the above popup commands did not error
       // out make sure to return the state, the popup expects it!
+
       if (!res.error) {
         const popupStateData = this.popupState.get();
         res.result = {
@@ -355,6 +355,10 @@ export class PopupController {
       }
       reqResponse = null;
       accountDetail = undefined;
+      console.log("RETURN RESULT => UI ", {
+        method,
+        res,
+      });
     });
   }
 
@@ -365,9 +369,8 @@ export class PopupController {
 
   async getFollowTokenList() {
     console.log("Background [getFollowTokenList] ");
-    // console.log("reduxStore.getState() ", reduxStore.getState());
     const followTokens = sharedSelectors.followTokensFormatedSelector(reduxStore.getState());
-    // console.log("Backgorund [getFollowTokenList] followTokens ", followTokens);
+    console.log("Backgorund [getFollowTokenList] followTokens ", followTokens);
     return followTokens;
   }
 

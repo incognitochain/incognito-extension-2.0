@@ -15,11 +15,10 @@ import RpcEngine from "json-rpc-engine";
 
 const PortStream = require("extension-port-stream");
 const createJsonRpcStream = require("json-rpc-middleware-stream");
-const log = require("debug")("incognito:bgContext");
+const JSON_RPC = "2.0";
 
 let isNotification = false;
 if (window.location.hash === "#notification") {
-  log("Enabling notification mode");
   isNotification = true;
 }
 
@@ -53,7 +52,7 @@ export function BackgroundProvider(props: React.PropsWithChildren<{}>) {
 
   const setupStreams = () => {
     const windowType = getEnvironmentType();
-    log("Window type detected: %s", windowType);
+    console.log("Window type detected: %s", windowType);
     const bgPort = chrome.runtime.connect({ name: windowType });
     const bgStream = new PortStream(bgPort);
     const popupMux = createObjectMultiplex("popup-ext-mux");
@@ -61,12 +60,12 @@ export function BackgroundProvider(props: React.PropsWithChildren<{}>) {
     popupMux.setMaxListeners(25);
 
     pump(bgStream, popupMux, bgStream, (err) => {
-      log("Background stream <> mux disconnected", err);
+      console.log("Background stream <> mux disconnected", err);
     });
 
     const jsonRpcConnection = createJsonRpcStream();
     pump(jsonRpcConnection.stream, popupMux.createStream(MUX_CONTROLLER_SUBSTREAM), jsonRpcConnection.stream, (err) => {
-      log("JsonRPC stream <> controller sub-stream disconnected", err);
+      console.log("JsonRPC stream <> controller sub-stream disconnected", err);
     });
 
     // @ts-ignore FIXME: Type definition in json-rpc-engine is incorrect, RpcEngine is not exported
@@ -77,11 +76,11 @@ export function BackgroundProvider(props: React.PropsWithChildren<{}>) {
       console.log("jsonRpcConnection resp ", resp);
       switch (resp.type) {
         case "popupStateChanged":
-          log("Received state change notification %O", resp.data);
+          console.log("Received state change notification %O", resp.data);
           setState(resp.data);
           return;
         default:
-          log("Received unhandled notification [%s] %O", resp.type, resp.data);
+          console.log("Received unhandled notification [%s] %O", resp.type, resp.data);
       }
     });
     setEngine(rpcEngine);
@@ -102,19 +101,18 @@ export function BackgroundProvider(props: React.PropsWithChildren<{}>) {
 
   const request: BackgroundContextType["request"] = (method: PopupActions, params: any) => {
     return new Promise<RPCResp<PopupState>>(function (resolve, reject) {
-      let request = { id: 1, jsonrpc: "2.0", method: method };
+      const requestId = Math.random().toFixed(10);
+      let request = { id: requestId, jsonrpc: JSON_RPC, method: method };
       if (params) {
         request = Object.assign(request, { params: params });
       }
-
-      log("performing rpc request: %O", request);
       engine.handle(request, function (err: any, response: any) {
-        // console.log("jsonRpcConnection response ", response);
+        // console.log(" engine.handle ", { request, err, response });
         if (err) {
           reject(err);
         } else {
           const res = response as RPCResp<PopupState>;
-          log("received new popup state from background: %O", res);
+          console.log("received new popup state from background: %O", res);
           setState(res.result);
           resolve(res);
         }
@@ -123,24 +121,24 @@ export function BackgroundProvider(props: React.PropsWithChildren<{}>) {
   };
 
   const changeNetwork: BackgroundContextType["changeNetwork"] = (network: Network) => {
-    log("Changing network from [%s] to [%s]", state?.selectedNetwork.cluster, network.cluster);
+    console.log("Changing network from [%s] to [%s]", state?.selectedNetwork.cluster, network.cluster);
     request("popup_changeNetwork", { cluster: network.cluster })
       .then((state) => {
-        log("Changed network to [%s]", state.result.selectedNetwork.cluster);
+        console.log("Changed network to [%s]", state.result.selectedNetwork.cluster);
       })
       .catch((err) => {
-        log("Unable to switch network from [%s] to [%s]", state?.selectedNetwork.cluster, network, err);
+        console.log("Unable to switch network from [%s] to [%s]", state?.selectedNetwork.cluster, network, err);
       });
   };
 
   const changeAccount: BackgroundContextType["changeAccount"] = (account: string) => {
-    log("Changing account from [%s] to [%s]", state?.selectedAccount, account);
+    console.log("Changing account from [%s] to [%s]", state?.selectedAccount, account);
     request("popup_changeAccount", { account: account })
       .then((state) => {
-        log("Changed account to [%s]", state.result.selectedAccount);
+        console.log("Changed account to [%s]", state.result.selectedAccount);
       })
       .catch((err) => {
-        log("Unable to switch account from [%s] to [%s]", state?.selectedAccount, account, err);
+        console.log("Unable to switch account from [%s] to [%s]", state?.selectedAccount, account, err);
       });
   };
 

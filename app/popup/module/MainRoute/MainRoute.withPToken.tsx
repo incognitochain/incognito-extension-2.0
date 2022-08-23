@@ -1,4 +1,5 @@
 import { useBackground } from "@popup/context/background";
+import { useCallAsync } from "@popup/utils/notifications";
 // import { getPTokenList } from "@redux/token";
 import React, { FunctionComponent } from "react";
 // import { useDispatch } from "react-redux";
@@ -6,16 +7,8 @@ import React, { FunctionComponent } from "react";
 
 const withPToken = (WrappedComponent: FunctionComponent) => {
   return (props: any) => {
-    const { request } = useBackground();
-    // const dispatch = useDispatch();
-    // const getTokensList = async () => dispatch(getPTokenList());
-    const getTokensList = async () => {
-      request("popup_getPTokenList", {}).catch((err) => {
-        console.log("popup_getPTokenList ERROR => %O", err);
-      });
-    };
     React.useEffect(() => {
-      getTokensList();
+      // getTokensList();
     }, []);
 
     return <WrappedComponent {...props} />;

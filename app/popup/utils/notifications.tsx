@@ -104,7 +104,12 @@ export function useCallAsync<T>() {
       persist: true,
     });
     try {
-      let result = await promise;
+      let result = await promise.then();
+
+      console.log(" useCallAsync => Result ", {
+        id,
+        result,
+      });
       closeSnackbar(id);
       if (success?.message) {
         enqueueSnackbar(success.message, { variant: success.variant ?? "success" });
@@ -114,6 +119,8 @@ export function useCallAsync<T>() {
         onSuccess(result);
       }
     } catch (e) {
+      console.log(" useCallAsync ERROR ", e);
+
       closeSnackbar(id);
 
       let message: string = e.message || (e !== null ? e.toString() : "Unknown error");

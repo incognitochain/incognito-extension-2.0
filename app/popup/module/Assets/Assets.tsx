@@ -11,10 +11,12 @@ import withBalance from "@module/MainRoute/MainRoute.withBalance";
 import Storage from "@services/storage";
 import rpcMetric, { METRIC_TYPE } from "@services/wallet/rpcMetric";
 import { AddButton } from "@components/AddButton/AddButton";
+import { useBackground } from "@popup/context/background";
 
 let isUpdated = false;
 const Assets = React.memo(() => {
   const history = useHistory();
+  const { request } = useBackground();
   const navigateImportTokens = () => {
     // history.push(routeImportToken);
   };
@@ -41,6 +43,14 @@ const Assets = React.memo(() => {
     if (isUpdated) return;
     updateMetric().then();
   }, [isUpdated]);
+
+  const getTokensList = async () => {
+    request("popup_getPTokenList", {});
+  };
+
+  React.useEffect(() => {
+    getTokensList();
+  }, []);
 
   return (
     <>
