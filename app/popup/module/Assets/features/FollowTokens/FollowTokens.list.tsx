@@ -13,14 +13,8 @@ const FollowTokensList = React.memo(() => {
   const { request } = useBackground();
   // const callAsync = useCallAsync();
   const [followTokens, setFollowTokens] = useState([]);
-
-  // const followTokens = useSelector(sharedSelectors.followTokensFormatedSelector);
   const getFollowTokens = async () => {
-    try {
-      request("popup_getFollowTokenList", {});
-    } catch (error) {
-      console.log("getFollowTokens ERROR  =>> ", error);
-    }
+    request("popup_getFollowTokenList", {});
   };
   useEffect(() => {
     getFollowTokens();

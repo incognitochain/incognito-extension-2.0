@@ -31,7 +31,7 @@ const withBalance = (WrappedComponent: FunctionComponent) => (props: any) => {
   //     clearInterval(interval.current);
   //     interval.current = null;
   //   };
-  // }, [keyDefine, walletState, isScanCoins]);
+  // }, [OTAKey, walletState, isScanCoins]);
 
   return <WrappedComponent {...{ ...props, loadFollowTokensBalance }} />;
 };

@@ -7,6 +7,7 @@ import { TokenActionType } from "@redux/token/token.types";
 import PTokenModel from "@model/pTokenModel";
 import { followsTokenAssetsSelector } from "@module/Assets/Assets.selector";
 import { IBalance } from "@core/types";
+import { networkSelector } from "@popup/configs/Configs.selector";
 const { PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
 
 export const getBalanceStart = (tokenSymbol: any) => ({
@@ -34,19 +35,18 @@ export const getPTokenList =
   async (dispatch: AppThunkDispatch, getState: AppGetState) => {
     try {
       const state = getState();
-      // const network = networkSelector(state);
-      // const accountSender = defaultAccountWalletSelector(state);
-      // const followTokens = await accountSender.getListFollowingTokens();
-      //
-      // const [pTokens, tokensInfo] = await Promise.all([
-      //   await getTokenList({ expiredTime, network }),
-      //   await getTokensInfo({ tokenIDs: followTokens }),
-      // ]);
-      //
-      // const tokens = uniqBy([...pTokens, ...tokensInfo], "tokenId");
-      // dispatch(setListPToken(tokens));
-      // return tokens;
-      return [];
+      const network = networkSelector(state);
+      const accountSender = defaultAccountWalletSelector(state);
+      const followTokens = await accountSender.getListFollowingTokens();
+
+      const [pTokens, tokensInfo] = await Promise.all([
+        await getTokenList({ expiredTime, network }),
+        await getTokensInfo({ tokenIDs: followTokens }),
+      ]);
+
+      const tokens = uniqBy([...pTokens, ...tokensInfo], "tokenId");
+      dispatch(setListPToken(tokens));
+      return tokens;
     } catch (e) {
       throw e;
     }

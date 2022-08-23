@@ -1,6 +1,6 @@
 import { reducer as test } from "@redux-sync-storage/test";
 import { reducer as account } from "@redux-sync-storage/account";
-import { reducer as followTokens } from "@redux-sync-storage/followTokens";
+import { reducer as followTokensReducer } from "@redux-sync-storage/followTokens";
 import { reducer as scanCoinsReducer } from "@redux-sync-storage/scanCoins";
 import { reducer as networkReducer } from "@redux-sync-storage/network";
 import { $CombinedState, combineReducers } from "redux";
@@ -9,7 +9,7 @@ const rootReducers = combineReducers({
   test,
   account,
   themeReducer,
-  followTokens,
+  followTokensReducer,
   scanCoinsReducer,
   networkReducer,
 });

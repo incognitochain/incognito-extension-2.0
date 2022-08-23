@@ -26,7 +26,6 @@ initialize().catch((err) => {
 
 async function initialize() {
   await Storage.logAll();
-  console.log("Background initialization ");
   const { reduxSyncStorage: reduxSyncStorageInstance } = await getReduxSyncStorage();
   reduxSyncStorage = reduxSyncStorageInstance;
   reduxStore = store;

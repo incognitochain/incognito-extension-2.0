@@ -1,4 +1,5 @@
-import { FollowTokenActionType, SelectedPrivacy } from "./followTokens.types";
+import { FollowTokenActionType, SelectedPrivacy, SetPTokenListAction } from "./followTokens.types";
+import PTokenModel from "@model/pTokenModel";
 
 const setFollowToken = (followTokenList: SelectedPrivacy[]) => ({
   type: FollowTokenActionType.SET,
@@ -7,4 +8,11 @@ const setFollowToken = (followTokenList: SelectedPrivacy[]) => ({
   },
 });
 
-export { setFollowToken };
+const setPToken = (pTokens: PTokenModel[]): SetPTokenListAction => ({
+  type: FollowTokenActionType.SET_PTOKEN,
+  payload: {
+    pTokens,
+  },
+});
+
+export { setFollowToken, setPToken };

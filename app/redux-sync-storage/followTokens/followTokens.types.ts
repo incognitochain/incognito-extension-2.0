@@ -1,4 +1,5 @@
 import { Action } from "redux";
+import PTokenModel from "@model/pTokenModel";
 
 export type PToken = {
   address: string;
@@ -96,6 +97,7 @@ export type SelectedPrivacy = {
 
 export enum FollowTokenActionType {
   SET = "REDUX_SYNC_STORAGE/FOLLOW_TOKEN/SET",
+  SET_PTOKEN = "REDUX_SYNC_STORAGE/FOLLOW_TOKEN/SET_PTOKEN",
 }
 
 //----------------------------------------------
@@ -109,8 +111,15 @@ export interface SetFollowTokenListAction extends Action {
   };
 }
 
+export interface SetPTokenListAction extends Action {
+  type: FollowTokenActionType.SET_PTOKEN;
+  payload: {
+    pTokens: PTokenModel[];
+  };
+}
+
 //----------------------------------------------
 
-export type FollowTokenActions = SetFollowTokenListAction;
+export type FollowTokenActions = SetFollowTokenListAction | SetPTokenListAction;
 
 export {};

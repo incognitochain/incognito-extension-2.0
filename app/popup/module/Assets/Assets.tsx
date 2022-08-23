@@ -12,11 +12,14 @@ import Storage from "@services/storage";
 import rpcMetric, { METRIC_TYPE } from "@services/wallet/rpcMetric";
 import { AddButton } from "@components/AddButton/AddButton";
 import { useBackground } from "@popup/context/background";
+import { useSelector } from "react-redux";
+import { getPTokenList } from "@redux-sync-storage/followTokens";
 
 let isUpdated = false;
 const Assets = React.memo(() => {
   const history = useHistory();
   const { request } = useBackground();
+  const pTokenList = useSelector(getPTokenList);
   const navigateImportTokens = () => {
     history.push(routeImportToken);
   };

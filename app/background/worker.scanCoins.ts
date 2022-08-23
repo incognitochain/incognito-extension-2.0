@@ -8,7 +8,7 @@ import {
 import { createLogger } from "@core/utils";
 import uniqBy from "lodash/uniqBy";
 import { IBalance } from "@core/types";
-// import { actionFetchedFollowBalance, actionFetchingFollowBalance } from "@module/Assets";
+import { actionFetchedFollowBalance, actionFetchingFollowBalance } from "@module/Assets/Assets.actions";
 // import { isFetchingAssetsSelector } from "@module/Assets";
 import { defaultAccountSelector, defaultAccountWalletSelector } from "@redux/account/account.selectors";
 import { actionHandler } from "@redux-sync-storage/store/store";
@@ -114,15 +114,14 @@ export const getFollowTokensBalance = async () => {
 
   try {
     const tokens = await getTokensDefault();
-    // dispatch(actionFetchingFollowBalance({ isFetching: true }));
+    actionHandler(actionFetchingFollowBalance({ isFetching: true }));
     // follow tokens balance
     const { balance }: { balance: IBalance[] } = await accountSender.getFollowTokensBalance({
       defaultTokens: tokens,
       version: PrivacyVersion.ver3,
     });
     const _balance = uniqBy(balance, "id");
-    // dispatch(actionFetchedFollowBalance({ balance: _balance, OTAKey: keyDefine }));
-
+    dispatch(actionFetchedFollowBalance({ balance: _balance, OTAKey: keyDefine }));
     return {
       keyDefine,
       balances: _balance,
