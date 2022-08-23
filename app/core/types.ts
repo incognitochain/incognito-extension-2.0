@@ -151,7 +151,8 @@ export type PopupActions =
   | "popup_request_scan_coins"
   | "popup_request_account_detail"
   | "popup_getFollowTokenList"
-  | "popup_getPTokenList";
+  | "popup_getPTokenList"
+  | "popup_set_default_scan_coins";
 
 export type Markdown = string;
 

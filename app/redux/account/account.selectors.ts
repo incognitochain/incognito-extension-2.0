@@ -3,7 +3,7 @@ import { walletSelector } from "@redux/wallet/wallet.selectors";
 import { getAccountWallet } from "@services/wallet/wallet.shared";
 import { memoize } from "lodash";
 import { createSelector } from "reselect";
-import { networkSelector } from "@popup/configs";
+import { networkSelector } from "@popup/configs/Configs.selector";
 
 export const getAccountWithPaymentAddress = (paymentAddress: string) => (state: RootState) => {
   return state.account.list.find((acc) => acc.PaymentAddress === paymentAddress);

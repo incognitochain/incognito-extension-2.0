@@ -89,11 +89,11 @@ const MainRoute = () => {
     handleGetRoutes();
   }, []);
 
-  // React.useEffect(() => {
-  //   if (showConfirmScanCoins) {
-  //     throttleShowModal();
-  //   }
-  // }, [showConfirmScanCoins]);
+  React.useEffect(() => {
+    if (showConfirmScanCoins) {
+      throttleShowModal();
+    }
+  }, [showConfirmScanCoins]);
 
   if (!popupState) {
     return null;
@@ -118,7 +118,7 @@ const MainRoute = () => {
           </Switch>
         </Suspense>
       </Styled>
-      {/* {isScanCoins && <Loading message="Scanning coins, please wait a few minutes" />} */}
+      {isScanCoins && <Loading message="Scanning coins, please wait a few minutes" />}
     </>
   );
 };

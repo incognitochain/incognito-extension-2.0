@@ -27,6 +27,7 @@ const isShowConfirmScanCoins = createSelector(
   statusScanCoinsSelector,
   getKeyDefineAccountSelector,
   (scanStatus, key) => {
+    console.log("SANG TEST: AHIHI", key, scanStatus);
     return key && (!scanStatus || scanStatus[key] === undefined);
   },
 );

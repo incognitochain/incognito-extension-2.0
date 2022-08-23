@@ -21,8 +21,8 @@ interface IProps {}
 
 const BoxScanCoin = React.memo((props: IProps) => {
   const dispatch = useDispatch();
-  const accountSender = useSelector(defaultAccountWalletSelector);
-  const keyDefine = useSelector(keyDefineAccountSelector);
+  // const accountSender = useSelector(defaultAccountWalletSelector);
+  // const keyDefine = useSelector(keyDefineAccountSelector);
   const { clearAllModal } = useModal();
   const { request } = useBackground();
 
@@ -32,27 +32,29 @@ const BoxScanCoin = React.memo((props: IProps) => {
 
   const onCancelPress = async () => {
     onButtonPress();
-    const otaKey = accountSender.getOTAKey();
-    if (!otaKey || !keyDefine) return;
-    dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
+    // const otaKey = accountSender.getOTAKey();
+    // if (!otaKey || !keyDefine) return;
+    // dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
+    // try {
+    //   await accountSender.setNewAccountCoinsScan();
+    // } catch (e) {
+    //   console.log("STORAGE ERROR: ", e);
+    // }
     try {
-      await accountSender.setNewAccountCoinsScan();
-    } catch (e) {
-      console.log("STORAGE ERROR: ", e);
-    }
-    try {
-      request("popup_request_scan_coins", {});
+      request("popup_set_default_scan_coins", {}).then(() => {
+        request("popup_request_scan_coins", {});
+      });
     } catch (e) {
       console.log("REQUEST SCAN ERROR: ", e);
     }
   };
 
   const onScanPress = async () => {
-    onButtonPress();
-    const otaKey = accountSender.getOTAKey();
-    if (!otaKey || !keyDefine) return;
-    dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey: keyDefine }));
-    request("popup_request_scan_coins", {});
+    // onButtonPress();
+    // const otaKey = accountSender.getOTAKey();
+    // if (!otaKey || !keyDefine) return;
+    // dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey: keyDefine }));
+    // request("popup_request_scan_coins", {});
   };
 
   return (

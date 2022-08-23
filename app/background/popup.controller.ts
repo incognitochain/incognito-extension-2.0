@@ -42,6 +42,7 @@ import sharedSelectors from "@redux/shared/shared.selectors";
 import { getPTokenList } from "@redux/token/token.actions";
 import { changeNetwork } from "@redux-sync-storage/network/network.actions";
 import { actionHandler } from "@redux-sync-storage/store/store";
+import { getKeyDefineAccountSelector } from "@redux-sync-storage/account";
 const { setShardNumber, Validator, PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 const log = createLogger("incognito:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -172,7 +173,7 @@ export class PopupController {
               // await this.store.unlockSecretBox(req.params.password);
               await this.updateNetworkHandler();
               await this.unlockWallet(req.params);
-              // await this.scanCoinHandler();
+              await this.scanCoinHandler();
               // const accountDefault = await getFollowTokensBalance();
               // this._notifyAll({
               //   type: "accountsChanged",
@@ -337,6 +338,14 @@ export class PopupController {
             res.error = err;
           }
           break;
+        case "popup_set_default_scan_coins":
+          try {
+            await this.setDefaultCoins();
+          } catch (err) {
+            log("error: set default UTXOs scan coins failed  with error: %s", err);
+            res.error = err;
+          }
+          break;
         default:
           console.log("popup controller middleware did not match method name %s", req.method);
           await next();
@@ -365,6 +374,15 @@ export class PopupController {
   async getPTokenList() {
     console.log("Background [getPTokenList] ");
     await reduxStore.dispatch(getPTokenList());
+  }
+
+  async setDefaultCoins() {
+    const accountSender = defaultAccountWalletSelector(reduxStore.getState());
+    const keyDefine = getKeyDefineAccountSelector(this.reduxSyncStorage.getState());
+    console.log("SANG TEST: 3", {
+      accountSender,
+      keyDefine,
+    });
   }
 
   async getFollowTokenList() {
