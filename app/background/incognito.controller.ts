@@ -308,7 +308,6 @@ export default class IncognitoController {
   }
 
   async scanCoinHandler(params: any) {
-    console.log("scanCoinHandler ", params);
     const popupState = this.popupState;
     if (params) {
       const { isClear } = params;
@@ -316,7 +315,7 @@ export default class IncognitoController {
         return this.clearScanCoins();
       }
     }
-    const showConfirmScanCoins = isShowConfirmScanCoins(reduxStore.getState())(popupState.get());
+    const showConfirmScanCoins = isShowConfirmScanCoins(this.reduxSyncStorage.getState())(popupState.get());
     const popupStateData = popupState.get();
     if (popupState && popupStateData.walletState === "unlocked") {
       if (!scanCoinInterval && !showConfirmScanCoins) {
