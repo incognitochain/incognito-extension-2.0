@@ -4,6 +4,7 @@ import { createSelector } from "reselect";
 
 import { RootState } from "@redux-sync-storage/reducers/index";
 import { getKeyDefineAccountSelector } from "@redux-sync-storage/account/account.selectors";
+import { PopupState } from "@core/types";
 
 const scanCoinsReducerSelector = createSelector(
   (state: RootState) => state.scanCoinsReducer,
@@ -26,8 +27,8 @@ const isFirstTimeScanCoinsSelector = createSelector(
 const isShowConfirmScanCoins = createSelector(
   statusScanCoinsSelector,
   getKeyDefineAccountSelector,
-  (scanStatus, key) => {
-    console.log("SANG TEST: AHIHI", key, scanStatus);
+  (scanStatus, key) => (popupState: PopupState | undefined) => {
+    if (!popupState || popupState.walletState !== "unlocked") return false;
     return key && (!scanStatus || scanStatus[key] === undefined);
   },
 );

@@ -32,16 +32,8 @@ const BoxScanCoin = React.memo((props: IProps) => {
 
   const onCancelPress = async () => {
     onButtonPress();
-    // const otaKey = accountSender.getOTAKey();
-    // if (!otaKey || !keyDefine) return;
-    // dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
-    // try {
-    //   await accountSender.setNewAccountCoinsScan();
-    // } catch (e) {
-    //   console.log("STORAGE ERROR: ", e);
-    // }
     try {
-      request("popup_set_default_scan_coins", {}).then(() => {
+      request("popup_scan_coins_box_click", { isCancel: true }).then(() => {
         request("popup_request_scan_coins", {});
       });
     } catch (e) {
@@ -50,11 +42,14 @@ const BoxScanCoin = React.memo((props: IProps) => {
   };
 
   const onScanPress = async () => {
-    // onButtonPress();
-    // const otaKey = accountSender.getOTAKey();
-    // if (!otaKey || !keyDefine) return;
-    // dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey: keyDefine }));
-    // request("popup_request_scan_coins", {});
+    onButtonPress();
+    try {
+      request("popup_scan_coins_box_click", { isCancel: false }).then(() => {
+        request("popup_request_scan_coins", {});
+      });
+    } catch (e) {
+      console.log("REQUEST SCAN ERROR: ", e);
+    }
   };
 
   return (

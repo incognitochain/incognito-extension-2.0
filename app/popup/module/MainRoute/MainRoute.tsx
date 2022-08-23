@@ -66,7 +66,7 @@ const MainRoute = () => {
   const { setModal } = useModal();
 
   const isScanCoins = useSelector(isFirstTimeScanCoinsSelector);
-  const showConfirmScanCoins = useSelector(isShowConfirmScanCoins);
+  const showConfirmScanCoins = useSelector(isShowConfirmScanCoins)(popupState);
 
   const handleGetRoutes = () => {
     const allRoutes: IRouteProps[] = [];

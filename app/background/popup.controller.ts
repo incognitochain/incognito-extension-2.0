@@ -35,7 +35,7 @@ import accountService from "@services/wallet/accountService";
 import { clearAllCaches } from "@services/cache";
 import { clearReduxStore } from "@redux/reducers";
 import { actionFreeAssets } from "@module/Assets/Assets.actions";
-import { actionFreeScanCoins } from "@redux-sync-storage/scanCoins";
+import { actionFistTimeScanCoins, actionFreeScanCoins } from "@redux-sync-storage/scanCoins";
 import { batch } from "react-redux";
 import rpcSubmit from "@services/wallet/rpcSubmit";
 import sharedSelectors from "@redux/shared/shared.selectors";
@@ -338,9 +338,14 @@ export class PopupController {
             res.error = err;
           }
           break;
-        case "popup_set_default_scan_coins":
+        case "popup_scan_coins_box_click":
           try {
-            await this.setDefaultCoins();
+            const { isCancel = false } = req.params;
+            const res = await this.updateStatusScanCoins();
+            const accountSender = defaultAccountWalletSelector(reduxStore.getState());
+            if (isCancel && res && accountSender) {
+              await accountSender.setNewAccountCoinsScan();
+            }
           } catch (err) {
             log("error: set default UTXOs scan coins failed  with error: %s", err);
             res.error = err;
@@ -376,13 +381,27 @@ export class PopupController {
     await reduxStore.dispatch(getPTokenList());
   }
 
-  async setDefaultCoins() {
+  async updateStatusScanCoins() {
+    let res = false;
     const accountSender = defaultAccountWalletSelector(reduxStore.getState());
     const keyDefine = getKeyDefineAccountSelector(this.reduxSyncStorage.getState());
-    console.log("SANG TEST: 3", {
-      accountSender,
-      keyDefine,
-    });
+    if (!accountSender || !keyDefine) return res;
+    const walletState = this.popupState.get().walletState;
+    if (walletState !== "locked") {
+      await actionHandler(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
+      res = true;
+    }
+    return res;
+  }
+
+  async confirmScanCoins() {
+    const accountSender = defaultAccountWalletSelector(reduxStore.getState());
+    const keyDefine = getKeyDefineAccountSelector(this.reduxSyncStorage.getState());
+    if (!accountSender || !keyDefine) return;
+    const walletState = this.popupState.get().walletState;
+    if (walletState !== "locked") {
+      await actionHandler(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
+    }
   }
 
   async getFollowTokenList() {
