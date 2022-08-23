@@ -61,7 +61,6 @@ export type StoredData = {
   secretBox: SecretBox | undefined;
   accountCount: number;
   selectedNetwork: Network | any;
-  selectedAccount: string;
   authorizedOrigins: string[];
 };
 
@@ -76,9 +75,7 @@ export type IBalance = {
 export type PopupState = {
   walletState: WalletState;
   accounts: string[];
-  selectedAccount: string;
   selectedNetwork: Network;
-  availableNetworks: Network[];
   authorizedOrigins: string[];
   actions: OrderedAction[];
   storeData?: any;

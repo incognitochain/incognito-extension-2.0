@@ -7,7 +7,6 @@ export const initialState: StoredData = {
   secretBox: undefined,
   accountCount: 1, // this is important the default wallet should create an account
   selectedNetwork: DEFAULT_NETWORK,
-  selectedAccount: "",
   authorizedOrigins: [],
 };
 
@@ -22,17 +21,15 @@ export class Store {
   // persisted information
   public secretBox: SecretBox | null;
   public selectedNetwork: Network;
-  public selectedAccount: string;
   public authorizedOrigins: string[];
 
   constructor(initialStore: StoredData) {
-    const { secretBox, accountCount, selectedNetwork, selectedAccount, authorizedOrigins } = initialStore;
+    const { secretBox, accountCount, selectedNetwork, authorizedOrigins } = initialStore;
     this.popIsOpen = false;
 
     // We should always have at-least 1 account at all time
     this.initialAccountCount = accountCount ?? 1;
     this.selectedNetwork = selectedNetwork || DEFAULT_NETWORK;
-    this.selectedAccount = selectedAccount;
     this.wallet = null;
     this.secretBox = null;
 
@@ -64,7 +61,6 @@ export class Store {
 
   lockSecretBox() {
     this.wallet = null;
-    this.selectedAccount = "";
   }
 
   setWallet(wallet: any) {

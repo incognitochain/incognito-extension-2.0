@@ -16,8 +16,6 @@ export class PopupStateResolver {
       walletState: "uninitialized",
       accounts: [],
       selectedNetwork: this.store.selectedNetwork,
-      availableNetworks: AVAILABLE_NETWORKS,
-      selectedAccount: this.store.selectedAccount,
       authorizedOrigins: [],
       actions: this.actionManager.getOrderedActions(),
       storeData: {},

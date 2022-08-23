@@ -95,6 +95,8 @@ const MainRoute = () => {
     }
   }, [showConfirmScanCoins]);
 
+  console.log("[MainRoute] WALLET STATE: ", popupState);
+
   if (!popupState) {
     return null;
   }

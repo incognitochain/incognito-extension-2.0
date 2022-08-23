@@ -297,7 +297,7 @@ export class PopupController {
           try {
             await this.scanCoinHandler();
           } catch (err) {
-            log("error: popup_lockWallet failed  with error: %s", err);
+            console.log("error: popup_lockWallet failed  with error: %s", err);
             res.error = err;
           }
           break;
@@ -341,13 +341,13 @@ export class PopupController {
         case "popup_scan_coins_box_click":
           try {
             const { isCancel = false } = req.params;
-            const res = await this.updateStatusScanCoins();
+            // const res = await this.updateStatusScanCoins();
             const accountSender = defaultAccountWalletSelector(reduxStore.getState());
             if (isCancel && res && accountSender) {
-              await accountSender.setNewAccountCoinsScan();
+              // await accountSender.setNewAccountCoinsScan(); //BUG SDK???
             }
           } catch (err) {
-            log("error: set default UTXOs scan coins failed  with error: %s", err);
+            console.log("error: set default UTXOs scan coins failed  with error: %s", err);
             res.error = err;
           }
           break;
@@ -713,7 +713,7 @@ export class PopupController {
 
     for (const act of this.store.wallet?.getPublicKeysAsBs58()) {
       if (account === act) {
-        this.store.selectedAccount = account;
+        // this.store.selectedAccount = account;
         return;
       }
     }
@@ -725,7 +725,7 @@ export class PopupController {
     const newAccount = this.store.wallet?.addAccount();
 
     if (newAccount) {
-      this.store.selectedAccount = newAccount.publicKey.toBase58();
+      // this.store.selectedAccount = newAccount.publicKey.toBase58();
       this._notifyAll({
         type: "accountsChanged",
         data: this.store.wallet?.getPublicKeysAsBs58() || [],

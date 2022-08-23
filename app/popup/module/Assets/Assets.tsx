@@ -48,7 +48,7 @@ const Assets = React.memo(() => {
   }, [isUpdated]);
 
   const getTokensList = async () => {
-    request("popup_getPTokenList", {});
+    request("popup_getPTokenList", {}).then();
   };
 
   React.useEffect(() => {

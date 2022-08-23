@@ -132,13 +132,12 @@ export function BackgroundProvider(props: React.PropsWithChildren<{}>) {
   };
 
   const changeAccount: BackgroundContextType["changeAccount"] = (account: string) => {
-    console.log("Changing account from [%s] to [%s]", state?.selectedAccount, account);
     request("popup_changeAccount", { account: account })
       .then((state) => {
-        console.log("Changed account to [%s]", state.result.selectedAccount);
+        console.log("Changed account to [%s]", state.result);
       })
       .catch((err) => {
-        console.log("Unable to switch account from [%s] to [%s]", state?.selectedAccount, account, err);
+        console.log("Unable to switch account from [%s] to [%s]", account, err);
       });
   };
 

@@ -286,7 +286,6 @@ export default class IncognitoController {
       // accountCount: this.store.wallet?.accounts.length,
       accountCount: 1,
       selectedNetwork: this.store.selectedNetwork,
-      selectedAccount: this.store.selectedAccount,
       authorizedOrigins: this.store.authorizedOrigins,
     } as StoredData);
   }
