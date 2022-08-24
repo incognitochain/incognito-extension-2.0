@@ -1,7 +1,7 @@
 import { reducer as account } from "@redux/account/account.reducer";
 import { reducer as appReducer } from "@redux/app/app.reducer";
 import { reducer as masterKey } from "@redux/masterKey/masterKey.reducer";
-import { reducer as selectedPrivacy } from "@redux/selectedPrivacy/selectedPrivacy.reducer";
+// import { reducer as selectedPrivacy } from "@redux/selectedPrivacy/selectedPrivacy.reducer";
 import { reducer as token } from "@redux/token/token.reducer";
 import { reducer as wallet } from "@redux/wallet/wallet.reducer";
 import { reducer as scanCoinsReducer } from "@redux-sync-storage/scanCoins";
@@ -28,7 +28,7 @@ const rootReducers = combineReducers({
   configReducer,
   // assetsReducer,
   themeReducer,
-  selectedPrivacy,
+  // selectedPrivacy,
   // sendReducer,
   signTransactionReducer,
   // form: formReducer,

@@ -1,5 +1,8 @@
 import { createSelector } from "reselect";
-import { getPrivacyDataByTokenID, selectedPrivacyToken } from "@redux/selectedPrivacy";
+import {
+  getPrivacyDataByTokenID,
+  selectedPrivacyToken,
+} from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.selectors";
 import { getSendData } from "@module/Send/Send.utils";
 import { ISendData } from "@module/Send/Send.types";
 import { RootState } from "@redux-sync-storage/reducers/index";

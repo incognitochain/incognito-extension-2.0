@@ -1,5 +1,5 @@
 import { unionBy, remove } from "lodash";
-// import { SelectedPrivacyActionType } from "@redux/selectedPrivacy/selectedPrivacy.types";
+// import { SelectedPrivacyActionType } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.type";
 import { TokenActionType, TokenActions } from "@redux/token/token.types";
 import { Reducer } from "redux";
 import PTokenModel from "@model/pTokenModel";

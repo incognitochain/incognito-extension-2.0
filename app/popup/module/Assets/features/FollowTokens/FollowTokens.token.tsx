@@ -4,7 +4,7 @@ import { Row } from "@popup/theme";
 import SelectedPrivacy from "@model/SelectedPrivacyModel";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@redux/store";
-import { actionSelectedPrivacySet } from "@redux/selectedPrivacy";
+import { actionSelectedPrivacySet } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.actions";
 import { useHistory } from "react-router-dom";
 import { route as routeTokenDetail } from "@module/TokenDetail";
 import { Image } from "@components/Core";

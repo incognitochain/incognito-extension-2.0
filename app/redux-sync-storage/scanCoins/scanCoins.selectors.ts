@@ -1,6 +1,5 @@
 import { createSelector } from "reselect";
 // import { RootState } from "@redux/reducers";
-// import { keyDefineAccountSelector } from "@redux/account/account.selectors";
 
 import { RootState } from "@redux-sync-storage/reducers/index";
 import { getKeyDefineAccountSelector } from "@redux-sync-storage/account/account.selectors";

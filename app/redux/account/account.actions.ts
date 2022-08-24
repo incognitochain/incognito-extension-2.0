@@ -4,6 +4,7 @@ import {
   burnerAddressSelector,
   default as accountSelector,
   default as accountSelectors,
+  defaultAccountWalletSelector,
 } from "@redux/account/account.selectors";
 import { loadAllMasterKeyAccounts, switchMasterKey, updateMasterKey } from "@redux/masterKey/masterKey.actions";
 import {
@@ -11,7 +12,6 @@ import {
   masterlessKeyChainSelector,
   noMasterLessSelector,
 } from "@redux/masterKey/masterKey.selectors";
-import { getDefaultAccountWalletSelector } from "@redux/shared/shared.selectors";
 import { AppGetState, AppThunkDispatch } from "@redux/store";
 import { reloadWallet } from "@redux/wallet/wallet.actions";
 import { walletSelector } from "@redux/wallet/wallet.selectors";
@@ -283,7 +283,8 @@ export const actionFetchBurnerAddress = () => async (dispatch: AppThunkDispatch,
     if (burnerAddress) {
       return;
     }
-    const account = getDefaultAccountWalletSelector(state);
+    // const account = getDefaultAccountWalletSelector(state);
+    const account = defaultAccountWalletSelector(getState());
     const payload = await account.getBurnerAddress();
     await dispatch({
       type: AccountActionType.ACTION_GET_BURNER_ADDRESS,

@@ -8,7 +8,8 @@ import { route as QRCodeRoute } from "@module/QRCode";
 import { actionFreeData } from "@module/Send/Send.actions";
 import { FORM_CONFIGS } from "@module/Send/Send.constant";
 import { route as SendRoute } from "@module/Send/Send.route";
-import { actionSelectedPrivacySet, selectedPrivacyToken } from "@redux/selectedPrivacy";
+import { actionSelectedPrivacySet } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.actions";
+import { selectedPrivacyToken } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.selectors";
 import { AppThunkDispatch } from "@redux/store";
 import { reset } from "redux-form";
 

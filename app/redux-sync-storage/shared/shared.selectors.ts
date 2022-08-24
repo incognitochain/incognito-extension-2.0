@@ -1,35 +1,12 @@
-import CONSTANT_COMMONS from "@constants/common";
-import { BIG_COINS } from "@constants/dexV2";
-import { defaultAccountName, defaultAccountSelector } from "@redux/account/account.selectors";
-import { RootState } from "@redux/reducers";
-import { getPrivacyDataByTokenID } from "@redux/selectedPrivacy/selectedPrivacy.selectors";
-import { walletSelector } from "@redux/wallet/wallet.selectors";
-import { getAccountWallet } from "@services/wallet/wallet.shared";
-import convert from "@utils/convert";
-import format from "@utils/format";
-import { createSelector } from "reselect";
-import orderBy from "lodash/orderBy";
 import SelectedPrivacyModel from "@model/SelectedPrivacyModel";
 import { followsTokenAssetsSelector } from "@module/Assets/Assets.selector";
+import { getPrivacyDataByTokenID } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.selectors";
+import convert from "@utils/convert";
+import format from "@utils/format";
 import BigNumber from "bignumber.js";
+import orderBy from "lodash/orderBy";
+import { createSelector } from "reselect";
 const { PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
-
-export const isGettingBalance = createSelector(
-  (state: RootState) => state?.token?.isGettingBalance,
-  (state: RootState) => state?.account?.isGettingBalance,
-  defaultAccountName,
-  (tokens, accounts, defaultAccountName) => {
-    const isLoadingAccountBalance = accounts?.includes(defaultAccountName);
-    const result = [...tokens];
-    return isLoadingAccountBalance ? [...result, CONSTANT_COMMONS.PRV.id] : result;
-  },
-);
-
-export const getDefaultAccountWalletSelector = createSelector(
-  defaultAccountSelector,
-  walletSelector,
-  (account, wallet) => getAccountWallet(account, wallet),
-);
 
 const followTokensFormatedSelector = createSelector(
   getPrivacyDataByTokenID,
@@ -64,8 +41,6 @@ const followTokensUSDAmountSelector = createSelector(followTokensFormatedSelecto
 });
 
 export default {
-  isGettingBalance,
-  getDefaultAccountWalletSelector,
   followTokensFormatedSelector,
   followTokensUSDAmountSelector,
 };

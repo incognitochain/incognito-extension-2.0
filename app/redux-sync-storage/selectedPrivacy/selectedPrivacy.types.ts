@@ -5,8 +5,8 @@ export interface ISelectedPrivacyState {
 }
 
 export enum SelectedPrivacyActionType {
-  SET = `SELECTED_PRIVACY/SET`,
-  CLEAR = `SELECTED_PRIVACY/CLEAR`,
+  SET = `REDUX_SYNC_STORAGE/SELECTED_PRIVACY/SET`,
+  CLEAR = `REDUX_SYNC_STORAGE/SELECTED_PRIVACY/CLEAR`,
 }
 
 export interface SelectedPrivacySetPayload {

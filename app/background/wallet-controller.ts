@@ -13,7 +13,7 @@ import { getCurrentPaymentAddress } from "@redux/account/account.selectors";
 import { store as reduxStore } from "@redux/store/store";
 
 import { getFollowTokensBalance } from "./worker.scanCoins";
-import { actionSelectedPrivacySet } from "@redux/selectedPrivacy";
+import { actionSelectedPrivacySet } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.actions";
 import { change } from "redux-form";
 import { getPTokenList } from "@redux/token/token.actions";
 import { batch } from "react-redux";

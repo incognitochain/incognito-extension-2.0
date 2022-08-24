@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { selectedPrivacyToken } from "@redux/selectedPrivacy";
+import { selectedPrivacyToken } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.selectors";
 import CONSTANT_CONFIGS from "@constants/config";
 import CONSTANT_COMMONS from "@constants/common";
 import SelectedPrivacyModel from "@model/SelectedPrivacyModel";

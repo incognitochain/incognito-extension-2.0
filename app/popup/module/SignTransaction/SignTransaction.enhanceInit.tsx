@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import SelectedPrivacy from "@model/SelectedPrivacyModel";
-import { selectedPrivacyToken } from "@redux/selectedPrivacy/selectedPrivacy.selectors";
+import { selectedPrivacyToken } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.selectors";
 import { ISignTransactionData } from "@module/SignTransaction/SignTransaction.types";
 import { signDataSelector } from "@module/SignTransaction/SignTransaction.selector";
 

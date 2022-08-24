@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Header from "@components/Header";
 import { useSelector } from "react-redux";
-import { selectedPrivacyToken } from "@redux/selectedPrivacy";
+import { selectedPrivacyToken } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.selectors";
 import WrapContent from "@components/Content/Content";
 import { ArrowCircleIcon, AskIcon } from "@components/Icons";
 import { Extra, ActionsGroup } from "@module/TokenDetail/features";

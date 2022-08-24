@@ -38,7 +38,7 @@ import { actionFreeAssets } from "@module/Assets/Assets.actions";
 import { actionFistTimeScanCoins, actionFreeScanCoins } from "@redux-sync-storage/scanCoins";
 import { batch } from "react-redux";
 import rpcSubmit from "@services/wallet/rpcSubmit";
-import sharedSelectors from "@redux/shared/shared.selectors";
+import sharedSelectors from "@redux-sync-storage/shared/shared.selectors";
 import { getPTokenList } from "@redux/token/token.actions";
 import { changeNetwork } from "@redux-sync-storage/network/network.actions";
 import { actionHandler } from "@redux-sync-storage/store/store";
@@ -405,10 +405,8 @@ export class PopupController {
   }
 
   async getFollowTokenList() {
-    console.log("Background [getFollowTokenList] ");
-    // const followTokens = sharedSelectors.followTokensFormatedSelector(reduxStore.getState());
-    // console.log("Backgorund [getFollowTokenList] followTokens ", followTokens);
-    // return followTokens;
+    const followTokens = sharedSelectors.followTokensFormatedSelector(this.reduxSyncStorage.getState());
+    return followTokens;
   }
 
   async createAccount({ accountName }: { accountName: string }) {

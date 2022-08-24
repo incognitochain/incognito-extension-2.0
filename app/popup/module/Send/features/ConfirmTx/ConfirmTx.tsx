@@ -5,7 +5,7 @@ import styled from "styled-components";
 import HistoryItem, { IHistoryItem } from "@module/TokenDetail/features/HistoryItem";
 import { route as routeTokenDetail } from "@module/TokenDetail";
 import Header from "@components/Header";
-import { selectedPrivacyToken } from "@redux/selectedPrivacy";
+import { selectedPrivacyToken } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.selectors";
 import { IConfirmTx } from "@module/Send/features/ConfirmTx";
 import WrapContent from "@components/Content/Content";
 import { ellipsisCenter } from "@popup/utils";

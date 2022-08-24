@@ -1,7 +1,7 @@
 import React from "react";
 import styled, { ITheme } from "styled-components";
 import { useSelector } from "react-redux";
-import { selectedPrivacyToken } from "@redux/selectedPrivacy";
+import { selectedPrivacyToken } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.selectors";
 import { Image } from "@components/Core";
 
 const Styled = styled.div`

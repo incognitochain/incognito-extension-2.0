@@ -7,7 +7,6 @@ import { TokenActionType } from "@redux/token/token.types";
 import PTokenModel from "@model/pTokenModel";
 import { followsTokenAssetsSelector } from "@module/Assets/Assets.selector";
 import { IBalance } from "@core/types";
-import { networkSelector } from "@popup/configs/Configs.selector";
 import { actionHandler, getReduxSyncStorage } from "@redux-sync-storage/store/store";
 import { setPToken } from "@redux-sync-storage/followTokens/followTokens.actions";
 import serverService from "@services/wallet/Server";
@@ -50,8 +49,8 @@ export const getPTokenList =
       ]);
 
       const tokens = uniqBy([...pTokens, ...tokensInfo], "tokenId");
-      dispatch(setListPToken(tokens));
-      actionHandler(setPToken(tokens));
+      // dispatch(setListPToken(tokens));
+      await actionHandler(setPToken(tokens));
       return tokens;
     } catch (e) {
       throw e;

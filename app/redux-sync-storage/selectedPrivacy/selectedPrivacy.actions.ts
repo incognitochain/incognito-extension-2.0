@@ -3,7 +3,7 @@ import {
   SelectedPrivacySetPayload,
   SelectedPrivacySetAction,
   SelectedPrivacyClearAction,
-} from "@redux/selectedPrivacy";
+} from "../selectedPrivacy/selectedPrivacy.types";
 
 const actionSelectedPrivacySet = (payload: SelectedPrivacySetPayload): SelectedPrivacySetAction => ({
   type: SelectedPrivacyActionType.SET,

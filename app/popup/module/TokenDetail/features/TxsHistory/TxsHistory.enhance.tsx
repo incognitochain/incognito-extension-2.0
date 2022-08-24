@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { defaultAccountWalletSelector } from "@redux/account/account.selectors";
-import { selectedPrivacyToken } from "@redux/selectedPrivacy";
+import { selectedPrivacyToken } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.selectors";
 import debounce from "lodash/debounce";
 import { IHistoryFromSDK, IHistory } from "@module/TokenDetail/features/TxsHistory/TxsHistory.interfaces";
 import { getTxsHistoryBuilder } from "@module/TokenDetail/features/TxsHistory/TxsHistory.utils";
