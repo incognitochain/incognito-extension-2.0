@@ -65,7 +65,7 @@ const MainRoute = () => {
 
   const { setModal } = useModal();
 
-  const isScanCoins = useSelector(isFirstTimeScanCoinsSelector);
+  const isScanCoins = useSelector(isFirstTimeScanCoinsSelector)(popupState);
   const showConfirmScanCoins = useSelector(isShowConfirmScanCoins)(popupState);
 
   const handleGetRoutes = () => {
@@ -95,8 +95,6 @@ const MainRoute = () => {
     }
   }, [showConfirmScanCoins]);
 
-  console.log("[MainRoute] WALLET STATE: ", popupState);
-
   if (!popupState) {
     return null;
   }
@@ -120,7 +118,7 @@ const MainRoute = () => {
           </Switch>
         </Suspense>
       </Styled>
-      {isScanCoins && <Loading message="Scanning coins, please wait a few minutes" />}
+      {isScanCoins && <Loading message="Scanning coins, please don't close the pop-up and wait a few minutes." />}
     </>
   );
 };

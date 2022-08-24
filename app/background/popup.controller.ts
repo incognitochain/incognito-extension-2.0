@@ -341,7 +341,7 @@ export class PopupController {
         case "popup_scan_coins_box_click":
           try {
             const { isCancel = false } = req.params;
-            const res = await this.updateStatusScanCoins();
+            const res = await this.updateStatusScanCoins({ isFirstTimeScan: isCancel ? false : true });
             const accountSender = defaultAccountWalletSelector(reduxStore.getState());
             if (isCancel && res && accountSender) {
               await accountSender.setNewAccountCoinsScan(); //BUG SDK???
@@ -381,14 +381,14 @@ export class PopupController {
     await reduxStore.dispatch(getPTokenList());
   }
 
-  async updateStatusScanCoins() {
+  async updateStatusScanCoins({ isFirstTimeScan }: { isFirstTimeScan: boolean }) {
     let res = false;
     const accountSender = defaultAccountWalletSelector(reduxStore.getState());
     const keyDefine = getKeyDefineAccountSelector(this.reduxSyncStorage.getState());
     if (!accountSender || !keyDefine) return res;
     const walletState = this.popupState.get().walletState;
     if (walletState !== "locked") {
-      await actionHandler(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
+      await actionHandler(actionFistTimeScanCoins({ isScanning: isFirstTimeScan, otaKey: keyDefine }));
       res = true;
     }
     return res;

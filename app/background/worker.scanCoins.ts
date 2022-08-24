@@ -71,10 +71,6 @@ export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any })
   const { accountSender, keyDefine } = (await configAccount()) as any;
   if (!reduxSyncStorage || !reduxSyncStorage.getState()) return;
   const isFetching = isFetchingScanCoinsSelector(reduxSyncStorage.getState());
-  console.log("scanCoins", {
-    isFetching,
-    reduxSyncStorage: reduxSyncStorage.getState(),
-  });
   // Validate data
   if (!accountSender || isFetching || !keyDefine) return;
 
@@ -84,10 +80,10 @@ export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any })
     // Get coins scanned from storage, existed ignore and continue scan
     const coinsStore = await accountSender.getStorageCoinsScan();
     if (!coinsStore) {
-      dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey: keyDefine }));
+      await actionHandler(actionFistTimeScanCoins({ isScanning: true, otaKey: keyDefine }));
     }
 
-    actionHandler(actionFetchingScanCoins({ isFetching: true }));
+    await actionHandler(actionFetchingScanCoins({ isFetching: true }));
 
     const tokens = await getTokensDefault();
 
@@ -98,7 +94,7 @@ export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any })
     });
 
     if (!coinsStore) {
-      dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
+      await actionHandler(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
       // getFollowTokensBalance().then();
     }
 

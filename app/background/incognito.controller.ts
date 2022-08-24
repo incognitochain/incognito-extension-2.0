@@ -322,8 +322,8 @@ export default class IncognitoController {
           await actionHandler(actionFetchingScanCoins({ isFetching: false }));
           scanCoins({ reduxSyncStorage: this.reduxSyncStorage }).then();
         } catch (e) {
-          console.log("SCAN COINS ERROR: ", e);
           // Handle error
+          console.log("SCAN COINS ERROR: ", e);
         }
         scanCoinInterval = setInterval(() => {
           try {
@@ -332,7 +332,7 @@ export default class IncognitoController {
             console.log("SCAN COINS ERROR: ", e);
             // Handle error
           }
-        }, 5000);
+        }, 20000);
       }
     } else {
       this.clearScanCoins();

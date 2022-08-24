@@ -18,8 +18,8 @@ const isFetchingScanCoinsSelector = createSelector(scanCoinsReducerSelector, ({ 
 const isFirstTimeScanCoinsSelector = createSelector(
   statusScanCoinsSelector,
   getKeyDefineAccountSelector,
-  (scanStatus, key) => {
-    if (!key || !scanStatus[key]) return false;
+  (scanStatus, key) => (popupState: PopupState | undefined) => {
+    if (!key || !scanStatus[key] || !popupState || popupState.walletState !== "unlocked") return false;
     return scanStatus[key].isScanning;
   },
 );

@@ -27,7 +27,9 @@ const BoxScanCoin = React.memo(() => {
     onButtonPress();
     try {
       request("popup_scan_coins_box_click", { isCancel: true }).then(() => {
-        request("popup_request_scan_coins", {});
+        setTimeout(() => {
+          request("popup_request_scan_coins", {});
+        }, 2000);
       });
     } catch (e) {
       console.log("REQUEST SCAN ERROR: ", e);
@@ -38,7 +40,9 @@ const BoxScanCoin = React.memo(() => {
     onButtonPress();
     try {
       request("popup_scan_coins_box_click", { isCancel: false }).then(() => {
-        request("popup_request_scan_coins", {});
+        setTimeout(() => {
+          request("popup_request_scan_coins", {});
+        }, 2000);
       });
     } catch (e) {
       console.log("REQUEST SCAN ERROR: ", e);
