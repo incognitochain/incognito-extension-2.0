@@ -1,13 +1,6 @@
 import { Store } from "./store";
 import { createLogger } from "@core/utils";
-import {
-  ActionRequestAccounts,
-  AVAILABLE_NETWORKS,
-  IncognitoSignTransaction,
-  Network,
-  Notification,
-  PopupActions,
-} from "@core/types";
+import { ActionRequestAccounts, IncognitoSignTransaction, Network, Notification, PopupActions } from "@core/types";
 import { ExtensionManager } from "./lib/extension-manager";
 import { ActionManager } from "./lib/action-manager";
 import { PopupStateResolver } from "./lib/popup-state-resolver";
@@ -707,20 +700,13 @@ export class PopupController {
     if (!cluster) {
       throw new Error("Must specify an network endpoint to change network");
     }
-    for (const network of AVAILABLE_NETWORKS) {
-      if (network.cluster === cluster) {
-        this.store.selectedNetwork = network;
-        onExit(network);
-        return;
-      }
-    }
 
-    this.store.selectedNetwork = {
-      title: "Custom",
-      cluster: cluster,
-      endpoint: endpoint,
-    };
-    onExit(this.store.selectedNetwork);
+    // this.store.selectedNetwork = {
+    //   title: "Custom",
+    //   cluster: cluster,
+    //   endpoint: endpoint,
+    // };
+    // onExit(this.store.selectedNetwork);
   }
 
   changeAccount(req: any) {

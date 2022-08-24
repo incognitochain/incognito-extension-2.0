@@ -4,7 +4,6 @@ import React, { useMemo } from "react";
 import { MainRoute } from "@module/MainRoute";
 import withApp from "@popup/app/App.enhance";
 import { BackgroundProvider } from "@popup/context/background";
-import { ConnectionProvider } from "@popup/context/connection";
 import { makeStyles } from "@mui/styles";
 import { SnackbarProvider } from "notistack";
 import { themeHelper } from "../helper/index";
@@ -37,26 +36,24 @@ const App: React.FunctionComponent = () => {
       <ThemeProviderMUI theme={theme}>
         <ThemedGlobalStyle />
         <BackgroundProvider>
-          <ConnectionProvider>
-            <LoadingProvider>
-              <ModalProvider>
-                <SnackbarProvider
-                  maxSnack={5}
-                  autoHideDuration={2000}
-                  classes={{
-                    variantSuccess: classes.success,
-                    variantError: classes.error,
-                    variantWarning: classes.warning,
-                    variantInfo: classes.info,
-                  }}
-                >
-                  <Router history={history}>
-                    <MainRoute />
-                  </Router>
-                </SnackbarProvider>
-              </ModalProvider>
-            </LoadingProvider>
-          </ConnectionProvider>
+          <LoadingProvider>
+            <ModalProvider>
+              <SnackbarProvider
+                maxSnack={5}
+                autoHideDuration={2000}
+                classes={{
+                  variantSuccess: classes.success,
+                  variantError: classes.error,
+                  variantWarning: classes.warning,
+                  variantInfo: classes.info,
+                }}
+              >
+                <Router history={history}>
+                  <MainRoute />
+                </Router>
+              </SnackbarProvider>
+            </ModalProvider>
+          </LoadingProvider>
         </BackgroundProvider>
       </ThemeProviderMUI>
     </ThemeProvider>

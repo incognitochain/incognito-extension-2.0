@@ -24,12 +24,6 @@ export type AccountInfo = {
   balances: any[];
 };
 
-export const AVAILABLE_NETWORKS: Network[] = [
-  { title: "Mainnet Beta", cluster: "mainnet-beta", endpoint: clusterApiUrl("mainnet-beta") },
-  { title: "Devnet", cluster: "devnet", endpoint: clusterApiUrl("devnet") },
-  { title: "Testnet", cluster: "testnet", endpoint: clusterApiUrl("testnet") },
-  // { title: "Break", cluster: "testnet", endpoint: "https://break-api.testnet.solana.com" },
-];
 export type RequestAccountsResp = {
   accounts: string[];
 };
@@ -60,7 +54,6 @@ export type VersionedData = {
 export type StoredData = {
   secretBox: SecretBox | undefined;
   accountCount: number;
-  selectedNetwork: Network | any;
   authorizedOrigins: string[];
 };
 
@@ -75,7 +68,6 @@ export type IBalance = {
 export type PopupState = {
   walletState: WalletState;
   accounts: string[];
-  selectedNetwork: Network;
   authorizedOrigins: string[];
   actions: OrderedAction[];
   storeData?: any;

@@ -1,4 +1,4 @@
-import { AVAILABLE_NETWORKS, PopupState } from "@core/types";
+import { PopupState } from "@core/types";
 import { ActionManager } from "./action-manager";
 import { Store } from "../store";
 
@@ -15,7 +15,6 @@ export class PopupStateResolver {
     let state: PopupState = {
       walletState: "uninitialized",
       accounts: [],
-      selectedNetwork: this.store.selectedNetwork,
       authorizedOrigins: [],
       actions: this.actionManager.getOrderedActions(),
       storeData: {},

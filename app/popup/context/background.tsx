@@ -121,13 +121,13 @@ export function BackgroundProvider(props: React.PropsWithChildren<{}>) {
   };
 
   const changeNetwork: BackgroundContextType["changeNetwork"] = (network: Network) => {
-    console.log("Changing network from [%s] to [%s]", state?.selectedNetwork.cluster, network.cluster);
+    console.log("Changing network from A to B");
     request("popup_changeNetwork", { cluster: network.cluster })
       .then((state) => {
-        console.log("Changed network to [%s]", state.result.selectedNetwork.cluster);
+        console.log("Changed network DONE");
       })
       .catch((err) => {
-        console.log("Unable to switch network from [%s] to [%s]", state?.selectedNetwork.cluster, network, err);
+        console.log("Unable to switch network ERROR ", err);
       });
   };
 

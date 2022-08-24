@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { useConnection } from "../context/connection";
-import { useIncognitoExplorerUrlSuffix } from "../hooks/solanaHook";
 import Button from "@mui/material/Button";
 import { TransactionSignature } from "@solana/web3.js";
 import { OptionsObject, useSnackbar } from "notistack";
@@ -16,7 +14,6 @@ export type SendTransaction = (
 ) => Promise<void>;
 
 export const useSendTransaction = (): [SendTransaction, boolean] => {
-  const { connection } = useConnection();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [sending, setSending] = useState(false);
 
@@ -35,8 +32,6 @@ export const useSendTransaction = (): [SendTransaction, boolean] => {
         persist: true,
         action: <ViewTransactionOnExplorerButton signature={signature} />,
       });
-
-      await connection.confirmTransaction(signature, 1);
       closeSnackbar(id);
       setSending(false);
       enqueueSnackbar("Transaction confirmed", {
@@ -63,14 +58,13 @@ export const useSendTransaction = (): [SendTransaction, boolean] => {
 
 const ViewTransactionOnExplorerButton = (opts: { signature: TransactionSignature }) => {
   const { signature } = opts;
-  const urlSuffix = useIncognitoExplorerUrlSuffix();
   return (
     <Button
       color="inherit"
       component="a"
       target="_blank"
       rel="noopener"
-      href={`https://explorer.solana.com/tx/${signature}` + urlSuffix}
+      href={`https://explorer.solana.com/tx/${signature}` + ""}
     >
       View on Incognito Explorer
     </Button>

@@ -5,7 +5,6 @@ import { BrowserRouter, Router } from "react-router-dom";
 import { LoadingIndicator } from "../components/loading-indicator";
 import { Routes } from "../components/routes/routes";
 import { BackgroundProvider } from "../context/background";
-import { ConnectionProvider } from "../context/connection";
 import { themeHelper } from "../helper/index";
 // import { history } from "../utils/history";
 import { makeStyles } from "@mui/styles";
@@ -39,22 +38,20 @@ export const App: React.FC = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <BackgroundProvider>
-          <ConnectionProvider>
-            <SnackbarProvider
-              maxSnack={5}
-              autoHideDuration={2000}
-              classes={{
-                variantSuccess: classes.success,
-                variantError: classes.error,
-                variantWarning: classes.warning,
-                variantInfo: classes.info,
-              }}
-            >
-              <BrowserRouter>
-                <Routes />
-              </BrowserRouter>
-            </SnackbarProvider>
-          </ConnectionProvider>
+          <SnackbarProvider
+            maxSnack={5}
+            autoHideDuration={2000}
+            classes={{
+              variantSuccess: classes.success,
+              variantError: classes.error,
+              variantWarning: classes.warning,
+              variantInfo: classes.info,
+            }}
+          >
+            <BrowserRouter>
+              <Routes />
+            </BrowserRouter>
+          </SnackbarProvider>
         </BackgroundProvider>
       </ThemeProvider>
     </Suspense>
