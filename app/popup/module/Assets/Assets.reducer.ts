@@ -1,10 +1,10 @@
 import { Reducer } from "redux";
-import { persistReducer } from "redux-persist";
-import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
+// import { persistReducer } from "redux-persist";
+// import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 import { AssetsActions, IAssetsState } from "@module/Assets/Assets.types";
 import { AssetsActionType } from "@module/Assets/Assets.constant";
 // import storage from "redux-persist/lib/storage";
-import Storage from "@services/storage";
+// import Storage from "@services/storage";
 export const initialState: IAssetsState = {
   isFetching: false,
   data: {},
@@ -44,12 +44,12 @@ const reducer: Reducer<IAssetsState, AssetsActions> = (state = initialState, act
   }
 };
 
-const persistConfig: any = {
-  key: "assetsReducer",
-  storage: Storage as any,
-  whitelist: [""],
-  stateReconciler: autoMergeLevel2,
-};
+// const persistConfig: any = {
+//   key: "assetsReducer",
+//   storage: Storage as any,
+//   whitelist: [""],
+//   stateReconciler: autoMergeLevel2,
+// };
 
 // export default persistReducer(persistConfig, reducer);
 export default reducer;

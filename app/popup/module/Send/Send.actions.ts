@@ -40,7 +40,12 @@ const actionSetInitForm = (payload: SendSetInitFormPayload): SendSetInitFormActi
 
 const actionFetchFee = () => async (dispatch: AppThunkDispatch, getState: () => RootState) => {
   const state = getState();
-  const { init, isFetching } = sendDataSelector(state);
+  // const { init, isFetching } = sendDataSelector(state);
+  const { init, isFetching } = {
+    init: true,
+    isFetching: false,
+  }; //HARD CODE, WILL CHANGE AFTER
+
   try {
     if (init || isFetching) return;
     batch(() => {

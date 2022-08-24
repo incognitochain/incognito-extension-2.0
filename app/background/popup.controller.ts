@@ -406,9 +406,9 @@ export class PopupController {
 
   async getFollowTokenList() {
     console.log("Background [getFollowTokenList] ");
-    const followTokens = sharedSelectors.followTokensFormatedSelector(reduxStore.getState());
-    console.log("Backgorund [getFollowTokenList] followTokens ", followTokens);
-    return followTokens;
+    // const followTokens = sharedSelectors.followTokensFormatedSelector(reduxStore.getState());
+    // console.log("Backgorund [getFollowTokenList] followTokens ", followTokens);
+    // return followTokens;
   }
 
   async createAccount({ accountName }: { accountName: string }) {
@@ -476,7 +476,7 @@ export class PopupController {
     await clearAllCaches();
     await reduxStore.dispatch(clearReduxStore());
     batch(() => {
-      reduxStore.dispatch(actionFreeAssets());
+      actionHandler(actionFreeAssets());
       // reduxStore.dispatch(actionFreeScanCoins());
       actionHandler(actionFreeScanCoins());
       reduxStore.dispatch(actionLogout());

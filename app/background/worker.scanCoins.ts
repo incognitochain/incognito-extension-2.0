@@ -126,7 +126,7 @@ export const getFollowTokensBalance = async () => {
       version: PrivacyVersion.ver3,
     });
     const _balance = uniqBy(balance, "id");
-    dispatch(actionFetchedFollowBalance({ balance: _balance, OTAKey: keyDefine }));
+    actionHandler(actionFetchedFollowBalance({ balance: _balance, OTAKey: keyDefine }));
     return {
       keyDefine,
       balances: _balance,
@@ -135,6 +135,6 @@ export const getFollowTokensBalance = async () => {
   } catch (error) {
     log("LOAD FOLLOW TOKENS BALANCE ERROR: ", error);
   } finally {
-    // dispatch(actionFetchingFollowBalance({ isFetching: false }));
+    actionHandler(actionFetchingFollowBalance({ isFetching: false }));
   }
 };

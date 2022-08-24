@@ -1,5 +1,5 @@
 export enum AssetsActionType {
-  FETCHING = "[assets] Getting balance",
-  FETCHED = "[assets] Got balance",
-  FREE_DATA = "[assets] Free data",
+  FETCHING = "REDUX_SYNC_STORAGE/[assets] Getting balance",
+  FETCHED = "REDUX_SYNC_STORAGE/[assets] Got balance",
+  FREE_DATA = "REDUX_SYNC_STORAGE/[assets] Free data",
 }

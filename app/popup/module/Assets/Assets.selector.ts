@@ -1,6 +1,8 @@
 import { createSelector } from "reselect";
-import { RootState } from "@redux/reducers";
-import { keyDefineAccountSelector } from "@redux/account/account.selectors";
+// import { RootState } from "@redux/reducers";
+// import { keyDefineAccountSelector } from "@redux/account/account.selectors";
+import { RootState } from "@redux-sync-storage/reducers/index";
+import { getKeyDefineAccountSelector } from "@redux-sync-storage/account/account.selectors";
 
 const assetsReducerSelector = createSelector(
   (state: RootState) => state.assetsReducer,
@@ -9,7 +11,7 @@ const assetsReducerSelector = createSelector(
 
 const isFetchingAssetsSelector = createSelector(assetsReducerSelector, ({ isFetching }) => isFetching);
 
-const followsTokenAssetsSelector = createSelector(assetsReducerSelector, keyDefineAccountSelector, ({ data }, key) =>
+const followsTokenAssetsSelector = createSelector(assetsReducerSelector, getKeyDefineAccountSelector, ({ data }, key) =>
   key ? data[key] || [] : [],
 );
 

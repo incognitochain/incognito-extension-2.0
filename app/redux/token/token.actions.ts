@@ -8,8 +8,10 @@ import PTokenModel from "@model/pTokenModel";
 import { followsTokenAssetsSelector } from "@module/Assets/Assets.selector";
 import { IBalance } from "@core/types";
 import { networkSelector } from "@popup/configs/Configs.selector";
-import { actionHandler } from "@redux-sync-storage/store/store";
+import { actionHandler, getReduxSyncStorage } from "@redux-sync-storage/store/store";
 import { setPToken } from "@redux-sync-storage/followTokens/followTokens.actions";
+import serverService from "@services/wallet/Server";
+
 const { PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
 
 export const getBalanceStart = (tokenSymbol: any) => ({
@@ -37,12 +39,13 @@ export const getPTokenList =
   async (dispatch: AppThunkDispatch, getState: AppGetState) => {
     try {
       const state = getState();
-      const network = networkSelector(state);
+      // const network = networkSelector(state);
+      const currentNetwork = await serverService.getDefault();
       const accountSender = defaultAccountWalletSelector(state);
       const followTokens = await accountSender.getListFollowingTokens();
 
       const [pTokens, tokensInfo] = await Promise.all([
-        await getTokenList({ expiredTime, network }),
+        await getTokenList({ expiredTime, network: currentNetwork.address }),
         await getTokensInfo({ tokenIDs: followTokens }),
       ]);
 
@@ -60,9 +63,10 @@ const actionAddFollowToken =
   async (dispatch: AppThunkDispatch, getState: AppGetState) => {
     try {
       const state = getState();
+      const { reduxSyncStorage: reduxSyncStorageInstance } = await getReduxSyncStorage();
       const accountSender = defaultAccountWalletSelector(state);
       if (!accountSender) return;
-      const followed: IBalance[] = followsTokenAssetsSelector(state);
+      const followed: IBalance[] = followsTokenAssetsSelector(reduxSyncStorageInstance.getState());
       const newFollowed = followed.concat([
         {
           id: tokenID,

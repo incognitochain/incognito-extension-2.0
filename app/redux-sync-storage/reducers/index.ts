@@ -3,6 +3,7 @@ import { reducer as account } from "@redux-sync-storage/account";
 import { reducer as followTokensReducer } from "@redux-sync-storage/followTokens";
 import { reducer as scanCoinsReducer } from "@redux-sync-storage/scanCoins";
 import { reducer as networkReducer } from "@redux-sync-storage/network";
+import assetsReducer from "@module/Assets/Assets.reducer";
 import { $CombinedState, combineReducers } from "redux";
 import themeReducer from "@popup/theme/Theme.reducer";
 const rootReducers = combineReducers({
@@ -12,6 +13,7 @@ const rootReducers = combineReducers({
   followTokensReducer,
   scanCoinsReducer,
   networkReducer,
+  assetsReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducers> & {
