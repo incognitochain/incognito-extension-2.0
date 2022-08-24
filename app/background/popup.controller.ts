@@ -122,7 +122,7 @@ export class PopupController {
             try {
               await this.scanCoinHandler({ isClear: true });
               await this.createAccount(req.params);
-              const accountDefault = await getFollowTokensBalance();
+              const accountDefault = await getFollowTokensBalance({ reduxSyncStorage: this.reduxSyncStorage });
               this._notifyAll({
                 type: "accountsChanged",
                 data: accountDefault ? [accountDefault] : [],
@@ -138,7 +138,7 @@ export class PopupController {
           {
             try {
               await this.switchAccount(req.params);
-              const accountDefault = await getFollowTokensBalance();
+              const accountDefault = await getFollowTokensBalance({ reduxSyncStorage: this.reduxSyncStorage });
               this._notifyAll({
                 type: "accountsChanged",
                 data: accountDefault ? [accountDefault] : [],
@@ -646,7 +646,7 @@ export class PopupController {
   }
 
   async loadFollowTokensBalance() {
-    await getFollowTokensBalance();
+    await getFollowTokensBalance({ reduxSyncStorage: this.reduxSyncStorage });
   }
 
   async createAndSendTransaction({ isMainCrypto = true, payload = null }: { isMainCrypto: Boolean; payload: any }) {

@@ -14,6 +14,7 @@ import { defaultAccountSelector, defaultAccountWalletSelector } from "@redux/acc
 import { actionHandler, getReduxSyncStorage } from "@redux-sync-storage/store/store";
 import uniq from "lodash/uniq";
 import Server, { TESTNET_FULLNODE } from "@services/wallet/Server";
+import { isFetchingAssetsSelector } from "@module/Assets/Assets.selector";
 const { PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 
 const MAINNET_TOKEN: any[] = [
@@ -95,7 +96,7 @@ export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any })
 
     if (!coinsStore) {
       await actionHandler(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
-      // getFollowTokensBalance().then();
+      await getFollowTokensBalance({ reduxSyncStorage });
     }
 
     console.log("scanCoins: ", { elapsed, otaKey, coins: result });
@@ -106,23 +107,23 @@ export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any })
   }
 };
 
-export const getFollowTokensBalance = async () => {
+export const getFollowTokensBalance = async ({ reduxSyncStorage }: { reduxSyncStorage: any }) => {
+  if (!reduxSyncStorage || !reduxSyncStorage.getState()) return;
   const accountData = defaultAccountSelector(reduxStore.getState());
-  const isFetching = true;
+  const isFetching = isFetchingAssetsSelector(reduxSyncStorage.getState());
   const { accountSender, keyDefine } = (await configAccount()) as any;
   if (!accountSender || isFetching) return;
   if (!keyDefine) return;
-
   try {
     const tokens = await getTokensDefault();
-    actionHandler(actionFetchingFollowBalance({ isFetching: true }));
+    await actionHandler(actionFetchingFollowBalance({ isFetching: true }));
     // follow tokens balance
     const { balance }: { balance: IBalance[] } = await accountSender.getFollowTokensBalance({
       defaultTokens: tokens,
       version: PrivacyVersion.ver3,
     });
     const _balance = uniqBy(balance, "id");
-    actionHandler(actionFetchedFollowBalance({ balance: _balance, OTAKey: keyDefine }));
+    await actionHandler(actionFetchedFollowBalance({ balance: _balance, OTAKey: keyDefine }));
     return {
       keyDefine,
       balances: _balance,
@@ -131,6 +132,6 @@ export const getFollowTokensBalance = async () => {
   } catch (error) {
     log("LOAD FOLLOW TOKENS BALANCE ERROR: ", error);
   } finally {
-    actionHandler(actionFetchingFollowBalance({ isFetching: false }));
+    await actionHandler(actionFetchingFollowBalance({ isFetching: false }));
   }
 };

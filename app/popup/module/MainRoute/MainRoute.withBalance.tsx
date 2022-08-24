@@ -26,7 +26,7 @@ const withBalance = (WrappedComponent: FunctionComponent) => (props: any) => {
     loadFollowTokensBalance();
     interval.current = setInterval(() => {
       loadFollowTokensBalance();
-    }, 5000);
+    }, 10000);
     return () => {
       clearInterval(interval.current);
       interval.current = null;

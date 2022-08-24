@@ -153,7 +153,7 @@ export class WalletController {
     console.log("[_handleRequestAccounts] req  ", req);
 
     if (this.store.getWalletState() === "unlocked") {
-      const accountDefault = await getFollowTokensBalance();
+      const accountDefault = await getFollowTokensBalance({ reduxSyncStorage: this.reduxSyncStorage });
       return {
         accounts: [accountDefault],
       };
