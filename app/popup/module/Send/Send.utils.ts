@@ -1,6 +1,6 @@
 import { ISendData, ISendState, TypeSend } from "@module/Send/Send.types";
 import SelectedPrivacy from "@model/SelectedPrivacyModel";
-import { RootState } from "@redux/reducers";
+import { RootState } from "@redux-sync-storage/reducers/index";
 import { formValueSelector, isValid, isSubmitting } from "redux-form";
 import { FORM_CONFIGS } from "@module/Send/Send.constant";
 import BigNumber from "bignumber.js";

@@ -7,7 +7,7 @@ import LoadingContainer from "@components/LoadingContainer";
 import styled from "styled-components";
 import { Field } from "redux-form";
 import { InputField } from "@components/ReduxForm";
-import { FORM_CONFIGS } from "@module/Send";
+import { FORM_CONFIGS } from "@module/Send/Send.constant";
 import { INPUT_FIELD } from "@components/ReduxForm/InputField";
 import { Button } from "@components/Core";
 import { PRV } from "@constants/common";

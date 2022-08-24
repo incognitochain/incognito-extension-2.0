@@ -1,6 +1,7 @@
 import { change, focus, InjectedFormProps, reduxForm, reset } from "redux-form";
 import { compose } from "recompose";
-import { actionFreeData, FORM_CONFIGS } from "@module/Send";
+import { actionFreeData } from "@module/Send/Send.actions";
+import { FORM_CONFIGS } from "@module/Send/Send.constant";
 import withInit, { TInnerInit } from "./Send.enhanceInit";
 import withValAddress, { TInner as TInnerAddress } from "./Send.enhanceAddressValidator";
 import withValAmount, { TInner as TInnerAmount } from "./Send.enhanceAmountValidator";

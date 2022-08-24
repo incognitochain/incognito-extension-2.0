@@ -1,8 +1,8 @@
 import { createSelector } from "reselect";
-import { RootState } from "@redux/reducers";
 import { getPrivacyDataByTokenID, selectedPrivacyToken } from "@redux/selectedPrivacy";
 import { getSendData } from "@module/Send/Send.utils";
 import { ISendData } from "@module/Send/Send.types";
+import { RootState } from "@redux-sync-storage/reducers/index";
 
 export const sendSelector = createSelector(
   (state: RootState) => state.sendReducer,

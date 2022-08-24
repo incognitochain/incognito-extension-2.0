@@ -2,7 +2,7 @@ import { IAddressBook } from "./AddressBook.interface";
 import React from "react";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { useMasterKeyWithKeychains } from "@popup/hooks/useMasterKeyWithKeychains";
-import { FORM_CONFIGS } from "@module/Send";
+import { FORM_CONFIGS } from "@module/Send/Send.constant";
 import { change, focus } from "redux-form";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@redux/store";

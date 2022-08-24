@@ -1,5 +1,5 @@
 import {
-  SendActionTypes,
+  // SendActionTypes,
   SendFetchingAction,
   SendFetchingPayload,
   SendFreeDataAction,
@@ -11,11 +11,12 @@ import {
   SendSetNetworkFeePayload,
   SendSetUnshieldAction,
   SendSetUnshieldPayload,
-} from "@module/Send";
+} from "@module/Send/Send.types";
 import { AppThunkDispatch } from "@redux/store";
 import { RootState } from "@redux/reducers";
 import { sendDataSelector } from "@module/Send/Send.selector";
 import { batch } from "react-redux";
+import { SendActionTypes } from "@module/Send/Send.constant";
 const { PRVIDSTR, ACCOUNT_CONSTANT } = require("incognito-chain-web-js/build/web/wallet");
 
 const actionFetching = (payload: SendFetchingPayload): SendFetchingAction => ({

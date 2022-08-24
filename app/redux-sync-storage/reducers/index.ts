@@ -7,6 +7,7 @@ import assetsReducer from "@module/Assets/Assets.reducer";
 import { $CombinedState, combineReducers } from "redux";
 import themeReducer from "@popup/theme/Theme.reducer";
 import { reducer as formReducer } from "redux-form";
+import sendReducer from "@module/Send/Send.reducer";
 
 const rootReducers = combineReducers({
   test,
@@ -17,6 +18,7 @@ const rootReducers = combineReducers({
   networkReducer,
   assetsReducer,
   form: formReducer,
+  sendReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducers> & {
