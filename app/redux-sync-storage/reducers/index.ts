@@ -6,6 +6,8 @@ import { reducer as networkReducer } from "@redux-sync-storage/network";
 import assetsReducer from "@module/Assets/Assets.reducer";
 import { $CombinedState, combineReducers } from "redux";
 import themeReducer from "@popup/theme/Theme.reducer";
+import { reducer as formReducer } from "redux-form";
+
 const rootReducers = combineReducers({
   test,
   account,
@@ -14,6 +16,7 @@ const rootReducers = combineReducers({
   scanCoinsReducer,
   networkReducer,
   assetsReducer,
+  form: formReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducers> & {
