@@ -10,7 +10,7 @@ import headerReducer from "@components/Header/Header.reducer";
 // import { reducer as configReducer } from "@popup/configs";
 import { reducer as configReducer } from "@redux/configs";
 // import { reducer as assetsReducer } from "@module/Assets";
-import assetsReducer from "@module/Assets/Assets.reducer";
+// import assetsReducer from "@module/Assets/Assets.reducer";
 
 import { reducer as themeReducer } from "@popup/theme";
 import { reducer as sendReducer } from "@module/Send";
@@ -27,7 +27,7 @@ const rootReducers = combineReducers({
   scanCoinsReducer,
   headerReducer,
   configReducer,
-  assetsReducer,
+  // assetsReducer,
   themeReducer,
   selectedPrivacy,
   sendReducer,
