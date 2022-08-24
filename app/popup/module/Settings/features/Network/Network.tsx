@@ -4,7 +4,7 @@ import { useCallAsync } from "@popup/utils/notifications";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import serverService, { ServerModel } from "@services/wallet/Server";
-import { route as routeAssets } from "@module/Assets";
+import { route as routeAssets } from "@module/Assets/Assets.route";
 import { changeBaseUrl } from "@services/http";
 import WrapContent from "@components/Content/Content";
 import { NetworkItem } from "@module/Settings/features/Network";

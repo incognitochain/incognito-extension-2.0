@@ -2,12 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { PrimaryButton, SecondaryButton } from "@components/Core";
 import { Row } from "@popup/theme";
-import { useDispatch, useSelector } from "react-redux";
-import { AppThunkDispatch } from "@redux/store";
 import { useModal } from "@module/Modal";
-import { defaultAccountWalletSelector, keyDefineAccountSelector } from "@redux/account/account.selectors";
 import { useBackground } from "@popup/context/background";
-import { actionFistTimeScanCoins } from "@redux-sync-storage/scanCoins";
 
 const Styled = styled.div`
   padding: 24px 16px;
@@ -19,10 +15,7 @@ const Styled = styled.div`
 
 interface IProps {}
 
-const BoxScanCoin = React.memo((props: IProps) => {
-  const dispatch = useDispatch();
-  // const accountSender = useSelector(defaultAccountWalletSelector);
-  // const keyDefine = useSelector(keyDefineAccountSelector);
+const BoxScanCoin = React.memo(() => {
   const { clearAllModal } = useModal();
   const { request } = useBackground();
 

@@ -11,7 +11,7 @@ import { IBalance } from "@core/types";
 import { actionFetchedFollowBalance, actionFetchingFollowBalance } from "@module/Assets/Assets.actions";
 // import { isFetchingAssetsSelector } from "@module/Assets";
 import { defaultAccountSelector, defaultAccountWalletSelector } from "@redux/account/account.selectors";
-import { actionHandler } from "@redux-sync-storage/store/store";
+import { actionHandler, getReduxSyncStorage } from "@redux-sync-storage/store/store";
 import uniq from "lodash/uniq";
 import Server, { TESTNET_FULLNODE } from "@services/wallet/Server";
 const { PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
@@ -67,9 +67,14 @@ export const configAccount = async () => {
   return { accountSender, keyDefine };
 };
 
-export const scanCoins = async () => {
+export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any }) => {
   const { accountSender, keyDefine } = (await configAccount()) as any;
-  const isFetching = isFetchingScanCoinsSelector(reduxStore.getState());
+  if (!reduxSyncStorage || !reduxSyncStorage.getState()) return;
+  const isFetching = isFetchingScanCoinsSelector(reduxSyncStorage.getState());
+  console.log("scanCoins", {
+    isFetching,
+    reduxSyncStorage: reduxSyncStorage.getState(),
+  });
   // Validate data
   if (!accountSender || isFetching || !keyDefine) return;
 
@@ -97,7 +102,7 @@ export const scanCoins = async () => {
       // getFollowTokensBalance().then();
     }
 
-    log("scanCoins: ", { elapsed, otaKey, coins: result });
+    console.log("scanCoins: ", { elapsed, otaKey, coins: result });
   } catch (error) {
     log("SCAN COINS WITH ERROR: ", error);
   } finally {

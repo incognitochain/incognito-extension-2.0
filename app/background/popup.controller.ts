@@ -341,10 +341,10 @@ export class PopupController {
         case "popup_scan_coins_box_click":
           try {
             const { isCancel = false } = req.params;
-            // const res = await this.updateStatusScanCoins();
+            const res = await this.updateStatusScanCoins();
             const accountSender = defaultAccountWalletSelector(reduxStore.getState());
             if (isCancel && res && accountSender) {
-              // await accountSender.setNewAccountCoinsScan(); //BUG SDK???
+              await accountSender.setNewAccountCoinsScan(); //BUG SDK???
             }
           } catch (err) {
             console.log("error: set default UTXOs scan coins failed  with error: %s", err);

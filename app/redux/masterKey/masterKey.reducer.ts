@@ -87,7 +87,13 @@ function removeMasterKey(name: string, list: any[]) {
 }
 
 export async function saveMasterKeys(lists: MasterKeyModel[]) {
-  const masterKeyList = lists.map((item) => ({ ...item, wallet: undefined })) || [];
+  let masterKeyList: any[] = [];
+  try {
+    masterKeyList = lists.map((item) => ({ ...item, wallet: undefined })) || [];
+  } catch (error) {
+    console.log("saveMasterKeys error: ", error);
+    return;
+  }
   const masterKeyListJSON = JSON.stringify(masterKeyList);
   const { aesKey } = await getPassphrase();
   const masterKeyListEncryped = algorithms.encryptData(masterKeyListJSON, aesKey);

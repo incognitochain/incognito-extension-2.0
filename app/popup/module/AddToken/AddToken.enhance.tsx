@@ -10,7 +10,7 @@ import { AppThunkDispatch } from "@redux/store";
 import { actionAddFollowToken } from "@redux/token";
 import { useLoading } from "@popup/context/loading";
 import { useHistory } from "react-router-dom";
-import { followsTokenAssetsSelector } from "@module/Assets";
+import { followsTokenAssetsSelector } from "@module/Assets/Assets.selector";
 
 const log = createLogger("incognito:import-token");
 

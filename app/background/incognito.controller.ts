@@ -319,15 +319,15 @@ export default class IncognitoController {
     if (popupState && popupStateData.walletState === "unlocked") {
       if (!scanCoinInterval && !showConfirmScanCoins) {
         try {
-          actionHandler(actionFetchingScanCoins({ isFetching: false }));
-          scanCoins().then();
+          await actionHandler(actionFetchingScanCoins({ isFetching: false }));
+          scanCoins({ reduxSyncStorage: this.reduxSyncStorage }).then();
         } catch (e) {
           console.log("SCAN COINS ERROR: ", e);
           // Handle error
         }
         scanCoinInterval = setInterval(() => {
           try {
-            scanCoins().then();
+            scanCoins({ reduxSyncStorage: this.reduxSyncStorage }).then();
           } catch (e) {
             console.log("SCAN COINS ERROR: ", e);
             // Handle error
