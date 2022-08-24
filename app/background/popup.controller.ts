@@ -42,7 +42,7 @@ import sharedSelectors from "@redux/shared/shared.selectors";
 import { getPTokenList } from "@redux/token/token.actions";
 import { changeNetwork } from "@redux-sync-storage/network/network.actions";
 import { actionHandler } from "@redux-sync-storage/store/store";
-import { getKeyDefineAccountSelector } from "@redux-sync-storage/account";
+import { freeAccount, getKeyDefineAccountSelector } from "@redux-sync-storage/account";
 const { setShardNumber, Validator, PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 const log = createLogger("incognito:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -498,6 +498,7 @@ export class PopupController {
 
   async lockWalletAction() {
     this.store.setWallet(null);
+    await actionHandler(freeAccount());
   }
 
   async deleteAuthorizedWebsite(req: any) {

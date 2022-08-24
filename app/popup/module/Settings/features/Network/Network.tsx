@@ -37,6 +37,7 @@ const NetworkPage: React.FC = () => {
     await serverService.setDefaultServer(network);
     await changeBaseUrl();
     dispatch(actionLogout());
+    await request("popup_lockWallet", {});
     callAsync(request("popup_switchNetwork", {}), {
       progress: { message: "Switching..." },
       success: { message: "Switch Network Done" },

@@ -22,6 +22,7 @@ import BoxScanCoin from "@components/BoxScanCoin";
 import { Loading } from "@popup/context/loading";
 import throttle from "lodash/throttle";
 import { route as SendRoute } from "@module/Send";
+import debounce from "lodash/debounce";
 
 const context = require.context("@popup/module", true, /\.route.tsx?/);
 
@@ -74,7 +75,7 @@ const MainRoute = () => {
     setRoutes([...allRoutes]);
   };
 
-  const throttleShowModal = throttle(
+  const throttleShowModal = debounce(
     () =>
       setModal({
         data: <BoxScanCoin />,

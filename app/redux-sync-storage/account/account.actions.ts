@@ -5,6 +5,7 @@ import {
   SetAccountDefaultNameAction,
   SetAccountListAction,
   AddAccountAction,
+  AccountActions,
 } from "./account.types";
 
 const setAccountDefaultName = (name: string): SetAccountDefaultNameAction => ({
@@ -35,4 +36,8 @@ const addAccount = (newAccount: AccountInfo): AddAccountAction => ({
   },
 });
 
-export { setAccountDefaultName, setCurrentAccount, setAccountList, addAccount };
+const freeAccount = (): AccountActions => ({
+  type: AccountActionType.FREE_ACCOUNT,
+});
+
+export { setAccountDefaultName, setCurrentAccount, setAccountList, addAccount, freeAccount };

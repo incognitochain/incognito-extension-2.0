@@ -27,6 +27,7 @@ export enum AccountActionType {
   SET_ACCOUNT_LIST = "REDUX_SYNC_STORAGE/ACCOUNT/SET_ACCOUNT_LIST",
 
   ADD_ACCOUNT = "REDUX_SYNC_STORAGE/ACCOUNT/ADD_ACCOUNT",
+  FREE_ACCOUNT = "REDUX_SYNC_STORAGE/ACCOUNT/FREE_ACCOUNT",
 }
 
 //----------------------------------------------
@@ -60,12 +61,17 @@ export interface AddAccountAction extends Action {
   };
 }
 
+export interface FreeAccountAction extends Action {
+  type: AccountActionType.FREE_ACCOUNT;
+}
+
 //----------------------------------------------
 
 export type AccountActions =
   | SetAccountDefaultNameAction
   | SetCurrentAccountAction
   | SetAccountListAction
-  | AddAccountAction;
+  | AddAccountAction
+  | FreeAccountAction;
 
 export default {};

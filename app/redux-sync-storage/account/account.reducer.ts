@@ -30,6 +30,9 @@ export const reducer: Reducer<AccountState, AccountActions> = (
     case AccountActionType.ADD_ACCOUNT: {
       return { ...state, accountList: [...state.accountList, action.payload.newAccount] };
     }
+    case AccountActionType.FREE_ACCOUNT: {
+      return { ...initialState };
+    }
     default:
       return state;
   }
