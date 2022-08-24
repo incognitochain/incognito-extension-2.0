@@ -28,7 +28,7 @@ import { actionFetchingScanCoins, isShowConfirmScanCoins } from "@redux-sync-sto
 import { scanCoins } from "@background/worker.scanCoins";
 import serverService, { MAINNET_FULLNODE } from "@services/wallet/Server";
 import { actionUpdateNetwork } from "@redux/configs/Configs.actions";
-import { actionHandler } from "@redux-sync-storage/store/store";
+import { actionHandler, getReduxSyncStorage } from "@redux-sync-storage/store/store";
 
 const createEngineStream = require("json-rpc-middleware-stream/engineStream");
 const PortStream = require("extension-port-stream");
@@ -300,8 +300,8 @@ export default class IncognitoController {
     // chrome.browserAction.setBadgeBackgroundColor({ color: "#037DD6" });
   };
 
-  clearScanCoins() {
-    actionHandler(actionFetchingScanCoins({ isFetching: false }));
+  async clearScanCoins() {
+    await actionHandler(actionFetchingScanCoins({ isFetching: false }));
     scanCoinInterval && clearInterval(scanCoinInterval);
     scanCoinInterval = undefined;
   }
@@ -325,14 +325,22 @@ export default class IncognitoController {
           // Handle error
           console.log("SCAN COINS ERROR: ", e);
         }
-        scanCoinInterval = setInterval(() => {
+        const syncStorageInstance = this.reduxSyncStorage;
+        scanCoinInterval = setInterval(async () => {
           try {
-            scanCoins({ reduxSyncStorage: this.reduxSyncStorage }).then();
+            if (!syncStorageInstance) return;
+            const state = syncStorageInstance.getState();
+            if (state.account.accountList.length === 0) {
+              scanCoinInterval && clearInterval(scanCoinInterval);
+              scanCoinInterval = null;
+              return;
+            }
+            scanCoins({ reduxSyncStorage: syncStorageInstance }).then();
           } catch (e) {
             console.log("SCAN COINS ERROR: ", e);
             // Handle error
           }
-        }, 25000);
+        }, 5000);
       }
     } else {
       this.clearScanCoins();

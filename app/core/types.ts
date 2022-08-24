@@ -149,7 +149,8 @@ export type PopupActions =
   | "popup_request_account_detail"
   | "popup_getFollowTokenList"
   | "popup_getPTokenList"
-  | "popup_scan_coins_box_click";
+  | "popup_scan_coins_box_click"
+  | "popup_request_clear_storage_scan_coins";
 
 export type Markdown = string;
 

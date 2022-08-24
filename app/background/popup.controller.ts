@@ -35,7 +35,7 @@ import accountService from "@services/wallet/accountService";
 import { clearAllCaches } from "@services/cache";
 import { clearReduxStore } from "@redux/reducers";
 import { actionFreeAssets } from "@module/Assets/Assets.actions";
-import { actionFistTimeScanCoins, actionFreeScanCoins } from "@redux-sync-storage/scanCoins";
+import { actionFistTimeScanCoins, actionFreeScanCoins, actionReScanCoins } from "@redux-sync-storage/scanCoins";
 import { batch } from "react-redux";
 import rpcSubmit from "@services/wallet/rpcSubmit";
 import sharedSelectors from "@redux-sync-storage/shared/shared.selectors";
@@ -43,6 +43,7 @@ import { getPTokenList } from "@redux/token/token.actions";
 import { changeNetwork } from "@redux-sync-storage/network/network.actions";
 import { actionHandler } from "@redux-sync-storage/store/store";
 import { freeAccount, getKeyDefineAccountSelector } from "@redux-sync-storage/account";
+import { sleep } from "@popup/utils/utils";
 const { setShardNumber, Validator, PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 const log = createLogger("incognito:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -295,7 +296,8 @@ export class PopupController {
           break;
         case "popup_request_scan_coins":
           try {
-            await this.scanCoinHandler();
+            const { isClear } = req.params;
+            await this.scanCoinHandler({ isClear: isClear || false });
           } catch (err) {
             console.log("error: popup_lockWallet failed  with error: %s", err);
             res.error = err;
@@ -344,10 +346,20 @@ export class PopupController {
             const res = await this.updateStatusScanCoins({ isFirstTimeScan: isCancel ? false : true });
             const accountSender = defaultAccountWalletSelector(reduxStore.getState());
             if (isCancel && res && accountSender) {
-              await accountSender.setNewAccountCoinsScan(); //BUG SDK???
+              await accountSender.setNewAccountCoinsScan();
             }
           } catch (err) {
             console.log("error: set default UTXOs scan coins failed  with error: %s", err);
+            res.error = err;
+          }
+          break;
+        case "popup_request_clear_storage_scan_coins":
+          try {
+            await this.scanCoinHandler({ isClear: true });
+            await sleep(2000);
+            await this.clearStorageScanCoins();
+          } catch (err) {
+            console.log("error: clear storage scan coins with error: %s", err);
             res.error = err;
           }
           break;
@@ -392,6 +404,18 @@ export class PopupController {
       res = true;
     }
     return res;
+  }
+
+  async clearStorageScanCoins() {
+    try {
+      const accountSender = defaultAccountWalletSelector(reduxStore.getState());
+      const keyDefine = getKeyDefineAccountSelector(this.reduxSyncStorage.getState());
+      if (!accountSender || !keyDefine) return;
+      await accountSender.clearStorageCoinsScan();
+      await actionHandler(actionReScanCoins({ keyDefine }));
+    } catch (e) {
+      throw e;
+    }
   }
 
   async confirmScanCoins() {

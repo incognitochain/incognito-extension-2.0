@@ -36,7 +36,7 @@ const NetworkPage: React.FC = () => {
 
     await serverService.setDefaultServer(network);
     await changeBaseUrl();
-    dispatch(actionLogout());
+    // dispatch(actionLogout());
     await request("popup_lockWallet", {});
     callAsync(request("popup_switchNetwork", {}), {
       progress: { message: "Switching..." },
@@ -48,7 +48,7 @@ const NetworkPage: React.FC = () => {
             progress: { message: "locking wallet..." },
             success: { message: "Wallet locked" },
             onSuccess: () => {
-              dispatch(actionLogout());
+              // dispatch(actionLogout());
               dispatch(actionUpdateNetwork({ network: network.address }));
               showLoading({ value: false });
             },

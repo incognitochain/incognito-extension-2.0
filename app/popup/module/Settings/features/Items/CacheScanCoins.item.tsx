@@ -16,7 +16,7 @@ import { actionReScanCoins } from "@redux-sync-storage/scanCoins";
 import { actionLogout } from "@redux/account";
 
 const CacheScanCoins: React.FC = () => {
-  const { setModal } = useModal();
+  const { setModal, clearAllModal } = useModal();
   const { showLoading } = useLoading();
   // const accountSender = useSelector(defaultAccountWalletSelector);
   const { request } = useBackground();
@@ -25,16 +25,18 @@ const CacheScanCoins: React.FC = () => {
   const dispatch: AppThunkDispatch = useDispatch();
   // const keyDefine = useSelector(keyDefineAccountSelector);
 
-  const clearStorageScanCoins = () => {
+  const clearStorageScanCoins = async () => {
     try {
       // const otaKey = accountSender.getOTAKey();
       // if (!otaKey || !keyDefine) return;
       showLoading({ value: true });
+      // await request("popup_request_scan_coins", { isClear: true });
+      await request("popup_request_clear_storage_scan_coins", {});
       callAsync(request("popup_lockWallet", {}), {
         progress: { message: "locking wallet..." },
         success: { message: "Wallet locked" },
         onSuccess: () => {
-          dispatch(actionLogout());
+          // dispatch(actionLogout());
           setTimeout(async () => {
             // await accountSender.clearStorageCoinsScan();
             // dispatch(actionReScanCoins({ keyDefine }));

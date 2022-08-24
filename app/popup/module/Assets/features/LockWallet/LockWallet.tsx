@@ -29,7 +29,7 @@ const LockWallet = React.memo(() => {
       progress: { message: "locking wallet..." },
       success: { message: "Wallet locked" },
       onSuccess: () => {
-        dispatch(actionLogout());
+        // dispatch(actionLogout());
         showLoading({ value: false });
         history.push(Paths.unlockPage);
       },
