@@ -17,9 +17,15 @@ import { actionUpdateNetwork } from "@redux/configs/Configs.actions";
 import { dispatch, store as reduxStore } from "@redux/store/store";
 import Storage from "@services/storage";
 import { APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@constants/common";
-import { actionFetchCreateAccount, actionLogout, actionSwitchAccount } from "@redux/account/account.actions";
+import {
+  actionFetchCreateAccount,
+  actionLogout,
+  actionSwitchAccount,
+  setDefaultAccount,
+} from "@redux/account/account.actions";
 import { getFollowTokensBalance } from "@background/worker.scanCoins";
 import {
+  defaultAccountSelector,
   defaultAccountWalletSelector,
   getAccountWithPaymentAddress,
   getCurrentPaymentAddress,
@@ -428,6 +434,8 @@ export class PopupController {
 
   async createAccount({ accountName }: { accountName: string }) {
     await reduxStore.dispatch(actionFetchCreateAccount({ accountName }));
+    const defaultAccount = defaultAccountSelector(reduxStore.getState());
+    await dispatch(setDefaultAccount(defaultAccount));
   }
 
   async switchAccount({ accountName }: { accountName: string }) {
