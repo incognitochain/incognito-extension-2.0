@@ -3,7 +3,6 @@ import styled, { ITheme } from "styled-components";
 import { Button } from "@components/Core";
 import { useHistory } from "react-router-dom";
 import { batch, useDispatch, useSelector } from "react-redux";
-import { paymentAddressOfDefaultAccountSelector } from "@redux/account/account.selectors";
 import { route as QRCodeRoute } from "@module/QRCode";
 import { actionFreeData } from "@module/Send/Send.actions";
 import { FORM_CONFIGS } from "@module/Send/Send.constant";
@@ -12,6 +11,7 @@ import { actionSelectedPrivacySet } from "@redux-sync-storage/selectedPrivacy/se
 import { selectedPrivacyToken } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.selectors";
 import { AppThunkDispatch } from "@redux/store";
 import { reset } from "redux-form";
+import { getPaymentAddressSelector } from "@redux-sync-storage/account";
 
 const Styled = styled.div`
   display: flex;
@@ -33,7 +33,7 @@ const Styled = styled.div`
 const ActionsGroup = React.memo(() => {
   const history = useHistory();
   const dispatch: AppThunkDispatch = useDispatch();
-  const paymentAddress = useSelector(paymentAddressOfDefaultAccountSelector);
+  const paymentAddress = useSelector(getPaymentAddressSelector);
   const { tokenId: tokenID } = useSelector(selectedPrivacyToken);
 
   const onShowQrCode = () => {

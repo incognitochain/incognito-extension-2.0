@@ -18,6 +18,7 @@ const AddressBook = React.memo((props: IMergeProps & any) => {
   const renderKeyChain = (item: IAddressBookItem) => (
     <AddressBookItem address={item.address} name={item.name} onSelectedItem={onSelectedItem} key={item.address} />
   );
+
   return (
     <>
       <Header title="Address Book" />

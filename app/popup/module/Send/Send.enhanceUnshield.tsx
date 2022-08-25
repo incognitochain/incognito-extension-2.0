@@ -1,22 +1,19 @@
 import React from "react";
 import { useLoading } from "@popup/context/loading";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { defaultAccountWalletSelector } from "@redux/account/account.selectors";
-import { getConfirmTxBuilder, route as routeConfirmTx } from "@module/Send/features/ConfirmTx";
 import { sendDataSelector } from "@module/Send/Send.selector";
-import { useHistory } from "react-router-dom";
 import { useCallAsync } from "@popup/utils/notifications";
 import { useBackground } from "@popup/context/background";
 import { throttle } from "lodash";
 import { common } from "@constants/index";
 import rpcMetric, { METRIC_TYPE } from "@services/wallet/rpcMetric";
-const { PrivacyVersion, ACCOUNT_CONSTANT } = require("incognito-chain-web-js/build/web/wallet");
 const {
   BurningFantomRequestMeta,
   BurningPBSCRequestMeta,
   BurningPLGRequestMeta,
-  BurningPRVBEP20RequestMeta,
-  BurningPRVERC20RequestMeta,
+  // BurningPRVBEP20RequestMeta,
+  // BurningPRVERC20RequestMeta,
   BurningRequestMeta,
 } = require("incognito-chain-web-js/build/wallet");
 export interface TInner {

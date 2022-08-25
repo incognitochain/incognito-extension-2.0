@@ -1,6 +1,6 @@
 import { IAddressBook } from "./AddressBook.interface";
 import React from "react";
-import ErrorBoundary from "@components/ErrorBoundary";
+// import ErrorBoundary from "@components/ErrorBoundary";
 import { useMasterKeyWithKeychains } from "@popup/hooks/useMasterKeyWithKeychains";
 import { FORM_CONFIGS } from "@module/Send/Send.constant";
 import { change, focus } from "redux-form";
@@ -46,11 +46,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IProps & 
     history.goBack();
   };
 
-  return (
-    <ErrorBoundary>
-      <WrappedComponent {...{ ...props, addressBook, onSelectedItem }} />
-    </ErrorBoundary>
-  );
+  return <WrappedComponent {...{ ...props, addressBook, onSelectedItem }} />;
 };
 
 export default enhance;

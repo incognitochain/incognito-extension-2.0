@@ -1,13 +1,15 @@
 import React from "react";
 import { useLoading } from "@popup/context/loading";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { defaultAccountWalletSelector } from "@redux/account/account.selectors";
-import { getConfirmTxBuilder, route as routeConfirmTx } from "@module/Send/features/ConfirmTx";
+import { route as routeConfirmTx } from "@module/Send/features/ConfirmTx/ConfirmTx.route";
+import { getConfirmTxBuilder } from "@module/Send/features/ConfirmTx/ConfirmTx.utils";
 import { sendDataSelector } from "@module/Send/Send.selector";
 import { useHistory } from "react-router-dom";
 import { useCallAsync } from "@popup/utils/notifications";
 import { useBackground } from "@popup/context/background";
 import rpcMetric, { METRIC_TYPE } from "@services/wallet/rpcMetric";
+import { AppThunkDispatch } from "@redux/store";
 const { PrivacyVersion, ACCOUNT_CONSTANT } = require("incognito-chain-web-js/build/web/wallet");
 
 export interface TInner {
@@ -30,6 +32,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
   } = useSelector(sendDataSelector);
   const { showLoading } = useLoading();
   const history = useHistory();
+  const dispatch: AppThunkDispatch = useDispatch();
 
   const callAsync = useCallAsync();
   const { request } = useBackground();

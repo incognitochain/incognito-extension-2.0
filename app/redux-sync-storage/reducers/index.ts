@@ -20,7 +20,7 @@ const rootReducers = combineReducers({
   selectedPrivacyReducer,
   assetsReducer,
   sendReducer,
-  formReducer,
+  form: formReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducers> & {

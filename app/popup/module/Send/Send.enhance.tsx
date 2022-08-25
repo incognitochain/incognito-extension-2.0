@@ -13,7 +13,7 @@ import { sendDataSelector } from "@module/Send/Send.selector";
 import { AppThunkDispatch } from "@redux/store";
 import { useLoading } from "@popup/context/loading";
 import { useHistory } from "react-router-dom";
-import { route as routeAddressBook } from "@module/Account/features/AddressBook";
+import { route as routeAddressBook } from "@module/Account/features/AddressBook/AddressBook.route";
 import { route as routeTokenDetail } from "@module/TokenDetail";
 import enhanceUnshield from "@module/Send/Send.enhanceUnshield";
 
