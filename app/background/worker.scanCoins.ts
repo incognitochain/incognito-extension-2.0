@@ -53,9 +53,13 @@ const getTokensDefault = async () => {
 
 const log = createLogger("background:scanCoins");
 
-export const configAccount = async () => {
+/**
+ * @keyDefine [string] format =>  OTAKey-Network.address
+ * @returns {Promise<boolean | { accountSender: any; keyDefine: string }>}
+ */
+export const getAccountInstanceAndKeyDefine = async (): Promise<{ accountSender?: any; keyDefine?: string }> => {
   const accountData = defaultAccountSelector(reduxStore.getState());
-  if (!accountData || !accountData.PrivateKey) return;
+  if (!accountData || !accountData.PrivateKey) return {};
   const accountSender = defaultAccountWalletSelector(reduxStore.getState());
   let keyDefine = "";
   try {
@@ -63,13 +67,14 @@ export const configAccount = async () => {
       keyDefine = `${accountSender.getOTAKey()}-${accountSender?.rpc?.rpcHttpService?.url}`;
     }
   } catch (e) {
-    // Handle error
+    console.log("getAccountInstanceAndKeyDefine ERROR ", e);
+    return {};
   }
   return { accountSender, keyDefine };
 };
 
 export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any }) => {
-  const { accountSender, keyDefine } = (await configAccount()) as any;
+  const { accountSender, keyDefine } = await getAccountInstanceAndKeyDefine();
   if (!reduxSyncStorage || !reduxSyncStorage.getState()) return;
   const isFetching = isFetchingScanCoinsSelector(reduxSyncStorage.getState());
   // Validate data
@@ -112,7 +117,7 @@ export const getFollowTokensBalance = async ({ reduxSyncStorage }: { reduxSyncSt
   if (!reduxSyncStorage || !reduxSyncStorage.getState()) return;
   const accountData = defaultAccountSelector(reduxStore.getState());
   const isFetching = isFetchingAssetsSelector(reduxSyncStorage.getState());
-  const { accountSender, keyDefine } = (await configAccount()) as any;
+  const { accountSender, keyDefine } = await getAccountInstanceAndKeyDefine();
 
   // console.log("[getFollowTokensBalance] ", {
   //   accountSender,
