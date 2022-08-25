@@ -13,13 +13,7 @@ const withBalance = (WrappedComponent: FunctionComponent) => (props: any) => {
   const loadFollowTokensBalance = debounce(() => request("popup_followTokensBalance", {}), 1000);
   const walletState = popupState?.walletState;
   const interval = React.useRef<any>(null);
-  const isScanCoins = useSelector(isFirstTimeScanCoinsSelector);
-
-  console.log("withBalance: ", {
-    keyDefine,
-    walletState,
-    isScanCoins,
-  });
+  const isScanCoins = useSelector(isFirstTimeScanCoinsSelector)(popupState);
 
   React.useEffect(() => {
     if (!walletState || !keyDefine || walletState !== "unlocked" || interval.current || isScanCoins) return;
