@@ -30,7 +30,6 @@ export interface IMergeProps extends TInner, IProps {}
 
 const AddToken = React.memo((props: IMergeProps) => {
   const { tokenID, symbol, network, name, contractID, pDecimals, error, onChangeTokenID, onAddToken } = props;
-  console.log(pDecimals);
   return (
     <Styled>
       <Header title="Add Token" />

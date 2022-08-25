@@ -43,6 +43,7 @@ import { changeNetwork } from "@redux-sync-storage/network/network.actions";
 import { actionHandler } from "@redux-sync-storage/store/store";
 import { freeAccount, getKeyDefineAccountSelector } from "@redux-sync-storage/account";
 import { sleep } from "@popup/utils/utils";
+import { actionAddFollowToken } from "@redux/token";
 const { setShardNumber, Validator, PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 const log = createLogger("incognito:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -362,6 +363,16 @@ export class PopupController {
             res.error = err;
           }
           break;
+        case "popup_addNewFollowToken":
+          try {
+            const { tokenID } = req.params;
+            await this.addNewFollowToken(tokenID);
+            await getFollowTokensBalance({ reduxSyncStorage: this.reduxSyncStorage });
+          } catch (err) {
+            console.log("error: popup_addNewFollowToken with error: %s", err);
+            res.error = err;
+          }
+          break;
         default:
           console.log("popup controller middleware did not match method name %s", req.method);
           await next();
@@ -388,8 +399,11 @@ export class PopupController {
   }
 
   async getPTokenList() {
-    console.log("Background [getPTokenList] ");
     await reduxStore.dispatch(getPTokenList());
+  }
+
+  async addNewFollowToken(tokenID: string) {
+    await reduxStore.dispatch(actionAddFollowToken({ tokenID }));
   }
 
   async updateStatusScanCoins({ isFirstTimeScan }: { isFirstTimeScan: boolean }) {

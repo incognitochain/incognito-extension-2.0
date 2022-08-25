@@ -5,19 +5,20 @@ import debounce from "lodash/debounce";
 import first from "lodash/first";
 import { createLogger } from "@core/utils";
 import PTokenModel from "@model/pTokenModel";
-import { useDispatch, useSelector } from "react-redux";
-import { AppThunkDispatch } from "@redux/store";
-import { actionAddFollowToken } from "@redux/token";
+import { useSelector } from "react-redux";
 import { useLoading } from "@popup/context/loading";
 import { useHistory } from "react-router-dom";
 import { followsTokenAssetsSelector } from "@module/Assets/Assets.selector";
+import { useCallAsync } from "@popup/utils/notifications";
+import { useBackground } from "@popup/context/background";
 
 const log = createLogger("incognito:import-token");
 
 const withImportToken = (WrappedComponent: FunctionComponent & any) => {
   return (props: any) => {
-    const dispatch: AppThunkDispatch = useDispatch();
     const followed = useSelector(followsTokenAssetsSelector);
+    const callAsync = useCallAsync();
+    const { request } = useBackground();
     const { showLoading } = useLoading();
     const history = useHistory();
     const [{ tokenID, network, symbol, error, contractID, name, pDecimals }, setState] = React.useState<TInner>({});
@@ -70,14 +71,20 @@ const withImportToken = (WrappedComponent: FunctionComponent & any) => {
         showLoading({
           value: true,
         });
-        await dispatch(actionAddFollowToken({ tokenID })).then();
-        history.goBack();
-      } catch (e) {
-        // Error
-      } finally {
-        showLoading({
-          value: false,
+
+        await callAsync(request("popup_addNewFollowToken", { tokenID }), {
+          onSuccess: (result: any) => {},
+          onError: (error) => {
+            console.log("onAddToken ERROR: ", error);
+          },
+          onFinish: () => {
+            showLoading({ value: false });
+            console.log("onAddToken FINISH: ");
+            history.goBack();
+          },
         });
+      } catch (e) {
+        console.log("onAddToken ERROR: ", error);
       }
     };
 

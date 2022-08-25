@@ -42,12 +42,10 @@ export const getPTokenList =
       const currentNetwork = await serverService.getDefault();
       const accountSender = defaultAccountWalletSelector(state);
       const followTokens = await accountSender.getListFollowingTokens();
-
       const [pTokens, tokensInfo] = await Promise.all([
         await getTokenList({ expiredTime, network: currentNetwork.address }),
         await getTokensInfo({ tokenIDs: followTokens }),
       ]);
-
       const tokens = uniqBy([...pTokens, ...tokensInfo], "tokenId");
       // dispatch(setListPToken(tokens));
       await actionHandler(setPToken(tokens));
@@ -73,6 +71,7 @@ const actionAddFollowToken =
           swipable: tokenID !== PRVIDSTR,
         },
       ]);
+      // SAVE new list token to storage by SDK
       await accountSender.addListFollowingToken({
         tokenIDs: newFollowed.map(({ id }) => id),
       });

@@ -137,7 +137,7 @@ export const getFollowTokensBalance = async ({ reduxSyncStorage }: { reduxSyncSt
       paymentAddress: accountData.PaymentAddress,
     };
   } catch (error) {
-    log("LOAD FOLLOW TOKENS BALANCE ERROR: ", error);
+    console.log("LOAD FOLLOW TOKENS BALANCE ERROR: ", error);
   } finally {
     await actionHandler(actionFetchingFollowBalance({ isFetching: false }));
   }
