@@ -94,8 +94,9 @@ export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any })
       tokenList: uniq(tokens.concat(_followTokens)),
     });
 
+    await actionHandler(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
+
     if (!coinsStore) {
-      await actionHandler(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
       await getFollowTokensBalance({ reduxSyncStorage });
     }
 

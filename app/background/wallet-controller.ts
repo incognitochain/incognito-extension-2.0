@@ -20,6 +20,9 @@ import { batch } from "react-redux";
 import { FORM_CONFIGS } from "@popup/module/SignTransaction/SignTransaction.constant";
 import { actionSetSignTransactionData } from "@module/SignTransaction/SignTransaction.actions";
 import { ISignTransactionParams } from "@module/SignTransaction/SignTransaction.types";
+import { actionSetUnshieldData } from "@popup/module/Send/Send.actions";
+import { TypeSend } from "@module/Send/Send.types";
+import { actionHandler } from "@redux-sync-storage/store/store";
 
 const log = createLogger("incognito:walletCtr");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -225,15 +228,31 @@ export class WalletController {
   _handleSignTransaction = async (req: any): Promise<IncognitoSignTransactionResponse | void> => {
     const { tabId, origin } = req;
     if (this.store.getWalletState() === "unlocked" && req.params) {
+      // const params = req.params;
+      // const { receiverAddress, tokenID } = params as ISignTransactionParams;
+      // batch(() => {
+      //   reduxStore(getPTokenList());
+      //   reduxStore(actionSelectedPrivacySet({ tokenID }));
+      //   reduxStore(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, receiverAddress));
+      //   reduxStore(
+      //     actionSetSignTransactionData({
+      //       ...params,
+      //     }),
+      //   );
+      // });
       const params = req.params;
-      const { receiverAddress, tokenID } = params as ISignTransactionParams;
+      const { isUnshield, receiverAddress, burnAmountText } = params;
       batch(() => {
-        reduxStore(getPTokenList());
-        reduxStore(actionSelectedPrivacySet({ tokenID }));
-        reduxStore(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, receiverAddress));
-        reduxStore(
-          actionSetSignTransactionData({
+        // actionHandler(getPTokenList());
+        actionHandler(actionSelectedPrivacySet({ tokenID: params.burnToken }));
+        actionHandler(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, receiverAddress));
+        actionHandler(change(FORM_CONFIGS.formName, FORM_CONFIGS.amount, burnAmountText));
+        // reduxStore(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, receiverAddress));
+        // reduxStore(change(FORM_CONFIGS.formName, FORM_CONFIGS.amount, burnAmountText));
+        actionHandler(
+          actionSetUnshieldData({
             ...params,
+            screen: isUnshield ? TypeSend.CONFIRM_UNSHIELD : TypeSend.SEND,
           }),
         );
       });

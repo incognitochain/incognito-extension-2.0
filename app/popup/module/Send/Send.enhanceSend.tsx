@@ -17,7 +17,7 @@ export interface TInner {
 }
 
 const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
-  const accountSender = useSelector(defaultAccountWalletSelector);
+  // const accountSender = useSelector(defaultAccountWalletSelector);
   const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.SEND });
 
   const {
@@ -45,7 +45,6 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
       updateMetric().then();
       showLoading({ value: true });
       let payload: any = {
-        accountSender,
         fee: networkFeeAmount,
         info: inputMemo,
         txType: ACCOUNT_CONSTANT.TX_TYPE.SEND,
