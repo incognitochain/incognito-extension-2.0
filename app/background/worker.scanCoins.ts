@@ -148,3 +148,18 @@ export const getFollowTokensBalance = async ({ reduxSyncStorage }: { reduxSyncSt
     await actionHandler(actionFetchingFollowBalance({ isFetching: false }));
   }
 };
+
+export const getDefaultFollowTokensBalance = async (): Promise<{
+  balance: IBalance[];
+  OTAKey: string;
+}> => {
+  const tokens = await getTokensDefault();
+  const { accountSender, keyDefine } = await getAccountInstanceAndKeyDefine();
+  if (!accountSender || !keyDefine) return { balance: [], OTAKey: "" };
+  const { balance }: { balance: IBalance[] } = await accountSender.getFollowTokensBalance({
+    defaultTokens: tokens,
+    version: PrivacyVersion.ver3,
+  });
+  const _balance = uniqBy(balance, "id");
+  return { balance: _balance, OTAKey: keyDefine };
+};

@@ -23,7 +23,7 @@ import {
   actionSwitchAccount,
   setDefaultAccount,
 } from "@redux/account/account.actions";
-import { getFollowTokensBalance } from "@background/worker.scanCoins";
+import { getDefaultFollowTokensBalance, getFollowTokensBalance } from "@background/worker.scanCoins";
 import {
   defaultAccountSelector,
   defaultAccountWalletSelector,
@@ -33,7 +33,7 @@ import {
 import accountService from "@services/wallet/accountService";
 import { clearAllCaches } from "@services/cache";
 import { clearReduxStore } from "@redux/reducers";
-import { actionFreeAssets } from "@module/Assets/Assets.actions";
+import { actionFreeAssets, actionSetFollowBalanceDefault } from "@module/Assets/Assets.actions";
 import { actionFistTimeScanCoins, actionFreeScanCoins, actionReScanCoins } from "@redux-sync-storage/scanCoins";
 import { batch } from "react-redux";
 import rpcSubmit from "@services/wallet/rpcSubmit";
@@ -442,8 +442,11 @@ export class PopupController {
   }
 
   async getFollowTokenList() {
-    const followTokens = sharedSelectors.followTokensFormatedSelector(this.reduxSyncStorage.getState());
-    return followTokens;
+    let followTokens = sharedSelectors.followTokensFormatedSelector(this.reduxSyncStorage.getState());
+    if (!followTokens || followTokens.length === 0) {
+      const { balance, OTAKey } = await getDefaultFollowTokensBalance();
+      await actionHandler(actionSetFollowBalanceDefault({ balance, OTAKey }));
+    }
   }
 
   async createAccount({ accountName }: { accountName: string }) {

@@ -25,7 +25,6 @@ export interface AssetsFetchedPayload {
   balance: IBalance[];
   OTAKey: string;
 }
-
 //----------------------------------------------
 // Action Definition here!
 //----------------------------------------------
@@ -43,5 +42,14 @@ export interface AssetsFreeAction extends Action {
   type: AssetsActionType.FREE_DATA;
 }
 
+export interface AssetsSetDefaultFollowAction extends Action {
+  type: AssetsActionType.SET_DEFAULT;
+  payload: AssetsFetchedPayload;
+}
+
 //-----------------------------------
-export type AssetsActions = AssetsFetchingAction | AssetsFetchedAction | AssetsFreeAction;
+export type AssetsActions =
+  | AssetsFetchingAction
+  | AssetsFetchedAction
+  | AssetsFreeAction
+  | AssetsSetDefaultFollowAction;

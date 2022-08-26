@@ -32,6 +32,17 @@ const reducer: Reducer<IAssetsState, AssetsActions> = (state = initialState, act
         },
       };
     }
+    case AssetsActionType.SET_DEFAULT: {
+      const { balance, OTAKey } = action.payload;
+      return {
+        ...state,
+        isFetching: false,
+        data: {
+          ...state.data,
+          [OTAKey]: balance,
+        },
+      };
+    }
     case AssetsActionType.FREE_DATA: {
       return {
         ...state,

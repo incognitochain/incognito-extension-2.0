@@ -5,6 +5,7 @@ import {
   AssetsFetchingAction,
   AssetsFetchingPayload,
   AssetsFreeAction,
+  AssetsSetDefaultFollowAction,
 } from "@module/Assets/Assets.types";
 
 const actionFetchingFollowBalance = (payload: AssetsFetchingPayload): AssetsFetchingAction => ({
@@ -21,4 +22,9 @@ const actionFreeAssets = (): AssetsFreeAction => ({
   type: AssetsActionType.FREE_DATA,
 });
 
-export { actionFetchingFollowBalance, actionFetchedFollowBalance, actionFreeAssets };
+const actionSetFollowBalanceDefault = (payload: AssetsFetchedPayload): AssetsSetDefaultFollowAction => ({
+  type: AssetsActionType.SET_DEFAULT,
+  payload,
+});
+
+export { actionFetchingFollowBalance, actionFetchedFollowBalance, actionFreeAssets, actionSetFollowBalanceDefault };
