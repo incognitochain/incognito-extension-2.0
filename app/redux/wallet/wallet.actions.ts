@@ -57,11 +57,10 @@ export const reloadWallet =
     const masterKey = currentMasterKeySelector(state);
     let wallet = masterKey.wallet;
     let defaultAccount: AccountModel;
-
     try {
       await configsWallet(wallet);
       if (wallet?.Name) {
-        listAccount = (await wallet.listAccount()) || [];
+        listAccount = (await wallet.listAccountNoCache()) || [];
         defaultAccount = listAccount.find((item) => isEqual(item?.accountName, accountName)) || listAccount[0];
         const accountListStorage = listAccount.map((item) => {
           return {

@@ -28,7 +28,6 @@ import {
   defaultAccountSelector,
   defaultAccountWalletSelector,
   getAccountWithPaymentAddress,
-  getCurrentPaymentAddress,
 } from "@redux/account/account.selectors";
 import accountService from "@services/wallet/accountService";
 import { clearAllCaches } from "@services/cache";
@@ -495,6 +494,7 @@ export class PopupController {
       const wallet = await reduxStore.dispatch(masterKeySwitchNetwork());
       const currentServer = await serverService.getDefault();
       await actionHandler(changeNetwork(currentServer));
+      await reduxStore.dispatch(actionLogout());
       this.store.setWallet(wallet);
     } catch (e) {
       console.log("switchNetwork ERROR ", e);
@@ -558,6 +558,7 @@ export class PopupController {
 
   async lockWalletAction() {
     this.store.setWallet(null);
+    await reduxStore.dispatch(actionLogout());
     await actionHandler(freeAccount());
   }
 
