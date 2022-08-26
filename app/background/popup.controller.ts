@@ -44,6 +44,7 @@ import { actionHandler } from "@redux-sync-storage/store/store";
 import { freeAccount, getKeyDefineAccountSelector } from "@redux-sync-storage/account";
 import { sleep } from "@popup/utils/utils";
 import { actionAddFollowToken } from "@redux/token";
+import { IHistoryFromSDK, IRequestHistory } from "@module/TokenDetail/features/TxsHistory/TxsHistory.interfaces";
 const { setShardNumber, Validator, PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 const log = createLogger("incognito:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -368,6 +369,23 @@ export class PopupController {
             const { tokenID } = req.params;
             await this.addNewFollowToken(tokenID);
             await getFollowTokensBalance({ reduxSyncStorage: this.reduxSyncStorage });
+          } catch (err) {
+            console.log("error: popup_addNewFollowToken with error: %s", err);
+            res.error = err;
+          }
+          break;
+        case "popup_request_txs_history":
+          try {
+            const { tokenID, isPToken, version } = req.params as IRequestHistory;
+            const accountSender = defaultAccountWalletSelector(reduxStore.getState());
+            if (accountSender && tokenID && version) {
+              const { txsTransactor }: { txsTransactor: IHistoryFromSDK[] } = await accountSender.getTxsHistory({
+                tokenID,
+                isPToken,
+                version,
+              });
+              reqResponse = { txsTransactor };
+            }
           } catch (err) {
             console.log("error: popup_addNewFollowToken with error: %s", err);
             res.error = err;

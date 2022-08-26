@@ -6,6 +6,7 @@ import debounce from "lodash/debounce";
 import { IHistoryFromSDK, IHistory } from "@module/TokenDetail/features/TxsHistory/TxsHistory.interfaces";
 import { getTxsHistoryBuilder } from "@module/TokenDetail/features/TxsHistory/TxsHistory.utils";
 import { colorsSelector } from "@popup/theme";
+import { useBackground } from "@popup/context/background";
 const { PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 
 export interface TInner {
@@ -15,23 +16,27 @@ export interface TInner {
 
 const enhance = (WrappedComponent: React.FunctionComponent) =>
   React.forwardRef((props: any, ref: any) => {
-    const accountSender = useSelector(defaultAccountWalletSelector);
     const selectedPrivacy = useSelector(selectedPrivacyToken);
     const [history, setHistory] = React.useState<IHistory[]>([]);
     const colors = useSelector(colorsSelector);
     const interval = React.useRef<any>(null);
+    const { request } = useBackground();
 
     const handleLoadHistory = async () => {
-      const { txsTransactor }: { txsTransactor: IHistoryFromSDK[] } = await accountSender.getTxsHistory({
+      request("popup_request_txs_history", {
         tokenID: selectedPrivacy.tokenId,
         isPToken: false,
         version: PrivacyVersion.ver3,
+      }).then((response: any) => {
+        const { reqResponse } = response.result;
+        if (reqResponse && reqResponse.txsTransactor) {
+          const history = getTxsHistoryBuilder({ txsHistory: reqResponse.txsTransactor, selectedPrivacy, colors });
+          setHistory(history);
+        }
       });
-      const history = getTxsHistoryBuilder({ txsHistory: txsTransactor, selectedPrivacy, colors });
-      setHistory(history);
     };
 
-    const _debounceLoadHistory = debounce(React.useCallback(handleLoadHistory, [selectedPrivacy.tokenId]), 200);
+    const _debounceLoadHistory = debounce(React.useCallback(handleLoadHistory, [selectedPrivacy.tokenId]), 300);
 
     React.useImperativeHandle(ref, () => ({
       reloadHistory: () => {
@@ -44,7 +49,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) =>
       _debounceLoadHistory();
       interval.current = setInterval(() => {
         _debounceLoadHistory();
-      }, 5000);
+      }, 10000);
       return () => {
         clearInterval(interval.current);
         interval.current = null;

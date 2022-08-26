@@ -26,3 +26,9 @@ export interface IHistory {
   txTypeStr: string;
   statusColor: string;
 }
+
+export interface IRequestHistory {
+  tokenID: string;
+  isPToken: boolean;
+  version: number;
+}
