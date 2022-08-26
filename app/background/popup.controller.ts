@@ -175,7 +175,9 @@ export class PopupController {
               // await this.store.unlockSecretBox(req.params.password);
               await this.updateNetworkHandler();
               await this.unlockWallet(req.params);
-              await this.scanCoinHandler();
+              setTimeout(() => {
+                this.scanCoinHandler();
+              }, 1000);
               // const accountDefault = await getFollowTokensBalance();
               // this._notifyAll({
               //   type: "accountsChanged",
@@ -357,7 +359,7 @@ export class PopupController {
         case "popup_request_clear_storage_scan_coins":
           try {
             await this.scanCoinHandler({ isClear: true });
-            await sleep(2000);
+            await sleep(1000);
             await this.clearStorageScanCoins();
           } catch (err) {
             console.log("error: clear storage scan coins with error: %s", err);

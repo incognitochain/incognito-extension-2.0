@@ -29,13 +29,16 @@ const CacheScanCoins: React.FC = () => {
     try {
       // const otaKey = accountSender.getOTAKey();
       // if (!otaKey || !keyDefine) return;
+      clearAllModal();
       showLoading({ value: true });
+      console.log("clearStorageScanCoins: 2");
       // await request("popup_request_scan_coins", { isClear: true });
       await request("popup_request_clear_storage_scan_coins", {});
       callAsync(request("popup_lockWallet", {}), {
         progress: { message: "locking wallet..." },
         success: { message: "Wallet locked" },
         onSuccess: () => {
+          console.log("clearStorageScanCoins: 4");
           // dispatch(actionLogout());
           setTimeout(async () => {
             // await accountSender.clearStorageCoinsScan();
