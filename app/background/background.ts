@@ -10,6 +10,7 @@ import LocalStore from "./lib/local-store";
 import { initialState } from "./store";
 import { testHandleScanCoins } from "./test/scanCoin";
 import { store } from "@redux/store/store";
+import { actionFreeSignTransactionData } from "@module/SignTransaction/SignTransaction.actions";
 const { init } = require("incognito-chain-web-js/build/web/wallet");
 const PortStream = require("extension-port-stream");
 const endOfStream = require("end-of-stream");
@@ -167,7 +168,8 @@ function setupController(versionedData: VersionedData) {
     if (port.name === "notification") {
       port.onDisconnect.addListener(function () {
         incognitoController.actionManager.deleteCurrentAction();
-        reduxStore.dispatch(actionFreeData());
+        this.reduxSyncStorage.dispatch(actionFreeData());
+        this.reduxSyncStorage.dispatch(actionFreeSignTransactionData());
       });
     }
   });

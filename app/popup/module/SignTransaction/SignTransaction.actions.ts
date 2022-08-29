@@ -1,4 +1,5 @@
 import {
+  SignTransactionFreeDataAction,
   SignTransactionSetDataAction,
   SignTransactionSetDataPayload,
 } from "@module/SignTransaction/SignTransaction.types";
@@ -9,4 +10,8 @@ const actionSetSignTransactionData = (payload: SignTransactionSetDataPayload): S
   payload,
 });
 
-export { actionSetSignTransactionData };
+const actionFreeSignTransactionData = (): SignTransactionFreeDataAction => ({
+  type: SignTransactionActionTypes.FreeData,
+});
+
+export { actionSetSignTransactionData, actionFreeSignTransactionData };

@@ -119,7 +119,7 @@ const MainRoute = () => {
           </Switch>
         </Suspense>
       </Styled>
-      {isScanCoins && <Loading message="Scanning coins, please don't close the pop-up and wait a few minutes." />}
+      {isScanCoins && <Loading message="Scanning coins, please don't close the browser and wait a few minutes." />}
     </>
   );
 };
