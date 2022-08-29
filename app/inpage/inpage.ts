@@ -8,7 +8,6 @@ import {
   WallActions,
 } from "../core/types";
 import { EventEmitter } from "events";
-import { enableLogger } from "../core/utils";
 const LocalMessageDuplexStream = require("post-message-stream");
 const RpcEngine = require("json-rpc-engine");
 const createJsonRpcStream = require("json-rpc-middleware-stream");
@@ -76,10 +75,20 @@ class Provider extends EventEmitter {
       }
       that._rpcEngine.handle(req, function (err: any, response: any) {
         if (err) {
-          log("rpc engine [%s] failed: %O ", err);
+          console.log("RPC ERROR", {
+            req,
+            response,
+            err,
+          });
+          // console.log("rpc engine [%s] failed: %O ", err);
           reject(err);
         } else {
-          log("rpc engine [%s] responded: %O ", response);
+          console.log("RPC Response", {
+            req,
+            response,
+            err,
+          });
+          // console.log("rpc engine [%s] responded: %O ", response);
           resolve(response);
         }
       });

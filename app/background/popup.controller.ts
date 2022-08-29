@@ -177,15 +177,15 @@ export class PopupController {
               setTimeout(() => {
                 this.scanCoinHandler();
               }, 1000);
-              // const accountDefault = await getFollowTokensBalance();
-              // this._notifyAll({
-              //   type: "accountsChanged",
-              //   data: accountDefault ? [accountDefault] : [],
-              // });
-              // this._notifyAll({
-              //   type: "stateChanged",
-              //   data: { state: "unlocked" },
-              // });
+              const accountDefault = await getFollowTokensBalance({ reduxSyncStorage: this.reduxSyncStorage });
+              this._notifyAll({
+                type: "accountsChanged",
+                data: accountDefault ? [accountDefault] : [],
+              });
+              this._notifyAll({
+                type: "stateChanged",
+                data: { state: "unlocked" },
+              });
             } catch (err) {
               log("error: popup_unlockWallet failed  with error: %s", err);
               res.error = err;
