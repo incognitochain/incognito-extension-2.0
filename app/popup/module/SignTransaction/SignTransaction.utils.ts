@@ -1,5 +1,5 @@
 import SelectedPrivacy from "@model/SelectedPrivacyModel";
-import { RootState } from "@redux/reducers";
+import { RootState } from "@redux-sync-storage/reducers/index";
 import { formValueSelector, isValid, isSubmitting } from "redux-form";
 import BigNumber from "bignumber.js";
 import convert from "@utils/convert";

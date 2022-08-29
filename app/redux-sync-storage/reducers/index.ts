@@ -9,6 +9,7 @@ import { $CombinedState, combineReducers } from "redux";
 import themeReducer from "@popup/theme/Theme.reducer";
 import { reducer as formReducer } from "redux-form";
 import sendReducer from "@module/Send/Send.reducer";
+import signTransactionReducer from "@module/SignTransaction/SignTransaction.reducer";
 
 const rootReducers = combineReducers({
   test,
@@ -21,6 +22,7 @@ const rootReducers = combineReducers({
   assetsReducer,
   sendReducer,
   form: formReducer,
+  signTransactionReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducers> & {

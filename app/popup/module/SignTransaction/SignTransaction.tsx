@@ -1,7 +1,6 @@
 import WrapContent from "@components/Content/Content";
 import Header from "@components/Header";
 import React from "react";
-import { MainContent } from "./SignTransaction.styled";
 import enhance, { IMergeProps } from "./SignTransaction.enhance";
 import LoadingContainer from "@components/LoadingContainer";
 import styled from "styled-components";

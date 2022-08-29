@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { RootState } from "@redux/reducers";
+import { RootState } from "@redux-sync-storage/reducers/index";
 import {
   getPrivacyDataByTokenID,
   selectedPrivacyToken,
