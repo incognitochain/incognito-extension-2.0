@@ -1,6 +1,6 @@
 import { Store } from "./store";
 import { createLogger } from "@core/utils";
-import { ActionRequestAccounts, IncognitoSignTransaction, Network, Notification, PopupActions } from "@core/types";
+import { ActionRequestAccounts, IncognitoSignTransaction, Notification, PopupActions } from "@core/types";
 import { ExtensionManager } from "./lib/extension-manager";
 import { ActionManager } from "./lib/action-manager";
 import { PopupStateResolver } from "./lib/popup-state-resolver";
@@ -817,13 +817,13 @@ export class PopupController {
   changeNetwork(req: any) {
     log("Changing network: %O", req);
 
-    const onExit = (network: Network) => {
-      // change the connection network option
-      this._notifyAll({
-        type: "clusterChanged",
-        data: network,
-      });
-    };
+    // const onExit = (network: Network) => {
+    //   // change the connection network option
+    //   this._notifyAll({
+    //     type: "clusterChanged",
+    //     data: network,
+    //   });
+    // };
     // TODO: Endpoint will be used here to add a customer cluster
     const { cluster, endpoint } = req.params;
     if (!cluster) {

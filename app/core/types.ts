@@ -1,4 +1,3 @@
-import { Cluster, clusterApiUrl, TransactionInstruction } from "@solana/web3.js";
 import { AccountDetail } from "@redux-sync-storage/account/account.types";
 
 export const ENVIRONMENT_TYPE_POPUP = "popup";
@@ -11,12 +10,6 @@ export const MUX_CONTROLLER_SUBSTREAM = "incognito.controller";
 export const CHROME_CONN_CS = "incognito.cs";
 export const EVENT_UPDATE_BADGE = "updateBadge";
 export const EVENT_UPDATE_ACTIONS = "updateActions";
-
-export const DEFAULT_NETWORK: Network = {
-  title: "Devnet",
-  cluster: "devnet",
-  endpoint: clusterApiUrl("devnet"),
-};
 
 export type AccountInfo = {
   paymentAddress: string;
@@ -38,12 +31,6 @@ export type SignTransactionResp = {
 
 export type IncognitoSignTransactionResponse = {
   data: any;
-};
-
-export type Network = {
-  title: string;
-  cluster: Cluster | string;
-  endpoint: string;
 };
 
 export type VersionedData = {
@@ -173,7 +160,8 @@ export type Notification =
 
 export type NotificationNetworkChanged = {
   type: "clusterChanged";
-  data: Network;
+  // data: Network;
+  data: {};
 };
 
 export type NotificationAccountsChanged = {

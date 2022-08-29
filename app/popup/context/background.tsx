@@ -5,7 +5,6 @@ import {
   ENVIRONMENT_TYPE_NOTIFICATION,
   ENVIRONMENT_TYPE_POPUP,
   MUX_CONTROLLER_SUBSTREAM,
-  Network,
   Notification,
   PopupActions,
   PopupState,
@@ -32,7 +31,8 @@ interface BackgroundContextType {
   isNotification: boolean;
   popupState: PopupState | undefined;
   request: (method: PopupActions, params: any) => Promise<RPCResp<PopupState>>;
-  changeNetwork: (network: Network) => void;
+  // changeNetwork: (network: Network) => void;
+  changeNetwork: (network: any) => void;
   changeAccount: (account: string) => void;
 }
 
@@ -120,7 +120,9 @@ export function BackgroundProvider(props: React.PropsWithChildren<{}>) {
     });
   };
 
-  const changeNetwork: BackgroundContextType["changeNetwork"] = (network: Network) => {
+  //(network: Network)
+
+  const changeNetwork: BackgroundContextType["changeNetwork"] = (network: any) => {
     console.log("Changing network from A to B");
     request("popup_changeNetwork", { cluster: network.cluster })
       .then((state) => {

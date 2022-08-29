@@ -1,13 +1,6 @@
 import { Store } from "./store";
 import { createLogger } from "../core/utils";
-import {
-  IncognitoSignTransactionResponse,
-  Markdown,
-  RequestAccountsResp,
-  SignTransactionResp,
-  WallActions,
-  WalletActionsType,
-} from "../core/types";
+import { IncognitoSignTransactionResponse, RequestAccountsResp, WalletActionsType } from "../core/types";
 import { ActionManager } from "./lib/action-manager";
 import { getCurrentPaymentAddress } from "@redux/account/account.selectors";
 import { store as reduxStore } from "@redux/store/store";
@@ -15,11 +8,8 @@ import { store as reduxStore } from "@redux/store/store";
 import { getFollowTokensBalance } from "./worker.scanCoins";
 import { actionSelectedPrivacySet } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.actions";
 import { change } from "redux-form";
-import { getPTokenList } from "@redux/token/token.actions";
 import { batch } from "react-redux";
 import { FORM_CONFIGS } from "@popup/module/SignTransaction/SignTransaction.constant";
-import { actionSetSignTransactionData } from "@module/SignTransaction/SignTransaction.actions";
-import { ISignTransactionParams } from "@module/SignTransaction/SignTransaction.types";
 import { actionSetUnshieldData } from "@popup/module/Send/Send.actions";
 import { TypeSend } from "@module/Send/Send.types";
 import { actionHandler } from "@redux-sync-storage/store/store";

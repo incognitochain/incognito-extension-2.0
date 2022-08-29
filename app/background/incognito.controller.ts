@@ -15,20 +15,18 @@ import {
   EVENT_UPDATE_BADGE,
   MUX_CONTROLLER_SUBSTREAM,
   MUX_PROVIDER_SUBSTREAM,
-  Network,
   Notification,
   StoredData,
-  Token,
 } from "../core/types";
 import { ExtensionManager } from "./lib/extension-manager";
 import { ActionManager } from "./lib/action-manager";
 import { PopupStateResolver } from "./lib/popup-state-resolver";
-import { dispatch, store as reduxStore } from "@redux/store/store";
+import { store as reduxStore } from "@redux/store/store";
 import { actionFetchingScanCoins, isShowConfirmScanCoins } from "@redux-sync-storage/scanCoins";
 import { scanCoins } from "@background/worker.scanCoins";
 import serverService, { MAINNET_FULLNODE } from "@services/wallet/Server";
 import { actionUpdateNetwork } from "@redux/configs/Configs.actions";
-import { actionHandler, getReduxSyncStorage } from "@redux-sync-storage/store/store";
+import { actionHandler } from "@redux-sync-storage/store/store";
 
 const createEngineStream = require("json-rpc-middleware-stream/engineStream");
 const PortStream = require("extension-port-stream");
