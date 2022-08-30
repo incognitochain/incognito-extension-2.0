@@ -119,13 +119,6 @@ export const getFollowTokensBalance = async ({ reduxSyncStorage }: { reduxSyncSt
   const accountData = defaultAccountSelector(reduxStore.getState());
   const isFetching = isFetchingAssetsSelector(reduxSyncStorage.getState());
   const { accountSender, keyDefine } = await getAccountInstanceAndKeyDefine();
-
-  // console.log("[getFollowTokensBalance] ", {
-  //   accountSender,
-  //   keyDefine,
-  //   isFetching,
-  //   STATE_SYNC_STORAGE: reduxSyncStorage.getState(),
-  // });
   if (!accountSender || isFetching) return;
   if (!keyDefine) return;
   try {

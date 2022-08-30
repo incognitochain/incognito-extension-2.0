@@ -349,6 +349,12 @@ export class PopupController {
             if (isCancel && res && accountSender) {
               await accountSender.setNewAccountCoinsScan();
             }
+
+            if (res && accountSender) {
+              setTimeout(() => {
+                this.scanCoinHandler({ isClear: false });
+              }, 2000);
+            }
           } catch (err) {
             console.log("error: set default UTXOs scan coins failed  with error: %s", err);
             res.error = err;

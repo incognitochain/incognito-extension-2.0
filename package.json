@@ -38,7 +38,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "extension-port-stream": "^1.0.0",
     "immutable-tuple": "^0.4.10",
-    "incognito-chain-web-js": "https://github.com/incognitochain/incognito-chain-web-js#4.4.1.65",
+    "incognito-chain-web-js": "https://github.com/incognitochain/incognito-chain-web-js#4.4.1.66",
     "is-stream": "^2.0.0",
     "json-rpc-engine": "^5.3.0",
     "json-rpc-middleware-stream": "^2.1.1",
