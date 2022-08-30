@@ -45,13 +45,19 @@ const Styled = styled(Row)`
 `;
 
 const Token = React.memo((props: SelectedPrivacy) => {
-  const dispatch: AppThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
   const history = useHistory();
   const { symbol, shortName, network, formatAmount, formatBalanceByUsd, iconUrl, tokenId: tokenID } = props;
 
   const onTokenClick = React.useCallback(() => {
     dispatch(actionSelectedPrivacySet({ tokenID }));
     history.push(routeTokenDetail);
+    setTimeout(() => {
+      dispatch(actionSelectedPrivacySet({ tokenID }));
+    }, 400);
+    setTimeout(() => {
+      dispatch(actionSelectedPrivacySet({ tokenID }));
+    }, 1500);
   }, [tokenID]);
 
   if (!symbol) return null;

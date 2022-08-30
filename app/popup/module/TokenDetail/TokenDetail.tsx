@@ -13,6 +13,7 @@ import { compose } from "recompose";
 import withBalance from "@module/MainRoute/MainRoute.withBalance";
 import { sleep } from "@popup/utils/utils";
 import { route } from "@module/TokenDetail/features/TokenInfo";
+import LoadingContainer from "@components/LoadingContainer";
 
 const Styled = styled.div`
   height: 100%;
@@ -28,6 +29,7 @@ const TokenDetail = React.memo((props: any) => {
   const history = useHistory();
   const historyRef = React.useRef<any>(null);
 
+  const [initing, setIniting] = React.useState(true);
   const onReload = async () => {
     try {
       if (isLoading || !historyRef.current) return;
@@ -41,6 +43,14 @@ const TokenDetail = React.memo((props: any) => {
   };
 
   const navTokenInfo = () => history.push(route);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setIniting(false);
+    }, 300);
+  }, []);
+
+  if (initing) return <LoadingContainer />;
 
   return (
     <Styled>

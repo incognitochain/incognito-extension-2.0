@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "@components/Header";
 import { AddressBar, TotalBalance, FollowTokensList, LockWallet } from "@module/Assets/features";
-import { SearchIcon, SettingIcon } from "@components/Icons";
+import { SettingIcon } from "@components/Icons";
 import { useHistory } from "react-router-dom";
 import { route as routeImportToken } from "@module/AddToken/AddToken.route";
 import { route as routeSettings } from "@module/Settings/Settings.route";
@@ -12,14 +12,11 @@ import Storage from "@services/storage";
 import rpcMetric, { METRIC_TYPE } from "@services/wallet/rpcMetric";
 import { AddButton } from "@components/AddButton/AddButton";
 import { useBackground } from "@popup/context/background";
-import { useSelector } from "react-redux";
-import { getPTokenList } from "@redux-sync-storage/followTokens";
 
 let isUpdated = false;
 const Assets = React.memo(() => {
   const history = useHistory();
   const { request } = useBackground();
-  const pTokenList = useSelector(getPTokenList);
   const navigateImportTokens = () => {
     history.push(routeImportToken);
   };
@@ -52,7 +49,7 @@ const Assets = React.memo(() => {
   };
 
   React.useEffect(() => {
-    getTokensList();
+    getTokensList().then();
   }, []);
 
   return (

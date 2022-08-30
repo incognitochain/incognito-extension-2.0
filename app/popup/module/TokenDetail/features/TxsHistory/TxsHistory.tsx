@@ -1,6 +1,6 @@
 import React from "react";
-import enhance, { IHistory } from "@module/TokenDetail/features/TxsHistory";
-import { TInner } from "@module/TokenDetail/features/TxsHistory/TxsHistory.enhance";
+import { IHistory } from "@module/TokenDetail/features/TxsHistory";
+import enhance, { TInner } from "@module/TokenDetail/features/TxsHistory/TxsHistory.enhance";
 import styled, { ITheme } from "styled-components";
 import { Row } from "@popup/theme";
 import { useHistory } from "react-router-dom";
