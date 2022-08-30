@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { camelCaseKeys } from "@popup/utils";
+import fetchAdapter from "@vespaiach/axios-fetch-adapter";
 
 const TIMEOUT = 20000;
 
@@ -12,6 +13,7 @@ const createAxiosInstance = ({ baseURL = "" }: { baseURL: string }) => {
     headers: {
       ...HEADERS,
     },
+    adapter: fetchAdapter,
   });
 
   instance.interceptors.request.use(

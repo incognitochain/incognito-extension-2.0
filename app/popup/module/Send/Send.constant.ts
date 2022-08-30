@@ -1,11 +1,11 @@
 export enum SendActionTypes {
-  FETCHING = "[send] Fetching data",
-  FETCHED = "[send] Fetched data",
-  FREE_DATA = "[send] Free data",
-  UNSHIELD = "[send] Unshield",
-  SET_NETWORK_FEE = "[send] Set network fee",
-  SET_BURN_FEE = "[send] Set burn fee",
-  SET_INIT_FORM = "[send] Set int form",
+  FETCHING = "REDUX_SYNC_STORAGE[send] Fetching data",
+  FETCHED = "REDUX_SYNC_STORAGE[send] Fetched data",
+  FREE_DATA = "REDUX_SYNC_STORAGE[send] Free data",
+  UNSHIELD = "REDUX_SYNC_STORAGE[send] Unshield",
+  SET_NETWORK_FEE = "REDUX_SYNC_STORAGE[send] Set network fee",
+  SET_BURN_FEE = "REDUX_SYNC_STORAGE[send] Set burn fee",
+  SET_INIT_FORM = "REDUX_SYNC_STORAGE[send] Set int form",
 }
 
 export const FORM_CONFIGS = {

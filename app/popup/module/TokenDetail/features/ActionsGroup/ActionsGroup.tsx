@@ -45,12 +45,12 @@ const ActionsGroup = React.memo(() => {
   };
 
   const navigateSendRoute = () => {
-    history.push(`${SendRoute}`);
     batch(() => {
       dispatch(actionFreeData());
       dispatch(reset(FORM_CONFIGS.formName));
       dispatch(actionSelectedPrivacySet({ tokenID: tokenID }));
     });
+    history.push(`${SendRoute}`);
   };
 
   return (
