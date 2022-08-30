@@ -5,7 +5,7 @@ import { ActionManager } from "./lib/action-manager";
 import { getCurrentPaymentAddress } from "@redux/account/account.selectors";
 import { store as reduxStore } from "@redux/store/store";
 
-import { getFollowTokensBalance } from "./worker.scanCoins";
+import { getBalanceFromDApp, getFollowTokensBalance } from "./worker.scanCoins";
 import { actionSelectedPrivacySet } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.actions";
 import { change } from "redux-form";
 import { batch } from "react-redux";
@@ -146,7 +146,8 @@ export class WalletController {
     console.log("[_handleRequestAccounts] req  ", req);
 
     if (this.store.getWalletState() === "unlocked") {
-      const accountDefault = await getFollowTokensBalance({ reduxSyncStorage: this.reduxSyncStorage });
+      // const accountDefault = await getFollowTokensBalance({ reduxSyncStorage: this.reduxSyncStorage });
+      const accountDefault = await getBalanceFromDApp({ reduxSyncStorage: this.reduxSyncStorage });
       return {
         accounts: [accountDefault],
       };

@@ -12,8 +12,7 @@ import {
   masterKeySwitchNetwork,
   unlockMasterKey,
 } from "@redux/masterKey";
-import serverService, { MAINNET_FULLNODE } from "@services/wallet/Server";
-import { actionUpdateNetwork } from "@redux/configs/Configs.actions";
+import serverService from "@services/wallet/Server";
 import { dispatch, store as reduxStore } from "@redux/store/store";
 import Storage from "@services/storage";
 import { APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@constants/common";

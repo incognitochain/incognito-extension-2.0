@@ -14,7 +14,8 @@ import { defaultAccountSelector, defaultAccountWalletSelector } from "@redux/acc
 import { actionHandler, getReduxSyncStorage } from "@redux-sync-storage/store/store";
 import uniq from "lodash/uniq";
 import Server, { TESTNET_FULLNODE } from "@services/wallet/Server";
-import { isFetchingAssetsSelector } from "@module/Assets/Assets.selector";
+import { followsTokenAssetsSelector, isFetchingAssetsSelector } from "@module/Assets/Assets.selector";
+import { getOTAKeySelector, getPaymentAddressSelector } from "@redux-sync-storage/account/account.selectors";
 const { PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 
 const MAINNET_TOKEN: any[] = [
@@ -162,4 +163,19 @@ export const getDefaultFollowTokensBalance = async (): Promise<{
   });
   const _balance = uniqBy(balance, "id");
   return { balance: _balance, OTAKey: keyDefine };
+};
+
+export const getBalanceFromDApp = async ({ reduxSyncStorage }: { reduxSyncStorage: any }): Promise<any> => {
+  if (!reduxSyncStorage || !reduxSyncStorage.getState()) return;
+  const reduxSyncState = reduxSyncStorage.getState();
+  // get data from memory, improve performance
+  const keyDefine = getOTAKeySelector(reduxSyncState);
+  const _balance = followsTokenAssetsSelector(reduxSyncState);
+  const paymentAddress = getPaymentAddressSelector(reduxSyncState);
+
+  return {
+    keyDefine,
+    balances: _balance,
+    paymentAddress: paymentAddress,
+  };
 };
