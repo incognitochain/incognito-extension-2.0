@@ -16,12 +16,14 @@ import { Paths } from "@components/routes/paths";
 import { AppThunkDispatch } from "@redux/store";
 import { useDispatch } from "react-redux";
 import { actionUpdateNetwork } from "@popup/configs";
+import { useSnackbar } from "notistack";
 
 const NetworkPage: React.FC = () => {
   const history = useHistory();
   const callAsync = useCallAsync();
   const { request } = useBackground();
   const { showLoading } = useLoading();
+  const { enqueueSnackbar } = useSnackbar();
   const dispatch: AppThunkDispatch = useDispatch();
 
   const [networkList, setNetworkList] = useState<ServerModel[]>([]);
@@ -32,6 +34,10 @@ const NetworkPage: React.FC = () => {
   };
 
   const handleSetDefaultNetwork = async (network: ServerModel) => {
+    if (network.default) {
+      enqueueSnackbar(`Current network is already available`, { variant: "warning" });
+      return;
+    }
     showLoading({ value: true });
 
     await serverService.setDefaultServer(network);
