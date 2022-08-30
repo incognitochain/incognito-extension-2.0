@@ -346,7 +346,7 @@ export default class IncognitoController {
 
   async updateNetworkHandler() {
     const server = (await serverService.getDefault()) || {};
-    reduxStore.dispatch(actionUpdateNetwork({ network: server.address || MAINNET_FULLNODE }));
+    await reduxStore.dispatch(actionUpdateNetwork({ network: server.address || MAINNET_FULLNODE }));
   }
 }
 

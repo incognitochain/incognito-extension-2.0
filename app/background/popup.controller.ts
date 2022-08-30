@@ -160,6 +160,7 @@ export class PopupController {
           break;
         case "popup_restoreWallet":
           await this.restoreWallet(req.params);
+          await getFollowTokensBalance({ reduxSyncStorage: this.reduxSyncStorage });
           await this.scanCoinHandler();
           this._notifyAll({
             type: "stateChanged",
