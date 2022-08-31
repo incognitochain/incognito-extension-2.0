@@ -248,6 +248,12 @@ export class WalletController {
           }),
         );
       });
+      setTimeout(() => {
+        actionHandler(actionSelectedPrivacySet({ tokenID: params.burnToken }));
+      }, 300);
+      setTimeout(() => {
+        actionHandler(actionSelectedPrivacySet({ tokenID: params.burnToken }));
+      }, 1200);
     }
 
     this._showPopup();
