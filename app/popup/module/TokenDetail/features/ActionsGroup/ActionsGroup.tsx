@@ -48,8 +48,12 @@ const ActionsGroup = React.memo(() => {
     batch(() => {
       dispatch(actionFreeData());
       dispatch(reset(FORM_CONFIGS.formName));
-      dispatch(actionSelectedPrivacySet({ tokenID: tokenID }));
+      // dispatch(actionSelectedPrivacySet({ tokenID: tokenID }));
     });
+    setTimeout(() => {
+      dispatch(actionFreeData());
+      dispatch(reset(FORM_CONFIGS.formName));
+    }, 1000);
     history.push(`${SendRoute}`);
   };
 

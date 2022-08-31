@@ -23,7 +23,7 @@ const enhanceInit = (WrappedComp: React.FunctionComponent) => (props: any) => {
     } finally {
       setTimeout(() => {
         setInit(true);
-      }, 200);
+      }, 1000);
     }
   }, []);
 

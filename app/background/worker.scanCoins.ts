@@ -18,6 +18,8 @@ import { followsTokenAssetsSelector, isFetchingAssetsSelector } from "@module/As
 import { getOTAKeySelector, getPaymentAddressSelector } from "@redux-sync-storage/account/account.selectors";
 const { PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 
+let counterFetchingCoins = 0;
+const maxCounterFetchingCoins = 6;
 const MAINNET_TOKEN: any[] = [
   "3ee31eba6376fc16cadb52c8765f20b6ebff92c0b1c5ab5fc78c8c25703bb19e", //-> pETH
   "076a4423fa20922526bd50b0d7b0dc1c593ce16e15ba141ede5fb5a28aa3f229", //-> pUSDT
@@ -76,8 +78,22 @@ export const getAccountInstanceAndKeyDefine = async (): Promise<{ accountSender?
 
 export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any }) => {
   const { accountSender, keyDefine } = await getAccountInstanceAndKeyDefine();
+  console.log("SCAN COINS: 111 ", { accountSender, keyDefine, reduxSyncStorage });
   if (!reduxSyncStorage || !reduxSyncStorage.getState()) return;
   const isFetching = isFetchingScanCoinsSelector(reduxSyncStorage.getState());
+  let coinsStore;
+  if (!accountSender) return;
+  coinsStore = await accountSender.getStorageCoinsScan();
+  if (coinsStore && isFetching && keyDefine) {
+    if (counterFetchingCoins > maxCounterFetchingCoins) {
+      await actionHandler(actionFetchingScanCoins({ isFetching: false }));
+      counterFetchingCoins = 0;
+      return;
+    }
+    counterFetchingCoins++;
+  }
+
+  console.log("SCAN COINS: 222 ", { isFetching });
   // Validate data
   if (!accountSender || isFetching || !keyDefine) return;
 
@@ -85,7 +101,6 @@ export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any })
     const otaKey = accountSender.getOTAKey();
     const _followTokens = (await accountSender.getListFollowingTokens()) || [];
     // Get coins scanned from storage, existed ignore and continue scan
-    const coinsStore = await accountSender.getStorageCoinsScan();
     if (!coinsStore) {
       await actionHandler(actionFistTimeScanCoins({ isScanning: true, otaKey: keyDefine }));
     }
@@ -94,14 +109,14 @@ export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any })
 
     const tokens = await getTokensDefault();
 
-    console.log("SCANNING COINS::: ");
+    console.log("SCAN COINS::: ");
     // start scan coins
     const { elapsed, result } = await measure(accountSender, "scanCoins", {
       tokenList: uniq(tokens.concat(_followTokens)),
     });
 
     await actionHandler(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
-
+    counterFetchingCoins = 0;
     if (!coinsStore) {
       await getFollowTokensBalance({ reduxSyncStorage });
     }
