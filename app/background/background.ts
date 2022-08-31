@@ -121,7 +121,7 @@ function setupController(versionedData: VersionedData) {
       const portStream = new PortStream(remotePort);
       // console.log(`connect internal process: %o`, {
       //   processName: processName,
-      //   tabId: tabId,mm
+      //   tabId: tabId,
       //   url: url,
       //   origin: origin,
       // });
@@ -143,12 +143,15 @@ function setupController(versionedData: VersionedData) {
       const tabId = remotePort.sender.tab.id;
       const url = new URL(remotePort.sender.url);
       const { origin } = url;
-      // console.log(`connect remote process: %o`, {
-      //   processName: remotePort.name,
-      //   tabId: tabId,
-      //   url: url,
-      //   origin: origin,
-      // });
+      console.log(`connect remote process: %o`, {
+        processName: remotePort.name,
+        tabId: tabId,
+        url: url,
+        origin: origin,
+      });
+      // if (processName === "keepAlive") {
+      //   return;
+      // }
       remotePort.onMessage.addListener((msg) => {
         console.log("received message from remote port [%s]: %O}", remotePort.name, msg);
       });
