@@ -45,7 +45,7 @@ yarn build
 
 ### Add extension to Chrome
 
-**Important** Unload any previously loaded Solana Assets extension, only one extension can be loaded at one time.
+**Important** Unload any previously loaded Incognito Assets extension, only one extension can be loaded at one time.
 
 - Go to chrome://extensions
 - Enable developer mode

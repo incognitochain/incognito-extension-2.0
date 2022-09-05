@@ -18,8 +18,8 @@ main() {
 
   id="$1";
   if [[ $id == "" ]]; then
-    if [[ -n "$SOLANA_EXTENSION_ID" ]]; then
-      id="$SOLANA_EXTENSION_ID"
+    if [[ -n "$INCOGNITO_EXTENSION_ID" ]]; then
+      id="$INCOGNITO_EXTENSION_ID"
     else
       usage_error "parameter <id> is required"
     fi
@@ -62,7 +62,7 @@ usage() {
   echo ""
   echo "Environment Variables"
   echo "    BROWSER_BIN              The binary to use to launch chrome"
-  echo "    SOLANA_EXTENSION_ID      Default Chrome extension ID to use when the parameter is not provided"
+  echo "    INCOGNITO_EXTENSION_ID      Default Chrome extension ID to use when the parameter is not provided"
 }
 
 main "$@"
