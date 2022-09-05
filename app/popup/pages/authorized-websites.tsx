@@ -1,7 +1,6 @@
 import React from "react";
 import { withLayout } from "../components/layout";
 import { useBackground } from "../context/background";
-import { LoadingIndicator } from "../components/loading-indicator";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
@@ -21,7 +20,8 @@ const AuthorizedWebsitesPageBase: React.FC = () => {
   const callAsync = useCallAsync();
 
   if (!popupState) {
-    return <LoadingIndicator />;
+    // return <LoadingIndicator />;
+    return null;
   }
 
   const origins = popupState.authorizedOrigins;
@@ -55,9 +55,7 @@ const AuthorizedWebsitesPageBase: React.FC = () => {
               <List disablePadding>
                 {Object.keys(origins).length === 0 && (
                   <ListItem key={"no-website-found"}>
-                    <ListItemText
-                      primary={<Empty title={"No Authorized Website"} description={""} />}
-                    />
+                    <ListItemText primary={<Empty title={"No Authorized Website"} description={""} />} />
                   </ListItem>
                 )}
                 {origins.map((origin: string) => (
