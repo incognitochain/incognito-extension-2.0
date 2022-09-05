@@ -491,6 +491,7 @@ export class PopupController {
       tokenPayments,
       metadata,
       info,
+      formType
     } = req.params;
 
     const pendingTransactionAction = this.actionManager.getAction<IncognitoSignTransaction>(actionKey);
@@ -525,9 +526,8 @@ export class PopupController {
       console.log("CREATE TRANSACTION ERROR: ", error);
       pendingTransactionAction.reject(error);
     }
-
-    if (tx && tx.hash) {
-      pendingTransactionAction.resolve({ txHash: tx.hash, rawData: tx.rawData });
+    if (tx && tx.txId) {
+      pendingTransactionAction.resolve({ txHash: tx.txId, rawData: tx.rawTx });
     } else {
       pendingTransactionAction.reject(new Error("Create Transaction failed"));
     }

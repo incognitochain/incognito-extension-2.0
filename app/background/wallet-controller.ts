@@ -13,7 +13,7 @@ import { Transaction } from "@solana/web3.js";
 import { Buffer } from "buffer";
 import { ProgramPluginManager } from "../core/program-plugin";
 import { ActionManager } from "./lib/action-manager";
-import { getCurrentPaymentAddress } from "@redux/account/account.selectors";
+import { defaultAccountWalletSelector, getCurrentPaymentAddress } from "@redux/account/account.selectors";
 import { dispatch, store as storeRedux } from "@redux/store/store";
 import { getFollowTokensBalance } from "./worker.scanCoins";
 import { actionSelectedPrivacySet } from "@redux/selectedPrivacy";
@@ -91,6 +91,11 @@ export class WalletController {
         case "wallet_requestAccounts":
           try {
             let resp = await this._handleRequestAccounts(req);
+            if (resp) {
+              const accountSender = defaultAccountWalletSelector(storeRedux.getState());
+              const otaReceiver = await accountSender?.getOTAReceive();
+              resp.otaReceiver = otaReceiver;
+            }
             res.result = resp;
           } catch (err) {
             log("wallet_requestAccounts failed  with error: %O", err);
