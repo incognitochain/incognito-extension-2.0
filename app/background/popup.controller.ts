@@ -260,9 +260,6 @@ export class PopupController {
             res.error = err;
           }
           break;
-        case "popup_addWalletAccount":
-          this.addAccount();
-          break;
         case "popup_changeNetwork":
           try {
             this.changeNetwork(req);

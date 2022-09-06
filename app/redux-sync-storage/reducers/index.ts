@@ -10,9 +10,10 @@ import themeReducer from "@popup/theme/Theme.reducer";
 import { reducer as formReducer } from "redux-form";
 import sendReducer from "@module/Send/Send.reducer";
 import signTransactionReducer from "@module/SignTransaction/SignTransaction.reducer";
+import { reducer as versionReducer } from "@redux-sync-storage/version";
 
 const rootReducers = combineReducers({
-  test,
+  versionReducer,
   account,
   themeReducer,
   followTokensReducer,

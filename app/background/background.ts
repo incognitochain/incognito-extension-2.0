@@ -8,8 +8,6 @@ import Storage from "@services/storage";
 import IncognitoController from "./incognito.controller";
 import LocalStore from "./lib/local-store";
 import { initialState } from "./store";
-import { testHandleScanCoins } from "./test/scanCoin";
-import { store } from "@redux/store/store";
 import { actionFreeSignTransactionData } from "@module/SignTransaction/SignTransaction.actions";
 import { reset } from "redux-form";
 import { FORM_CONFIGS as SEND_FORM_CONFIGS } from "@module/Send/Send.constant";
@@ -22,20 +20,15 @@ const localStore = new LocalStore();
 let versionedData: VersionedData;
 
 let reduxSyncStorage: any;
-let reduxStore: any;
 
 initialize().catch((err) => {
   console.log("Background initialization failed: %O", err);
 });
 
 async function initialize() {
-  await Storage.logAll();
+  // await Storage.logAll();
   const { reduxSyncStorage: reduxSyncStorageInstance } = await getReduxSyncStorage();
   reduxSyncStorage = reduxSyncStorageInstance;
-  reduxStore = store;
-
-  console.log("Background reduxSyncStore STATE: ", reduxSyncStorage.getState());
-  console.log("Background reduxStore STATE: ", reduxStore.getState());
 
   await loadWasmConfig();
   await loadStoreRedux();
