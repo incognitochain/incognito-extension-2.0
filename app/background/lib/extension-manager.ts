@@ -26,6 +26,7 @@ export class ExtensionManager {
 
   async showNotification(notifyWindow: () => void) {
     const notification = await this._getNotification();
+    console.log("SANG TEST: HAHA ", notification);
     if (notification) {
       // bring focus to existing chrome notification window
       await this.platform.focusWindow(notification.id);

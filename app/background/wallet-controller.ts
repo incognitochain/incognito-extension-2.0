@@ -2,18 +2,20 @@ import { Store } from "./store";
 import { createLogger } from "../core/utils";
 import { IncognitoSignTransactionResponse, RequestAccountsResp, WalletActionsType } from "../core/types";
 import { ActionManager } from "./lib/action-manager";
-import { getCurrentPaymentAddress } from "@redux/account/account.selectors";
 import { store as reduxStore } from "@redux/store/store";
 
 import { getBalanceFromDApp, getFollowTokensBalance } from "./worker.scanCoins";
 import { actionSelectedPrivacySet } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.actions";
+import { defaultAccountWalletSelector, getCurrentPaymentAddress } from "@redux/account/account.selectors";
 import { change } from "redux-form";
 import { batch } from "react-redux";
-// import { FORM_CONFIGS } from "@popup/module/SignTransaction/SignTransaction.constant";
-import { FORM_CONFIGS } from "@popup/module/Send/Send.constant";
+import { FORM_CONFIGS } from "@popup/module/SignTransaction/SignTransaction.constant";
+// import { FORM_CONFIGS } from "@popup/module/Send/Send.constant";
 import { actionSetUnshieldData } from "@popup/module/Send/Send.actions";
 import { TypeSend } from "@module/Send/Send.types";
 import { actionHandler } from "@redux-sync-storage/store/store";
+import { ISignTransactionParams } from "@module/SignTransaction/SignTransaction.types";
+import { actionSetSignTransactionData } from "@module/SignTransaction/SignTransaction.actions";
 
 const log = createLogger("incognito:walletCtr");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -69,6 +71,7 @@ export class WalletController {
         case "wallet_signTransaction":
           try {
             log("[wallet_signTransaction] resquest: ", req);
+            console.log("SANG TEST: _handleSignTransaction: 111 ");
             let resp = await this._handleSignTransaction(req);
             res.result = resp;
           } catch (err) {
@@ -79,6 +82,11 @@ export class WalletController {
         case "wallet_requestAccounts":
           try {
             let resp = await this._handleRequestAccounts(req);
+            if (resp) {
+              const accountSender = defaultAccountWalletSelector(reduxStore.getState());
+              const otaReceiver = await accountSender?.getOTAReceive();
+              resp.otaReceiver = otaReceiver;
+            }
             res.result = resp;
           } catch (err) {
             log("wallet_requestAccounts failed  with error: %O", err);
@@ -219,44 +227,32 @@ export class WalletController {
 
   _handleSignTransaction = async (req: any): Promise<IncognitoSignTransactionResponse | void> => {
     const { tabId, origin } = req;
+    console.log("SANG TEST: _handleSignTransaction 222");
     if (this.store.getWalletState() === "unlocked" && req.params) {
-      // const params = req.params;
-      // const { receiverAddress, tokenID } = params as ISignTransactionParams;
-      // batch(() => {
-      //   reduxStore(getPTokenList());
-      //   reduxStore(actionSelectedPrivacySet({ tokenID }));
-      //   reduxStore(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, receiverAddress));
-      //   reduxStore(
-      //     actionSetSignTransactionData({
-      //       ...params,
-      //     }),
-      //   );
-      // });
       const params = req.params;
-      const { isUnshield, receiverAddress, burnAmountText } = params;
-      batch(() => {
-        // actionHandler(getPTokenList());
-        actionHandler(actionSelectedPrivacySet({ tokenID: params.burnToken }));
-        actionHandler(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, receiverAddress));
-        actionHandler(change(FORM_CONFIGS.formName, FORM_CONFIGS.amount, burnAmountText));
-        // reduxStore(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, receiverAddress));
-        // reduxStore(change(FORM_CONFIGS.formName, FORM_CONFIGS.amount, burnAmountText));
-        actionHandler(
-          actionSetUnshieldData({
-            ...params,
-            screen: isUnshield ? TypeSend.CONFIRM_UNSHIELD : TypeSend.SEND,
-          }),
-        );
-      });
+      const { receiverAddress, tokenID } = params as ISignTransactionParams;
+      const updateData = () => {
+        batch(() => {
+          // dispatch(getPTokenList());
+          actionHandler(actionSelectedPrivacySet({ tokenID }));
+          actionHandler(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, receiverAddress));
+          actionHandler(
+            actionSetSignTransactionData({
+              ...params,
+            }),
+          );
+        });
+      };
+
+      updateData();
       setTimeout(() => {
-        actionHandler(actionSelectedPrivacySet({ tokenID: params.burnToken }));
+        updateData();
       }, 300);
       setTimeout(() => {
-        actionHandler(actionSelectedPrivacySet({ tokenID: params.burnToken }));
+        updateData();
       }, 1200);
     }
-
-    this._showPopup();
+    await this._showPopup();
     this.actionManager.clearAllAction();
     return new Promise<IncognitoSignTransactionResponse>((resolve, reject) => {
       this.actionManager.addAction(origin, tabId, {
@@ -268,6 +264,7 @@ export class WalletController {
     });
   };
   async _showPopup() {
+    console.log("SANG TEST: 323232");
     return this.openPopup().then(() => {});
   }
 }

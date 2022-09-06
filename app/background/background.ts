@@ -3,7 +3,7 @@ import "./background-keep-alive";
 import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP, StoredData, VersionedData } from "@core/types";
 import { isInternalProcess } from "@core/utils";
 import { actionFreeData } from "@module/Send/Send.actions";
-import { getReduxSyncStorage } from "@redux-sync-storage/store/store";
+import { actionHandler, getReduxSyncStorage } from "@redux-sync-storage/store/store";
 import Storage from "@services/storage";
 import IncognitoController from "./incognito.controller";
 import LocalStore from "./lib/local-store";
@@ -11,6 +11,9 @@ import { initialState } from "./store";
 import { testHandleScanCoins } from "./test/scanCoin";
 import { store } from "@redux/store/store";
 import { actionFreeSignTransactionData } from "@module/SignTransaction/SignTransaction.actions";
+import { reset } from "redux-form";
+import { FORM_CONFIGS as SEND_FORM_CONFIGS } from "@module/Send/Send.constant";
+import { FORM_CONFIGS as SIGN_FORM_CONFIGS } from "@module/SignTransaction/SignTransaction.constant";
 const { init } = require("incognito-chain-web-js/build/web/wallet");
 const PortStream = require("extension-port-stream");
 const endOfStream = require("end-of-stream");
@@ -171,8 +174,19 @@ function setupController(versionedData: VersionedData) {
     if (port.name === "notification") {
       port.onDisconnect.addListener(function () {
         incognitoController.actionManager.deleteCurrentAction();
-        this.reduxSyncStorage.dispatch(actionFreeData());
-        this.reduxSyncStorage.dispatch(actionFreeSignTransactionData());
+        const freeForm = () => {
+          this.reduxSyncStorage.dispatch(actionFreeData());
+          this.reduxSyncStorage.dispatch(actionFreeSignTransactionData());
+          actionHandler(reset(SEND_FORM_CONFIGS.formName)).then();
+          actionHandler(reset(SIGN_FORM_CONFIGS.formName)).then();
+        };
+        freeForm();
+        setTimeout(() => {
+          freeForm();
+        }, 500);
+        setTimeout(() => {
+          freeForm();
+        }, 1200);
       });
     }
   });
