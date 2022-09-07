@@ -168,10 +168,10 @@ function setupController(versionedData: VersionedData) {
       port.onDisconnect.addListener(function () {
         incognitoController.actionManager.deleteCurrentAction();
         const freeForm = () => {
-          this.reduxSyncStorage.dispatch(actionFreeData());
-          this.reduxSyncStorage.dispatch(actionFreeSignTransactionData());
-          actionHandler(reset(SEND_FORM_CONFIGS.formName)).then();
-          actionHandler(reset(SIGN_FORM_CONFIGS.formName)).then();
+          actionHandler(actionFreeData()).then();
+          actionHandler(actionFreeSignTransactionData()).then();
+          // actionHandler(reset(SEND_FORM_CONFIGS.formName)).then();
+          // actionHandler(reset(SIGN_FORM_CONFIGS.formName)).then();
         };
         freeForm();
         setTimeout(() => {
