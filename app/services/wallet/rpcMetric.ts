@@ -18,11 +18,11 @@ class RpcMetric {
   async updateMetric({ type }: { type: METRIC_TYPE }) {
     try {
       const now = Math.round(new Date().getTime() / 1000);
-      // await this.http.post("churn", {
-      //   created_at: now,
-      //   type_id: type,
-      //   app: "extension",
-      // });
+      await this.http.post("churn", {
+        created_at: now,
+        type_id: type,
+        app: "extension",
+      });
     } catch (e) {
       console.log("UPDATE METRIC WITH ERROR: ", e);
     }

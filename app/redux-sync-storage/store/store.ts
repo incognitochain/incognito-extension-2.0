@@ -22,7 +22,8 @@ const getReduxSyncStorage = async () => {
       storageKey: STORAGE_KEY,
     };
     const asyncStoreCreator = storeCreatorFactory(options);
-    reduxSyncStorage = await asyncStoreCreator(rootReducers, applyMiddleware(thunkMiddleware, logger));
+    reduxSyncStorage = await asyncStoreCreator(rootReducers, applyMiddleware(thunkMiddleware));
+    // reduxSyncStorage = await asyncStoreCreator(rootReducers, applyMiddleware(thunkMiddleware, logger));
   }
 
   return { reduxSyncStorage };
