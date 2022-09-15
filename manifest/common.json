@@ -7,6 +7,7 @@
     "48": "icons/incognito-48.png",
     "128": "icons/incognito-128.png"
   },
+  "description": "A Crypto Wallet for Incognito Chain",
   "permissions": ["tabs", "storage", "unlimitedStorage", "scripting", "webRequest", "webNavigation"],
   "host_permissions": ["*://*/*"],
   "action": {
