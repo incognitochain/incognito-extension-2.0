@@ -687,8 +687,8 @@ export class PopupController {
       pendingTransactionAction.reject(error);
     }
 
-    if (tx && tx.hash) {
-      pendingTransactionAction.resolve({ txHash: tx.hash, rawData: tx.rawData });
+    if (tx && (tx.hash || tx.txId)) {
+      pendingTransactionAction.resolve({ txHash: tx.hash || tx.txId, rawData: tx.rawTx || tx.rawData });
     } else {
       pendingTransactionAction.reject(new Error("Create Transaction failed"));
     }
