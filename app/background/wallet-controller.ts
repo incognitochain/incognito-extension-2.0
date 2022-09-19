@@ -85,7 +85,9 @@ export class WalletController {
             if (resp) {
               const accountSender = defaultAccountWalletSelector(reduxStore.getState());
               const otaReceiver = await accountSender?.getOTAReceive();
+              const burnerAddress = await accountSender?.getBurnerAddress2();
               resp.otaReceiver = otaReceiver;
+              resp.burnerAddress = burnerAddress;
             }
             res.result = resp;
           } catch (err) {
