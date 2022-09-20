@@ -261,12 +261,9 @@ export default class IncognitoController {
   }
 
   async triggerUi() {
-    console.log("SANG TEST::: 1111");
     const notify = () => {
       const test = this.notifyNotificationStateChange();
-      console.log("SANG TEST::: 2222", test);
     };
-    console.log("SANG TEST::: 3333");
     await this.extensionManager.showNotification(notify);
     // const tabs = await platform.getActiveTabs()
     // const currentlyActiveMetamaskTab = Boolean(tabs.find((tab) => openIncognitoTabsIDs[tab.id]))

@@ -59,7 +59,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
 
   React.useEffect(() => {
     setFormValidator();
-  }, [selectedPrivacy.amount]);
+  }, [selectedPrivacy.amount, maxInputAmountText]);
 
   const validateAmount: any[] = getAmountValidator();
 

@@ -71,7 +71,6 @@ export class WalletController {
         case "wallet_signTransaction":
           try {
             log("[wallet_signTransaction] resquest: ", req);
-            console.log("SANG TEST: _handleSignTransaction: 111 ");
             let resp = await this._handleSignTransaction(req);
             res.result = resp;
           } catch (err) {
@@ -229,7 +228,6 @@ export class WalletController {
 
   _handleSignTransaction = async (req: any): Promise<IncognitoSignTransactionResponse | void> => {
     const { tabId, origin } = req;
-    console.log("SANG TEST: _handleSignTransaction 222");
     if (this.store.getWalletState() === "unlocked" && req.params) {
       const params = req.params;
       const { receiverAddress, tokenID } = params as ISignTransactionParams;
@@ -266,7 +264,6 @@ export class WalletController {
     });
   };
   async _showPopup() {
-    console.log("SANG TEST: 323232");
     return this.openPopup().then(() => {});
   }
 }
