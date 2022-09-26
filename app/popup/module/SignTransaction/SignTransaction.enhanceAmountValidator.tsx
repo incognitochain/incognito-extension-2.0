@@ -50,10 +50,10 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
     const val = [];
     if (minAmountValidator) val.push(minAmountValidator);
     if (maxAmountValidator) val.push(maxAmountValidator);
-    if (selectedPrivacy?.isIncognitoToken || detectToken.ispNEO(selectedPrivacy.tokenId)) {
-      val.push(...validator.combinedNanoAmount);
-    }
-    val.push(...validator.combinedAmount);
+    // if (selectedPrivacy?.isIncognitoToken || detectToken.ispNEO(selectedPrivacy.tokenId)) {
+    //   val.push(...validator.combinedNanoAmount);
+    // }
+    // val.push(...validator.combinedAmount);
     return [...val];
   };
 

@@ -4,6 +4,7 @@ import SelectedPrivacy from "@model/SelectedPrivacyModel";
 import { selectedPrivacyToken } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.selectors";
 import { ISignTransactionData } from "@module/SignTransaction/SignTransaction.types";
 import { signDataSelector } from "@module/SignTransaction/SignTransaction.selector";
+import LoadingContainer from "@components/LoadingContainer";
 
 export interface TInnerInit {
   isInitingForm: boolean;
@@ -31,6 +32,8 @@ const enhanceInit = (WrappedComp: React.FunctionComponent) => (props: any) => {
   React.useEffect(() => {
     initData().then();
   }, []);
+
+  if (isInitingForm) return <LoadingContainer />;
 
   return <WrappedComp {...{ ...props, isInitingForm, ...signData }} />;
 };
