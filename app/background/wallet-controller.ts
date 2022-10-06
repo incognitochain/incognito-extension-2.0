@@ -10,12 +10,10 @@ import { defaultAccountWalletSelector, getCurrentPaymentAddress } from "@redux/a
 import { change } from "redux-form";
 import { batch } from "react-redux";
 import { FORM_CONFIGS } from "@popup/module/SignTransaction/SignTransaction.constant";
-// import { FORM_CONFIGS } from "@popup/module/Send/Send.constant";
-import { actionSetUnshieldData } from "@popup/module/Send/Send.actions";
-import { TypeSend } from "@module/Send/Send.types";
 import { actionHandler } from "@redux-sync-storage/store/store";
 import { ISignTransactionParams } from "@module/SignTransaction/SignTransaction.types";
 import { actionSetSignTransactionData } from "@module/SignTransaction/SignTransaction.actions";
+const { createNewCoins } = require("incognito-chain-web-js/build/web/wallet");
 
 const log = createLogger("incognito:walletCtr");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -94,6 +92,8 @@ export class WalletController {
               resp.otaReceiver = otaReceiver;
               resp.burnerAddress = burnerAddress;
               resp.otaReceiverWithCfg = otaReceiverWithCfg;
+              const paymentAddress = accountSender.getPaymentAddress();
+              resp.newCoins = await createNewCoins(paymentAddress);
             }
             res.result = resp;
           } catch (err) {

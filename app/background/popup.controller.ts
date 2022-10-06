@@ -677,10 +677,14 @@ export class PopupController {
         metadata,
         info,
       };
+      let _tokenPayments = tokenPayments;
+      if (!_tokenPayments || _tokenPayments.length === 0) {
+        _tokenPayments = null;
+      }
       if (isSignAndSendTransaction) {
-        tx = await accountSender.createAndSignTransaction({ ...params });
+        tx = await accountSender.createAndSignTransaction({ ...params, tokenPayments: _tokenPayments });
       } else {
-        tx = await accountSender.createTransaction({ ...params });
+        tx = await accountSender.createTransaction({ ...params, tokenPayments: _tokenPayments });
       }
     } catch (error) {
       console.log("CREATE TRANSACTION ERROR: ", error);
