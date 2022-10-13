@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 import withValAmount, { TInner as TInnerAmount } from "./SignTransaction.enhanceAmountValidator";
 import { FORM_CONFIGS } from "./SignTransaction.constant";
 import enhanceSignTxs from "@module/SignTransaction/SignTransaction.enhanceSign";
+import { withBalance } from "@module/MainRoute";
 
 export interface IMergeProps extends InjectedFormProps<any, any>, TInnerInit, TInnerAmount {
   onChangeField: (value: string, field: any) => any;
@@ -62,5 +63,6 @@ export default compose<IMergeProps, any>(
   withInit,
   withValAmount,
   enhanceSignTxs,
+  withBalance,
   enhance,
 );
