@@ -178,8 +178,8 @@ export const getBalanceFromDApp = async ({ reduxSyncStorage }: { reduxSyncStorag
   const reduxSyncState = reduxSyncStorage.getState();
   // get data from memory, improve performance
   const keyDefine = getOTAKeySelector(reduxSyncState);
-  const _balance = followsTokenAssetsSelector(reduxSyncState);
   const paymentAddress = getPaymentAddressSelector(reduxSyncState);
+  const { balance: _balance } = await getDefaultFollowTokensBalance();
 
   return {
     keyDefine,
