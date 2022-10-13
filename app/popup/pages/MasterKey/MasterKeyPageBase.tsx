@@ -80,7 +80,7 @@ const MasterKeyPageBase: React.FC<MasterKeyPharsePageBaseProps> = (props: Master
           </CopyButton>
         </CopyButtonContainer>
 
-        <PrimaryButtonContaniner onClick={saveMyPhrase}>{"I'm saved my phrase"}</PrimaryButtonContaniner>
+        <PrimaryButtonContaniner onClick={saveMyPhrase}>{"I saved my phrase"}</PrimaryButtonContaniner>
       </BodyLayout>
     </>
   );
