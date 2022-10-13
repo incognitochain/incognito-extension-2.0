@@ -19,6 +19,17 @@ const Styled = styled.div`
   .btn-add-token {
     margin-top: 34px;
   }
+  .open-explorer {
+    margin-bottom: 12px;
+    cursor: pointer;
+    color: ${({ theme }) => theme.colorP11};
+    a {
+      color: ${({ theme }) => theme.colorP10};
+      :hover {
+        opacity: 0.8;
+      }
+    }
+  }
 `;
 
 interface IProps {
@@ -41,6 +52,13 @@ const AddToken = React.memo((props: IMergeProps) => {
           errorEnable={true}
           errorText={error}
         />
+        <div className="open-explorer fs-small">
+          Hint: the Token ID could be found by inputting token name or symbol into the search box on{" "}
+          <a target="_blank" href="https://explorer.incognito.org/">
+            Incognito Explorer.
+          </a>
+        </div>
+
         {!!symbol && <TextInput value={symbol || ""} header="Token Symbol" disabled={true} />}
         {!!name && <TextInput value={name || ""} header="Token Name" disabled={true} />}
         {!!network && <TextInput value={network || ""} header="Network Name" disabled={true} />}
