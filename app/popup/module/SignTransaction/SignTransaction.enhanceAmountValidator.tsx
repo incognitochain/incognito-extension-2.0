@@ -37,8 +37,6 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
       autoCorrect: true,
     });
 
-    console.log("SANG TEST: ", inputAmountNum, maxAmountNum, isNumber(maxAmountNum), isNumber(inputAmountNum));
-
     let currentState = { ...state };
     if (isNumber(maxAmountNum) && isNumber(inputAmountNum)) {
       currentState = {

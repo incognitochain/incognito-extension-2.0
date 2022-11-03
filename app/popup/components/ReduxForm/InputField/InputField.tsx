@@ -23,6 +23,7 @@ export interface IInputFieldProps {
   rightTitle?: string;
   showMax?: boolean;
   showAddressBook?: boolean;
+  shouldTouched?: boolean;
 }
 
 interface IInputProps {
@@ -62,19 +63,26 @@ const InputField = (props: IInputFieldProps) => {
     rightTitle,
     showMax = true,
     showAddressBook = true,
+    shouldTouched = true,
   } = props;
 
   const { error: errorMeta, touched, submitting } = meta;
   const error = errorMeta || errorCustom;
   const [togglePassword, setTogglePassword] = React.useState(false);
   const handleTogglePassword = () => setTogglePassword(!togglePassword);
+
+  const isUseTouched = React.useMemo(() => {
+    if (shouldTouched) return touched;
+    return true;
+  }, [shouldTouched, touched]);
+
   const renderError = () => {
     if (submitting) {
       return null;
     }
     return (
       <>
-        {(touched && error && (
+        {(isUseTouched && error && (
           <p
             className={`error fs-small fw-regular ${
               inputType === INPUT_FIELD.leftTitleDisplayPTag ? "align-right" : ""
@@ -83,7 +91,7 @@ const InputField = (props: IInputFieldProps) => {
             {error}
           </p>
         )) ||
-          (touched && warning && (
+          (isUseTouched && warning && (
             <p
               className={`warning fs-small fw-regular ${
                 inputType === INPUT_FIELD.leftTitleDisplayPTag ? "align-right" : ""

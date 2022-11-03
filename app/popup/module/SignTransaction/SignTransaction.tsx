@@ -32,6 +32,7 @@ const SignTransaction: React.FC = React.memo((props: IMergeProps & any) => {
     maxInputAmountText,
     selectedPrivacy,
     inputAmountText,
+    errorMessage,
   } = props;
 
   const renderForm = () => {
@@ -50,6 +51,8 @@ const SignTransaction: React.FC = React.memo((props: IMergeProps & any) => {
           rightTitle={`${maxInputAmountText} ${selectedPrivacy.symbol}`}
           validate={validateAmount}
           showMax={false}
+          errorCustom={errorMessage}
+          shouldTouched={false}
         />
         <Field
           component={InputField}
