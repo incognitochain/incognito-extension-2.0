@@ -4,6 +4,7 @@ import convert from "@utils/convert";
 import { validator } from "@components/ReduxForm";
 import BigNumber from "bignumber.js";
 import { detectToken } from "@utils/misc";
+import { isNumber } from "lodash";
 
 export interface TInner {
   validateAmount: () => any;
@@ -15,7 +16,7 @@ interface IState {
 }
 
 const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
-  const { selectedPrivacy, maxInputAmountText } = props;
+  const { selectedPrivacy, maxInputAmountText, inputAmountText } = props;
 
   const initialState: IState = {
     maxAmountValidator: undefined,
@@ -31,8 +32,15 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
       autoCorrect: true,
     });
 
+    const inputAmountNum = convert.toNumber({
+      text: inputAmountText,
+      autoCorrect: true,
+    });
+
+    console.log("SANG TEST: ", inputAmountNum, maxAmountNum, isNumber(maxAmountNum), isNumber(inputAmountNum));
+
     let currentState = { ...state };
-    if (Number.isFinite(maxAmountNum)) {
+    if (isNumber(maxAmountNum) && isNumber(inputAmountNum)) {
       currentState = {
         ...state,
         maxAmountValidator: validator.maxValue(
@@ -40,6 +48,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
           new BigNumber(maxAmountNum).toNumber() > 0
             ? `Max amount you can send is ${maxInputAmountText} ${selectedPrivacy?.symbol}`
             : "Your balance is insufficient.",
+          inputAmountNum,
         ),
       };
       await setState(currentState);
@@ -59,7 +68,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
 
   React.useEffect(() => {
     setFormValidator();
-  }, [selectedPrivacy.amount, maxInputAmountText]);
+  }, [selectedPrivacy.amount, maxInputAmountText, inputAmountText]);
 
   const validateAmount: any[] = getAmountValidator();
 

@@ -31,6 +31,7 @@ const SignTransaction: React.FC = React.memo((props: IMergeProps & any) => {
     networkFeeText,
     maxInputAmountText,
     selectedPrivacy,
+    inputAmountText,
   } = props;
 
   const renderForm = () => {
@@ -42,8 +43,8 @@ const SignTransaction: React.FC = React.memo((props: IMergeProps & any) => {
           name={FORM_CONFIGS.amount}
           inputType={INPUT_FIELD.amount}
           componentProps={{
-            type: "number",
             readonly: "readonly",
+            value: inputAmountText,
           }}
           leftTitle="Amount"
           rightTitle={`${maxInputAmountText} ${selectedPrivacy.symbol}`}
