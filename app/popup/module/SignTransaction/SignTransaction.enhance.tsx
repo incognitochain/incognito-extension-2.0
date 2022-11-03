@@ -55,7 +55,7 @@ export default compose<IMergeProps, any>(
   }),
   withBalance,
   withInit,
-  withValAmount,
+  // withValAmount,
   enhanceSignTxs,
   enhance,
 );

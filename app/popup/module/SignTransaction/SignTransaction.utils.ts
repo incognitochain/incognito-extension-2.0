@@ -62,6 +62,7 @@ const getSignTransactionData = ({
 
   let inputOriginalAmount = prvSendOriginalAmount;
   let inputAmountText = prvSendAmountText;
+
   let maxInputOriginalAmount = prvToken.amount || 0;
   let maxInputAmountText = convert
     .toHumanAmount({
@@ -89,17 +90,17 @@ const getSignTransactionData = ({
   let errorMessage = "";
   if (valid) {
     const inputNum = convert.toNumber({ text: inputAmountText, autoCorrect: true });
-    const maxInputNum = convert.toNumber({ text: inputAmountText, autoCorrect: true });
+    const maxInputNum = convert.toNumber({ text: maxInputAmountText, autoCorrect: true });
     const isInputValid = new BigNumber(inputNum).lt(maxInputNum);
-    const isPRVValid = new BigNumber(prvSendOriginalAmount || 0).plus(networkFee || 0).gte(prvToken.amount || 0);
+    const inValidPRV = new BigNumber(prvSendOriginalAmount || 0).plus(networkFee || 0).gte(prvToken.amount || 0);
     if (!isInputValid) {
       errorMessage = "Your balance is insufficient.";
-    } else if (!isPRVValid) {
+    } else if (inValidPRV) {
       errorMessage = `Not enough amount cover ${format.formatAmount({
         decimals: PRV.pDecimals,
         originalAmount: new BigNumber(prvSendOriginalAmount || 0).plus(networkFee || 0).toNumber(),
       })} PRV.`;
-    } else if ((networkFee || 0) < prvToken.amount) {
+    } else if ((networkFee || 0) > prvToken.amount) {
       errorMessage = `Not enough PRV cover network fee.`;
     }
   }

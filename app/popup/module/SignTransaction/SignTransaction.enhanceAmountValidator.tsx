@@ -3,7 +3,6 @@ import debounce from "lodash/debounce";
 import convert from "@utils/convert";
 import { validator } from "@components/ReduxForm";
 import BigNumber from "bignumber.js";
-import { detectToken } from "@utils/misc";
 import { isNumber } from "lodash";
 
 export interface TInner {

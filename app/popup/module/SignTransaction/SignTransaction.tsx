@@ -49,7 +49,7 @@ const SignTransaction: React.FC = React.memo((props: IMergeProps & any) => {
           }}
           leftTitle="Amount"
           rightTitle={`${maxInputAmountText} ${selectedPrivacy.symbol}`}
-          validate={validateAmount}
+          // validate={validateAmount}
           showMax={false}
           errorCustom={errorMessage}
           shouldTouched={false}
