@@ -18,9 +18,7 @@ export interface IMergeProps extends InjectedFormProps<any, any>, TInnerInit, TI
 
 const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergeProps & any) => {
   const dispatch: AppThunkDispatch = useDispatch();
-  const history = useHistory();
-  const { showLoading } = useLoading();
-  const { isInitingForm, inputAmountText, disabledForm, handleSendCrypto } = props;
+  const { disabledForm, handleSendCrypto } = props;
 
   const onChangeField = async (value: string, field: string) => {
     let val: any = value;
@@ -39,11 +37,6 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergePro
     }
   };
 
-  React.useEffect(() => {
-    if (isInitingForm) return;
-    onChangeField(inputAmountText, FORM_CONFIGS.amount);
-  }, [isInitingForm]);
-
   return (
     <WrappedComponent
       {...{
@@ -60,9 +53,9 @@ export default compose<IMergeProps, any>(
     form: FORM_CONFIGS.formName,
     destroyOnUnmount: false,
   }),
+  withBalance,
   withInit,
   withValAmount,
   enhanceSignTxs,
-  withBalance,
   enhance,
 );

@@ -31,10 +31,17 @@ const number = (value: string) => {
 const minValue = (min: number, message?: string) => (value: string) =>
   value && convert.toNumber({ text: value }) < min ? message || `Must be at least ${format.number(min)}` : undefined;
 
-const maxValue = (max: number, message?: string) => (value: string) =>
-  value && convert.toNumber({ text: value }) > max
-    ? message || `Must be less than or equal ${format.number(max)}`
-    : undefined;
+const maxValue = (max: number, message?: string, inputNum?: number) => (value: string) => {
+  if (inputNum) {
+    message = inputNum && inputNum > max ? message || `Must be less than or equal ${format.number(max)}` : undefined;
+    return message;
+  }
+  message =
+    value && convert.toNumber({ text: value }) > max
+      ? message || `Must be less than or equal ${format.number(max)}`
+      : undefined;
+  return message;
+};
 
 const largerThan = (min: number, message?: string) => (value: string) =>
   value && convert.toNumber({ text: value }) <= min
