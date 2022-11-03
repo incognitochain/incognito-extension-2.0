@@ -21,7 +21,6 @@ const Styled = styled.div`
   }
   .open-explorer {
     margin-bottom: 12px;
-    cursor: pointer;
     color: ${({ theme }) => theme.colorP11};
     a {
       color: ${({ theme }) => theme.colorP10};
@@ -52,7 +51,7 @@ const AddToken = React.memo((props: IMergeProps) => {
           errorEnable={true}
           errorText={error}
         />
-        <div className="open-explorer fs-small">
+        <div className="open-explorer fs-small" onClick={() => {}}>
           Hint: the Token ID could be found by inputting token name or symbol into the search box on{" "}
           <a target="_blank" href="https://explorer.incognito.org/">
             Incognito Explorer.
