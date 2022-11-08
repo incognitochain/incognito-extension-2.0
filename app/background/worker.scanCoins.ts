@@ -16,6 +16,7 @@ import uniq from "lodash/uniq";
 import Server, { TESTNET_FULLNODE } from "@services/wallet/Server";
 import { followsTokenAssetsSelector, isFetchingAssetsSelector } from "@module/Assets/Assets.selector";
 import { getOTAKeySelector, getPaymentAddressSelector } from "@redux-sync-storage/account/account.selectors";
+import Storage from "@services/storage";
 const { PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 
 let counterFetchingCoins = 0;
@@ -45,6 +46,8 @@ const TESTNET_TOKEN: any[] = [
   "9fca0a0947f4393994145ef50eecd2da2aa15da2483b310c2c0650301c59b17d",
   "c01e7dc1d1aba995c19b257412340b057f8ad1482ccb6a9bb0adce61afbf05d4",
 ];
+
+const COINS_INDEX_STORAGE_KEY = "COINS_INDEX_STORAGE_KEY";
 
 const getTokensDefault = async () => {
   const server = await Server.getDefault();

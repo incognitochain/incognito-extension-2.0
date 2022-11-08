@@ -20,9 +20,8 @@ import { useSelector, useStore } from "react-redux";
 import { isFirstTimeScanCoinsSelector, isShowConfirmScanCoins } from "@redux-sync-storage/scanCoins";
 import BoxScanCoin from "@components/BoxScanCoin";
 import { Loading } from "@popup/context/loading";
-import throttle from "lodash/throttle";
-import { route as SendRoute } from "@module/Send/Send.route";
 import debounce from "lodash/debounce";
+import { ScanCoinsBar } from "@components/ScanCoinsBar/ScanCoinsBar";
 
 const context = require.context("@popup/module", true, /\.route.tsx?/);
 
@@ -66,7 +65,6 @@ const MainRoute = () => {
 
   const { setModal } = useModal();
 
-  const isScanCoins = useSelector(isFirstTimeScanCoinsSelector)(popupState);
   const showConfirmScanCoins = useSelector(isShowConfirmScanCoins)(popupState);
 
   const handleGetRoutes = () => {
@@ -119,7 +117,7 @@ const MainRoute = () => {
           </Switch>
         </Suspense>
       </Styled>
-      {isScanCoins && <Loading message="Scanning coins, please don't close the browser and wait a few minutes." />}
+      {/*{isScanCoins && <Loading message="Scanning coins, please don't close the browser and wait a few minutes." />}*/}
     </>
   );
 };

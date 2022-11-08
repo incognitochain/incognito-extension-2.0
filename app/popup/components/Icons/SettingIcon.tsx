@@ -22,7 +22,7 @@ const Styled = styled.button`
 const Setting = (props: IProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   const { className = "" } = props;
   return (
-    <Styled type="button" className={`icon ${className || ""}`} {...props}>
+    <Styled type="button" className={`icon hover ${className || ""}`} {...props}>
       <SettingVector />
     </Styled>
   );

@@ -12,10 +12,15 @@ import Storage from "@services/storage";
 import rpcMetric, { METRIC_TYPE } from "@services/wallet/rpcMetric";
 import { AddButton } from "@components/AddButton/AddButton";
 import { useBackground } from "@popup/context/background";
+import { ScanCoinsBar } from "@components/ScanCoinsBar/ScanCoinsBar";
+import { useSelector } from "react-redux";
+import { isFirstTimeScanCoinsSelector } from "@redux-sync-storage/scanCoins";
 
 let isUpdated = false;
 const Assets = React.memo(() => {
+  const { popupState } = useBackground();
   const history = useHistory();
+  const isScanCoins = useSelector(isFirstTimeScanCoinsSelector)(popupState);
   const { request } = useBackground();
   const navigateImportTokens = () => {
     history.push(routeImportToken);
@@ -56,14 +61,15 @@ const Assets = React.memo(() => {
     <>
       <Header
         showBack={false}
+        selectAccount={!isScanCoins}
         rightHeader={
           <>
             <SettingIcon onClick={navigateSetting} />
             <LockWallet />
+            {isScanCoins && <ScanCoinsBar />}
           </>
         }
         customHeader={<AddButton onClick={navigateImportTokens} />}
-        selectAccount
       />
       <TotalBalance />
       <AddressBar />

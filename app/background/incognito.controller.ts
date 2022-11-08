@@ -319,27 +319,28 @@ export default class IncognitoController {
       if (!scanCoinInterval && !showConfirmScanCoins) {
         try {
           await actionHandler(actionFetchingScanCoins({ isFetching: false }));
-          scanCoins({ reduxSyncStorage: this.reduxSyncStorage }).then();
+          scanCoins({ reduxSyncStorage: this.reduxSyncStorage }).finally(() => {
+            const syncStorageInstance = this.reduxSyncStorage;
+            scanCoinInterval = setInterval(async () => {
+              try {
+                if (!syncStorageInstance) return;
+                const state = syncStorageInstance.getState();
+                if (state.account.accountList.length === 0) {
+                  scanCoinInterval && clearInterval(scanCoinInterval);
+                  scanCoinInterval = null;
+                  return;
+                }
+                scanCoins({ reduxSyncStorage: syncStorageInstance }).then();
+              } catch (e) {
+                console.log("SCAN COINS ERROR: ", e);
+                // Handle error
+              }
+            }, 15000);
+          });
         } catch (e) {
           // Handle error
           console.log("SCAN COINS ERROR: ", e);
         }
-        const syncStorageInstance = this.reduxSyncStorage;
-        scanCoinInterval = setInterval(async () => {
-          try {
-            if (!syncStorageInstance) return;
-            const state = syncStorageInstance.getState();
-            if (state.account.accountList.length === 0) {
-              scanCoinInterval && clearInterval(scanCoinInterval);
-              scanCoinInterval = null;
-              return;
-            }
-            scanCoins({ reduxSyncStorage: syncStorageInstance }).then();
-          } catch (e) {
-            console.log("SCAN COINS ERROR: ", e);
-            // Handle error
-          }
-        }, 15000);
       }
     } else {
       this.clearScanCoins();

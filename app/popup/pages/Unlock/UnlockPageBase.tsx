@@ -19,6 +19,8 @@ import {
   Title,
 } from "./UnlockPage.styled";
 import { route as AssetsRoute } from "@module/Assets/Assets.route";
+import Storage from "@services/storage";
+import { COINS_INDEX_STORAGE_KEY } from "@components/ScanCoinsBar/ScanCoinsBar";
 
 export const UnlockPageBase: React.FC = () => {
   const history = useHistory();
@@ -32,6 +34,7 @@ export const UnlockPageBase: React.FC = () => {
   const unLockOnClick = useCallback(
     throttle(async () => {
       try {
+        await Storage.setItem(COINS_INDEX_STORAGE_KEY, "");
         const passWordValid = await checkPasswordValid(password);
         if (passWordValid) {
           showLoading({
