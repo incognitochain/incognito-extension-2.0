@@ -92,6 +92,7 @@ interface IProps {
   handleOpen: () => void;
   handleClose: () => void;
   tokens: PTokenModel[];
+  selectToken: (token: PTokenModel) => void;
 }
 
 export interface IMergeProps extends TInner, IProps {}
@@ -107,13 +108,14 @@ function getIconUrl(symbol: string, tokenId: string) {
 }
 
 const AddToken = React.memo((props: IMergeProps) => {
-  const { searchText, error, open, handleClose, onChangeInput, searchToken, tokens } = props;
+  const { searchText, error, open, handleClose, onChangeInput, searchToken, tokens, selectToken } = props;
 
   const renderItem = React.useCallback(() => {
     if (!tokens || tokens.length === 0) return null;
-    return (tokens || []).map(({ name, network, tokenId, symbol, verified }) => {
+    return (tokens || []).map((token) => {
+      const { name, network, tokenId, symbol, verified } = token;
       return (
-        <div key={tokenId} className="box-item hover">
+        <div key={tokenId} className="box-item hover" onClick={() => selectToken(token)}>
           <Image className="logo noselect" iconUrl={getIconUrl(symbol, tokenId)} alt="logo-icon" />
           <div>
             <p className="token-name fs-regular fw-regular">{name}</p>

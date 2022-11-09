@@ -64,13 +64,16 @@ const actionAddFollowToken =
       const accountSender = defaultAccountWalletSelector(state);
       if (!accountSender) return;
       const followed: IBalance[] = followsTokenAssetsSelector(reduxSyncStorageInstance.getState());
-      const newFollowed = followed.concat([
-        {
-          id: tokenID,
-          amount: "0",
-          swipable: tokenID !== PRVIDSTR,
-        },
-      ]);
+      const newFollowed = uniqBy(
+        followed.concat([
+          {
+            id: tokenID,
+            amount: "0",
+            swipable: tokenID !== PRVIDSTR,
+          },
+        ]),
+        "id",
+      );
       // SAVE new list token to storage by SDK
       await accountSender.addListFollowingToken({
         tokenIDs: newFollowed.map(({ id }) => id),
@@ -80,4 +83,18 @@ const actionAddFollowToken =
     }
   };
 
-export { actionAddFollowToken };
+const actionRemoveFollowToken =
+  ({ tokenID }: { tokenID: string }) =>
+  async (dispatch: AppThunkDispatch, getState: AppGetState) => {
+    try {
+      const state = getState();
+      const accountSender = defaultAccountWalletSelector(state);
+      if (!accountSender || !tokenID) return;
+      // SAVE new list token to storage by SDK
+      await accountSender.removeFollowingToken({ tokenID });
+    } catch (error) {
+      throw error;
+    }
+  };
+
+export { actionAddFollowToken, actionRemoveFollowToken };

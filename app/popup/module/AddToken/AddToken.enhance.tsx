@@ -1,28 +1,18 @@
 import React, { FunctionComponent } from "react";
 import { TInner } from "@module/AddToken/AddToken.types";
-import { getTokensInfo } from "@services/api/token";
 import debounce from "lodash/debounce";
-import first from "lodash/first";
 import { createLogger } from "@core/utils";
 import PTokenModel from "@model/pTokenModel";
 import { useSelector } from "react-redux";
-import { useLoading } from "@popup/context/loading";
 import { useHistory } from "react-router-dom";
-import { followsTokenAssetsSelector } from "@module/Assets/Assets.selector";
-import { useCallAsync } from "@popup/utils/notifications";
-import { useBackground } from "@popup/context/background";
-import axios from "axios";
 import { getPTokenList } from "@redux-sync-storage/followTokens/followTokens.selectors";
 import orderBy from "lodash/orderBy";
+import { route } from "@module/AddToken/features/ImportToken";
 
 const log = createLogger("incognito:import-token");
 
 const withImportToken = (WrappedComponent: FunctionComponent & any) => {
   return (props: any) => {
-    const followed = useSelector(followsTokenAssetsSelector);
-    const callAsync = useCallAsync();
-    const { request } = useBackground();
-    const { showLoading } = useLoading();
     const history = useHistory();
     const pTokens = useSelector(getPTokenList);
 
@@ -69,27 +59,13 @@ const withImportToken = (WrappedComponent: FunctionComponent & any) => {
       setState((value) => ({ ...value, searchText: text }));
     };
 
-    const onAddToken = async () => {
-      // if (!searchText) return;
-      // try {
-      //   showLoading({
-      //     value: true,
-      //   });
-      //
-      //   await callAsync(request("popup_addNewFollowToken", { tokenID }), {
-      //     onSuccess: (result: any) => {},
-      //     onError: (error) => {
-      //       console.log("onAddToken ERROR: ", error);
-      //     },
-      //     onFinish: () => {
-      //       showLoading({ value: false });
-      //       console.log("onAddToken FINISH: ");
-      //       history.goBack();
-      //     },
-      //   });
-      // } catch (e) {
-      //   console.log("onAddToken ERROR: ");
-      // }
+    const onAddToken = async () => {};
+
+    const selectToken = (token: PTokenModel) => {
+      history.push({
+        pathname: route,
+        state: { data: token },
+      });
     };
 
     return (
@@ -104,6 +80,7 @@ const withImportToken = (WrappedComponent: FunctionComponent & any) => {
           open,
           handleOpen,
           handleClose,
+          selectToken,
         }}
       />
     );

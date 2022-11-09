@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { ITheme } from "styled-components";
 import Header from "@components/Header";
 import { useSelector } from "react-redux";
 import { selectedPrivacyToken } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.selectors";
@@ -14,11 +14,32 @@ import withBalance from "@module/MainRoute/MainRoute.withBalance";
 import { sleep } from "@popup/utils/utils";
 import { route } from "@module/TokenDetail/features/TokenInfo";
 import LoadingContainer from "@components/LoadingContainer";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { Row } from "@popup/theme";
+import { useCallAsync } from "@popup/utils/notifications";
+import { useBackground } from "@popup/context/background";
+import { useLoading } from "@popup/context/loading";
 
 const Styled = styled.div`
   height: 100%;
   .wrap-content {
     flex-direction: column;
+  }
+`;
+
+const BinButton = styled.button`
+  padding: 8px;
+  background: ${({ theme }: { theme: ITheme }) => theme.content};
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 8px;
+  .bin-icon {
+    color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
+    width: 24px;
+    height: 24px;
   }
 `;
 
@@ -28,6 +49,9 @@ const TokenDetail = React.memo((props: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const history = useHistory();
   const historyRef = React.useRef<any>(null);
+  const callAsync = useCallAsync();
+  const { request } = useBackground();
+  const { showLoading } = useLoading();
 
   const [initing, setIniting] = React.useState(true);
   const onReload = async () => {
@@ -57,7 +81,38 @@ const TokenDetail = React.memo((props: any) => {
       <Header
         onGoBack={() => history.push(routeWallet)}
         customHeader={<AskIcon onClick={navTokenInfo} />}
-        rightHeader={<ArrowCircleIcon className="hover" onClick={onReload} isLoading={isLoading} />}
+        rightHeader={
+          <Row>
+            <BinButton
+              className="hover"
+              onClick={() => {
+                history.goBack();
+                setTimeout(async () => {
+                  try {
+                    showLoading({
+                      value: true,
+                    });
+                    await callAsync(request("popup_removeFollowToken", { tokenID: tokenSelected.tokenId }), {
+                      onSuccess: (result: any) => {},
+                      onError: (error) => {
+                        console.log("onAddToken ERROR: ", error);
+                      },
+                      onFinish: () => {
+                        showLoading({ value: false });
+                        console.log("onAddToken FINISH: ");
+                      },
+                    });
+                  } catch (e) {
+                    console.log("onAddToken ERROR: ");
+                  }
+                }, 200);
+              }}
+            >
+              <DeleteOutlineIcon className="bin-icon" />
+            </BinButton>
+            <ArrowCircleIcon className="hover" onClick={onReload} isLoading={isLoading} />
+          </Row>
+        }
         title={tokenSelected.symbol}
       />
       <WrapContent>

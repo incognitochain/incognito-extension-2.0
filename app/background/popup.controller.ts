@@ -36,7 +36,7 @@ import { actionFistTimeScanCoins, actionFreeScanCoins, actionReScanCoins } from 
 import { batch } from "react-redux";
 import rpcSubmit from "@services/wallet/rpcSubmit";
 import sharedSelectors from "@redux-sync-storage/shared/shared.selectors";
-import { getPTokenList } from "@redux/token/token.actions";
+import { actionRemoveFollowToken, getPTokenList } from "@redux/token/token.actions";
 import { changeNetwork } from "@redux-sync-storage/network/network.actions";
 import { actionHandler } from "@redux-sync-storage/store/store";
 import { freeAccount, getKeyDefineAccountSelector } from "@redux-sync-storage/account";
@@ -378,6 +378,16 @@ export class PopupController {
             res.error = err;
           }
           break;
+        case "popup_removeFollowToken":
+          try {
+            const { tokenID } = req.params;
+            await this.addRemoveFollowToken(tokenID);
+            await getFollowTokensBalance({ reduxSyncStorage: this.reduxSyncStorage });
+          } catch (err) {
+            console.log("error: popup_addNewFollowToken with error: %s", err);
+            res.error = err;
+          }
+          break;
         case "popup_request_txs_history":
           try {
             const { tokenID, isPToken, version } = req.params as IRequestHistory;
@@ -426,6 +436,10 @@ export class PopupController {
 
   async addNewFollowToken(tokenID: string) {
     await reduxStore.dispatch(actionAddFollowToken({ tokenID }));
+  }
+
+  async addRemoveFollowToken(tokenID: string) {
+    await reduxStore.dispatch(actionRemoveFollowToken({ tokenID }));
   }
 
   async updateStatusScanCoins({ isFirstTimeScan }: { isFirstTimeScan: boolean }) {
