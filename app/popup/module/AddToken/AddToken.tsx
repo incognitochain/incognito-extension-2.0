@@ -128,16 +128,16 @@ const AddToken = React.memo((props: IMergeProps) => {
       return (
         <div key={tokenId} className="box-item hover" onClick={() => selectToken(token)}>
           <Image className="logo noselect" iconUrl={getIconUrl(symbol, tokenId)} alt="logo-icon" />
-          <div>
+          <div style={{ flex: 1 }}>
             <Row style={{ alignItems: "center" }}>
               <p className="token-name fs-regular fw-regular">{name}</p>
               {verified && <CheckCircleIcon className="verified" />}
             </Row>
             <Row style={{ alignItems: "center" }}>
               <p className="network fs-small fw-small">{network}</p>
-              {isFollowed && <p className="followed fs-supersmall fw-small">Followed</p>}
             </Row>
           </div>
+          {isFollowed && <p className="followed fs-supersmall fw-small">Followed</p>}
         </div>
       );
     });
