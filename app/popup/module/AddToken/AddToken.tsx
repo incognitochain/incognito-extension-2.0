@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { ITheme } from "styled-components";
 import Header from "@components/Header";
 import WrapContent from "@components/Content/Content";
 import withImport from "@module/AddToken/AddToken.enhance";
@@ -13,6 +13,8 @@ import Backdrop from "@mui/material/Backdrop";
 import PTokenModel from "@model/pTokenModel";
 import { CONSTANT_CONFIGS } from "@constants/index";
 const { PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { Row } from "@popup/theme";
 
 const Styled = styled.div`
   input {
@@ -27,6 +29,7 @@ const Styled = styled.div`
   }
   .open-explorer {
     margin-bottom: 12px;
+    margin-top: 8px;
     color: ${({ theme }) => theme.colorP11};
     a {
       color: ${({ theme }) => theme.colorP10};
@@ -57,10 +60,24 @@ const BoxStyled = styled(Box)`
     display: flex;
     flex-direction: row;
     cursor: pointer;
+    align-items: center;
   }
   .logo {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
+    margin-right: 12px;
+  }
+  .token-name {
+    color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
+  }
+  .network {
+    color: ${({ theme }: { theme: ITheme }) => theme.primaryP8};
+  }
+  .verified {
+    color: ${({ theme }: { theme: ITheme }) => theme.colorP2};
+    width: 18px;
+    height: 18px;
+    margin-left: 6px;
   }
 `;
 
@@ -99,8 +116,11 @@ const AddToken = React.memo((props: IMergeProps) => {
         <div key={tokenId} className="box-item hover">
           <Image className="logo noselect" iconUrl={getIconUrl(symbol, tokenId, true)} alt="logo-icon" />
           <div>
-            <p className="fs-regular fw-regular">{name}</p>
-            <p className="fs-small fw-small">{network}</p>
+            <p className="token-name fs-regular fw-regular">{name}</p>
+            <Row style={{ alignItems: "center" }}>
+              <p className="network fs-small fw-small">{network}</p>
+              {verified && <CheckCircleIcon className="verified" />}
+            </Row>
           </div>
         </div>
       );
@@ -111,7 +131,18 @@ const AddToken = React.memo((props: IMergeProps) => {
     <Styled>
       <Header title="Add Token" />
       <WrapContent paddingTop={true} className="default-padding-horizontal">
-        <TextInput value={searchText || ""} onChange={onChangeInput} errorEnable={true} errorText={error} />
+        <TextInput
+          value={searchText || ""}
+          onChange={onChangeInput}
+          errorEnable={true}
+          errorText={error}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              searchToken();
+            }
+          }}
+          placeholder="Search token"
+        />
         <div className="open-explorer fs-small" onClick={() => {}}>
           Hint: the Token ID could be found by inputting token name or symbol into the search box on{" "}
           <a target="_blank" href="https://explorer.incognito.org/">
