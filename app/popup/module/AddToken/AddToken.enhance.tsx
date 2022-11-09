@@ -13,6 +13,7 @@ import { useCallAsync } from "@popup/utils/notifications";
 import { useBackground } from "@popup/context/background";
 import axios from "axios";
 import { getPTokenList } from "@redux-sync-storage/followTokens/followTokens.selectors";
+import orderBy from "lodash/orderBy";
 
 const log = createLogger("incognito:import-token");
 
@@ -35,15 +36,23 @@ const withImportToken = (WrappedComponent: FunctionComponent & any) => {
     const searchToken = async () => {
       try {
         if (!searchText) return;
-        const _tokens = pTokens.filter((token) => {
-          return (
-            (token.name && token.name.toLowerCase().includes(searchText.toLowerCase())) ||
-            (token.symbol && token.symbol.toLowerCase().includes(searchText.toLowerCase())) ||
-            (token.network && token.network.toLowerCase().includes(searchText.toLowerCase())) ||
-            (token.contractId && token.contractId.toLowerCase().includes(searchText.toLowerCase())) ||
-            (token.tokenId && token.tokenId.toLowerCase().includes(searchText.toLowerCase()))
-          );
-        });
+        const _tokens = orderBy(
+          pTokens.filter((token) => {
+            return (
+              (token.name && token.name.toLowerCase().includes(searchText.toLowerCase())) ||
+              (token.symbol && token.symbol.toLowerCase().includes(searchText.toLowerCase())) ||
+              // (token.network && token.network.toLowerCase().includes(searchText.toLowerCase())) ||
+              (searchText.length > 10
+                ? token.contractId && token.contractId.toLowerCase().includes(searchText.toLowerCase())
+                : false) ||
+              (searchText.length > 10
+                ? token.tokenId && token.tokenId.toLowerCase().includes(searchText.toLowerCase())
+                : false)
+            );
+          }) || [],
+          ["isUnified", "verified"],
+          ["desc", "desc"],
+        );
         setTokens(_tokens || []);
         if (_tokens && _tokens.length > 0) {
           handleOpen();

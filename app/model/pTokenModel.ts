@@ -30,6 +30,8 @@ class PToken {
   hasSameSymbol?: boolean;
   listChildToken?: any;
   parentID?: any;
+  isUnified: boolean;
+  listUnifiedToken: any;
 
   constructor(data: any = {}, pTokens = []) {
     const pairPrv = data?.CurrentPrvPool !== 0;
@@ -70,6 +72,16 @@ class PToken {
     } else {
       this.listChildToken = [];
     }
+    if (data && data.ListUnifiedToken instanceof Array) {
+      this.listUnifiedToken = data.ListUnifiedToken.map((item: any) => {
+        let newItem = new PToken(item);
+        newItem.parentID = item.ParentID;
+        return newItem;
+      });
+    } else {
+      this.listUnifiedToken = [];
+    }
+    this.isUnified = this.listUnifiedToken && this.listUnifiedToken.length > 0;
   }
 
   /**

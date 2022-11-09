@@ -49,7 +49,7 @@ const BoxStyled = styled(Box)`
   background-color: #1a1c1e;
   padding: 8px 8px 0 8px;
   border-radius: 8px;
-  max-height: 360px;
+  max-height: 480px;
   overflow-y: scroll;
 
   .box-item {
@@ -79,6 +79,10 @@ const BoxStyled = styled(Box)`
     height: 18px;
     margin-left: 6px;
   }
+  .search-title {
+    color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
+    margin-bottom: 12px;
+  }
 `;
 
 interface IProps {
@@ -92,14 +96,11 @@ interface IProps {
 
 export interface IMergeProps extends TInner, IProps {}
 
-function getIconUrl(symbol: string, tokenId: string, verified: boolean) {
+function getIconUrl(symbol: string, tokenId: string) {
   let uri;
-
-  console.log("SANG TEST: ", { symbol, verified });
   if (tokenId === PRVIDSTR) {
     return "https://statics.incognito.org/wallet/cryptocurrency-icons/32@2x/color/prv@2x.png";
   }
-  if (!verified) return "";
   let formatedSymbol = String(symbol).toUpperCase();
   uri = `${CONSTANT_CONFIGS.CRYPTO_ICON_URL}/${formatedSymbol}.png`;
   return uri;
@@ -111,10 +112,9 @@ const AddToken = React.memo((props: IMergeProps) => {
   const renderItem = React.useCallback(() => {
     if (!tokens || tokens.length === 0) return null;
     return (tokens || []).map(({ name, network, tokenId, symbol, verified }) => {
-      getIconUrl(symbol, tokenId, verified);
       return (
         <div key={tokenId} className="box-item hover">
-          <Image className="logo noselect" iconUrl={getIconUrl(symbol, tokenId, true)} alt="logo-icon" />
+          <Image className="logo noselect" iconUrl={getIconUrl(symbol, tokenId)} alt="logo-icon" />
           <div>
             <p className="token-name fs-regular fw-regular">{name}</p>
             <Row style={{ alignItems: "center" }}>
@@ -168,7 +168,10 @@ const AddToken = React.memo((props: IMergeProps) => {
         onClose={handleClose}
         closeAfterTransition
       >
-        <BoxStyled>{renderItem()}</BoxStyled>
+        <BoxStyled>
+          {/*<p className="search-title fs-regular fw-regular">Search result for "{searchText}"</p>*/}
+          {renderItem()}
+        </BoxStyled>
       </Modal>
     </Styled>
   );

@@ -15,7 +15,6 @@ const Image = React.memo((props: IProps) => {
   let { iconUrl } = props;
   const imgEl = React.useRef<HTMLImageElement>(null);
 
-  console.log("SANG TEST: 1111");
   const onError = (e: any) => {
     e.target.onerror = null;
     e.target.src = imgLogo;
