@@ -26,7 +26,7 @@ const Styled = styled.div<{ isVerified: boolean }>`
     margin-bottom: 6px;
   }
   .btn-add-token {
-    margin-top: 15px;
+    margin-top: 32px;
   }
 `;
 
@@ -61,7 +61,7 @@ const ImportToken = React.memo(({ infosFactories, isVerified, selectedPrivacy }:
         onFinish: () => {
           showLoading({ value: false });
           console.log("onAddToken FINISH: ");
-          history.goBack();
+          history.replace("/assets");
         },
       });
     } catch (e) {
@@ -82,12 +82,14 @@ const ImportToken = React.memo(({ infosFactories, isVerified, selectedPrivacy }:
           <HistoryItem key={item.title} {...item} />
         ))}
 
-        <Button
-          disabled={isDisabled}
-          title={`${isDisabled ? "Token Added" : "Import Token"}`}
-          className="btn-add-token"
-          onClick={handleImportToken}
-        />
+        {!isDisabled && (
+          <Button
+            disabled={isDisabled}
+            title={`${isDisabled ? "Token Added" : "Import Token"}`}
+            className="btn-add-token"
+            onClick={handleImportToken}
+          />
+        )}
       </WrapContent>
     </Styled>
   );

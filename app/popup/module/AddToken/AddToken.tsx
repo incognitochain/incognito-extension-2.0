@@ -15,6 +15,8 @@ import { CONSTANT_CONFIGS } from "@constants/index";
 const { PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Row } from "@popup/theme";
+import { useSelector } from "react-redux";
+import { followsTokenAssetsSelector } from "@module/Assets";
 
 const Styled = styled.div`
   input {
@@ -45,7 +47,7 @@ const BoxStyled = styled(Box)`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 300px;
+  width: 320px;
   background-color: #1a1c1e;
   padding: 8px 8px 0 8px;
   border-radius: 8px;
@@ -83,6 +85,13 @@ const BoxStyled = styled(Box)`
     color: ${({ theme }: { theme: ITheme }) => theme.primaryP7};
     margin-bottom: 12px;
   }
+  .followed {
+    background: ${({ theme }: { theme: ITheme }) => theme.primaryP9};
+    padding: 2px 4px 2px 4px;
+    border-radius: 4px;
+    color: ${({ theme }: { theme: ITheme }) => theme.primaryP8};
+    margin-left: 6px;
+  }
 `;
 
 interface IProps {
@@ -109,19 +118,24 @@ function getIconUrl(symbol: string, tokenId: string) {
 
 const AddToken = React.memo((props: IMergeProps) => {
   const { searchText, error, open, handleClose, onChangeInput, searchToken, tokens, selectToken } = props;
+  const followed = useSelector(followsTokenAssetsSelector);
 
   const renderItem = React.useCallback(() => {
     if (!tokens || tokens.length === 0) return null;
     return (tokens || []).map((token) => {
       const { name, network, tokenId, symbol, verified } = token;
+      const isFollowed = followed.some(({ id }) => id === tokenId);
       return (
         <div key={tokenId} className="box-item hover" onClick={() => selectToken(token)}>
           <Image className="logo noselect" iconUrl={getIconUrl(symbol, tokenId)} alt="logo-icon" />
           <div>
-            <p className="token-name fs-regular fw-regular">{name}</p>
+            <Row style={{ alignItems: "center" }}>
+              <p className="token-name fs-regular fw-regular">{name}</p>
+              {verified && <CheckCircleIcon className="verified" />}
+            </Row>
             <Row style={{ alignItems: "center" }}>
               <p className="network fs-small fw-small">{network}</p>
-              {verified && <CheckCircleIcon className="verified" />}
+              {isFollowed && <p className="followed fs-supersmall fw-small">Followed</p>}
             </Row>
           </div>
         </div>

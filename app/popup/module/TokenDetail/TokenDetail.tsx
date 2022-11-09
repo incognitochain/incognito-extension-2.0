@@ -14,7 +14,7 @@ import withBalance from "@module/MainRoute/MainRoute.withBalance";
 import { sleep } from "@popup/utils/utils";
 import { route } from "@module/TokenDetail/features/TokenInfo";
 import LoadingContainer from "@components/LoadingContainer";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Row } from "@popup/theme";
 import { useCallAsync } from "@popup/utils/notifications";
 import { useBackground } from "@popup/context/background";
@@ -108,7 +108,7 @@ const TokenDetail = React.memo((props: any) => {
                 }, 200);
               }}
             >
-              <DeleteOutlineIcon className="bin-icon" />
+              <DeleteIcon className="bin-icon" />
             </BinButton>
             <ArrowCircleIcon className="hover" onClick={onReload} isLoading={isLoading} />
           </Row>
