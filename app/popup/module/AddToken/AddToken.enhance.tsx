@@ -11,6 +11,7 @@ import { useHistory } from "react-router-dom";
 import { followsTokenAssetsSelector } from "@module/Assets/Assets.selector";
 import { useCallAsync } from "@popup/utils/notifications";
 import { useBackground } from "@popup/context/background";
+import axios from "axios";
 
 const log = createLogger("incognito:import-token");
 
@@ -21,86 +22,75 @@ const withImportToken = (WrappedComponent: FunctionComponent & any) => {
     const { request } = useBackground();
     const { showLoading } = useLoading();
     const history = useHistory();
-    const [{ tokenID, network, symbol, error, contractID, name, pDecimals }, setState] = React.useState<TInner>({});
 
-    const getTokenInfo = async ({ tokenID }: { tokenID: string }) => {
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const [{ searchText }, setState] = React.useState<TInner>({});
+    const [tokens, setTokens] = React.useState<PTokenModel[]>([]);
+
+    const searchToken = async () => {
       try {
-        if (!tokenID) return;
-        const isExist = followed.some(({ id }) => id.toLowerCase() === tokenID);
-        if (isExist) {
-          return setState((value) => ({ ...value, error: "Token have been added before" }));
+        if (!searchText) return;
+        const resp = await axios.get(
+          `https://explorer.incognito.org/search/${searchText}?_data=routes%2Fsearch%2F%24value`,
+        );
+        if (resp) {
+          const tokens: PTokenModel[] = (resp.data || []).map((token: any) => new PTokenModel(token, resp.data || []));
+          console.log("SANG TEST: ", tokens);
+          setTokens(tokens);
+          if (tokens && tokens.length > 0) {
+            handleOpen();
+          }
         }
-        const tokens: PTokenModel[] = await getTokensInfo({ tokenIDs: [tokenID] });
-        const token = first(tokens);
-        if (!token) {
-          return setState((value) => ({ ...value, error: "Can not find your tokenID" }));
-        }
-        setState((value) => ({
-          ...value,
-          tokenID,
-          contractID: token.contractId,
-          network: token.network,
-          symbol: token.symbol,
-          name: token.name,
-          pDecimals: token.pDecimals,
-          error: undefined,
-        }));
       } catch (error) {
-        setState((value) => ({ ...value, error: error.message }));
         log("ERROR: ", error);
       }
     };
 
-    const _handleDetectToken = React.useCallback(debounce(getTokenInfo, 500), [
-      tokenID,
-      network,
-      symbol,
-      error,
-      contractID,
-    ]);
+    const _handleSearchToken = React.useCallback(debounce(searchToken, 500), [searchText]);
 
-    const onChangeTokenID = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
       const text = event.target.value;
-      setState((value) => ({ ...value, tokenID: text }));
-      _handleDetectToken({ tokenID: text });
+      setState((value) => ({ ...value, searchText: text }));
     };
 
     const onAddToken = async () => {
-      if (!tokenID) return;
-      try {
-        showLoading({
-          value: true,
-        });
-
-        await callAsync(request("popup_addNewFollowToken", { tokenID }), {
-          onSuccess: (result: any) => {},
-          onError: (error) => {
-            console.log("onAddToken ERROR: ", error);
-          },
-          onFinish: () => {
-            showLoading({ value: false });
-            console.log("onAddToken FINISH: ");
-            history.goBack();
-          },
-        });
-      } catch (e) {
-        console.log("onAddToken ERROR: ", error);
-      }
+      // if (!searchText) return;
+      // try {
+      //   showLoading({
+      //     value: true,
+      //   });
+      //
+      //   await callAsync(request("popup_addNewFollowToken", { tokenID }), {
+      //     onSuccess: (result: any) => {},
+      //     onError: (error) => {
+      //       console.log("onAddToken ERROR: ", error);
+      //     },
+      //     onFinish: () => {
+      //       showLoading({ value: false });
+      //       console.log("onAddToken FINISH: ");
+      //       history.goBack();
+      //     },
+      //   });
+      // } catch (e) {
+      //   console.log("onAddToken ERROR: ");
+      // }
     };
 
     return (
       <WrappedComponent
         {...{
           ...props,
-          tokenID,
-          network,
-          symbol,
-          name,
-          error,
-          contractID,
-          pDecimals,
-          onChangeTokenID,
+          searchText,
+          tokens,
+          onChangeInput,
           onAddToken,
+          searchToken: _handleSearchToken,
+          open,
+          handleOpen,
+          handleClose,
         }}
       />
     );

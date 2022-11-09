@@ -10,15 +10,20 @@ const Styled = styled.img`
   border-radius: 50%;
 `;
 
+let error = false;
 const Image = React.memo((props: IProps) => {
-  const { iconUrl } = props;
+  let { iconUrl } = props;
+  const imgEl = React.useRef<HTMLImageElement>(null);
 
+  console.log("SANG TEST: 1111");
   const onError = (e: any) => {
     e.target.onerror = null;
     e.target.src = imgLogo;
   };
 
-  return <Styled className="logo noselect" src={iconUrl} alt="logo-icon" onError={onError} />;
+  if (!iconUrl || error) iconUrl = imgLogo;
+
+  return <Styled className="logo noselect" src={iconUrl} alt="logo-icon" onError={onError} ref={imgEl} />;
 });
 
 export { Image };
