@@ -12,17 +12,25 @@ const SettingVector = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-interface IProps {}
+interface IProps {
+  disabled: boolean;
+}
 
-const Styled = styled.button`
+const Styled = styled.button<{ disable: boolean }>`
   width: 40px;
   height: 40px;
+  opacity: ${({ disable }) => (disable ? 0.6 : 1)};
 `;
 
 const Setting = (props: IProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
-  const { className = "" } = props;
+  const { className = "", disabled = false } = props;
   return (
-    <Styled type="button" className={`icon hover ${className || ""}`} {...props}>
+    <Styled
+      disable={disabled}
+      type="button"
+      className={`icon ${disabled ? "" : "hover"} ${className || ""}`}
+      {...props}
+    >
       <SettingVector />
     </Styled>
   );

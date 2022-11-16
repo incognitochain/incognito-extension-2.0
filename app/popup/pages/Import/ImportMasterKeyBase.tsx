@@ -58,7 +58,7 @@ const ImportMasterKeyBase: React.FC = () => {
               history.goBack();
             }}
             passwordInitValue={routeData.current.password}
-            descriptionText="Create a password to protect this wallet and access your transaction history. For your eyes only; no one will be able to help you recover it. Keep it safe."
+            descriptionText="Create a password to protect this wallet and access your transaction history. For your eyes only, no one will be able to help you recover it. Keep it safe."
             buttonTitle="Continue"
             continuePressed={(password: string) => {
               routeData.current = { ...routeData.current, password };

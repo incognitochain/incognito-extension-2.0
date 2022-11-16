@@ -11,12 +11,13 @@ import { actionLogout } from "@redux/account";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@redux/store";
 
-const Container = styled.div`
+const Container = styled.div<{ disabled: boolean }>`
   margin-right: 10px;
   margin-left: 10px;
+  opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
 `;
 
-const LockWallet = React.memo(() => {
+const LockWallet = React.memo(({ disabled = false }: { disabled: boolean }) => {
   const { request } = useBackground();
   const callAsync = useCallAsync();
   const history = useHistory();
@@ -24,6 +25,7 @@ const LockWallet = React.memo(() => {
   const dispatch: AppThunkDispatch = useDispatch();
 
   const onLockPressed = throttle(() => {
+    if (disabled) return;
     showLoading({ value: true });
     callAsync(request("popup_lockWallet", {}), {
       progress: { message: "locking wallet..." },
@@ -37,7 +39,7 @@ const LockWallet = React.memo(() => {
   }, 2000);
 
   return (
-    <Container className="center hover-with-cursor">
+    <Container disabled={disabled} className={`center ${disabled ? "" : "hover-with-cursor"}`}>
       <LockIcon onClick={onLockPressed} />
     </Container>
   );

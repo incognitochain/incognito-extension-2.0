@@ -1,5 +1,9 @@
 import React from "react";
 import styled, { ITheme } from "styled-components";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { Row } from "@popup/theme";
+import { useSelector } from "react-redux";
+import { followsTokenAssetsSelector } from "@module/Assets";
 import Header from "@components/Header";
 import WrapContent from "@components/Content/Content";
 import withImport from "@module/AddToken/AddToken.enhance";
@@ -8,15 +12,10 @@ import { TInner } from "@module/AddToken/AddToken.types";
 import { Button, Image } from "@components/Core";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Fade from "@mui/material/Fade";
 import Backdrop from "@mui/material/Backdrop";
 import PTokenModel from "@model/pTokenModel";
 import { CONSTANT_CONFIGS } from "@constants/index";
 const { PRVIDSTR } = require("incognito-chain-web-js/build/web/wallet");
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { Row } from "@popup/theme";
-import { useSelector } from "react-redux";
-import { followsTokenAssetsSelector } from "@module/Assets";
 
 const Styled = styled.div`
   input {
@@ -159,12 +158,12 @@ const AddToken = React.memo((props: IMergeProps) => {
           }}
           placeholder="Search token"
         />
-        <div className="open-explorer fs-small" onClick={() => {}}>
-          Hint: the Token ID could be found by inputting token name or symbol into the search box on{" "}
-          <a target="_blank" href="https://explorer.incognito.org/">
-            Incognito Explorer.
-          </a>
-        </div>
+        {/*<div className="open-explorer fs-small" onClick={() => {}}>*/}
+        {/*  Hint: the Token ID could be found by inputting token name or symbol into the search box on{" "}*/}
+        {/*  <a target="_blank" href="https://explorer.incognito.org/">*/}
+        {/*    Incognito Explorer.*/}
+        {/*  </a>*/}
+        {/*</div>*/}
         {/*{!!symbol && <TextInput value={symbol || ""} header="Token Symbol" disabled={true} />}*/}
         {/*{!!name && <TextInput value={name || ""} header="Token Name" disabled={true} />}*/}
         {/*{!!network && <TextInput value={network || ""} header="Network Name" disabled={true} />}*/}

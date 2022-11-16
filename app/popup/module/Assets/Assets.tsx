@@ -64,8 +64,8 @@ const Assets = React.memo(() => {
         selectAccount={!isScanCoins}
         rightHeader={
           <>
-            <SettingIcon onClick={navigateSetting} />
-            <LockWallet />
+            <SettingIcon disabled={isScanCoins} onClick={navigateSetting} />
+            <LockWallet disabled={isScanCoins} />
             {isScanCoins && <ScanCoinsBar />}
           </>
         }

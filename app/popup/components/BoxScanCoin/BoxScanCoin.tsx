@@ -45,8 +45,8 @@ const BoxScanCoin = React.memo(() => {
     <Styled>
       <p className="label fs-supermedium fw-medium">Confirm</p>
       <p className="label fs-regular fw-medium sub-title">
-        If this is an old keychain, scanning coins helps to recalculate your private balance. Otherwise, you can skip
-        this step.
+        You can skip this step if this is newly created keychain. Otherwise, scan your coins to recalculate your private
+        balance. Please wait for a few hours. You can check its progress at the top right label.
       </p>
       <Row>
         <SecondaryButton onClick={onCancelPress}>Skip</SecondaryButton>
