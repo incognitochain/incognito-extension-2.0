@@ -20,7 +20,7 @@ import {
   savePasspharseToStorage,
 } from "@services/wallet/passwordService";
 import serverService from "@services/wallet/Server";
-import { configsWallet, importWallet, loadListAccount, saveWallet } from "@services/wallet/walletService";
+import WalletServices  from "@services/wallet/walletService";
 import { batch } from "react-redux";
 import {
   InitMasterKeySuccessAction,
@@ -200,15 +200,15 @@ export const initMasterKey =
     await updateNetwork();
     // await login();
     const defaultMasterKey = new MasterKeyModel(DEFAULT_MASTER_KEY);
-    let wallet = await importWallet(mnemonic, defaultMasterKey.getStorageName());
+    let wallet = await WalletServices.importWallet(mnemonic, defaultMasterKey.getStorageName());
     defaultMasterKey.mnemonic = wallet.Mnemonic;
     defaultMasterKey.wallet = wallet;
     wallet.RootName = masterKeyName;
 
     const masterKeys = [defaultMasterKey]; //Remove mastereless so far! (!)
 
-    await saveWallet(wallet);
-    await loadListAccount(wallet);
+    await WalletServices.saveWallet(wallet);
+    await WalletServices.loadListAccount(wallet);
     const { aesKey } = await getPassphraseNoCache();
     await savePasspharseToStorage(aesKey, mnemonic, password);
     dispatch(setWallet(wallet));
@@ -257,14 +257,14 @@ export const importMasterKey =
         name: masterKeyName,
         mnemonic,
       });
-      wallet = await importWallet(mnemonic, newMasterKey.getStorageName());
+      wallet = await WalletServices.importWallet(mnemonic, newMasterKey.getStorageName());
       // await login();
       // await syncServerAccounts(wallet);
-      await loadListAccount(wallet);
+      await WalletServices.loadListAccount(wallet);
       newMasterKey.wallet = wallet;
       newMasterKey.mnemonic = wallet.Mnemonic;
       wallet.RootName = newMasterKey.name;
-      await saveWallet(wallet);
+      await WalletServices.saveWallet(wallet);
       const { aesKey } = await getPassphraseNoCache();
       await savePasspharseToStorage(aesKey, mnemonic, password);
       await dispatch(setWallet(wallet));
@@ -291,12 +291,12 @@ export const getWalletInstanceByImportMasterKey = async (data: any) => {
     newMasterKey = new MasterKeyModel({
       ...data,
     });
-    wallet = await importWallet(data.mnemonic, newMasterKey.getStorageName());
+    wallet = await WalletServices.importWallet(data.mnemonic, newMasterKey.getStorageName());
     await syncServerAccounts(wallet);
     newMasterKey.wallet = wallet;
     newMasterKey.mnemonic = wallet.Mnemonic;
     wallet.RootName = newMasterKey.name;
-    await saveWallet(wallet);
+    await WalletServices.saveWallet(wallet);
   } catch (error) {
     console.log("getWalletInstanceByImportMasterKey", error);
   }
@@ -375,11 +375,11 @@ export const createMasterKey = (data: any) => async (dispatch: AppThunkDispatch,
     newMasterKey = new MasterKeyModel({
       ...data,
     });
-    wallet = await importWallet(data.mnemonic, newMasterKey.getStorageName());
+    wallet = await WalletServices.importWallet(data.mnemonic, newMasterKey.getStorageName());
     newMasterKey.wallet = wallet;
     newMasterKey.mnemonic = wallet.Mnemonic;
     wallet.RootName = newMasterKey.name;
-    await saveWallet(wallet);
+    await WalletServices.saveWallet(wallet);
     batch(async () => {
       await dispatch(createMasterKeySuccess(newMasterKey));
       await dispatch(switchMasterKeySuccess(data.name));
@@ -433,7 +433,7 @@ export const actionSyncAccountMasterKey =
         return;
       }
       let wallet = masterKey.wallet;
-      await configsWallet(wallet);
+      await WalletServices.configsWallet(wallet);
       let masterAccountInfo = await wallet.MasterAccount.getDeserializeInformation();
       const serverAccounts = await getWalletAccounts(masterAccountInfo.PublicKeyCheckEncode);
       const accountIds: any = [];
@@ -501,6 +501,6 @@ const syncUnlinkWithNewMasterKey = (newMasterKey: any) => async (dispatch: AppTh
       }
     }
   }
-  masterLessWallet && (await saveWallet(masterLessWallet));
+  masterLessWallet && (await WalletServices.saveWallet(masterLessWallet));
   masterless && (await dispatch(updateMasterKey(masterless)));
 };

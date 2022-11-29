@@ -1,7 +1,7 @@
 import storage from "@services/storage";
 import { getPassphrase } from "@services/wallet/passwordService";
 import Server from "@services/wallet/Server";
-import { importWallet, initWallet, loadWallet } from "@services/wallet/walletService";
+import WalletServices from "@services/wallet/walletService";
 import { isEqual, toLower } from "lodash";
 import { BaseModel } from "./BaseModel";
 const { loadBackupKey, parseStorageBackup } = require("incognito-chain-web-js/build/web/wallet");
@@ -86,10 +86,10 @@ class MasterKeyModel extends BaseModel {
     const passphrase = await getPassphrase();
     let wallet;
     if (rawData) {
-      wallet = await loadWallet(passphrase, storageName, rootName);
+      wallet = await WalletServices.loadWallet(passphrase, storageName, rootName);
     } else {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      wallet = await importWallet(this.mnemonic!, rootName);
+      wallet = await  WalletServices.importWallet(this.mnemonic!, rootName);
     }
     this.mnemonic = wallet.Mnemonic;
     this.wallet = wallet;

@@ -1,4 +1,4 @@
-import { configsWallet } from "@services/wallet/walletService";
+import WalletServices from "@services/wallet/walletService";
 import AccountModel from "@model/account";
 import {
   actionSetSignPublicKeyEncode,
@@ -58,7 +58,7 @@ export const reloadWallet =
     let wallet = masterKey.wallet;
     let defaultAccount: AccountModel;
     try {
-      await configsWallet(wallet);
+      await WalletServices.configsWallet(wallet);
       if (wallet?.Name) {
         listAccount = (await wallet.listAccountNoCache()) || [];
         defaultAccount = listAccount.find((item) => isEqual(item?.accountName, accountName)) || listAccount[0];

@@ -1,6 +1,5 @@
 import AccountModel from "@model/account";
 import { getStorageLoadWalletError, setStorageLoadWalletError } from "@model/storageError";
-import { getToken } from "@services/authService";
 import storage from "@services/storage";
 import formatUtil from "@utils/format";
 import { getPassphrase } from "./passwordService";
@@ -9,7 +8,6 @@ import Server from "./Server";
 const crypto = require("crypto");
 
 const {
-  genImageFromStr: genImageFromStrWallet,
   Wallet,
   PrivacyVersion,
   setShardNumber,
@@ -18,16 +16,14 @@ const {
 Wallet.RandomBytesFunc = crypto.randomBytes;
 Wallet.setPrivacyUtilRandomBytesFunc(crypto.randomBytes);
 
-export const genImageFromStr = genImageFromStrWallet;
-
-export async function loadListAccount(wallet: any) {
+async function loadListAccount(wallet: any) {
   try {
     const listAccountRaw = (await wallet.listAccount()) || [];
     const accountInstanceList = listAccountRaw.map((account: any) => new AccountModel(account)) || [];
     return accountInstanceList;
   } catch (e) {
     throw e;
-  }
+  }                 
 }
 
 /**
@@ -35,7 +31,7 @@ export async function loadListAccount(wallet: any) {
  * @param {object} wallet
  * @returns [{{string} AccountName, {string} BLSPublicKey, {int} Index}]
  */
-export async function loadListAccountWithBLSPubKey(wallet: any) {
+async function loadListAccountWithBLSPubKey(wallet: any) {
   try {
     const listAccountRaw = (await wallet.listAccountWithBLSPubKey()) || [];
     // const listAccount =
@@ -47,7 +43,7 @@ export async function loadListAccountWithBLSPubKey(wallet: any) {
   }
 }
 
-export async function loadWallet(passphrase: any, name = "Wallet", rootName = "") {
+async function loadWallet(passphrase: any, name = "Wallet", rootName = "") {
   try {
     let wallet = new Wallet();
     wallet.Name = name;
@@ -69,7 +65,7 @@ export async function loadWallet(passphrase: any, name = "Wallet", rootName = ""
   }
 }
 
-export async function initWallet(walletName: string = "Wallet", rootName: string) {
+async function initWallet(walletName: string = "Wallet", rootName: string) {
   try {
     const { aesKey } = await getPassphrase();
     let wallet = new Wallet();
@@ -83,7 +79,7 @@ export async function initWallet(walletName: string = "Wallet", rootName: string
   }
 }
 
-export async function configsWallet(wallet: any) {
+async function configsWallet(wallet: any) {
   try {
     if (!wallet) {
       return;
@@ -110,7 +106,7 @@ export async function configsWallet(wallet: any) {
   return wallet;
 }
 
-export async function saveWallet(wallet: any) {
+async function saveWallet(wallet: any) {
   try {
     const { aesKey } = await getPassphrase();
     wallet.Storage = storage;
@@ -120,7 +116,7 @@ export async function saveWallet(wallet: any) {
   }
 }
 
-export async function importWallet(mnemonic: string, name: string) {
+async function importWallet(mnemonic: string, name: string) {
   try {
     const { aesKey } = await getPassphrase();
     let wallet = new Wallet();
@@ -131,3 +127,15 @@ export async function importWallet(mnemonic: string, name: string) {
     throw e;
   }
 }
+
+const WalletServices = {
+  loadListAccount,
+  loadListAccountWithBLSPubKey,
+  loadWallet,
+  initWallet,
+  configsWallet,
+  saveWallet,
+  importWallet
+}
+
+export default WalletServices
