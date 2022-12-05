@@ -36,10 +36,7 @@ const maxValue = (max: number, message?: string, inputNum?: number) => (value: s
     message = inputNum && inputNum > max ? message || `Must be less than or equal ${format.number(max)}` : undefined;
     return message;
   }
-  message =
-    value && convert.toNumber({ text: value }) > max
-      ? message || `Must be less than or equal ${format.number(max)}`
-      : undefined;
+  message = value && convert.toNumber({ text: value }) > max ? message || `Your balance is insufficient.` : undefined;
   return message;
 };
 

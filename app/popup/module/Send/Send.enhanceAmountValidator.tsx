@@ -19,7 +19,7 @@ interface IState {
 
 const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
   const sendData: ISendData = useSelector(sendDataSelector);
-  const { selectedPrivacy, maxAmountText, isSend, minAmountText } = sendData;
+  const { selectedPrivacy, maxAmountText, isSend, minAmountText, inputAmount } = sendData;
 
   const initialState: IState = {
     maxAmountValidator: undefined,
@@ -78,7 +78,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
 
   React.useEffect(() => {
     setFormValidator();
-  }, [sendData.selectedPrivacy.amount]);
+  }, [sendData.selectedPrivacy.amount, maxAmountText, selectedPrivacy?.symbol, inputAmount]);
 
   const validateAmount: any[] = getAmountValidator();
 

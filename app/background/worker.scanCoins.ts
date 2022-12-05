@@ -1,4 +1,4 @@
-import { dispatch, store as reduxStore } from "@redux/store/store";
+import { store as reduxStore } from "@redux/store/store";
 import { measure } from "@utils/func";
 import {
   actionFetchingScanCoins,
@@ -9,18 +9,22 @@ import { createLogger } from "@core/utils";
 import uniqBy from "lodash/uniqBy";
 import { IBalance } from "@core/types";
 import { actionFetchedFollowBalance, actionFetchingFollowBalance } from "@module/Assets/Assets.actions";
-// import { isFetchingAssetsSelector } from "@module/Assets";
 import { defaultAccountSelector, defaultAccountWalletSelector } from "@redux/account/account.selectors";
-import { actionHandler, getReduxSyncStorage } from "@redux-sync-storage/store/store";
+import { actionHandler } from "@redux-sync-storage/store/store";
 import uniq from "lodash/uniq";
 import Server, { TESTNET_FULLNODE } from "@services/wallet/Server";
-import { followsTokenAssetsSelector, isFetchingAssetsSelector } from "@module/Assets/Assets.selector";
+import { isFetchingAssetsSelector } from "@module/Assets/Assets.selector";
 import { getOTAKeySelector, getPaymentAddressSelector } from "@redux-sync-storage/account/account.selectors";
-import Storage from "@services/storage";
+import { useSelector } from "react-redux";
+import sharedSelectors from "@redux-sync-storage/shared/shared.selectors";
+import SelectedPrivacy from "@model/SelectedPrivacyModel";
+import createNewKeyBase from "@popup/pages/CreateNewKey/CreateNewKeyBase";
+import BigNumber from "bignumber.js";
 const { PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 
 let counterFetchingCoins = 0;
 const maxCounterFetchingCoins = 6;
+
 const MAINNET_TOKEN: any[] = [
   "3ee31eba6376fc16cadb52c8765f20b6ebff92c0b1c5ab5fc78c8c25703bb19e", //-> pETH
   "076a4423fa20922526bd50b0d7b0dc1c593ce16e15ba141ede5fb5a28aa3f229", //-> pUSDT
@@ -46,8 +50,6 @@ const TESTNET_TOKEN: any[] = [
   "9fca0a0947f4393994145ef50eecd2da2aa15da2483b310c2c0650301c59b17d",
   "c01e7dc1d1aba995c19b257412340b057f8ad1482ccb6a9bb0adce61afbf05d4",
 ];
-
-const COINS_INDEX_STORAGE_KEY = "COINS_INDEX_STORAGE_KEY";
 
 const getTokensDefault = async () => {
   const server = await Server.getDefault();
@@ -87,7 +89,8 @@ export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any })
   let coinsStore;
   if (!accountSender) return;
   coinsStore = await accountSender.getStorageCoinsScan();
-  if (coinsStore && isFetching && keyDefine) {
+  const isFinishScan = coinsStore && coinsStore.finishScan;
+  if (isFinishScan && isFetching && keyDefine) {
     if (counterFetchingCoins > maxCounterFetchingCoins) {
       await actionHandler(actionFetchingScanCoins({ isFetching: false }));
       counterFetchingCoins = 0;
@@ -104,7 +107,7 @@ export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any })
     const otaKey = accountSender.getOTAKey();
     const _followTokens = (await accountSender.getListFollowingTokens()) || [];
     // Get coins scanned from storage, existed ignore and continue scan
-    if (!coinsStore) {
+    if (!isFinishScan) {
       await actionHandler(actionFistTimeScanCoins({ isScanning: true, otaKey: keyDefine }));
     }
 
@@ -120,7 +123,7 @@ export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any })
 
     await actionHandler(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
     counterFetchingCoins = 0;
-    if (!coinsStore) {
+    if (!isFinishScan) {
       await getFollowTokensBalance({ reduxSyncStorage });
     }
 
@@ -128,7 +131,7 @@ export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any })
   } catch (error) {
     log("SCAN COINS WITH ERROR: ", error);
   } finally {
-    actionHandler(actionFetchingScanCoins({ isFetching: false }));
+    await actionHandler(actionFetchingScanCoins({ isFetching: false }));
   }
 };
 
@@ -137,21 +140,33 @@ export const getFollowTokensBalance = async ({ reduxSyncStorage }: { reduxSyncSt
   const accountData = defaultAccountSelector(reduxStore.getState());
   const isFetching = isFetchingAssetsSelector(reduxSyncStorage.getState());
   const { accountSender, keyDefine } = await getAccountInstanceAndKeyDefine();
-  if (!accountSender || isFetching) return;
+  const isScanningCoins = isFetchingScanCoinsSelector(reduxSyncStorage.getState());
+  if (!accountSender || isFetching || isScanningCoins) return;
   if (!keyDefine) return;
+  let isUpdate = false;
   try {
     const tokens = await getTokensDefault();
     await actionHandler(actionFetchingFollowBalance({ isFetching: true }));
-    // follow tokens balance
-    const { balance }: { balance: IBalance[] } = await accountSender.getFollowTokensBalance({
+    const oldTokens = sharedSelectors.followTokensFormatedSelector(reduxSyncStorage.getState());
+    const { balance: newTokens }: { balance: IBalance[] } = await accountSender.getFollowTokensBalance({
       defaultTokens: tokens,
       version: PrivacyVersion.ver3,
     });
-    const _balance = uniqBy(balance, "id");
-    await actionHandler(actionFetchedFollowBalance({ balance: _balance, OTAKey: keyDefine }));
+    const _newTokens = uniqBy(newTokens, "id");
+    isUpdate = newTokens.some(({ amount: newAmount, id }) => {
+      const token = oldTokens.find(({ tokenId }) => tokenId === id);
+      if (!token) return true;
+      const oldAmount = token.amount;
+      return !new BigNumber(oldAmount || 0).eq(newAmount || 0); // is new amount
+    });
+    const coinsStore = await accountSender.getStorageCoinsScan();
+    console.log("LOAD BALANCE: ", { newTokens, oldTokens, tokens, coinsStore, isFetching }, isUpdate);
+    if (isUpdate) {
+      await actionHandler(actionFetchedFollowBalance({ balance: _newTokens, OTAKey: keyDefine }));
+    }
     return {
       keyDefine,
-      balances: _balance,
+      balances: _newTokens,
       paymentAddress: accountData.PaymentAddress,
     };
   } catch (error) {
