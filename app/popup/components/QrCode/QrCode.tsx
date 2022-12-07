@@ -9,6 +9,7 @@ interface IProps {
   qrCodeProps: any;
   label?: string;
   copyProps?: any;
+  showCopyAddressBar?: boolean;
 }
 
 const Styled = styled.div`
@@ -47,7 +48,7 @@ const Styled = styled.div`
 `;
 
 const QrCode = (props: IProps) => {
-  const { hook, qrCodeProps, label, copyProps } = props;
+  const { hook, qrCodeProps, label, copyProps, showCopyAddressBar } = props;
   const { value } = qrCodeProps;
   return (
     <Styled className="qrcode-container">
@@ -56,7 +57,7 @@ const QrCode = (props: IProps) => {
         <QRCodeReact {...{ ...qrCodeProps, size: qrCodeProps?.size || 184 }} bgColor="transparent" />
       </div>
       {hook}
-      <Copy text={value} {...copyProps} />
+      {showCopyAddressBar && <Copy text={value} {...copyProps} />}
     </Styled>
   );
 };

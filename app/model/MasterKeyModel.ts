@@ -1,4 +1,5 @@
-import storage from "@services/storage";
+import { WalletSDK } from "@core/types";
+import StorageService from "@services/storage";
 import { getPassphrase } from "@services/wallet/passwordService";
 import Server from "@services/wallet/Server";
 import WalletServices from "@services/wallet/walletService";
@@ -13,7 +14,7 @@ export interface MasterKeyModelProps {
   mnemonic?: string;
   deletedAccountIds?: string[];
   isMasterless?: boolean;
-  wallet?: any;
+  wallet?: any | undefined;
 }
 
 export const MasterKeyModelInit: MasterKeyModelProps = {
@@ -36,9 +37,12 @@ export const MASTERLESS = {
   isActive: false,
 };
 
-export interface MasterKeyModelActions {}
+export interface MasterKeyModelActions {
+  getAccounts(deserialize: boolean): void;
+  loadWallet(): Promise<any>;
+}
 
-class MasterKeyModel extends BaseModel {
+class MasterKeyModel extends BaseModel implements MasterKeyModelActions {
   //---------------------------
   static network = "mainnet";
   //---------------------------
@@ -48,7 +52,7 @@ class MasterKeyModel extends BaseModel {
   deletedAccountIds?: string[] | undefined;
   isMasterless?: boolean | undefined;
   name: string;
-  wallet: any;
+  wallet: any | undefined;
 
   constructor(data: MasterKeyModelProps = MasterKeyModelInit) {
     super();
@@ -57,9 +61,11 @@ class MasterKeyModel extends BaseModel {
     this.passphrase = data.passphrase;
     this.isActive = !!data.isActive;
     this.deletedAccountIds = data.deletedAccountIds || [];
-    this.isMasterless = isEqual(toLower(this?.name), "masterless") || isEqual(toLower(this?.name), "unlinked");
+    this.isMasterless = isEqual(toLower(this.name), "masterless") || isEqual(toLower(this.name), "unlinked");
   }
 
+  //[NetworkName]-master-[MasterKeyName]  (default is `name = wallet`)]
+  //Ex: $mainnet-master-ABCDE, $mainnet-master-wallet
   static getStorageName(name: string = "wallet") {
     return `$${MasterKeyModel.network}-master-${name.toLowerCase()}`;
   }
@@ -71,7 +77,7 @@ class MasterKeyModel extends BaseModel {
   async getBackupMasterKeys() {
     const [network, passphrase] = await Promise.all([Server.getNetwork(), getPassphrase()]);
     const storageKey = loadBackupKey(network);
-    const backupStr = (await storage.getItem(storageKey)) || "";
+    const backupStr = (await StorageService.getItem(storageKey)) || "";
     return parseStorageBackup({ passphrase, backupStr }) || [];
   }
 
@@ -79,17 +85,23 @@ class MasterKeyModel extends BaseModel {
    * Load wallet from storage
    * @returns {Promise<Wallet>}
    */
-  async loadWallet(callback?: any) {
+  async loadWallet(): Promise<WalletSDK> {
     const rootName = this.name;
     const storageName = this.getStorageName();
-    const rawData = await storage.getItem(storageName);
+    const rawData = await StorageService.getItem(storageName);
     const passphrase = await getPassphrase();
-    let wallet;
+
+    let wallet: WalletSDK;
     if (rawData) {
+      console.log("[loadWallet] INSTANCE MasterKeyModel: => ", this);
+      console.log("[loadWallet] LOAD WALLET co trong LOCAL STORAGE: => ");
       wallet = await WalletServices.loadWallet(passphrase, storageName, rootName);
+    } else if (this.mnemonic) {
+      console.log("[loadWallet] INIT WALLET voi Mnemonic: => ");
+      wallet = await WalletServices.importWallet(this.mnemonic, rootName);
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      wallet = await  WalletServices.importWallet(this.mnemonic!, rootName);
+      console.log("[loadWallet] INIT WALLET default trong SDK: => ");
+      wallet = await WalletServices.initWallet(storageName, rootName);
     }
     this.mnemonic = wallet.Mnemonic;
     this.wallet = wallet;
@@ -100,7 +112,6 @@ class MasterKeyModel extends BaseModel {
       await wallet.save();
     }
     wallet.Name = this.getStorageName();
-    console.time("TIME_LOAD_WALLET_FROM_STORAGE");
     return wallet;
   }
 

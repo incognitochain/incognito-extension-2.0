@@ -32,4 +32,12 @@ const MnemonicTextArea = styled.div`
   background: ${({ theme }: { theme: ITheme }) => theme.primaryP9};
   border-radius: 8px;
 `;
-export { PrimaryButtonContaniner, DescriptionText, PasswordLabel, VerifyLabel, MnemonicTextArea };
+
+const CreateNewWalletText = styled.p`
+  text-align: center;
+  color: ${({ theme }: { theme: ITheme }) => theme.colorP9};
+  text-decoration-thickness: 0.2px;
+  text-underline-offset: 5px;
+`;
+
+export { PrimaryButtonContaniner, DescriptionText, PasswordLabel, VerifyLabel, MnemonicTextArea, CreateNewWalletText };

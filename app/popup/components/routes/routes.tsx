@@ -46,7 +46,7 @@ const RoutesBase: React.FC = () => {
       <Route exact path={Paths.homeRouteStack} component={HomeRouteStack} />
       <Route exact path={Paths.createNewKeyStack} component={CreateNewKeyRouteStack} />
       <Route exact path={Paths.importMasterKeyStack} component={ImportMasterKeyRouteStack} />
-      <Route exact path={Paths.createAccountPage} component={CreateAccountPage} />
+      {/* <Route exact path={Paths.createAccountPage} component={CreateAccountPage} /> */}
       <Route exact path={Paths.restoreWalletPage} component={RestoreWalletPage} />
       {defaultRoute(`default-route`, {}, popupState, isNotification)}
     </Switch>
