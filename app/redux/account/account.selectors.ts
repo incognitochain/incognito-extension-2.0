@@ -166,6 +166,15 @@ export const getCurrentPaymentAddress = createSelector(
   (paymentAddress) => paymentAddress || "Unknow",
 );
 
+export const listBackupPrivateKeysSelector = createSelector(
+  (state: RootState) => state.account.list || [],
+  (list) =>
+    list.map((item) => ({
+      accountName: item?.name || item?.accountName || "",
+      privateKey: item?.PrivateKey || "",
+    })),
+);
+
 export default {
   defaultAccountName,
   listAccount,
@@ -189,4 +198,5 @@ export default {
   defaultAccountWalletSelector,
   isFetchingNFTSelector,
   getCurrentPaymentAddress,
+  listBackupPrivateKeysSelector,
 };

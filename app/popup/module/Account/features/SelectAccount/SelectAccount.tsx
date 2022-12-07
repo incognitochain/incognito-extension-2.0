@@ -5,7 +5,7 @@ import { useLoading } from "@popup/context/loading";
 import { ellipsisCenter } from "@popup/utils";
 import { useCallAsync } from "@popup/utils/notifications";
 import { trim } from "lodash";
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useSnackbar } from "notistack";
@@ -14,6 +14,8 @@ import { AccountItem } from "@module/Account/features/SelectAccount";
 import Header from "@components/Header";
 import WrapContent from "@components/Content";
 import { getAccountListSelector, getAccountDefaultNameSelector } from "@redux-sync-storage/account/account.selectors";
+import { MenuOption } from "@popup/components/MenuOption/index";
+import { MasterKeyLabel } from "./SelectAccount.MasterKeyLabel";
 
 const SelectAccount = React.memo(() => {
   const { enqueueSnackbar } = useSnackbar();
@@ -55,7 +57,9 @@ const SelectAccount = React.memo(() => {
 
   return (
     <>
-      <Header title="Keychain" rightHeader={<AddButton onClick={() => history.push(Paths.createAccountPage)} />} />
+      {/* <Header title="Keychain" rightHeader={<AddButton onClick={() => history.push(Paths.createAccountPage)} />} /> */}
+      <Header title="Keychains" customHeader={<MasterKeyLabel />} rightHeader={<MenuOption />} />
+
       <WrapContent className="default-padding-horizontal default-padding-top">
         {listAccount &&
           listAccount.map((accountItem) => {

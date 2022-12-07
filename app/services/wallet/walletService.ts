@@ -4,28 +4,25 @@ import storage from "@services/storage";
 import formatUtil from "@utils/format";
 import { getPassphrase } from "./passwordService";
 import Server from "./Server";
+import { WalletSDK } from "../../core/types";
 
 const crypto = require("crypto");
 
-const {
-  Wallet,
-  PrivacyVersion,
-  setShardNumber,
-} = require("incognito-chain-web-js/build/web/wallet");
+const { Wallet, PrivacyVersion, setShardNumber } = require("incognito-chain-web-js/build/web/wallet");
 
 Wallet.RandomBytesFunc = crypto.randomBytes;
 Wallet.setPrivacyUtilRandomBytesFunc(crypto.randomBytes);
 
 async function loadListAccount(wallet: any) {
   try {
+    if (!wallet) return;
     const listAccountRaw = (await wallet.listAccount()) || [];
     const accountInstanceList = listAccountRaw.map((account: any) => new AccountModel(account)) || [];
     return accountInstanceList;
   } catch (e) {
     throw e;
-  }                 
+  }
 }
-
 /**
  *
  * @param {object} wallet
@@ -106,7 +103,7 @@ async function configsWallet(wallet: any) {
   return wallet;
 }
 
-async function saveWallet(wallet: any) {
+async function saveWallet(wallet: WalletSDK) {
   try {
     const { aesKey } = await getPassphrase();
     wallet.Storage = storage;
@@ -116,7 +113,7 @@ async function saveWallet(wallet: any) {
   }
 }
 
-async function importWallet(mnemonic: string, name: string) {
+async function importWallet(mnemonic: string, name: string): Promise<WalletSDK> {
   try {
     const { aesKey } = await getPassphrase();
     let wallet = new Wallet();
@@ -135,7 +132,7 @@ const WalletServices = {
   initWallet,
   configsWallet,
   saveWallet,
-  importWallet
-}
+  importWallet,
+};
 
-export default WalletServices
+export default WalletServices;

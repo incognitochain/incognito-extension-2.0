@@ -1,5 +1,7 @@
-import MasterKeyModel from "@model/MasterKeyModel";
 import AccountModel from "@model/account";
+import MasterKeyModel from "@model/MasterKeyModel";
+import { setAccountDefaultName, setCurrentAccount } from "@redux-sync-storage/account";
+import { actionHandler } from "@redux-sync-storage/store/store";
 import {
   burnerAddressSelector,
   default as accountSelector,
@@ -20,8 +22,6 @@ import accountService from "@services/wallet/accountService";
 import { getPassphrase } from "@services/wallet/passwordService";
 import { batch } from "react-redux";
 import { AccountActionType } from "./account.types";
-import { actionHandler } from "@redux-sync-storage/store/store";
-import { setAccountDefaultName, setCurrentAccount } from "@redux-sync-storage/account";
 const { Validator } = require("incognito-chain-web-js/build/web/wallet");
 
 //--------------------------------------------------------------------
@@ -40,7 +40,6 @@ export const setListAccount = (accounts: AccountModel[]) => ({
 export const removeAccount = (account: AccountModel) => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
   const state = getState();
   const wallet = walletSelector(state);
-  console.time("TOTAL_TIME_REMOVE_ACCOUNT");
   try {
     try {
       accountService.removeCacheBalance(account, wallet);
@@ -57,9 +56,7 @@ export const removeAccount = (account: AccountModel) => async (dispatch: AppThun
     }
     masterKey.deletedAccountIds.push(accountInfo.ID);
     wallet.deletedAccountIds = masterKey.deletedAccountIds;
-    console.time("TIME_REMOVE_ACCOUNT");
     await accountService.removeAccount(PrivateKey, aesKey, wallet);
-    console.timeEnd("TIME_REMOVE_ACCOUNT");
     batch(() => {
       dispatch(updateMasterKey(masterKey));
       dispatch({
@@ -69,7 +66,6 @@ export const removeAccount = (account: AccountModel) => async (dispatch: AppThun
       dispatch(reloadWallet());
       dispatch(loadAllMasterKeyAccounts());
     });
-    console.timeEnd("TOTAL_TIME_REMOVE_ACCOUNT");
     return true;
   } catch (e) {
     console.log("REMOVE ACCOUNT ERROR", e);
@@ -164,7 +160,6 @@ export const actionSwitchAccount =
       new Validator("actionSwitchAccount-shouldLoadBalance", shouldLoadBalance).boolean();
       const state = getState();
       const account: any = accountSelector.getAccountByName1(state)(accountName);
-      console.log("actionSwitchAccount account ", account);
       const masterKey: MasterKeyModel = currentMasterKeySelector(state);
       const defaultAccountName = accountSelector.defaultAccountNameSelector(state);
       if (defaultAccountName !== account?.name) {
@@ -191,7 +186,6 @@ export const actionFetchFailCreateAccount = () => ({
 export const actionFetchCreateAccount =
   ({ accountName }: any) =>
   async (dispatch: AppThunkDispatch, getState: AppGetState) => {
-    console.time("TOTAL_TIME_CREATE_ACCOUNT");
     const state = getState();
     const create = accountSelector.createAccountSelector(state);
     let wallet = walletSelector(state);
@@ -211,9 +205,6 @@ export const actionFetchCreateAccount =
           dispatch(loadAllMasterKeyAccounts());
         }
       });
-
-      console.log("[actionFetchCreateAccount]  end ");
-      console.timeEnd("TOTAL_TIME_CREATE_ACCOUNT");
       return serializedAccount;
     } catch (error) {
       dispatch(actionFetchFailCreateAccount());

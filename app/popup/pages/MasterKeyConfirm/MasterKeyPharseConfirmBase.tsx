@@ -21,9 +21,8 @@ export interface MasterKeyPharseConfirmPageBaseProps {
 const MasterKeyPharseConfirmBase: React.FC<MasterKeyPharseConfirmPageBaseProps> = (
   props: MasterKeyPharseConfirmPageBaseProps,
 ) => {
-  const [phraseListSelected, setPhraseListSelected] = useState<string[]>([]);
   const { onBack = () => {}, createMasterKeySucess = () => {}, continueOnPress = () => {}, phraseList = [] } = props;
-
+  const [phraseListSelected, setPhraseListSelected] = useState<string[]>(phraseList);
   const mnemonicCorrect = useMemo(() => phraseList.join(" "), []);
   const phraseListShuffle = useMemo(() => shuffle(phraseList), []);
 

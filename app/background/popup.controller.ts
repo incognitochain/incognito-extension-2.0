@@ -1,14 +1,23 @@
 import { Store } from "./store";
 import { createLogger } from "@core/utils";
-import { ActionRequestAccounts, IncognitoSignTransaction, Notification, PopupActions } from "@core/types";
+import {
+  ActionRequestAccounts,
+  BackupPriavteKeyType,
+  IncognitoSignTransaction,
+  Notification,
+  PopupActions,
+} from "@core/types";
 import { ExtensionManager } from "./lib/extension-manager";
 import { ActionManager } from "./lib/action-manager";
 import { PopupStateResolver } from "./lib/popup-state-resolver";
 import {
+  currentMasterKeySelector,
+  groupAccountsByMaster,
   importMasterKey,
   ImportMasterKeyPayload,
   initMasterKey,
   InitMasterKeyPayload,
+  listAllMasterKeyAccounts,
   masterKeySwitchNetwork,
   unlockMasterKey,
 } from "@redux/masterKey";
@@ -18,6 +27,7 @@ import Storage from "@services/storage";
 import { APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@constants/common";
 import {
   actionFetchCreateAccount,
+  actionFetchImportAccount,
   actionLogout,
   actionSwitchAccount,
   setDefaultAccount,
@@ -27,6 +37,8 @@ import {
   defaultAccountSelector,
   defaultAccountWalletSelector,
   getAccountWithPaymentAddress,
+  listAccountSelector,
+  listBackupPrivateKeysSelector,
 } from "@redux/account/account.selectors";
 import accountService from "@services/wallet/accountService";
 import { clearAllCaches } from "@services/cache";
@@ -43,6 +55,7 @@ import { freeAccount, getKeyDefineAccountSelector } from "@redux-sync-storage/ac
 import { sleep } from "@popup/utils/utils";
 import { actionAddFollowToken } from "@redux/token";
 import { IHistoryFromSDK, IRequestHistory } from "@module/TokenDetail/features/TxsHistory/TxsHistory.interfaces";
+import { toLower, lowerCase, trim } from "lodash";
 const { setShardNumber, Validator, PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 const log = createLogger("incognito:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -97,6 +110,9 @@ export class PopupController {
       const method = req.method as PopupActions;
       let reqResponse;
       let accountDetail;
+      let backupPrivateKey;
+      let mnemonic;
+
       switch (method) {
         case "popup_getState":
           break;
@@ -131,6 +147,65 @@ export class PopupController {
               log("error: popup_createAccount failed  with error: %s", err);
               res.error = err;
             }
+          }
+          break;
+
+        case "popup_importKeyChain":
+          {
+            try {
+              await this.scanCoinHandler({ isClear: true });
+              console.log("[BG][popup_importKeyChain] parasm", req.params);
+              await this.importKeyChain(req.params);
+              const accountDefault = await getFollowTokensBalance({ reduxSyncStorage: this.reduxSyncStorage });
+              this._notifyAll({
+                type: "accountsChanged",
+                data: accountDefault ? [accountDefault] : [],
+              });
+            } catch (err) {
+              log("error: popup_importKeyChain failed  with error: %s", err);
+              res.error = err;
+            }
+          }
+          break;
+
+        case "popup_requestBackupPrivateKeys":
+          try {
+            const groupAccounts = groupAccountsByMaster(reduxStore.getState());
+            console.log("[popup_requestBackupPrivateKeys] result ", {
+              groupAccounts,
+            });
+            backupPrivateKey = groupAccounts;
+          } catch (err) {
+            log("error: popup_requestBackupPrivateKeys failed  with error: %s", err);
+            res.error = err;
+          }
+          break;
+
+        case "popup_requestRestorePrivateKeys":
+          try {
+            console.log("TO DO "); // TO DO, the same flow popup_requestBackupPrivateKeys
+          } catch (err) {
+            log("error: popup_requestRestorePrivateKeys failed  with error: %s", err);
+            res.error = err;
+          }
+          break;
+
+        case "popup_requestSwitchMasterKey":
+          try {
+            await this.switchMasterKeyHandler();
+          } catch (err) {
+            log("error: popup_requestSwitchMasterKey failed  with error: %s", err);
+            res.error = err;
+          }
+          break;
+
+        case "popup_requestRevealMasterKeyPhrase":
+          try {
+            const currentMasterkey = currentMasterKeySelector(reduxStore.getState());
+            mnemonic = currentMasterkey.mnemonic;
+          } catch (err) {
+            log("error: popup_requestRevealMasterKeyPhrase failed  with error: %s", err);
+            res.error = err;
           }
           break;
 
@@ -419,14 +494,18 @@ export class PopupController {
           ...popupStateData,
           accountDetail,
           reqResponse,
+          backupPrivateKey,
+          mnemonic,
         };
       }
       reqResponse = null;
       accountDetail = undefined;
-      console.log("RETURN RESULT => UI ", {
-        method,
-        res,
-      });
+      backupPrivateKey = undefined;
+      mnemonic = undefined;
+      // console.log("RETURN RESULT => UI ", {
+      //   method,
+      //   res,
+      // });
     });
   }
 
@@ -440,6 +519,14 @@ export class PopupController {
 
   async addRemoveFollowToken(tokenID: string) {
     await reduxStore.dispatch(actionRemoveFollowToken({ tokenID }));
+  }
+
+  async switchMasterKeyHandler() {
+    try {
+      const accountSender = defaultAccountWalletSelector(reduxStore.getState());
+    } catch (error) {
+      console.log("[switchMasterKeyHandler] ERROR ", error);
+    }
   }
 
   async updateStatusScanCoins({ isFirstTimeScan }: { isFirstTimeScan: boolean }) {
@@ -489,6 +576,58 @@ export class PopupController {
     await reduxStore.dispatch(actionFetchCreateAccount({ accountName }));
     const defaultAccount = defaultAccountSelector(reduxStore.getState());
     await dispatch(setDefaultAccount(defaultAccount));
+  }
+
+  async importKeyChain({ accountName, privateKey }: { accountName: string; privateKey: string }) {
+    const masterKeyAccounts = listAllMasterKeyAccounts(reduxStore.getState()); //All Account in All MasterKey (the same, all account in Extension)
+    const accountList = listAccountSelector(reduxStore.getState()); //AccountList in Current MasterKey
+
+    // Check Privaite Key in Account List of Current MasterKey
+    const isPrivateKeyExist = accountList.find((account) => account?.privateKey === privateKey);
+
+    // Check  Name in Account List of Current MasterKey
+    const isAccountExist = accountList.find((account) => lowerCase(account?.accountName) === accountName);
+
+    const isAccountExistInMasterKeys = masterKeyAccounts.find((account) => account?.PrivateKey === privateKey);
+
+    const privateKeyValid = accountService.validatePrivateKey(privateKey);
+
+    console.log("isAccountExist ", isPrivateKeyExist);
+    console.log("isPrivateKeyExist ", isAccountExist);
+    console.log("isAccountExistInMasterKeys ", isAccountExistInMasterKeys);
+    console.log("privateKeyValid ", privateKeyValid);
+
+    if (isAccountExist) {
+      throw {
+        message: "You already have a keychain with this name. Please try another.",
+        field: "keyChainNameField",
+      };
+    }
+    if (!privateKeyValid) {
+      throw {
+        message: "Please try again with a valid private key.",
+        field: "privateKeyField",
+      };
+    }
+
+    if (isPrivateKeyExist || isAccountExistInMasterKeys) {
+      throw {
+        message: "This keychain already exists on this device.",
+        field: "privateKeyField",
+      };
+    }
+
+    const isImported = await reduxStore.dispatch(
+      actionFetchImportAccount({
+        privateKey: trim(privateKey),
+        accountName: trim(accountName),
+      }),
+    );
+    if (!isImported) throw new Error("Something went wrong. Please try again.");
+
+    // await reduxStore.dispatch(actionFetchCreateAccount({ accountName }));
+    // const defaultAccount = defaultAccountSelector(reduxStore.getState());
+    // await dispatch(setDefaultAccount(defaultAccount));
   }
 
   async switchAccount({ accountName }: { accountName: string }) {
@@ -561,7 +700,9 @@ export class PopupController {
     await this.updateNetworkHandler();
 
     // Create new wallet, the same flow import wallet
-    const wallet = await reduxStore.dispatch(importMasterKey({ mnemonic, masterKeyName: "Wallet", password }));
+    const wallet = await reduxStore.dispatch(
+      importMasterKey({ mnemonic, masterKeyName: "Wallet", password }, true, true),
+    );
 
     const salt = await Storage.getItem(APP_SALT_KEY);
     const passphraseEncrypted = await Storage.getItem(APP_PASS_PHRASE_CIPHER);
