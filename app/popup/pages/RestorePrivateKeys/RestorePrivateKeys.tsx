@@ -91,7 +91,7 @@ const RestorePrivateKeys: React.FC = () => {
 
   return (
     <Container>
-      <Header title="Back up private keys" onGoBack={() => history.goBack()} />
+      <Header title="Restore private keys" onGoBack={() => history.goBack()} />
       <WrapContent className="scroll-view no-padding">
         {renderMasterKeyAccounts()}
         {renderMasterlessAccounts()}

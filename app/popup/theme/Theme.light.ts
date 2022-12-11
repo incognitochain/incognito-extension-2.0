@@ -20,6 +20,7 @@ const lightTheme = (): Colors => {
     primaryP8: "#9C9C9C",
     primaryP9: "#404040",
     primaryP10: "#363636",
+    primaryP11: "#484848",
 
     // specific color
     colorP1: "#FF9500",

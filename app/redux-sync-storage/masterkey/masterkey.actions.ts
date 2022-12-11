@@ -1,10 +1,10 @@
 import { MasterKeyActionType, MasterKeyActiveType, SetMasterKeyActiveAction } from "./masterkey.types";
 
-const setVersion = (masterKeyActiveType: MasterKeyActiveType): SetMasterKeyActiveAction => ({
+const setMasterKeyActive = (masterKeyActiveType: MasterKeyActiveType): SetMasterKeyActiveAction => ({
   type: MasterKeyActionType.SET,
   payload: {
     masterKeyActiveType,
   },
 });
 
-export { setVersion };
+export { setMasterKeyActive };

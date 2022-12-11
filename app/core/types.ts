@@ -132,7 +132,8 @@ export type PopupActions =
   | "popup_requestBackupPrivateKeys"
   | "popup_requestRestorePrivateKeys"
   | "popup_requestRevealMasterKeyPhrase"
-  | "popup_requestSwitchMasterKey";
+  | "popup_requestSwitchMasterKey"
+  | "popup_requestGetAmountAccountsOfMasterless";
 
 export type Markdown = string;
 
@@ -200,7 +201,7 @@ export function isKindOfWalletAction(actionType: string): actionType is WalletAc
 type WalletStructSDK = {
   PassPhrase: string;
   Mnemonic: string;
-  MasterAccount: any[];
+  MasterAccount: any;
   Name: string; //$[NetworkName]-master-[name], Ex.. ($mainnet-master-abc)
   Seed: any;
   Storage: any;

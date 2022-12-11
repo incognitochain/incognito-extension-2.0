@@ -12,6 +12,8 @@ import { ActionManager } from "./lib/action-manager";
 import { PopupStateResolver } from "./lib/popup-state-resolver";
 import {
   currentMasterKeySelector,
+  getMasterlessSelector,
+  getMasterkeySelector,
   groupAccountsByMaster,
   importMasterKey,
   ImportMasterKeyPayload,
@@ -19,7 +21,9 @@ import {
   InitMasterKeyPayload,
   listAllMasterKeyAccounts,
   masterKeySwitchNetwork,
+  switchMasterKey,
   unlockMasterKey,
+  getAccountListOfMasterless,
 } from "@redux/masterKey";
 import serverService from "@services/wallet/Server";
 import { dispatch, store as reduxStore } from "@redux/store/store";
@@ -56,6 +60,7 @@ import { sleep } from "@popup/utils/utils";
 import { actionAddFollowToken } from "@redux/token";
 import { IHistoryFromSDK, IRequestHistory } from "@module/TokenDetail/features/TxsHistory/TxsHistory.interfaces";
 import { toLower, lowerCase, trim } from "lodash";
+import { MasterKeyActiveType, setMasterKeyActive } from "@redux-sync-storage/masterkey";
 const { setShardNumber, Validator, PrivacyVersion } = require("incognito-chain-web-js/build/web/wallet");
 const log = createLogger("incognito:popup");
 const createAsyncMiddleware = require("json-rpc-engine/src/createAsyncMiddleware");
@@ -112,6 +117,7 @@ export class PopupController {
       let accountDetail;
       let backupPrivateKey;
       let mnemonic;
+      let amountAccountMasterless;
 
       switch (method) {
         case "popup_getState":
@@ -154,8 +160,8 @@ export class PopupController {
           {
             try {
               await this.scanCoinHandler({ isClear: true });
-              console.log("[BG][popup_importKeyChain] parasm", req.params);
               await this.importKeyChain(req.params);
+              await actionHandler(setMasterKeyActive("Masterless"));
               const accountDefault = await getFollowTokensBalance({ reduxSyncStorage: this.reduxSyncStorage });
               this._notifyAll({
                 type: "accountsChanged",
@@ -192,7 +198,7 @@ export class PopupController {
 
         case "popup_requestSwitchMasterKey":
           try {
-            await this.switchMasterKeyHandler();
+            await this.switchMasterKeyHandler(req.params);
           } catch (err) {
             log("error: popup_requestSwitchMasterKey failed  with error: %s", err);
             res.error = err;
@@ -203,6 +209,14 @@ export class PopupController {
           try {
             const currentMasterkey = currentMasterKeySelector(reduxStore.getState());
             mnemonic = currentMasterkey.mnemonic;
+          } catch (err) {
+            log("error: popup_requestRevealMasterKeyPhrase failed  with error: %s", err);
+            res.error = err;
+          }
+          break;
+        case "popup_requestGetAmountAccountsOfMasterless":
+          try {
+            amountAccountMasterless = getAccountListOfMasterless(reduxStore.getState()).length;
           } catch (err) {
             log("error: popup_requestRevealMasterKeyPhrase failed  with error: %s", err);
             res.error = err;
@@ -496,12 +510,14 @@ export class PopupController {
           reqResponse,
           backupPrivateKey,
           mnemonic,
+          amountAccountMasterless,
         };
       }
       reqResponse = null;
       accountDetail = undefined;
       backupPrivateKey = undefined;
       mnemonic = undefined;
+      amountAccountMasterless = 0;
       // console.log("RETURN RESULT => UI ", {
       //   method,
       //   res,
@@ -521,9 +537,19 @@ export class PopupController {
     await reduxStore.dispatch(actionRemoveFollowToken({ tokenID }));
   }
 
-  async switchMasterKeyHandler() {
+  async switchMasterKeyHandler({ masterkeyType }: { masterkeyType: MasterKeyActiveType }) {
     try {
-      const accountSender = defaultAccountWalletSelector(reduxStore.getState());
+      // const accountSender = defaultAccountWalletSelector(reduxStore.getState());
+      let masterKey;
+      if (masterkeyType === "Masterless") {
+        masterKey = getMasterlessSelector(reduxStore.getState());
+      } else {
+        masterKey = getMasterkeySelector(reduxStore.getState());
+      }
+      await reduxStore.dispatch(switchMasterKey(masterKey.name));
+
+      //Save LocalStorage Redux => Update UI
+      await actionHandler(setMasterKeyActive(masterkeyType));
     } catch (error) {
       console.log("[switchMasterKeyHandler] ERROR ", error);
     }
@@ -592,10 +618,10 @@ export class PopupController {
 
     const privateKeyValid = accountService.validatePrivateKey(privateKey);
 
-    console.log("isAccountExist ", isPrivateKeyExist);
-    console.log("isPrivateKeyExist ", isAccountExist);
-    console.log("isAccountExistInMasterKeys ", isAccountExistInMasterKeys);
-    console.log("privateKeyValid ", privateKeyValid);
+    // console.log("isAccountExist ", isPrivateKeyExist);
+    // console.log("isPrivateKeyExist ", isAccountExist);
+    // console.log("isAccountExistInMasterKeys ", isAccountExistInMasterKeys);
+    // console.log("privateKeyValid ", privateKeyValid);
 
     if (isAccountExist) {
       throw {
@@ -700,9 +726,7 @@ export class PopupController {
     await this.updateNetworkHandler();
 
     // Create new wallet, the same flow import wallet
-    const wallet = await reduxStore.dispatch(
-      importMasterKey({ mnemonic, masterKeyName: "Wallet", password }, true, true),
-    );
+    const wallet = await reduxStore.dispatch(importMasterKey({ mnemonic, masterKeyName: "Wallet", password }));
 
     const salt = await Storage.getItem(APP_SALT_KEY);
     const passphraseEncrypted = await Storage.getItem(APP_PASS_PHRASE_CIPHER);

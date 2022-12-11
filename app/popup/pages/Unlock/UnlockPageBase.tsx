@@ -29,7 +29,7 @@ export const UnlockPageBase: React.FC = () => {
   const { showLoading } = useLoading();
 
   const passwordTextInput = useRef<any>(null);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("buitanphat");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>("");
   const unLockOnClick = useCallback(
     throttle(async () => {

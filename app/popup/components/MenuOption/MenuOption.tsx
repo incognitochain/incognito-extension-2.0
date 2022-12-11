@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import styled, { ITheme } from "styled-components";
 import { useHistory } from "react-router-dom";
 import { Paths } from "@components/routes/paths";
+import useClickOutsideWithRef from "@popup/hooks/useClickOutsideWithRef";
 
 interface IProps {}
 
@@ -100,26 +101,6 @@ const RestoreItem: MenuItemType = {
   icon: undefined,
 };
 
-function useOutsideAlerter(ref: any, callback: any) {
-  useEffect(() => {
-    /**
-     * Alert if clicked on outside of element
-     */
-    function handleClickOutside(event: any) {
-      if (ref.current && !ref.current.contains(event.target)) {
-        console.log("You clicked outside of me!");
-        typeof callback === "function" && callback();
-      }
-    }
-    // Bind the event listener
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [ref]);
-}
-
 const MenuOption = (props: IProps) => {
   const [showMenuItems, setShowMenuItems] = useState(false);
   const masterKeyTypeActive = useSelector(getMasterKeyActiveTypeSelector);
@@ -127,7 +108,7 @@ const MenuOption = (props: IProps) => {
 
   const menuItemRef = useRef(null);
 
-  useOutsideAlerter(menuItemRef, () => {
+  useClickOutsideWithRef(menuItemRef, () => {
     setShowMenuItems(false);
   });
 
@@ -157,17 +138,17 @@ const MenuOption = (props: IProps) => {
   };
 
   const MenuItemsList = useMemo(() => {
-    const SwitchMasterKeyItem = {
-      key: "Switch MasterKey",
-      name: `Swtich to ${masterKeyTypeActive === "Masterkey" ? "Masterless" : "Masterkey"}`,
-      icon: undefined,
-    };
+    // const SwitchMasterKeyItem = {
+    //   key: "Switch MasterKey",
+    //   name: `Swtich to ${masterKeyTypeActive === "Masterkey" ? "Masterless" : "Masterkey"}`,
+    //   icon: undefined,
+    // };
     if (masterKeyTypeActive === "Masterkey") {
-      return [CreateKeyChainItem, RecoveryPhraseItem, ImportKeyChainItem, BackupItem, RestoreItem, SwitchMasterKeyItem];
+      return [CreateKeyChainItem, RecoveryPhraseItem, ImportKeyChainItem, BackupItem, RestoreItem];
     } else {
-      return [ImportKeyChainItem, BackupItem, RestoreItem, SwitchMasterKeyItem];
+      return [ImportKeyChainItem, BackupItem, RestoreItem];
     }
-  }, []);
+  }, [masterKeyTypeActive]);
 
   const showMenuOnPress = () => {
     setShowMenuItems(!showMenuItems);
@@ -179,8 +160,7 @@ const MenuOption = (props: IProps) => {
     return (
       <div ref={menuItemRef} className={`menu-container menu-${status}`}>
         {MenuItemsList.map((item: any, index: number) => {
-          let className = "fs-small content-item";
-          className = index === MenuItemsList.length - 1 ? `${className} switch-master-key` : `${className} fw-medium`;
+          let className = "fs-small content-item fw-medium";
           const breakLine = index === MenuItemsList.length - 1 ? undefined : <div className="break-line"></div>;
           return (
             <div key={item.key} className="menu-item" onClick={() => MenuItemOnClicked(item)}>

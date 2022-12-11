@@ -31,6 +31,21 @@ export const currentMasterKeySelector = createSelector(
   (list) => list.find((item: MasterKeyModel) => item.isActive) || list[0],
 );
 
+export const getMasterkeySelector = createSelector(
+  masterKeysSelector,
+  (list) => list.find((item: MasterKeyModel) => !item.isMasterless) || list[0],
+);
+
+export const getMasterlessSelector = createSelector(
+  masterKeysSelector,
+  (list) => list.find((item: MasterKeyModel) => item.isMasterless) || list[0],
+);
+
+export const getAccountListOfMasterless = createSelector(
+  getMasterlessSelector,
+  (masterless) => masterless?.wallet?.MasterAccount?.child || [],
+);
+
 export const currentMasterKeyNameSelector = createSelector(
   currentMasterKeySelector,
   (masterKey: MasterKeyModel) => masterKey?.wallet?.Name,
