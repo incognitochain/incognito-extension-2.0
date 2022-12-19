@@ -137,6 +137,7 @@ export class PopupController {
               res.error = err;
             }
           }
+
           break;
 
         case "popup_createAccount":
@@ -684,8 +685,18 @@ export class PopupController {
   }
 
   async initMasterKey(data: InitMasterKeyPayload) {
-    const { mnemonic, masterKeyName, password } = data;
-
+    const { mnemonic, masterKeyName, password, createNewWallet } = data;
+    if (createNewWallet) {
+      //Clear All Local Storage! before create new a wallet
+      await Storage.clear();
+      await clearAllCaches();
+      await reduxStore.dispatch(clearReduxStore());
+      batch(() => {
+        actionHandler(actionFreeAssets());
+        actionHandler(actionFreeScanCoins());
+        reduxStore.dispatch(actionLogout());
+      });
+    }
     const wallet = await reduxStore.dispatch(initMasterKey({ mnemonic, masterKeyName, password }));
     const salt = await Storage.getItem(APP_SALT_KEY);
     const passphraseEncrypted = await Storage.getItem(APP_PASS_PHRASE_CIPHER);

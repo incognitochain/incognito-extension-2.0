@@ -3,13 +3,20 @@ import BodyLayout from "@components/layout/BodyLayout";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Container, PrimaryButtonContaniner } from "./styles";
-import { MnemoicBox, MnemonicItemWrapper } from "@popup/pages/MasterKey/MasterKeyPage.styled";
+import {
+  BookMarkContainer,
+  BookMarkText,
+  MnemoicBox,
+  MnemonicItemWrapper,
+  YellowBox,
+} from "@popup/pages/MasterKey/MasterKeyPage.styled";
 import MnemonicItem from "@components/Mnemonic/MnemonicItem";
 import { useBackground } from "@popup/context/background";
 import QrCodeModal from "@popup/components/QrCodeModal";
 import WrapContent from "@popup/components/Content";
 import { useSnackbar } from "notistack";
 import copy from "copy-to-clipboard";
+import BookmarkIcon from "@popup/components/Icons/BookmarkIcon";
 
 const RevealRecoveryPhrase: React.FC = () => {
   const history = useHistory();
@@ -48,9 +55,14 @@ const RevealRecoveryPhrase: React.FC = () => {
       <WrapContent className="scroll-view no-padding">
         <BodyLayout>
           <Container>
-            <p className="description fs-medium fw-regular">
-              {"Save these words in the correct order. Never share this phrase with anyone else."}
-            </p>
+            <YellowBox>
+              <BookMarkContainer>
+                <BookmarkIcon />
+              </BookMarkContainer>
+              <BookMarkText className="fs-small fw-medium">
+                {"Save these words in the correct order. Never share this phrase with anyone."}
+              </BookMarkText>
+            </YellowBox>
 
             <MnemoicBox>
               {mnemonic.map((item, index) => (

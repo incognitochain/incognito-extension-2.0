@@ -59,7 +59,7 @@ const Container = styled.div`
     padding-top: 5px;
     padding-bottom: 5px;
     background-color: ${({ theme }: { theme: ITheme }) => theme.content};
-    border-radius: 4px;
+    border-radius: 8px;
 
     .dropDownIconContainer {
       margin-left: 8px;

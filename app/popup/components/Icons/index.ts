@@ -28,3 +28,5 @@ export { default as CreateNewKeyChainIcon } from "./CreateNewKeyChainIcon";
 export { default as ImportAKeyChainIcon } from "./ImportAKeyChainIcon";
 export { default as RestoreIcon } from "./RestoreIcon";
 export { default as RevealRecoveryPhraseIcon } from "./RevealRecoveryPhraseIcon";
+export { default as UnCheckIcon } from "./UnCheckIcon";
+export { default as CheckedIcon } from "./CheckedIcon";

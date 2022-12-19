@@ -34,10 +34,12 @@ const CreateNewKeyBase: React.FC = () => {
 
   const createMasterKey = async () => {
     const { mnemonic = "", masterKeyName = "", password = "" } = routeData.current;
+    const locationState = (history.location?.state as any) || {};
+    const createNewWallet = locationState?.createNewWallet || false;
     showLoading({
       value: true,
     });
-    callAsync(request("popup_createWallet", { mnemonic, masterKeyName, password }), {
+    callAsync(request("popup_createWallet", { mnemonic, masterKeyName, password, createNewWallet }), {
       progress: { message: "Creating wallet..." },
       success: { message: "Wallet created" },
       onSuccess: (result) => {

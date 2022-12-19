@@ -1,7 +1,9 @@
 import Header from "@components/Header";
+import BackupItem from "@popup/components/BackupItem/BackupItem";
+import BottomView from "@popup/components/BottomView/BottomView";
 import WrapContent from "@popup/components/Content";
 import { useBackground } from "@popup/context/background";
-import { KeyChainDetailItem } from "@popup/module/Account/features/KeychainDetail";
+// import { KeyChainDetailItem } from "@popup/module/Account/features/KeychainDetail";
 import copy from "copy-to-clipboard";
 import { useSnackbar } from "notistack";
 import React, { useLayoutEffect, useMemo, useState } from "react";
@@ -59,9 +61,7 @@ const RestorePrivateKeys: React.FC = () => {
       <>
         <p className="fs-medium fw-suppermedium margin">{"Master keys"}</p>
         {MasterKeyAccounts.map((account: any) => {
-          return (
-            <KeyChainDetailItem key={account.PublicKey} title={account.AccountName} description={account.PrivateKey} />
-          );
+          return <BackupItem key={account.PublicKey} title={account.AccountName} content={account.PrivateKey} />;
         })}
       </>
     );
@@ -73,30 +73,22 @@ const RestorePrivateKeys: React.FC = () => {
       <>
         <p className="fs-medium fw-suppermedium margin">{"Masterless keys"}</p>
         {MasterlessAccounts.map((account: any) => {
-          return (
-            <KeyChainDetailItem key={account.PublicKey} title={account.AccountName} description={account.PrivateKey} />
-          );
+          return <BackupItem key={account.PublicKey} title={account.AccountName} content={account.PrivateKey} />;
         })}
       </>
-    );
-  };
-
-  const renderRowButton = () => {
-    return (
-      <div className="rowButton">
-        <PrimaryButtonContaniner onClick={copyAllKeysOnPress}>{"Copy all keys"}</PrimaryButtonContaniner>
-      </div>
     );
   };
 
   return (
     <Container>
       <Header title="Restore private keys" onGoBack={() => history.goBack()} />
-      <WrapContent className="scroll-view no-padding">
+      <WrapContent className="no-padding padding-bottom override-color">
         {renderMasterKeyAccounts()}
         {renderMasterlessAccounts()}
-        {renderRowButton()}
       </WrapContent>
+      <BottomView>
+        <PrimaryButtonContaniner onClick={copyAllKeysOnPress}>{"Copy all keys"}</PrimaryButtonContaniner>
+      </BottomView>
     </Container>
   );
 };

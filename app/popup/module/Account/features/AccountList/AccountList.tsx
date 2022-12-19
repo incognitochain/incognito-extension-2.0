@@ -1,5 +1,5 @@
 import { route as routeKeychainDetail } from "@module/Account/features/KeychainDetail";
-import { AccountItem } from "@module/Account/features/SelectAccount";
+import AccountItem from "@module/Account/features/AccountList/AccountItem/AccountItem";
 import { useBackground } from "@popup/context/background";
 import { useLoading } from "@popup/context/loading";
 import { ellipsisCenter } from "@popup/utils";
@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Container } from "./AccountList.styled";
 
-const Settings = () => {
+const AccountList = () => {
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const { request } = useBackground();
@@ -65,10 +65,10 @@ const Settings = () => {
             <AccountItem
               key={paymentAddress}
               isSelected={isSelected}
-              title={name}
-              description={paymentAddressEllipsis}
+              accountName={name}
+              paymentAddress={paymentAddressEllipsis}
               onClick={() => accountItemOnClick(accountItem)}
-              radioBtnOnClick={() => switchAccount(accountItem)}
+              checkBoxOnClick={() => switchAccount(accountItem)}
             />
           );
         })}
@@ -76,4 +76,4 @@ const Settings = () => {
   );
 };
 
-export default memo(Settings);
+export default memo(AccountList);

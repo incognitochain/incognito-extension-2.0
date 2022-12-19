@@ -25,6 +25,7 @@ export interface InitMasterKeyPayload {
   masterKeyName: string;
   mnemonic: string;
   password: string;
+  createNewWallet?: boolean;
 }
 
 export interface ImportMasterKeyPayload {

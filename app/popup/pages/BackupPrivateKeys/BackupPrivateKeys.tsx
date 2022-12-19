@@ -1,8 +1,12 @@
 import Header from "@components/Header";
 import { route } from "@module/QRCode/QRCode.route";
+import BackupItem from "@popup/components/BackupItem/BackupItem";
+import BottomView from "@popup/components/BottomView/BottomView";
 // import BodyLayout from "@components/layout/BodyLayout";
 import WrapContent from "@popup/components/Content";
 import { QrCodeIcon } from "@popup/components/Icons";
+import CopyIcon from "@popup/components/Icons/CopyIcon";
+import SpaceView from "@popup/components/SpaceView/SpaceView";
 import { useBackground } from "@popup/context/background";
 import { KeyChainDetailItem } from "@popup/module/Account/features/KeychainDetail";
 import copy from "copy-to-clipboard";
@@ -62,14 +66,11 @@ const BackupPrivateKeys: React.FC = () => {
       <>
         <p className="fs-medium fw-suppermedium margin">{"Master keys"}</p>
         {MasterKeyAccounts.map((account: any) => {
-          return (
-            <KeyChainDetailItem key={account.PublicKey} title={account.AccountName} description={account.PrivateKey} />
-          );
+          return <BackupItem key={account.PublicKey} title={account.AccountName} content={account.PrivateKey} />;
         })}
       </>
     );
   };
-
   const qrCodeIconOnClick = () => {
     history.push(route, {
       title: "Back up private keys",
@@ -84,33 +85,27 @@ const BackupPrivateKeys: React.FC = () => {
       <>
         <p className="fs-medium fw-suppermedium margin">{"Masterless keys"}</p>
         {MasterlessAccounts.map((account: any) => {
-          return (
-            <KeyChainDetailItem key={account.PublicKey} title={account.AccountName} description={account.PrivateKey} />
-          );
+          return <BackupItem key={account.PublicKey} title={account.AccountName} content={account.PrivateKey} />;
         })}
       </>
     );
   };
 
-  const renderRowButton = () => {
-    return (
-      <div className="rowButton">
-        <QrCodeIcon onClick={qrCodeIconOnClick} />
-        <div className="buttonCopy">
-          <PrimaryButtonContaniner onClick={copyAllKeysOnPress}>{"Copy all keys"}</PrimaryButtonContaniner>
-        </div>
-      </div>
-    );
-  };
   return (
     <Container>
       <Header title="Back up private keys" onGoBack={() => history.goBack()} />
-      <WrapContent className="scroll-view no-padding">
+      <WrapContent className="no-padding padding-bottom">
         {renderMasterKeyAccounts()}
         {renderMasterlessAccounts()}
-        {renderRowButton()}
       </WrapContent>
+
+      <BottomView>
+        <CopyIcon onClick={qrCodeIconOnClick} className="hover-with-cursor"></CopyIcon>
+        <SpaceView width={16} />
+        <PrimaryButtonContaniner onClick={copyAllKeysOnPress}>{"Copy all keys"}</PrimaryButtonContaniner>
+      </BottomView>
     </Container>
   );
 };
+
 export default BackupPrivateKeys;
