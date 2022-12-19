@@ -1,18 +1,12 @@
-import { useBackground } from "@popup/context/background";
-import { useLoading } from "@popup/context/loading";
-import { useCallAsync } from "@popup/utils/notifications";
-import { getAccountDefaultNameSelector, getAccountListSelector } from "@redux-sync-storage/account/account.selectors";
-import { useSnackbar } from "notistack";
-import React, { memo, useState } from "react";
+import { getMasterKeyActiveTypeSelector } from "@redux-sync-storage/masterkey/masterkey.selectors";
+import React, { memo } from "react";
 import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
 
 import styled, { ITheme } from "styled-components";
 
 export type TabBarItemType = "MasterKey" | "Settings";
 
 const Styled = styled.div`
-  width: 100%;
   margin-top: 20px;
   margin-bottom: 20px;
   display: flex;
@@ -50,7 +44,8 @@ const Styled = styled.div`
   }
 
   .bottom-view {
-    width: 100%;
+    margin-left: 24px;
+    margin-right: 24px;
     height: 1px;
     background-color: ${({ theme }: { theme: ITheme }) => theme.primaryP11};
   }
@@ -76,7 +71,7 @@ interface KeyChainsTabBarProps {
 
 const KeyChainsTabBar = memo((props: KeyChainsTabBarProps) => {
   const { activeTab, activeTabOnClick } = props;
-
+  const masterKeyTypeActive = useSelector(getMasterKeyActiveTypeSelector);
   // const { enqueueSnackbar } = useSnackbar();
   // const { request } = useBackground();
   // const callAsync = useCallAsync();
@@ -103,18 +98,17 @@ const KeyChainsTabBar = memo((props: KeyChainsTabBarProps) => {
 
   return (
     <Styled>
-      <div className="top-view">
+      <div className="top-view default-padding-horizontal">
         <div className="top-left-view cursor" onClick={() => itemOnClicked("MasterKey")}>
-          <p className={masterKeyClassName}>Masterless</p>
+          <p className={masterKeyClassName}>{masterKeyTypeActive}</p>
         </div>
         <div className="spaceView"></div>
         <div className="top-right-view cursor" onClick={() => itemOnClicked("Settings")}>
-          <p className={settingClassName}>Settings masterless</p>
+          <p className={settingClassName}>{`Settings ${masterKeyTypeActive}`}</p>
         </div>
       </div>
       <div className="bottom-view"></div>
     </Styled>
   );
 });
-
 export default KeyChainsTabBar;

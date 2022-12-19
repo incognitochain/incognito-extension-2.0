@@ -39,12 +39,6 @@ const AccountItemStyled = styled.div`
   }
 `;
 
-const Container = styled.div`
-  .body-container {
-    margin-top: 10px;
-    padding-bottom: 90px;
-    margin-bottom: 30px;
-  }
-`;
+const Container = styled.div``;
 
 export { Container, AccountItemStyled };

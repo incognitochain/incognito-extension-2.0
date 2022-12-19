@@ -1,14 +1,13 @@
+import { DropdownIcon } from "@popup/components/Icons";
+import { useBackground } from "@popup/context/background";
+import { useLoading } from "@popup/context/loading";
+import useClickOutsideWithRef from "@popup/hooks/useClickOutsideWithRef";
+import { useCallAsync } from "@popup/utils/notifications";
 import { getMasterKeyActiveTypeSelector } from "@redux-sync-storage/masterkey/masterkey.selectors";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { MasterKeyActiveType } from "@redux-sync-storage/masterkey/masterkey.types";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import styled, { ITheme } from "styled-components";
-import { DropdownIcon } from "@popup/components/Icons";
-import useClickOutsideWithRef from "@popup/hooks/useClickOutsideWithRef";
-import { MasterKeyActiveType } from "@redux-sync-storage/masterkey/masterkey.types";
-import { useBackground } from "@popup/context/background";
-import { useSnackbar } from "notistack";
-import { useCallAsync } from "@popup/utils/notifications";
-import { useLoading } from "@popup/context/loading";
 
 const MasterkeyItemList: {
   key: MasterKeyActiveType;
@@ -73,7 +72,7 @@ const Container = styled.div`
     display: block;
     position: absolute;
     top: 52px;
-    right: 85px;
+    right: 25px;
     min-width: 120px;
     background: ${({ theme }: { theme: ITheme }) => theme.primaryP9};
     border-radius: 8px;
