@@ -22,7 +22,7 @@ const MasterKeyPharseConfirmBase: React.FC<MasterKeyPharseConfirmPageBaseProps> 
   props: MasterKeyPharseConfirmPageBaseProps,
 ) => {
   const { onBack = () => {}, createMasterKeySucess = () => {}, continueOnPress = () => {}, phraseList = [] } = props;
-  const [phraseListSelected, setPhraseListSelected] = useState<string[]>(phraseList);
+  const [phraseListSelected, setPhraseListSelected] = useState<string[]>([]);
   const mnemonicCorrect = useMemo(() => phraseList.join(" "), []);
   const phraseListShuffle = useMemo(() => shuffle(phraseList), []);
 
