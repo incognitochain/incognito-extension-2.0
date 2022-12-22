@@ -351,6 +351,7 @@ export const createNewMasterlessWallet = () => async (dispatch: AppThunkDispatch
   try {
     const masterlessMasterKey = new MasterKeyModel(MASTERLESS);
     const masterlessWallet: WalletSDK = await masterlessMasterKey.loadWallet();
+    masterlessWallet.MasterAccount.child = [];
     masterlessMasterKey.wallet = masterlessWallet;
     await WalletServices.saveWallet(masterlessWallet);
     return masterlessMasterKey;
