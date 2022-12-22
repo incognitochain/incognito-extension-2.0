@@ -114,7 +114,7 @@ const ImportKeyChainPage: React.FC = () => {
   const checkValid = (): boolean => {
     let checkValid = true;
     let name = trim(keychainName);
-    let privateKeyTrim = trim(privateKey);
+    let privateKeyTrim = trim(privateKey) || "";
 
     console.log("CHECK>?> ", {
       name,

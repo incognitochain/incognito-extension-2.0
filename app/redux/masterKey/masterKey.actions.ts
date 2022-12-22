@@ -346,6 +346,19 @@ export const createMasterKey = (data: any) => async (dispatch: AppThunkDispatch,
   }
 };
 
+export const createNewMasterlessWallet = () => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
+  console.log("[createNewMasterlessWallet]");
+  try {
+    const masterlessMasterKey = new MasterKeyModel(MASTERLESS);
+    const masterlessWallet: WalletSDK = await masterlessMasterKey.loadWallet();
+    masterlessMasterKey.wallet = masterlessWallet;
+    await WalletServices.saveWallet(masterlessWallet);
+    return masterlessMasterKey;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const loadAllMasterKeyAccounts = () => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
   console.log("loadAllMasterKeyAccounts.... ");
   await dispatch(actionLoadingAllMasterKeyAccount(true));

@@ -119,3 +119,8 @@ export const groupAccountsByMaster = createSelector(listAllMasterKeyAccounts, (l
   });
   return groupAccounts;
 });
+
+export const isExistMasterlessWallet = createSelector(masterKeysSelector, (masterKeyList) => {
+  const founded = masterKeyList.find((item: MasterKeyModel) => item.isMasterless);
+  return !!founded;
+});

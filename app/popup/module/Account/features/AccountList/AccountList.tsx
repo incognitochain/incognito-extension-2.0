@@ -23,7 +23,7 @@ const AccountList = () => {
 
   const switchAccount = (accountItem: any) => {
     const accountName = accountItem.AccountName || accountItem.name;
-    if (accountName && (accountName != defaultAccountName || accountName != defaultAccountName)) {
+    if (accountName && accountName != defaultAccountName) {
       showLoading({
         value: true,
       });
@@ -50,13 +50,14 @@ const AccountList = () => {
     });
   };
 
+  console.log("");
   return (
     <Container className="default-padding-horizontal">
       {listAccount &&
         listAccount.map((accountItem: any) => {
           const name = accountItem.name;
           const paymentAddress = accountItem.paymentAddress;
-          const isSelected = name == defaultAccountName || name == defaultAccountName;
+          const isSelected = name == defaultAccountName;
           const paymentAddressEllipsis = ellipsisCenter({
             str: paymentAddress || "",
             limit: 13,

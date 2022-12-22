@@ -8,9 +8,16 @@ import {
   default as accountSelectors,
   defaultAccountWalletSelector,
 } from "@redux/account/account.selectors";
-import { loadAllMasterKeyAccounts, switchMasterKey, updateMasterKey } from "@redux/masterKey/masterKey.actions";
+import {
+  createMasterKeySuccess,
+  createNewMasterlessWallet,
+  loadAllMasterKeyAccounts,
+  switchMasterKey,
+  updateMasterKey,
+} from "@redux/masterKey/masterKey.actions";
 import {
   currentMasterKeySelector,
+  isExistMasterlessWallet,
   masterlessKeyChainSelector,
   noMasterLessSelector,
 } from "@redux/masterKey/masterKey.selectors";
@@ -229,6 +236,16 @@ export const actionFetchImportAccount =
   async (dispatch: AppThunkDispatch, getState: AppGetState) => {
     const state = getState();
     const importAccount = accountSelector.importAccountSelector(state);
+
+    // Check MesterkeyMasterless is exist?
+    const isExistMasterkeyMasterless = isExistMasterlessWallet(state);
+
+    if (!isExistMasterkeyMasterless) {
+      // Create New Masterless Wallet!
+      const masterlesMasterKey = await dispatch(createNewMasterlessWallet());
+      await dispatch(createMasterKeySuccess(masterlesMasterKey));
+    }
+
     const masterless = masterlessKeyChainSelector(state);
     const masterKeys = noMasterLessSelector(state);
     let selectedMasterKey = masterless;
