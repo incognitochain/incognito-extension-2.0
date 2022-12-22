@@ -2,6 +2,7 @@
 import MasterKeyModel, { DEFAULT_MASTER_KEY, MASTERLESS } from "@model/MasterKeyModel";
 import {
   currentMasterKeySelector,
+  isExistMasterlessWallet,
   masterlessKeyChainSelector,
   noMasterLessSelector,
 } from "@redux/masterKey/masterKey.selectors";
@@ -177,7 +178,6 @@ export const initMasterKey =
     await getPassphrase();
     await updateNetwork();
     // await login();
-
     const defaultMasterKey = new MasterKeyModel(DEFAULT_MASTER_KEY);
     defaultMasterKey.name = masterKeyName;
     defaultMasterKey.mnemonic = mnemonic;
@@ -365,13 +365,24 @@ export const loadAllMasterKeyAccounts = () => async (dispatch: AppThunkDispatch,
   await dispatch(actionLoadingAllMasterKeyAccount(true));
   try {
     const state = getState();
-    const masterKeysList = [...noMasterLessSelector(state), masterlessKeyChainSelector(state)];
+    const masterkeyList = noMasterLessSelector(state);
+
+    // Check MesterkeyMasterless is exist?
+    const isExistMasterkeyMasterless = isExistMasterlessWallet(state);
+
+    if (!isExistMasterkeyMasterless) {
+      // Create New Masterless Wallet!
+      const masterlesMasterKey = await dispatch(createNewMasterlessWallet());
+      await dispatch(createMasterKeySuccess(masterlesMasterKey));
+    }
+    const masterlessModel = masterlessKeyChainSelector(state);
+    const masterKeysList = [...masterkeyList, masterlessModel];
     let accounts: any = [];
     const tasks: any = [];
     for (const masterKey of masterKeysList) {
       try {
         // await dispatch(actionSyncAccountMasterKey(masterKey));
-        const masterKeyAccounts = await masterKey?.getAccounts(true);
+        const masterKeyAccounts = (await masterKey?.getAccounts(true)) || [];
         accounts = [...accounts, ...masterKeyAccounts];
         const wallet = masterKey?.wallet;
         if (wallet) {
