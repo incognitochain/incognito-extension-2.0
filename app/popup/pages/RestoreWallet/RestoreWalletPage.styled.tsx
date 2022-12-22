@@ -38,7 +38,6 @@ const CreateNewWalletText = styled.p`
   color: ${({ theme }: { theme: ITheme }) => theme.colorP9};
   text-decoration-thickness: 0.2px;
   text-underline-offset: 5px;
-  text-decoration: underline ${({ theme }: { theme: ITheme }) => theme.primaryP4};
 `;
 
 export { PrimaryButtonContaniner, DescriptionText, PasswordLabel, VerifyLabel, MnemonicTextArea, CreateNewWalletText };
