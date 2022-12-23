@@ -95,9 +95,11 @@ export class WalletController {
               const paymentAddress = accountSender.getPaymentAddress();
               resp.newCoins = await createNewCoins(paymentAddress);
             }
+            console.log("wallet_requestAccounts: respone ", res);
+
             res.result = resp;
           } catch (err) {
-            log("wallet_requestAccounts failed  with error: %O", err);
+            console.log("wallet_requestAccount: ERROR ", err);
             res.error = err;
           }
           break;
