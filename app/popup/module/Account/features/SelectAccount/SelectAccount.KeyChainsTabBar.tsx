@@ -100,11 +100,12 @@ const KeyChainsTabBar = memo((props: KeyChainsTabBarProps) => {
     <Styled>
       <div className="top-view default-padding-horizontal">
         <div className="top-left-view cursor" onClick={() => itemOnClicked("MasterKey")}>
-          <p className={masterKeyClassName}>{masterKeyTypeActive}</p>
+          {/* <p className={masterKeyClassName}>{masterKeyTypeActive}</p> */}
+          <p className={masterKeyClassName}>{"Accounts"}</p>
         </div>
         <div className="spaceView"></div>
         <div className="top-right-view cursor" onClick={() => itemOnClicked("Settings")}>
-          <p className={settingClassName}>{`Settings ${masterKeyTypeActive}`}</p>
+          <p className={settingClassName}>{`Setting ${masterKeyTypeActive}`}</p>
         </div>
       </div>
       <div className="bottom-view"></div>
