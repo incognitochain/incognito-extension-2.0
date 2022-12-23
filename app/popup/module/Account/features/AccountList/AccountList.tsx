@@ -54,6 +54,24 @@ const AccountList = () => {
 
   const connectHDWallet = () => {
     console.log("connectHDWallet TO DO ");
+    showLoading({
+      value: true,
+    });
+    callAsync(request("popup_hdWalletConnect", { accountName: undefined }), {
+      progress: { message: "Connect HD Wallet ..." },
+      success: { message: "Done" },
+      onSuccess: () => {
+        showLoading({
+          value: false,
+        });
+      },
+      onError: (e) => {
+        console.log("[connectHDWallet] ERROR: ", e);
+        showLoading({
+          value: false,
+        });
+      },
+    });
   };
 
   return (

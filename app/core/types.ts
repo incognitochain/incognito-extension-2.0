@@ -138,7 +138,8 @@ export type PopupActions =
   | "popup_requestRestorePrivateKeys"
   | "popup_requestRevealMasterKeyPhrase"
   | "popup_requestSwitchMasterKey"
-  | "popup_requestGetAmountAccountsOfMasterless";
+  | "popup_requestGetAmountAccountsOfMasterless"
+  | "popup_hdWalletConnect";
 
 export type Markdown = string;
 
