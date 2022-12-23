@@ -1,4 +1,5 @@
 import styled, { ITheme } from "styled-components";
+import { PrimaryButtonStyled } from "@popup/components/Core/Buttons";
 
 const AccountItemStyled = styled.div`
   width: 100%;
