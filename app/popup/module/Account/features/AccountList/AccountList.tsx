@@ -10,7 +10,7 @@ import { useSnackbar } from "notistack";
 import React, { memo } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Container } from "./AccountList.styled";
+import { Container, PrimaryButtonContaniner } from "./AccountList.styled";
 
 const AccountList = () => {
   const history = useHistory();
@@ -51,6 +51,11 @@ const AccountList = () => {
   };
 
   console.log("");
+
+  const connectHDWallet = () => {
+    console.log("connectHDWallet TO DO ");
+  };
+
   return (
     <Container className="default-padding-horizontal">
       {listAccount &&
@@ -73,6 +78,7 @@ const AccountList = () => {
             />
           );
         })}
+      <PrimaryButtonContaniner onClick={connectHDWallet}>{"HD Wallet"}</PrimaryButtonContaniner>
     </Container>
   );
 };
