@@ -219,6 +219,36 @@ export const actionFetchCreateAccount =
     }
   };
 
+export const actionFetchCreateHDWalletAccount =
+  ({ accountName }: any) =>
+  async (dispatch: AppThunkDispatch, getState: AppGetState) => {
+    const state = getState();
+    const create = accountSelector.createAccountSelector(state);
+    let wallet = walletSelector(state);
+    const masterKey: MasterKeyModel = currentMasterKeySelector(state);
+    let serializedAccount: any;
+    if (create || !wallet) {
+      return;
+    }
+    try {
+      dispatch(actionFetchingCreateAccount());
+      const account = await accountService.createHDWalletAccount(accountName, wallet);
+      serializedAccount = new AccountModel(accountService.toSerializedAccountObj(account));
+      batch(() => {
+        dispatch(actionFetchedCreateAccount());
+        if (serializedAccount?.name) {
+          dispatch(switchMasterKey(masterKey?.name, serializedAccount?.name));
+          dispatch(loadAllMasterKeyAccounts());
+        }
+      });
+      console.log("[actionFetchCreateAccount]  END ");
+      return serializedAccount;
+    } catch (error) {
+      dispatch(actionFetchFailCreateAccount());
+      throw error;
+    }
+  };
+
 export const actionFetchingImportAccount = () => ({
   type: AccountActionType.ACTION_FETCHING_IMPORT_ACCOUNT,
 });

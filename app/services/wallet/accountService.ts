@@ -71,6 +71,20 @@ export default class Account {
     }
   }
 
+  static async createHDWalletAccount(accountName?: string, wallet?: any, emulator = false) {
+    try {
+      new Validator("createHDWalletAccount-wallet", wallet).required().object();
+      const account = await wallet.initAccountWithHardwareWallet(undefined, undefined, false);
+      if (account) {
+        await saveWallet(wallet);
+      }
+      return account;
+    } catch (error) {
+      console.log("createHDWalletAccount: ERROR: ", error);
+      throw error;
+    }
+  }
+
   static saveDefaultAccountToStorage(accountName: any) {
     return storage.setItem(CONSTANT_KEYS.DEFAULT_ACCOUNT_NAME, accountName);
   }
