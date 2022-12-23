@@ -1,4 +1,5 @@
 import styled, { ITheme } from "styled-components";
+import { PrimaryButtonStyled } from "@popup/components/Core/Buttons";
 
 const AccountItemStyled = styled.div`
   width: 100%;
@@ -53,4 +54,24 @@ const Title = styled.p``;
 
 const Description = styled.p``;
 
-export { AccountItemStyled };
+const TextInputWraper = styled.div`
+  width: 100%;
+  margin-top: 8px;
+`;
+
+const KeyChainLabel = styled.p`
+  width: 100%;
+  margin-top: 24px;
+  text-align: left;
+`;
+
+const PrimaryButtonContaniner = styled(PrimaryButtonStyled)`
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  height: 50px;
+  width: auto;
+  bottom: 10px;
+`;
+
+export { AccountItemStyled, PrimaryButtonContaniner };

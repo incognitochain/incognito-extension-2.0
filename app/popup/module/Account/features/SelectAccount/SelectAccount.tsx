@@ -14,6 +14,7 @@ import { AccountItem } from "@module/Account/features/SelectAccount";
 import Header from "@components/Header";
 import WrapContent from "@components/Content";
 import { getAccountListSelector, getAccountDefaultNameSelector } from "@redux-sync-storage/account/account.selectors";
+import { PrimaryButtonContaniner } from "./SelectAccount.styled";
 
 const SelectAccount = React.memo(() => {
   const { enqueueSnackbar } = useSnackbar();
@@ -53,6 +54,10 @@ const SelectAccount = React.memo(() => {
     });
   };
 
+  const connectHDWallet = () => {
+    console.log("connectHDWallet TO DO ");
+  };
+
   return (
     <>
       <Header title="Keychain" rightHeader={<AddButton onClick={() => history.push(Paths.createAccountPage)} />} />
@@ -77,6 +82,7 @@ const SelectAccount = React.memo(() => {
               />
             );
           })}
+        <PrimaryButtonContaniner onClick={connectHDWallet}>{"HD Wallet"}</PrimaryButtonContaniner>
       </WrapContent>
     </>
   );
