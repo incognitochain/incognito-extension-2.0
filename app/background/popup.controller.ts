@@ -17,6 +17,7 @@ import { dispatch, store as reduxStore } from "@redux/store/store";
 import Storage from "@services/storage";
 import { APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@constants/common";
 import {
+  actionFetchCreateHDWalletAccount,
   actionFetchCreateAccount,
   actionLogout,
   actionSwitchAccount,
@@ -98,6 +99,24 @@ export class PopupController {
       let reqResponse;
       let accountDetail;
       switch (method) {
+        case "popup_hdWalletConnect": {
+          try {
+            await this.scanCoinHandler({ isClear: true });
+            const { accountName } = req.params;
+            await this.hdWalletHandler({ accountName });
+            await this.updateNetworkHandler();
+            // await this.scanCoinHandler();
+            this._notifyAll({
+              type: "stateChanged",
+              data: { state: "unlocked" },
+            });
+          } catch (err) {
+            log("error: popup_createWallet failed  with error: %s", err);
+            res.error = err;
+          }
+          break;
+        }
+
         case "popup_getState":
           break;
         case "popup_createWallet":
@@ -483,6 +502,12 @@ export class PopupController {
       const { balance, OTAKey } = await getDefaultFollowTokensBalance();
       await actionHandler(actionSetFollowBalanceDefault({ balance, OTAKey }));
     }
+  }
+
+  async hdWalletHandler({ accountName }: { accountName: string }) {
+    await reduxStore.dispatch(actionFetchCreateHDWalletAccount({ accountName }));
+    const defaultAccount = defaultAccountSelector(reduxStore.getState());
+    await dispatch(setDefaultAccount(defaultAccount));
   }
 
   async createAccount({ accountName }: { accountName: string }) {

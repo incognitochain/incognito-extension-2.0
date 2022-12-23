@@ -280,7 +280,6 @@ export const importMasterKey =
     } catch (error) {
       throw error;
     }
-    console.timeEnd("TOTAL_TIME_IMPORT_MASTER_KEY");
     return wallet;
   };
 
