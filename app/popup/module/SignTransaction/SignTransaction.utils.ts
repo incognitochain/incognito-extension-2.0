@@ -73,6 +73,9 @@ const getSignTransactionData = ({
 
   const paymentFeeTokenID = metadata && metadata.PaymentFeeTokenID;
   const isSendPRVPaymentTokenFee = paymentFeeTokenID && paymentFeeTokenID !== PRV_ID;
+  if (paymentFeeTokenID) {
+    delete metadata.PaymentFeeTokenID;
+  }
   let feeTokenAmount = 0;
   let feeTokenAmountStr = "";
   let feeTokenData;
@@ -80,7 +83,6 @@ const getSignTransactionData = ({
     if (isSendPRVPaymentTokenFee && paymentFeeTokenID) {
       // handle display token FEE
       feeTokenData = getDataByTokenID(paymentFeeTokenID);
-      delete metadata.PaymentFeeTokenID;
       if (feeTokenData.symbol) {
         feeTokenAmount = tokenSendOriginalAmount;
         feeTokenAmountStr = format.formatAmount({
