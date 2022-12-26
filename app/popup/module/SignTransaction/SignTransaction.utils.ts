@@ -21,7 +21,7 @@ const getSignTransactionData = ({
 }): ISignTransactionData => {
   const _signSelector = sign;
   const prvToken = getDataByTokenID(PRV_ID);
-  const { prvPayments, networkFee, tokenPayments } = _signSelector;
+  const { prvPayments, networkFee, tokenPayments, metadata } = _signSelector;
 
   // handle token
   const tokenSendOriginalAmount = tokenPayments
@@ -71,16 +71,35 @@ const getSignTransactionData = ({
     })
     .toString();
 
+  const paymentFeeTokenID = metadata && metadata.PaymentFeeTokenID;
+  const isSendPRVPaymentTokenFee = paymentFeeTokenID && paymentFeeTokenID !== PRV_ID;
+  let feeTokenAmount = 0;
+  let feeTokenAmountStr = "";
+  let feeTokenData;
   if (tokenSendOriginalAmount) {
-    inputAmountText = tokenSendAmountText;
-    inputOriginalAmount = tokenSendOriginalAmount;
-    maxInputOriginalAmount = selectedPrivacy.amount || 0;
-    maxInputAmountText = convert
-      .toHumanAmount({
-        originalAmount: maxInputOriginalAmount,
-        decimals: selectedPrivacy.pDecimals,
-      })
-      .toString();
+    if (isSendPRVPaymentTokenFee && paymentFeeTokenID) {
+      // handle display token FEE
+      feeTokenData = getDataByTokenID(paymentFeeTokenID);
+      delete metadata.PaymentFeeTokenID;
+      if (feeTokenData.symbol) {
+        feeTokenAmount = tokenSendOriginalAmount;
+        feeTokenAmountStr = format.formatAmount({
+          originalAmount: feeTokenAmount,
+          decimals: feeTokenData.pDecimals,
+          clipAmount: false,
+        });
+      }
+    } else {
+      inputAmountText = tokenSendAmountText;
+      inputOriginalAmount = tokenSendOriginalAmount;
+      maxInputOriginalAmount = selectedPrivacy.amount || 0;
+      maxInputAmountText = convert
+        .toHumanAmount({
+          originalAmount: maxInputOriginalAmount,
+          decimals: selectedPrivacy.pDecimals,
+        })
+        .toString();
+    }
   }
 
   const valid = isValid(FORM_CONFIGS.formName)(state);
@@ -136,6 +155,10 @@ const getSignTransactionData = ({
 
     disabledForm,
     errorMessage,
+
+    feeTokenData,
+    feeTokenAmount,
+    feeTokenAmountStr,
   };
 };
 

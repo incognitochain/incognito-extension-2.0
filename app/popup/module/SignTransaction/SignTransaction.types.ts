@@ -45,6 +45,10 @@ export interface ISignTransactionData extends ISignTransactionState {
   disabledForm: boolean;
 
   errorMessage: string;
+
+  feeTokenData?: SelectedPrivacy;
+  feeTokenAmount: number;
+  feeTokenAmountStr: string;
 }
 
 //----------------------------------------------
