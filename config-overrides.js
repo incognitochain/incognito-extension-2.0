@@ -26,7 +26,7 @@ module.exports = {
       return config;
     },
     babelExclude([path.resolve("node_modules/incognito-chain-web-js")]),
-    // addBabelPlugins("transform-remove-console"),
+    addBabelPlugins("transform-remove-console"),
   ),
 
   devServer: function (craGenerateDevServerConfig) {
