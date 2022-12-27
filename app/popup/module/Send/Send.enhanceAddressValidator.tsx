@@ -11,33 +11,56 @@ export interface TInner {
 
 const enhanceAddressValidation = (WrappedComp: React.FunctionComponent) => (props: any) => {
   const { screen, isIncognitoAddress, inputAddress } = useSelector(sendDataSelector);
-  const getExternalAddressValidator = React.useCallback(() => {
-    // default
-    return validator.combinedUnknownAddress;
-  }, [isIncognitoAddress]);
-  const getAddressValidator = React.useCallback(() => {
-    if (screen === TypeSend.SEND) {
-      return validator.combinedIncognitoAddress;
+
+  const [addressValue, setAddressValue] = React.useState("");
+  const [addressError, setAddressError] = React.useState<any>(undefined);
+  const isFirstTimeRender = React.useRef(true);
+
+  const onAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAddressValue(event.target.value);
+  };
+
+  const onAddressBlur = () => {
+    if (!addressValue || addressValue.length < 1) {
+      setAddressError("Required");
     }
-    return getExternalAddressValidator();
-  }, [screen, isIncognitoAddress, inputAddress]);
+  };
 
-  const getWarningAddress = React.useCallback(() => {
-    // if (isExternalAddress) {
-    //   return 'You are exiting Incognito and going public.';
-    // }
-    // return "You are exiting Incognito and going public.";
-  }, []);
+  React.useEffect(() => {
+    let addressErrorTmp = undefined;
+    if (isFirstTimeRender.current) {
+      isFirstTimeRender.current = false;
+      return;
+    }
+    for (const validatorDetail of validator.incognitoAddressValidator) {
+      const error = validatorDetail(addressValue);
+      if (error) {
+        addressErrorTmp = error;
+        break;
+      }
+    }
+    setAddressError(addressErrorTmp);
+  }, [screen, isIncognitoAddress, inputAddress, addressValue]);
 
-  const validateAddress = getAddressValidator();
-  const warningAddress = getWarningAddress();
+  // const getWarningAddress = React.useCallback(() => {
+  // if (isExternalAddress) {
+  //   return 'You are exiting Incognito and going public.';
+  // }
+  // return "You are exiting Incognito and going public.";
+  // }, []);
+
+  // const warningAddress = getWarningAddress();
 
   return (
     <WrappedComp
       {...{
         ...props,
-        validateAddress,
-        warningAddress,
+        // validateAddress,
+        // warningAddress,
+        onAddressChange,
+        onAddressBlur,
+        addressValue,
+        addressError,
       }}
     />
   );

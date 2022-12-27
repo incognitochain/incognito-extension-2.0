@@ -7,6 +7,8 @@ import withValAddress, { TInner as TInnerAddress } from "./Send.enhanceAddressVa
 import withValAmount, { TInner as TInnerAmount } from "./Send.enhanceAmountValidator";
 import withSend, { TInner as TInnerSend } from "./Send.enhanceSend";
 import withFee from "./Send.enhanceFee";
+import withMemo from "./Send.enhanceMemo";
+
 import React from "react";
 import { batch, useDispatch, useSelector } from "react-redux";
 import { sendDataSelector } from "@module/Send/Send.selector";
@@ -27,12 +29,18 @@ export interface IMergeProps extends InjectedFormProps<any, any>, TInnerInit, TI
 }
 
 const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergeProps & any) => {
-  const { handleSendAnonymously, handleUnShieldCrypto } = props;
+  const { handleSendAnonymously, handleUnShieldCrypto, amountValue, addressValue, amountError, addressError } = props;
 
   const dispatch: AppThunkDispatch = useDispatch();
   const history = useHistory();
   const { showLoading } = useLoading();
   const { maxAmountText, disabledForm, isSend, selectedPrivacy } = useSelector(sendDataSelector);
+
+  const sendBtnDisable = React.useMemo(() => {
+    if (!amountValue || amountValue.length < 1 || amountError !== undefined) return true;
+    if (!addressValue || addressValue.length < 1 || addressError !== undefined) return true;
+    return false;
+  }, [amountValue, addressValue, amountError, addressError]);
 
   const onChangeField = async (value: string, field: string) => {
     let val: any = value;
@@ -57,7 +65,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergePro
 
   const handleSend = async () => {
     try {
-      if (disabledForm) {
+      if (sendBtnDisable) {
         return;
       }
       showLoading({ value: true });
@@ -83,6 +91,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergePro
         onClickScan,
         onGoBack,
         handleSend,
+        sendBtnDisable,
       }}
     />
   );
@@ -96,6 +105,7 @@ export default compose<IMergeProps, any>(
   withInit,
   withValAddress,
   withValAmount,
+  withMemo,
   withFee,
   withSend,
   enhanceUnshield,
