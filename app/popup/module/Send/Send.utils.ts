@@ -217,6 +217,7 @@ const getSendData = ({
     estimatedExpectedAmount: _sendSelector.estimatedExpectedAmount,
 
     buyToken,
+    tokenPDecimals,
   };
 };
 

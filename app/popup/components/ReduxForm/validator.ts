@@ -73,6 +73,8 @@ const combinedNanoAmount = [required, isInteger, number, minValue(1, "Please ent
 const combinedIncognitoAddress = [required, incognitoAddress()];
 const combinedUnknownAddress = [required, minLength(15)];
 
+const incognitoAddressValidator = [incognitoAddress()];
+
 const combinedAccountName = [
   required,
   minLength(1),
@@ -107,6 +109,7 @@ const validator = {
   combinedIncognitoAddress,
   combinedUnknownAddress,
   email,
+  incognitoAddressValidator,
 };
 
 export default validator;

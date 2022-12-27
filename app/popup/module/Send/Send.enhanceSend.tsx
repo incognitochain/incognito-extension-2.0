@@ -10,6 +10,8 @@ import { useCallAsync } from "@popup/utils/notifications";
 import { useBackground } from "@popup/context/background";
 import rpcMetric, { METRIC_TYPE } from "@services/wallet/rpcMetric";
 import { AppThunkDispatch } from "@redux/store";
+import convert from "@utils/convert";
+
 const { PrivacyVersion, ACCOUNT_CONSTANT } = require("incognito-chain-web-js/build/web/wallet");
 
 export interface TInner {
@@ -20,16 +22,11 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
   // const accountSender = useSelector(defaultAccountWalletSelector);
   const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.SEND });
 
-  const {
-    inputMemo,
-    networkFeeAmount,
-    inputAddress,
-    inputOriginalAmount,
-    isMainCrypto,
-    selectedPrivacy,
-    disabledForm,
-    networkFeeToken,
-  } = useSelector(sendDataSelector);
+  const { inputMemo, networkFeeAmount, isMainCrypto, selectedPrivacy, networkFeeToken, tokenPDecimals } =
+    useSelector(sendDataSelector);
+
+  const { amountValue, addressValue, memoValue } = props;
+
   const { showLoading } = useLoading();
   const history = useHistory();
   const dispatch: AppThunkDispatch = useDispatch();
@@ -39,14 +36,19 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
 
   const handleSendAnonymously = async () => {
     try {
-      if (!inputOriginalAmount || !inputAddress || disabledForm) {
-        return;
-      }
       updateMetric().then();
       showLoading({ value: true });
+
+      const inputOriginalAmount = convert
+        .toOriginalAmount({
+          humanAmount: `${convert.toNumber({ text: amountValue, autoCorrect: true }) || 0}`,
+          decimals: tokenPDecimals,
+        })
+        .toString();
+
       let payload: any = {
         fee: networkFeeAmount,
-        info: inputMemo,
+        info: memoValue,
         txType: ACCOUNT_CONSTANT.TX_TYPE.SEND,
         tokenID: selectedPrivacy?.tokenId,
         version: PrivacyVersion.ver3,
@@ -56,7 +58,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
           ...payload,
           prvPayments: [
             {
-              PaymentAddress: inputAddress,
+              PaymentAddress: addressValue,
               Amount: inputOriginalAmount,
               Message: inputMemo,
             },
@@ -69,13 +71,15 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
           tokenID: selectedPrivacy?.tokenId,
           tokenPayments: [
             {
-              PaymentAddress: inputAddress,
+              PaymentAddress: addressValue,
               Amount: inputOriginalAmount,
-              Message: inputMemo,
+              Message: memoValue,
             },
           ],
         };
       }
+
+      // console.log("payload === ", payload);
 
       await callAsync(request("popup_create_and_send_transaction", { isMainCrypto, payload }), {
         onSuccess: (result: any) => {
@@ -84,7 +88,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
           if (!tx) return;
           const confirmData = getConfirmTxBuilder({
             tx,
-            address: inputAddress,
+            address: addressValue,
             amount: inputOriginalAmount,
             networkFee: networkFeeAmount,
             networkFeeToken: networkFeeToken,
