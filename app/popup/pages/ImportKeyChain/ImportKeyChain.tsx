@@ -90,7 +90,6 @@ const ImportKeyChainPage: React.FC = () => {
           showLoading({
             value: false,
           });
-          console.log("DDDD result ", result);
           history.goBack();
         },
         onError: (error: any) => {
@@ -99,9 +98,10 @@ const ImportKeyChainPage: React.FC = () => {
           });
           const originalError = error.data?.originalError;
           if (originalError) {
-            const { field, message } = originalError;
-            if (field === "privateKeyField") {
-              setPrivateKeyError(message);
+            // console.log("originalError ", originalError)
+            const { field, message, description, code } = originalError;
+            if (field === "privateKeyField" || code === -2005) {
+              setPrivateKeyError( message || description || "Something went wrong. Please try again.");
             } else {
               setKeychainNameError(message);
             }
@@ -138,7 +138,7 @@ const ImportKeyChainPage: React.FC = () => {
       }
     }
 
-    if (privateKeyTrim.length < 1) {
+    if (privateKeyTrim && privateKeyTrim.length < 1) {
       checkValid = false;
       setPrivateKeyError("Required");
     }
