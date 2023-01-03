@@ -12,6 +12,8 @@ import Settings from "../Settings/Settings";
 
 let cacheActiveTab: TabBarItemType;
 
+const ledgerUSBVendorId = 11415;
+
 const SelectAccount = React.memo(() => {
   const [activeTabType, setActiveTabType] = useState<TabBarItemType>("MasterKey");
 
