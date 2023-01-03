@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-import rootReducers from "@redux-sync-storage/reducers/index";
+import rootReducers, {superRootReducer} from "@redux-sync-storage/reducers/index";
 import { Action, applyMiddleware, createStore } from "redux";
 import logger from "redux-logger";
 import thunkMiddleware from "redux-thunk";
@@ -22,8 +22,8 @@ const getReduxSyncStorage = async () => {
       storageKey: STORAGE_KEY,
     };
     const asyncStoreCreator = storeCreatorFactory(options);
-    reduxSyncStorage = await asyncStoreCreator(rootReducers, applyMiddleware(thunkMiddleware));
-    // reduxSyncStorage = await asyncStoreCreator(rootReducers, applyMiddleware(thunkMiddleware, logger));
+    reduxSyncStorage = await asyncStoreCreator(superRootReducer, applyMiddleware(thunkMiddleware));
+    // reduxSyncStorage = await asyncStoreCreator(superRootReducer, applyMiddleware(thunkMiddleware, logger));
   }
 
   return { reduxSyncStorage };

@@ -28,6 +28,15 @@ const rootReducers = combineReducers({
   masterkeyReducer,
 });
 
+export const clearReduxSyncStore = () => ({
+  type: "CLEAR_REDUX_SYNC_STORE",
+});
+
+export const superRootReducer = (state: any, action: any) => {
+  if (action.type === "CLEAR_REDUX_SYNC_STORE") state = undefined;
+  return rootReducers(state, action);
+};
+
 export type RootState = ReturnType<typeof rootReducers> & {
   readonly [$CombinedState]?: undefined;
 };
