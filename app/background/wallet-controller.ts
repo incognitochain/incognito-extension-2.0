@@ -1,18 +1,18 @@
-import { Store } from "./store";
-import { createLogger } from "../core/utils";
-import { IncognitoSignTransactionResponse, RequestAccountsResp, WalletActionsType } from "../core/types";
-import { ActionManager } from "./lib/action-manager";
 import { store as reduxStore } from "@redux/store/store";
+import { IncognitoSignTransactionResponse, RequestAccountsResp, WalletActionsType } from "../core/types";
+import { createLogger, genETHAccFromOTAKey, makeSignature } from "../core/utils";
+import { ActionManager } from "./lib/action-manager";
+import { Store } from "./store";
 
-import { getBalanceFromDApp, getFollowTokensBalance } from "./worker.scanCoins";
-import { actionSelectedPrivacySet } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.actions";
-import { defaultAccountWalletSelector, getCurrentPaymentAddress } from "@redux/account/account.selectors";
-import { change } from "redux-form";
-import { batch } from "react-redux";
-import { FORM_CONFIGS } from "@popup/module/SignTransaction/SignTransaction.constant";
-import { actionHandler } from "@redux-sync-storage/store/store";
-import { ISignTransactionParams } from "@module/SignTransaction/SignTransaction.types";
 import { actionSetSignTransactionData } from "@module/SignTransaction/SignTransaction.actions";
+import { ISignTransactionParams } from "@module/SignTransaction/SignTransaction.types";
+import { FORM_CONFIGS } from "@popup/module/SignTransaction/SignTransaction.constant";
+import { actionSelectedPrivacySet } from "@redux-sync-storage/selectedPrivacy/selectedPrivacy.actions";
+import { actionHandler } from "@redux-sync-storage/store/store";
+import { defaultAccountWalletSelector, getCurrentPaymentAddress } from "@redux/account/account.selectors";
+import { batch } from "react-redux";
+import { change } from "redux-form";
+import { getBalanceFromDApp } from "./worker.scanCoins";
 const { createNewCoins } = require("incognito-chain-web-js/build/web/wallet");
 
 const log = createLogger("incognito:walletCtr");
@@ -69,8 +69,41 @@ export class WalletController {
         case "wallet_signTransaction":
           try {
             log("[wallet_signTransaction] resquest: ", req);
-            let resp = await this._handleSignTransaction(req);
-            res.result = resp;
+            let params = req.params;
+            let pDaoSignature: any = {};
+            let ethWalletInfo: any = {};
+            if (params?.metadata && params?.metadata?.Type === 338 && !params?.metadata?.RemoteAddress) {
+              const accountSender = defaultAccountWalletSelector(reduxStore.getState());
+              const otaKey = await accountSender?.getOTAKey();
+              ethWalletInfo = await genETHAccFromOTAKey(otaKey);
+              req.params.metadata.RemoteAddress = ethWalletInfo.address;
+              req.params.receiverAddress = ethWalletInfo.address;
+            }
+
+            let resp: any = await this._handleSignTransaction(req);
+
+            if (params?.pDaoData) {
+              // Make pDao Signature
+              const pDaoData = params.pDaoData;
+              const privateKey = Buffer.from(ethWalletInfo.privateKey, "hex");
+              const pDaoTransactionType: "CREATE_PROPOSAL" | "VOTE" = pDaoData.transactionType;
+
+              pDaoSignature = {
+                createPropSignature:
+                  pDaoTransactionType === "CREATE_PROPOSAL"
+                    ? makeSignature(1, pDaoData.createProposalInfo, privateKey)
+                    : "",
+                propVoteSignature: makeSignature(2, pDaoData.voteProposalInfo, privateKey),
+                reShieldSignature: makeSignature(
+                  3,
+                  {
+                    burnTX: resp?.txHash.startsWith("0x") ? resp?.txHash?.slice(2) : resp?.txHash,
+                  },
+                  privateKey,
+                ),
+              };
+            }
+            res.result = { ...resp, pDaoSignature };
           } catch (err) {
             log("error: wallet_signTransaction failed  with error: %s", JSON.stringify(err));
             res.error = err;

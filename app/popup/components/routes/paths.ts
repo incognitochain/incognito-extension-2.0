@@ -1,4 +1,4 @@
-import { compile } from "path-to-regexp";
+const compile = require("path-to-regexp");
 export type PathsKeyMap = {
   [PathsKeyType: string]: string;
 };
