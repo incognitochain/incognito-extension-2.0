@@ -16,6 +16,8 @@ import WrapContent from "@components/Content";
 import { getAccountListSelector, getAccountDefaultNameSelector } from "@redux-sync-storage/account/account.selectors";
 import { PrimaryButtonContaniner } from "./SelectAccount.styled";
 
+const ledgerUSBVendorId = 11415
+
 const SelectAccount = React.memo(() => {
   const { enqueueSnackbar } = useSnackbar();
   const { request } = useBackground();
@@ -59,8 +61,17 @@ const SelectAccount = React.memo(() => {
     showLoading({
       value: true,
     });
-    callAsync(request("popup_hdWalletConnect", { accountName: undefined }), {
-      progress: { message: "Connect HD Wallet ..." },
+    const { hid } = navigator as any;
+    
+    callAsync(hid.getDevices().then((deviceLst: any) => {
+      deviceLst = deviceLst.filter((d: any) => d.vendorId === ledgerUSBVendorId);
+      if (deviceLst?.length === 0) {
+        return chrome.tabs.create({ url: chrome.runtime.getURL("assets/request-device.html") });
+      } else {
+        return Promise.all(deviceLst.map((d: any) => d.opened ? d.close() : Promise.resolve(null)));
+      }
+    }).then((_: any) => request("popup_hdWalletConnect", { accountName: undefined })), {
+      progress: { message: "Connect Hardware Wallet ..." },
       success: { message: "Done" },
       onSuccess: () => {
         showLoading({
@@ -100,7 +111,7 @@ const SelectAccount = React.memo(() => {
               />
             );
           })}
-        <PrimaryButtonContaniner onClick={connectHDWallet}>{"HD Wallet"}</PrimaryButtonContaniner>
+        <PrimaryButtonContaniner onClick={connectHDWallet}>{"Connect Hardware Wallet"}</PrimaryButtonContaniner>
       </WrapContent>
     </>
   );
