@@ -12,6 +12,8 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Container, PrimaryButtonContaniner } from "./AccountList.styled";
 
+const ledgerUSBVendorId = 11415;
+
 const AccountList = () => {
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
@@ -57,21 +59,36 @@ const AccountList = () => {
     showLoading({
       value: true,
     });
-    callAsync(request("popup_hdWalletConnect", { accountName: undefined }), {
-      progress: { message: "Connect HD Wallet ..." },
-      success: { message: "Done" },
-      onSuccess: () => {
-        showLoading({
-          value: false,
-        });
+    const { hid } = navigator as any;
+
+    callAsync(
+      hid
+        .getDevices()
+        .then((deviceLst: any) => {
+          deviceLst = deviceLst.filter((d: any) => d.vendorId === ledgerUSBVendorId);
+          if (deviceLst?.length === 0) {
+            return chrome.tabs.create({ url: chrome.runtime.getURL("assets/request-device.html") });
+          } else {
+            return Promise.all(deviceLst.map((d: any) => (d.opened ? d.close() : Promise.resolve(null))));
+          }
+        })
+        .then((_: any) => request("popup_hdWalletConnect", { accountName: undefined })),
+      {
+        progress: { message: "Connect Hardware Wallet ..." },
+        success: { message: "Done" },
+        onSuccess: () => {
+          showLoading({
+            value: false,
+          });
+        },
+        onError: (e) => {
+          console.log("[connectHDWallet] ERROR: ", e);
+          showLoading({
+            value: false,
+          });
+        },
       },
-      onError: (e) => {
-        console.log("[connectHDWallet] ERROR: ", e);
-        showLoading({
-          value: false,
-        });
-      },
-    });
+    );
   };
 
   return (
