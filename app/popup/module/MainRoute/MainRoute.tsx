@@ -23,6 +23,11 @@ import { Loading } from "@popup/context/loading";
 import debounce from "lodash/debounce";
 import { ScanCoinsBar } from "@components/ScanCoinsBar/ScanCoinsBar";
 
+import ImportKeyChain from "@popup/pages/ImportKeyChain/ImportKeyChain";
+import BackupPrivateKeys from "@popup/pages/BackupPrivateKeys/BackupPrivateKeys";
+import RestorePrivateKeys from "@popup/pages/RestorePrivateKeys/RestorePrivateKeys";
+import RevealRecoveryPhrase from "@popup/pages/RevealRecoveryPhrase/RevealRecoveryPhrase";
+
 const context = require.context("@popup/module", true, /\.route.tsx?/);
 
 const Styled = styled.div`
@@ -113,6 +118,10 @@ const MainRoute = () => {
             <Route exact path={Paths.restoreWalletPage} component={RestoreWalletPage} />
             <Route exact path={Paths.getStatedPage} component={GetStartedPage} />
             <Route exact path={Paths.unlockPage} component={UnlockPage} />
+            <Route exact path={Paths.importKeyChain} component={ImportKeyChain} />
+            <Route exact path={Paths.backupPrivateKeys} component={BackupPrivateKeys} />
+            <Route exact path={Paths.restorePrivateKeys} component={RestorePrivateKeys} />
+            <Route exact path={Paths.revealRecoveryPhrase} component={RevealRecoveryPhrase} />
             {defaultRoute(`default-route`, {}, popupState, isNotification)}
           </Switch>
         </Suspense>

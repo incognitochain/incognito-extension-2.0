@@ -31,6 +31,11 @@ export const Paths = {
   createAccountPage: "/create-account-page",
   restoreWalletPage: "/restore-wallet-page",
   accountDetailPage: "/account-detail-page",
+
+  importKeyChain: "/import-keychain",
+  backupPrivateKeys: "/backup-privateKeys",
+  restorePrivateKeys: "/restore-privateKeys",
+  revealRecoveryPhrase: "/reveal-recovery-phrase",
 };
 
 export const PathsKey: PathsKeyMap = {

@@ -10,6 +10,9 @@ import { Button } from "@components/Core";
 import { useSelector } from "react-redux";
 import { sendDataSelector } from "@module/Send/Send.selector";
 import LoadingContainer from "@components/LoadingContainer";
+import InputFieldAmount from "@popup/components/ReduxForm/InputField/InputFieldAmount";
+import InputFieldAddress from "@popup/components/ReduxForm/InputField/InputFieldAddress";
+import InputFieldMemo from "@popup/components/ReduxForm/InputField/InputFieldMemo";
 
 const Styled = styled.div`
   .scroll-view {
@@ -22,28 +25,48 @@ const Styled = styled.div`
 
 const SendForm = React.memo((props: IMergeProps & any) => {
   const {
-    onClickMax,
-    validateAmount,
-    validateAddress,
-    warningAddress,
-    handleSubmit,
+    // onClickMax,
+    // validateAmount,
+    // validateAddress,
+    // warningAddress,
+    // handleSubmit,
     handleSend,
     isInitingForm,
     onClickAddressBook,
+
+    //Props Amount Text Input
+    amountValue,
+    onAmountChange,
+    onAmountBlur,
+    amountError,
+    onAmountMaxClicked,
+
+    //Props Address Text Input
+    addressValue,
+    onAddressChange,
+    onAddressBlur,
+    addressError,
+
+    //Memo
+    memoValue,
+    onMemoChange,
+
+    sendBtnDisable,
   } = props;
   const { networkFeeSymbol, networkFeeText, showMemo, btnSubmit, disabledForm, accountBalanceStr } =
     useSelector(sendDataSelector);
 
-  const renderMemo = () => {
-    if (!showMemo) return null;
-    return <Field component={InputField} name={FORM_CONFIGS.memo} leftTitle="Memo" />;
-  };
+  const isRenderFirstTime = React.useRef(true);
+
+  React.useEffect(() => {
+    isRenderFirstTime.current = false;
+  }, []);
 
   const renderForm = () => {
     if (isInitingForm) return <LoadingContainer />;
     return (
-      <form onSubmit={handleSubmit(handleSend)}>
-        <Field
+      <>
+        {/* <Field
           component={InputField}
           name={FORM_CONFIGS.amount}
           inputType={INPUT_FIELD.amount}
@@ -54,8 +77,18 @@ const SendForm = React.memo((props: IMergeProps & any) => {
           rightTitle={accountBalanceStr}
           onClickMax={onClickMax}
           validate={validateAmount}
+        /> */}
+        <InputFieldAmount
+          value={amountValue}
+          leftTitle="Amount"
+          rightTitle={accountBalanceStr}
+          // onClickMax={onClickMax}
+          onClickMax={onAmountMaxClicked}
+          error={amountError}
+          onChange={onAmountChange}
+          onBlur={onAmountBlur}
         />
-        <Field
+        {/* <Field
           component={InputField}
           name={FORM_CONFIGS.toAddress}
           inputType={INPUT_FIELD.address}
@@ -63,8 +96,16 @@ const SendForm = React.memo((props: IMergeProps & any) => {
           validate={validateAddress}
           warning={warningAddress}
           onClickAddressBook={onClickAddressBook}
+        /> */}
+        <InputFieldAddress
+          value={addressValue}
+          leftTitle="To"
+          onClickAddressBook={onClickAddressBook}
+          error={addressError}
+          onChange={onAddressChange}
+          onBlur={onAddressBlur}
         />
-        {renderMemo()}
+        <InputFieldMemo value={memoValue} leftTitle="Memo" onChange={onMemoChange} />
         <Field
           component={InputField}
           name={FORM_CONFIGS.fee}
@@ -76,8 +117,8 @@ const SendForm = React.memo((props: IMergeProps & any) => {
           onClickAddressBook={() => {}}
           subtitle={networkFeeText}
         />
-        <Button className="btn-submit" title={btnSubmit} disabled={disabledForm} type="submit" />
-      </form>
+        <Button className="btn-submit" title={btnSubmit} disabled={sendBtnDisable} type="submit" onClick={handleSend} />
+      </>
     );
   };
 

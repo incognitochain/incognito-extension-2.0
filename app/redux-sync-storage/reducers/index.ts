@@ -11,6 +11,7 @@ import { reducer as formReducer } from "redux-form";
 import sendReducer from "@module/Send/Send.reducer";
 import signTransactionReducer from "@module/SignTransaction/SignTransaction.reducer";
 import { reducer as versionReducer } from "@redux-sync-storage/version";
+import { reducer as masterkeyReducer } from "@redux-sync-storage/masterkey";
 
 const rootReducers = combineReducers({
   versionReducer,
@@ -24,6 +25,7 @@ const rootReducers = combineReducers({
   sendReducer,
   form: formReducer,
   signTransactionReducer,
+  masterkeyReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducers> & {

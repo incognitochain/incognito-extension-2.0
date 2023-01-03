@@ -39,18 +39,6 @@ const AccountItemStyled = styled.div`
   }
 `;
 
-const LeftView = styled.div``;
+const Container = styled.div``;
 
-const MiddleView = styled.button``;
-
-const RightView = styled.div`
-  position: absolute;
-  align-self: center;
-  right: 40px;
-`;
-
-const Title = styled.p``;
-
-const Description = styled.p``;
-
-export { AccountItemStyled };
+export { Container, AccountItemStyled };

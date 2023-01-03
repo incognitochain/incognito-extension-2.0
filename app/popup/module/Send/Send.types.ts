@@ -49,6 +49,7 @@ export interface ISendData {
   estimatedExpectedAmount: number;
 
   buyToken: SelectedPrivacy;
+  tokenPDecimals: any;
 }
 
 export interface IUnshield {

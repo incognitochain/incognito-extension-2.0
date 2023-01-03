@@ -83,7 +83,7 @@ export const getAccountInstanceAndKeyDefine = async (): Promise<{ accountSender?
 
 export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any }) => {
   const { accountSender, keyDefine } = await getAccountInstanceAndKeyDefine();
-  console.log("SCAN COINS: 111 ", { accountSender, keyDefine, reduxSyncStorage });
+  // console.log("SCAN COINS: 111 ", { accountSender, keyDefine, reduxSyncStorage });
   if (!reduxSyncStorage || !reduxSyncStorage.getState()) return;
   const isFetching = isFetchingScanCoinsSelector(reduxSyncStorage.getState());
   let coinsStore;
@@ -99,7 +99,7 @@ export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any })
     counterFetchingCoins++;
   }
 
-  console.log("SCAN COINS: 222 ", { isFetching });
+  // console.log("SCAN COINS: 222 ", { isFetching });
   // Validate data
   if (!accountSender || isFetching || !keyDefine) return;
 
@@ -115,7 +115,7 @@ export const scanCoins = async ({ reduxSyncStorage }: { reduxSyncStorage: any })
 
     const tokens = await getTokensDefault();
 
-    console.log("SCAN COINS::: ");
+    // console.log("SCAN COINS::: ");
     // start scan coins
     const { elapsed, result } = await measure(accountSender, "scanCoins", {
       tokenList: uniq(tokens.concat(_followTokens)),

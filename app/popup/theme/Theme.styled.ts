@@ -19,6 +19,7 @@ export interface Colors {
   primaryP8: Color;
   primaryP9: Color;
   primaryP10: Color;
+  primaryP11: Color;
 
   // specific color
   colorP1: Color;
