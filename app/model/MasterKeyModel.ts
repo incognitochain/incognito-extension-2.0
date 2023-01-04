@@ -7,6 +7,7 @@ import { isEqual, toLower } from "lodash";
 import { BaseModel } from "./BaseModel";
 const { loadBackupKey, parseStorageBackup } = require("incognito-chain-web-js/build/web/wallet");
 
+
 export interface MasterKeyModelProps {
   name: string;
   isActive?: boolean;
