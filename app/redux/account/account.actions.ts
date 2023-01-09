@@ -219,7 +219,7 @@ export const actionFetchCreateAccount =
     }
   };
 
-export const actionFetchCreateHDWalletAccount =
+export const actionFetchCreateHardwareWalletAccount =
   ({ accountName }: any) =>
   async (dispatch: AppThunkDispatch, getState: AppGetState) => {
     const state = getState();
@@ -232,7 +232,7 @@ export const actionFetchCreateHDWalletAccount =
     }
     try {
       dispatch(actionFetchingCreateAccount());
-      const account = await accountService.createHDWalletAccount(accountName, wallet);
+      const account = await accountService.createHardwareWalletAccount(accountName, wallet);
       serializedAccount = new AccountModel(accountService.toSerializedAccountObj(account));
       batch(() => {
         dispatch(actionFetchedCreateAccount());
