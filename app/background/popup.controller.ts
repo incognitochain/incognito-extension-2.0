@@ -17,7 +17,7 @@ import { dispatch, store as reduxStore } from "@redux/store/store";
 import Storage from "@services/storage";
 import { APP_PASS_PHRASE_CIPHER, APP_SALT_KEY } from "@constants/common";
 import {
-  actionFetchCreateHDWalletAccount,
+  actionFetchCreateHardwareWalletAccount,
   actionFetchCreateAccount,
   actionLogout,
   actionSwitchAccount,
@@ -99,11 +99,11 @@ export class PopupController {
       let reqResponse;
       let accountDetail;
       switch (method) {
-        case "popup_hdWalletConnect": {
+        case "popup_hardwareWalletConnect": {
           try {
             await this.scanCoinHandler({ isClear: true });
             const { accountName } = req.params;
-            await this.hdWalletHandler({ accountName });
+            await this.hardwareWalletHandler({ accountName });
             await this.updateNetworkHandler();
             // await this.scanCoinHandler();
             this._notifyAll({
@@ -504,8 +504,8 @@ export class PopupController {
     }
   }
 
-  async hdWalletHandler({ accountName }: { accountName: string }) {
-    await reduxStore.dispatch(actionFetchCreateHDWalletAccount({ accountName }));
+  async hardwareWalletHandler({ accountName }: { accountName: string }) {
+    await reduxStore.dispatch(actionFetchCreateHardwareWalletAccount({ accountName }));
     const defaultAccount = defaultAccountSelector(reduxStore.getState());
     await dispatch(setDefaultAccount(defaultAccount));
   }

@@ -82,6 +82,8 @@ const URL_SERVICE_UPDATE_FIRMWARE = `https://${
 }api-service.incognito.org/pool/check-lan-setup`;
 
 const FAUCET_URL = "https://faucet.incognito.org/";
+export const HARDWARE_DEVICE_EMULATOR = false;
+export const HARDWARE_DEVICE_ACCOUNT_NAME = "Hardware Device Account";
 export default {
   isMainnet,
   CRYPTO_ICON_URL,
@@ -115,4 +117,6 @@ export default {
   PASSPHRASE_WALLET_DEFAULT,
 
   COINS_SERVICE_URL,
+  HARDWARE_DEVICE_EMULATOR,
+  HARDWARE_DEVICE_ACCOUNT_NAME,
 };

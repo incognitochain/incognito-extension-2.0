@@ -128,7 +128,7 @@ export type PopupActions =
   | "popup_addNewFollowToken"
   | "popup_request_txs_history"
   | "popup_removeFollowToken"
-  | "popup_hdWalletConnect";
+  | "popup_hardwareWalletConnect";
 
 export type Markdown = string;
 

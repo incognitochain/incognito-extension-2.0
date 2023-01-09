@@ -15,6 +15,7 @@ import Header from "@components/Header";
 import WrapContent from "@components/Content";
 import { getAccountListSelector, getAccountDefaultNameSelector } from "@redux-sync-storage/account/account.selectors";
 import { PrimaryButtonContaniner } from "./SelectAccount.styled";
+import { HARDWARE_DEVICE_EMULATOR } from "@constants/config";
 
 const ledgerUSBVendorId = 11415
 
@@ -56,8 +57,8 @@ const SelectAccount = React.memo(() => {
     });
   };
 
-  const connectHDWallet = () => {
-    console.log("connectHDWallet TO DO ");
+  const connectHardwareWallet = () => {
+    console.log("connectHardwareWallet TO DO ");
     showLoading({
       value: true,
     });
@@ -66,11 +67,12 @@ const SelectAccount = React.memo(() => {
     callAsync(hid.getDevices().then((deviceLst: any) => {
       deviceLst = deviceLst.filter((d: any) => d.vendorId === ledgerUSBVendorId);
       if (deviceLst?.length === 0) {
+        if (HARDWARE_DEVICE_EMULATOR) return;
         return chrome.tabs.create({ url: chrome.runtime.getURL("assets/request-device.html") });
       } else {
         return Promise.all(deviceLst.map((d: any) => d.opened ? d.close() : Promise.resolve(null)));
       }
-    }).then((_: any) => request("popup_hdWalletConnect", { accountName: undefined })), {
+    }).then((_: any) => request("popup_hardwareWalletConnect", { accountName: undefined })), {
       progress: { message: "Connect Hardware Wallet ..." },
       success: { message: "Done" },
       onSuccess: () => {
@@ -79,7 +81,7 @@ const SelectAccount = React.memo(() => {
         });
       },
       onError: (e) => {
-        console.log("[connectHDWallet] ERROR: ", e);
+        console.log("[connectHardwareWallet] ERROR: ", e);
         showLoading({
           value: false,
         });
@@ -111,7 +113,7 @@ const SelectAccount = React.memo(() => {
               />
             );
           })}
-        <PrimaryButtonContaniner onClick={connectHDWallet}>{"Connect Hardware Wallet"}</PrimaryButtonContaniner>
+        <PrimaryButtonContaniner onClick={connectHardwareWallet}>{"Connect Hardware Wallet"}</PrimaryButtonContaniner>
       </WrapContent>
     </>
   );
