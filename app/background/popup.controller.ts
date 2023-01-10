@@ -47,6 +47,7 @@ import {
 import accountService from "@services/wallet/accountService";
 import { clearAllCaches } from "@services/cache";
 import { clearReduxStore } from "@redux/reducers";
+import { clearReduxSyncStore } from "@redux-sync-storage/reducers";
 import { actionFreeAssets, actionSetFollowBalanceDefault } from "@module/Assets/Assets.actions";
 import { actionFistTimeScanCoins, actionFreeScanCoins, actionReScanCoins } from "@redux-sync-storage/scanCoins";
 import { batch } from "react-redux";
@@ -691,6 +692,7 @@ export class PopupController {
       await Storage.clear();
       await clearAllCaches();
       await reduxStore.dispatch(clearReduxStore());
+      await this.reduxSyncStorage.dispatch(clearReduxSyncStore());
       batch(() => {
         actionHandler(actionFreeAssets());
         actionHandler(actionFreeScanCoins());
@@ -728,6 +730,8 @@ export class PopupController {
     // await Storage.logAll();
     await clearAllCaches();
     await reduxStore.dispatch(clearReduxStore());
+    await this.reduxSyncStorage.dispatch(clearReduxSyncStore());
+
     batch(() => {
       actionHandler(actionFreeAssets());
       // reduxStore.dispatch(actionFreeScanCoins());
