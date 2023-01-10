@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { GEN_PROPOSAL_SIGNATURE_INDEX } from "@constants/common";
+import { GEN_PROPOSAL_SIGNATURE_INDEX, TEMP_WALLET_INFO } from "@constants/common";
 import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP } from "./types";
 import Storage from "@services/storage";
 
@@ -234,4 +234,61 @@ export const genETHAccFromOTAKey = async (otaKey: any) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const genETHAccFromOTAKey2 = async (otaKey: any) => {
+  try {
+    const web3 = new Web3();
+    let bytes = bs58.decode(otaKey);
+    bytes = bytes.slice(1, bytes.length - 4);
+    const privHexStr = web3.utils.bytesToHex(bytes);
+    console.log({ privHexStr });
+    let privKey = web3.utils.keccak256(privHexStr);
+    let temp, temp2;
+    temp = web3.utils.hexToBytes(privKey);
+    temp2 = new Uint8Array(temp);
+    secp256k1.privateKeyVerify(temp2);
+    while (!secp256k1.privateKeyVerify(temp2)) {
+      privKey = web3.utils.keccak256(privKey);
+      temp = web3.utils.hexToBytes(privKey);
+      temp2 = new Uint8Array(temp);
+    }
+    const fixturePrivateBuffer = Buffer.from(privKey.replace("0x", ""), "hex");
+    const wallet = Wallet.fromPrivateKey(fixturePrivateBuffer);
+    return {
+      address: wallet.getAddress().toString("hex"),
+      privateKey: wallet.getPrivateKey().toString("hex"),
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const signMessage = async (signData, signerAddr, otaPrivateKey) => {
+  let signerWallet;
+  if (signerAddr) {
+    signerWallet = JSON.parse(await Storage.getItem(TEMP_WALLET_INFO));
+    if (signerWallet?.address !== signerAddr) return;
+  } else {
+    const dateToHex = bs58.encode(
+      Buffer.from(
+        Math.floor(Date.now() / 1000)
+          .toString(16)
+          .slice(2),
+      ),
+    );
+    signerWallet = await genETHAccFromOTAKey2(otaPrivateKey + dateToHex);
+    await Storage.setItem(TEMP_WALLET_INFO, JSON.stringify(signerWallet));
+  }
+
+  if (!signerWallet) {
+    console.log("Something went wrong");
+    return;
+  }
+  const hashData = web3.utils.keccak256(signData);
+  const signDataBuffer = Buffer.from(hashData.slice(2), "hex");
+  let sigResult = util.ecsign(signDataBuffer, Buffer.from(signerWallet.privateKey, "hex"));
+  sigResult = sigResult.r.toString("hex") + sigResult.s.toString("hex") + `0${sigResult.v - 27}`.toString("hex");
+
+  return { signature: sigResult, signer: signerWallet.address };
 };
