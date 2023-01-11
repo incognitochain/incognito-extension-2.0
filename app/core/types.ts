@@ -97,7 +97,12 @@ export type BaseAction<T> = {
   reject: (error: Error) => void;
 };
 
-export type WallActions = "wallet_signTransaction" | "wallet_requestAccounts" | "wallet_getCluster" | "wallet_getState";
+export type WallActions =
+  | "wallet_signTransaction"
+  | "wallet_requestAccounts"
+  | "wallet_getCluster"
+  | "wallet_getState"
+  | "wallet_make_signature";
 
 export type PopupActions =
   | "popup_getState"
@@ -190,6 +195,7 @@ export const WalletActionsList = [
   "wallet_getState",
   "wallet_getBalance",
   "wallet_showPopup",
+  "wallet_make_signature",
 ] as const;
 
 export type WalletActionsType = typeof WalletActionsList[number];

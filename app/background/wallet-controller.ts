@@ -1,6 +1,6 @@
 import { store as reduxStore } from "@redux/store/store";
 import { IncognitoSignTransactionResponse, RequestAccountsResp, WalletActionsType } from "../core/types";
-import { createLogger, genETHAccFromOTAKey, makeSignature } from "../core/utils";
+import { createLogger, genETHAccFromOTAKey, makeSignature, signMessage } from "../core/utils";
 import { ActionManager } from "./lib/action-manager";
 import { Store } from "./store";
 
@@ -143,6 +143,18 @@ export class WalletController {
             res.result = resp;
           } catch (err) {
             log("wallet_getPaymentAddress failed  with error: %O", err);
+            res.error = err;
+          }
+          break;
+        case "wallet_make_signature":
+          try {
+            const { signData, signerAddress } = req.params;
+            const accountSender = defaultAccountWalletSelector(reduxStore.getState());
+            const otaKey = await accountSender?.getOTAKey();
+            const signature = await signMessage(signData, signerAddress, otaKey);
+            res.result = signature;
+          } catch (err) {
+            log("wallet_make_signature failed  with error: %O", err);
             res.error = err;
           }
           break;
