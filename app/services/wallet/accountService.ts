@@ -77,7 +77,7 @@ export default class Account {
       new Validator("createHardwareWalletAccount-wallet", wallet).required().object();
       const account = await wallet.initAccountWithHardwareWallet(HARDWARE_DEVICE_ACCOUNT_NAME, undefined, HARDWARE_DEVICE_EMULATOR);
       if (account) {
-        await saveWallet(wallet);
+        await WalletServices.saveWallet(wallet);
       }
       return account;
     } catch (error) {

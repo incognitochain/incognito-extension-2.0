@@ -42,4 +42,4 @@ const AccountItemStyled = styled.div`
 
 const Container = styled.div``;
 
-export { Container, AccountItemStyled };
+export { Container, AccountItemStyled, PrimaryButtonStyled };

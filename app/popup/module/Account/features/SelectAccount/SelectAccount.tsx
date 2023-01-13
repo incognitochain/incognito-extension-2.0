@@ -21,7 +21,6 @@ const SelectAccount = React.memo(() => {
     setActiveTabType(type);
     cacheActiveTab = type;
   };
-
   useLayoutEffect(() => {
     if (cacheActiveTab) {
       setActiveTabType(cacheActiveTab);

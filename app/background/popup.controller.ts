@@ -124,11 +124,13 @@ export class PopupController {
       switch (method) {
         case "popup_hardwareWalletConnect": {
           try {
-            await this.scanCoinHandler({ isClear: true });
+            // await this.scanCoinHandler({ isClear: true });
             const { accountName } = req.params;
             await this.hardwareWalletHandler({ accountName });
             await this.updateNetworkHandler();
-            // await this.scanCoinHandler();
+            setTimeout(() => {
+                this.scanCoinHandler();
+              }, 1000);
             this._notifyAll({
               type: "stateChanged",
               data: { state: "unlocked" },
