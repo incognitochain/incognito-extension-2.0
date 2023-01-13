@@ -10,7 +10,9 @@ import { useSnackbar } from "notistack";
 import React, { memo } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Container, PrimaryButtonContaniner } from "./AccountList.styled";
+import { Container, PrimaryButtonContaniner, PrimaryButtonStyled } from "./AccountList.styled";
+import { getMasterKeyActiveTypeSelector } from "@redux-sync-storage/masterkey/masterkey.selectors";
+import { HARDWARE_DEVICE_EMULATOR } from "@constants/config"
 
 const ledgerUSBVendorId = 11415;
 
@@ -22,6 +24,7 @@ const AccountList = () => {
   const { showLoading } = useLoading();
   const defaultAccountName: string = useSelector(getAccountDefaultNameSelector);
   const listAccount = useSelector(getAccountListSelector);
+  const masterKeyTypeActive = useSelector(getMasterKeyActiveTypeSelector);
 
   const switchAccount = (accountItem: any) => {
     const accountName = accountItem.AccountName || accountItem.name;
@@ -54,42 +57,39 @@ const AccountList = () => {
 
   console.log("");
 
-  const connectHDWallet = () => {
-    console.log("connectHDWallet TO DO ");
+  const connectHardwareWallet = () => {
+    console.log("connectHardwareWallet TO DO ");
     showLoading({
       value: true,
     });
     const { hid } = navigator as any;
-
-    callAsync(
-      hid
-        .getDevices()
-        .then((deviceLst: any) => {
-          deviceLst = deviceLst.filter((d: any) => d.vendorId === ledgerUSBVendorId);
-          if (deviceLst?.length === 0) {
-            return chrome.tabs.create({ url: chrome.runtime.getURL("assets/request-device.html") });
-          } else {
-            return Promise.all(deviceLst.map((d: any) => (d.opened ? d.close() : Promise.resolve(null))));
-          }
-        })
-        .then((_: any) => request("popup_hdWalletConnect", { accountName: undefined })),
-      {
-        progress: { message: "Connect Hardware Wallet ..." },
-        success: { message: "Done" },
-        onSuccess: () => {
-          showLoading({
-            value: false,
-          });
-        },
-        onError: (e) => {
-          console.log("[connectHDWallet] ERROR: ", e);
-          showLoading({
-            value: false,
-          });
-        },
+    
+    callAsync(hid.getDevices().then((deviceLst: any) => {
+      deviceLst = deviceLst.filter((d: any) => d.vendorId === ledgerUSBVendorId);
+      if (deviceLst?.length === 0) {
+        if (HARDWARE_DEVICE_EMULATOR) return;
+        return chrome.tabs.create({ url: chrome.runtime.getURL("assets/request-device.html") });
+      } else {
+        return Promise.all(deviceLst.map((d: any) => d.opened ? d.close() : Promise.resolve(null)));
+      }
+    }).then((_: any) => request("popup_hardwareWalletConnect", { accountName: undefined })), {
+      progress: { message: "Connect Hardware Wallet ..." },
+      success: { message: "Done" },
+      onSuccess: () => {
+        showLoading({
+          value: false,
+        });
       },
-    );
+      onError: (e) => {
+        console.log("[connectHardwareWallet] ERROR: ", e);
+        showLoading({
+          value: false,
+        });
+      },
+    });
   };
+
+  console.log('masterKeyTypeActive is', masterKeyTypeActive);
 
   return (
     <Container className="default-padding-horizontal">
@@ -113,7 +113,7 @@ const AccountList = () => {
             />
           );
         })}
-      <PrimaryButtonContaniner onClick={connectHDWallet}>{"HD Wallet"}</PrimaryButtonContaniner>
+      { masterKeyTypeActive === "Masterless" && <PrimaryButtonStyled onClick={connectHardwareWallet}>{"Connect Hardware Wallet"}</PrimaryButtonStyled> }
     </Container>
   );
 };

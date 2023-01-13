@@ -74,4 +74,4 @@ const PrimaryButtonContaniner = styled(PrimaryButtonStyled)`
   bottom: 10px;
 `;
 
-export { AccountItemStyled, PrimaryButtonContaniner, Container };
+export { AccountItemStyled, PrimaryButtonContaniner, Container, PrimaryButtonStyled };

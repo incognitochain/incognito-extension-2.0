@@ -11,4 +11,4 @@ const PrimaryButtonContaniner = styled(PrimaryButtonStyled)`
   bottom: 10px;
 `;
 
-export { Container, PrimaryButtonContaniner };
+export { Container, PrimaryButtonContaniner, PrimaryButtonStyled };
