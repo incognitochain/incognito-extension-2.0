@@ -1,5 +1,8 @@
-import { configsWallet } from "@services/wallet/walletService";
+import { WalletSDK } from "@core/types";
 import AccountModel from "@model/account";
+import MasterKeyModel from "@model/MasterKeyModel";
+import { AccountInfo, setAccountList } from "@redux-sync-storage/account";
+import { actionHandler } from "@redux-sync-storage/store/store";
 import {
   actionSetSignPublicKeyEncode,
   setAccount,
@@ -11,11 +14,10 @@ import { currentMasterKeySelector } from "@redux/masterKey/masterKey.selectors";
 import { AppGetState, AppThunkDispatch } from "@redux/store";
 import { walletSelector } from "@redux/wallet/wallet.selectors";
 import accountService from "@services/wallet/accountService";
+import WalletServices from "@services/wallet/walletService";
 import { isEqual } from "lodash";
 import { batch } from "react-redux";
 import { WalletActionType } from "./wallet.types";
-import { AccountInfo, setAccountList } from "@redux-sync-storage/account";
-import { actionHandler } from "@redux-sync-storage/store/store";
 
 const { Validator } = require("incognito-chain-web-js/build/web/wallet");
 
@@ -23,7 +25,7 @@ const { Validator } = require("incognito-chain-web-js/build/web/wallet");
 // Pure Functions (Pure Action)
 //--------------------------------------------------------------------
 
-export const setWallet = (wallet: any) => ({
+export const setWallet = (wallet: WalletSDK) => ({
   type: WalletActionType.SET,
   data: wallet,
 });
@@ -54,14 +56,17 @@ export const reloadWallet =
     let listAccount: AccountModel[] = [];
     new Validator("reloadWallet-accountName", accountName).string();
     const state = getState();
-    const masterKey = currentMasterKeySelector(state);
-    let wallet = masterKey.wallet;
+    const masterKey: MasterKeyModel = currentMasterKeySelector(state);
+    let wallet: WalletSDK = masterKey.wallet;
     let defaultAccount: AccountModel;
     try {
-      await configsWallet(wallet);
+      await WalletServices.configsWallet(wallet);
       if (wallet?.Name) {
+        console.log("[reloadWallet] - wallet ", wallet);
         listAccount = (await wallet.listAccountNoCache()) || [];
+        console.log("[reloadWallet] - listAccount ", listAccount);
         defaultAccount = listAccount.find((item) => isEqual(item?.accountName, accountName)) || listAccount[0];
+        console.log("[reloadWallet] - defaultAccount ", defaultAccount);
         const accountListStorage = listAccount.map((item) => {
           return {
             name: item.name || item.accountName || "",
@@ -80,17 +85,16 @@ export const reloadWallet =
           dispatch(setAccount(defaultAccount));
           dispatch(setDefaultAccount(defaultAccount));
         });
-
-        setTimeout(() => {
-          batch(() => {
-            dispatch(actionSetSignPublicKeyEncode());
-            dispatch(actionSyncAccountMasterKey());
-          });
-        }, 500);
+        // setTimeout(() => {
+        //   batch(() => {
+        //     dispatch(actionSetSignPublicKeyEncode());
+        //     dispatch(actionSyncAccountMasterKey());
+        //   });
+        // }, 500);
       }
       return wallet;
     } catch (e) {
-      // new ExHandler(e).showErrorToast();
+      console.log("ERROR: ", e);
     }
   };
 

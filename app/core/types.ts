@@ -97,7 +97,12 @@ export type BaseAction<T> = {
   reject: (error: Error) => void;
 };
 
-export type WallActions = "wallet_signTransaction" | "wallet_requestAccounts" | "wallet_getCluster" | "wallet_getState";
+export type WallActions =
+  | "wallet_signTransaction"
+  | "wallet_requestAccounts"
+  | "wallet_getCluster"
+  | "wallet_getState"
+  | "wallet_make_signature";
 
 export type PopupActions =
   | "popup_getState"
@@ -128,6 +133,12 @@ export type PopupActions =
   | "popup_addNewFollowToken"
   | "popup_request_txs_history"
   | "popup_removeFollowToken"
+  | "popup_importKeyChain"
+  | "popup_requestBackupPrivateKeys"
+  | "popup_requestRestorePrivateKeys"
+  | "popup_requestRevealMasterKeyPhrase"
+  | "popup_requestSwitchMasterKey"
+  | "popup_requestGetAmountAccountsOfMasterless"
   | "popup_hardwareWalletConnect";
 
 export type Markdown = string;
@@ -185,6 +196,7 @@ export const WalletActionsList = [
   "wallet_getState",
   "wallet_getBalance",
   "wallet_showPopup",
+  "wallet_make_signature",
 ] as const;
 
 export type WalletActionsType = typeof WalletActionsList[number];
@@ -192,3 +204,40 @@ export type WalletActionsType = typeof WalletActionsList[number];
 export function isKindOfWalletAction(actionType: string): actionType is WalletActionsType {
   return (WalletActionsList as readonly string[]).includes(actionType);
 }
+
+type WalletStructSDK = {
+  PassPhrase: string;
+  Mnemonic: string;
+  MasterAccount: any;
+  Name: string; //$[NetworkName]-master-[name], Ex.. ($mainnet-master-abc)
+  Seed: any;
+  Storage: any;
+  Network: string;
+  measureStorage: any;
+  IsMasterless: boolean;
+  RootName: string; //Shorten Name. Ex.. (abc)
+  RpcClient: string;
+  RpcCoinService: string;
+  PrivacyVersion: number;
+  UseLegaceEncoding: boolean;
+  PubsubService: string;
+  RpcRequestService: string;
+  AuthToken: string;
+  RpcApiService: string;
+  PortalService: string;
+  IsBIP44: boolean;
+  deletedAccountIds: any[];
+};
+
+type WalletMethods = {
+  save(aesKey?: string): void;
+  import(mnemonic: string, aesKey: string, name: string, storage: any): void;
+  listAccountNoCache(): Promise<any>;
+};
+
+export type WalletSDK = WalletStructSDK & WalletMethods;
+
+export type BackupPriavteKeyType = {
+  privateKey: string;
+  accountName: string;
+}[];

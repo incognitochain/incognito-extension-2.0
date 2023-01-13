@@ -11,6 +11,7 @@ import { reducer as formReducer } from "redux-form";
 import sendReducer from "@module/Send/Send.reducer";
 import signTransactionReducer from "@module/SignTransaction/SignTransaction.reducer";
 import { reducer as versionReducer } from "@redux-sync-storage/version";
+import { reducer as masterkeyReducer } from "@redux-sync-storage/masterkey";
 
 const rootReducers = combineReducers({
   versionReducer,
@@ -24,7 +25,17 @@ const rootReducers = combineReducers({
   sendReducer,
   form: formReducer,
   signTransactionReducer,
+  masterkeyReducer,
 });
+
+export const clearReduxSyncStore = () => ({
+  type: "CLEAR_REDUX_SYNC_STORE",
+});
+
+export const superRootReducer = (state: any, action: any) => {
+  if (action.type === "CLEAR_REDUX_SYNC_STORE") state = undefined;
+  return rootReducers(state, action);
+};
 
 export type RootState = ReturnType<typeof rootReducers> & {
   readonly [$CombinedState]?: undefined;

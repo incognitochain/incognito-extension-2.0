@@ -5,7 +5,7 @@ import { CONSTANT_KEYS, COINS } from "@constants/index";
 import { clearAllCaches } from "@services/cache";
 import BigNumber from "bignumber.js";
 import { CustomError, ErrorCode, ExHandler } from "../exception";
-import { loadListAccountWithBLSPubKey, saveWallet } from "./walletService";
+import WalletServices from "./walletService";
 import AccountModel from "@model/account";
 import { STACK_TRACE } from "@services/exception/customError/code/webjsCode";
 import { getAccountNameByAccount, getAccountWallet } from "@services/wallet/wallet.shared";
@@ -55,7 +55,7 @@ export default class Account {
           lastByte = childKey.KeySet.PaymentAddress.Pk[childKey.KeySet.PaymentAddress.Pk.length - 1];
         }
         wallet.MasterAccount.child.push(newAccount);
-        await saveWallet(wallet);
+        await WalletServices.saveWallet(wallet);
         return newAccount;
       }
       let shardID = _.isNumber(initShardID) ? initShardID : undefined;
@@ -64,7 +64,7 @@ export default class Account {
       }
       const account = await wallet.createNewAccount(accountName, shardID, wallet.deletedAccountIds || []);
       if (account) {
-        await saveWallet(wallet);
+        await WalletServices.saveWallet(wallet);
       }
       return account;
     } catch (error) {
@@ -77,7 +77,7 @@ export default class Account {
       new Validator("createHardwareWalletAccount-wallet", wallet).required().object();
       const account = await wallet.initAccountWithHardwareWallet(HARDWARE_DEVICE_ACCOUNT_NAME, undefined, HARDWARE_DEVICE_EMULATOR);
       if (account) {
-        await saveWallet(wallet);
+        await WalletServices.saveWallet(wallet);
       }
       return account;
     } catch (error) {
@@ -100,7 +100,7 @@ export default class Account {
       const account = await wallet.importAccount(privakeyStr, accountName, passPhrase);
       imported = !!account.isImport;
       if (imported) {
-        await saveWallet(wallet);
+        await WalletServices.saveWallet(wallet);
       }
     } catch (e) {
       throw e;
@@ -112,7 +112,7 @@ export default class Account {
     try {
       const removed = await wallet.removeAccount(privateKeyStr, passPhrase);
       if (removed) {
-        await saveWallet(wallet);
+        await WalletServices.saveWallet(wallet);
       }
     } catch (error) {
       throw error;
@@ -433,7 +433,7 @@ export default class Account {
       let accountWallet = null;
       if (!_.isEmpty(blsKey)) {
         console.log(TAG, "getAccountWithBLSPubKey begin");
-        const listAccounts = (await loadListAccountWithBLSPubKey(wallet)) || [];
+        const listAccounts = (await WalletServices.loadListAccountWithBLSPubKey(wallet)) || [];
         console.log(TAG, "getAccountWithBLSPubKey listAccount ", listAccounts);
         let account = listAccounts.find((item: any) => _.isEqual(item.BLSPublicKey, blsKey));
 
@@ -460,7 +460,7 @@ export default class Account {
       let accountWallet = null;
       if (!_.isEmpty(accountName)) {
         console.log(TAG, "getFullDataOfAccount begin");
-        const listAccounts = (await loadListAccountWithBLSPubKey(wallet)) || [];
+        const listAccounts = (await WalletServices.loadListAccountWithBLSPubKey(wallet)) || [];
         console.log(TAG, "getFullDataOfAccount listAccount ", listAccounts);
         let account = listAccounts.find((item: any) => _.isEqual(item.AccountName, accountName));
 

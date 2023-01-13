@@ -8,6 +8,7 @@ import React, { useCallback, useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { useLoading } from "@popup/context/loading";
 import {
+  CreateNewWalletText,
   DescriptionText,
   MnemonicTextArea,
   PasswordLabel,
@@ -18,6 +19,8 @@ import { route as AssetsRoute } from "@module/Assets/Assets.route";
 import Header from "@components/Header";
 import { getEnvironmentType } from "@popup/context/background";
 import { ENVIRONMENT_TYPE_NOTIFICATION } from "@core/types";
+import { Paths } from "@components/routes/paths";
+
 const { validateMnemonic } = require("incognito-chain-web-js/build/web/wallet");
 
 let validator = require("password-validator");
@@ -187,6 +190,16 @@ const RestoreWalletPage: React.FC = () => {
         <PrimaryButtonContaniner onClick={restoreWalletOnPressed} disabled={false}>
           {"Restore"}
         </PrimaryButtonContaniner>
+        <CreateNewWalletText
+          className="hover-with-cursor fs-regular fw-regular"
+          onClick={() => {
+            history.push(Paths.createNewKeyStack, {
+              createNewWallet: true,
+            });
+          }}
+        >
+          Create New Wallet?
+        </CreateNewWalletText>
       </BodyLayout>
     </>
   );

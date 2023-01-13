@@ -11,6 +11,7 @@ import logger from "redux-logger";
 export default function configStore(preloadedState?: any): Store | any {
   // const middlewares = [thunkMiddleware, logger];
   const middlewares = [thunkMiddleware];
+  // const middlewares = [thunkMiddleware];
   const persistConfig = {
     key: "root",
     storage: Storage as any,

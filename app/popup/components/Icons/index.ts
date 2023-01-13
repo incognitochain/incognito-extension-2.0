@@ -19,3 +19,14 @@ export { default as EyeCloseIcon } from "./EyeCloseIcon";
 export { default as BackIcon } from "./BackIcon";
 export { default as OpenLinkIcon } from "./OpenLink";
 export { default as AskIcon } from "./Ask";
+export { default as KeypadIcon } from "./KeypadIcon";
+export { default as DropdownIcon } from "./DropdownIcon";
+
+//KeyChain Icons Area
+export { default as BackupIcon } from "./BackupIcon";
+export { default as CreateNewKeyChainIcon } from "./CreateNewKeyChainIcon";
+export { default as ImportAKeyChainIcon } from "./ImportAKeyChainIcon";
+export { default as RestoreIcon } from "./RestoreIcon";
+export { default as RevealRecoveryPhraseIcon } from "./RevealRecoveryPhraseIcon";
+export { default as UnCheckIcon } from "./UnCheckIcon";
+export { default as CheckedIcon } from "./CheckedIcon";

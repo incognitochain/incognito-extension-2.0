@@ -1,4 +1,4 @@
-import { compile } from "path-to-regexp";
+const compile = require("path-to-regexp");
 export type PathsKeyMap = {
   [PathsKeyType: string]: string;
 };
@@ -31,6 +31,11 @@ export const Paths = {
   createAccountPage: "/create-account-page",
   restoreWalletPage: "/restore-wallet-page",
   accountDetailPage: "/account-detail-page",
+
+  importKeyChain: "/import-keychain",
+  backupPrivateKeys: "/backup-privateKeys",
+  restorePrivateKeys: "/restore-privateKeys",
+  revealRecoveryPhrase: "/reveal-recovery-phrase",
 };
 
 export const PathsKey: PathsKeyMap = {

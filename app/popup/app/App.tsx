@@ -18,7 +18,6 @@ import { LoadingProvider } from "@popup/context/loading";
 const history = !isMainnet ? createBrowserHistory() : createMemoryHistory(); // Instead of createBrowserHistory();
 
 const App: React.FunctionComponent = () => {
-  console.log("App render");
   // const appSelectorsData = useSelector(appSelectors);
   // console.log("appSelectorsData ", appSelectorsData);
   const useStyles = makeStyles({
