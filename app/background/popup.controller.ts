@@ -129,8 +129,8 @@ export class PopupController {
             await this.hardwareWalletHandler({ accountName });
             await this.updateNetworkHandler();
             setTimeout(() => {
-                this.scanCoinHandler();
-              }, 1000);
+              this.scanCoinHandler();
+            }, 1000);
             this._notifyAll({
               type: "stateChanged",
               data: { state: "unlocked" },
