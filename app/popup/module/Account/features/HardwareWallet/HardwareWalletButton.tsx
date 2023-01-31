@@ -14,7 +14,6 @@ const HardwareWalletButton = React.memo(() => {
   const { showLoading } = useLoading();
 
   const connectHardwareWallet = () => {
-    console.log("connectHardwareWallet TO DO ");
     showLoading({
       value: true,
     });
