@@ -28,7 +28,7 @@ const HardwareWalletButton = React.memo(() => {
             if (HARDWARE_DEVICE_EMULATOR) return;
             return chrome.tabs.create({ url: chrome.runtime.getURL("assets/request-device.html") });
           } else {
-            return Promise.all(deviceLst.map((d: any) => (d.opened ? d.close() : Promise.resolve(null))));
+            return deviceLst; // Promise.all(deviceLst.map((d: any) => (d.opened ? d.close() : Promise.resolve(null))));
           }
         })
         .then((_: any) => request("popup_hardwareWalletConnect", { accountName: undefined })),
