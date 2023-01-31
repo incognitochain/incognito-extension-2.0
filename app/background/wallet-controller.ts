@@ -75,7 +75,11 @@ export class WalletController {
             if (params?.metadata && params?.metadata?.Type === 338 && !params?.metadata?.RemoteAddress) {
               const accountSender = defaultAccountWalletSelector(reduxStore.getState());
               const otaKey = await accountSender?.getOTAKey();
-              ethWalletInfo = await genETHAccFromOTAKey(otaKey);
+              const genETHAccFromOTAKeyPayload =
+                params?.pDaoData?.transactionType === "CREATE_PROPOSAL"
+                  ? params?.pDaoData?.createProposalInfo
+                  : params?.pDaoData?.voteProposalInfo?.proposal;
+              ethWalletInfo = await genETHAccFromOTAKey(otaKey, genETHAccFromOTAKeyPayload);
               req.params.metadata.RemoteAddress = ethWalletInfo.address;
               req.params.receiverAddress = ethWalletInfo.address;
             }
@@ -91,10 +95,10 @@ export class WalletController {
               pDaoSignature = {
                 createPropSignature:
                   pDaoTransactionType === "CREATE_PROPOSAL"
-                    ? makeSignature(1, pDaoData.createProposalInfo, privateKey)
+                    ? await makeSignature(1, pDaoData.createProposalInfo, privateKey)
                     : "",
-                propVoteSignature: makeSignature(2, pDaoData.voteProposalInfo, privateKey),
-                reShieldSignature: makeSignature(
+                propVoteSignature: await makeSignature(2, pDaoData.voteProposalInfo, privateKey),
+                reShieldSignature: await makeSignature(
                   3,
                   {
                     burnTX: resp?.txHash.startsWith("0x") ? resp?.txHash?.slice(2) : resp?.txHash,
