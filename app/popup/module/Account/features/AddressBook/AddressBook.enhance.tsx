@@ -7,6 +7,7 @@ import { change, focus } from "redux-form";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@redux/store";
 import { useHistory } from "react-router-dom";
+import sendRoute from "@popup/module/Send/Send.route";
 
 export interface TInner {
   addressBook: IPropsAddrBook[];
@@ -43,7 +44,10 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IProps & 
 
   const onSelectedItem = async ({ address }: { address: string }) => {
     await onChangeField(address, FORM_CONFIGS.toAddress);
-    history.goBack();
+    // history.goBack();
+    history.push(sendRoute.path, {
+      addressValue: address,
+    });
   };
 
   return <WrappedComponent {...{ ...props, addressBook, onSelectedItem }} />;
