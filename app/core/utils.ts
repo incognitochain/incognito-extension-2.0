@@ -1,7 +1,8 @@
 //@ts-nocheck
-import { GEN_PROPOSAL_SIGNATURE_INDEX, TEMP_WALLET_INFO } from "@constants/common";
-import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP } from "./types";
+import { TEMP_WALLET_INFO } from "@constants/common";
 import Storage from "@services/storage";
+import Server from "@services/wallet/Server";
+import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP } from "./types";
 
 const debug = require("debug");
 const ObjectMultiplex = require("obj-multiplex");
@@ -52,11 +53,8 @@ const GOVERNANCE_HELPER_ABI =
 const PROP_REQUEST = 1,
   VOTE_REQUEST = 2,
   RESHIELD_REQUEST = 3;
-const GOVERNANCE_ADDR = global.isMainnet
-  ? "0x6D82713dE1FBB2bAa0d9d2A81Fca1244b87808eC"
-  : "0x01f6549BeF494C8b0B00C2790577AcC1A3Fa0Bd0";
 
-export const makeSignature = (requestType: any, payload: any = {}, privateKey: any) => {
+export const makeSignature = async (requestType: any, payload: any = {}, privateKey: any) => {
   var governanceHelper = new Contract(JSON.parse(GOVERNANCE_HELPER_ABI));
   let result: any = {};
   let signData;
@@ -80,7 +78,7 @@ export const makeSignature = (requestType: any, payload: any = {}, privateKey: a
           payload.description,
         )
         .encodeABI();
-      signData = genSignData("0x" + propEncode.slice(10));
+      signData = await genSignData("0x" + propEncode.slice(10));
       break;
     case VOTE_REQUEST:
       if (!payload.vote || !payload.proposal) {
@@ -127,7 +125,7 @@ export const makeSignature = (requestType: any, payload: any = {}, privateKey: a
       );
       const voteEncode =
         BALLOT + governanceHelper.methods._buildSignVoteEncodeAbi(proposalID, payload.vote).encodeABI().slice(10);
-      signData = genSignData(voteEncode);
+      signData = await genSignData(voteEncode);
       break;
     case RESHIELD_REQUEST:
       if (!payload.burnTX) {
@@ -149,13 +147,20 @@ export const makeSignature = (requestType: any, payload: any = {}, privateKey: a
   return result;
 };
 
-const genSignData = (data: any) => {
+const genSignData = async (data: any) => {
+  const isMainnet = await Server.isMainnetDefault();
+
+  const GOVERNANCE_ADDR = isMainnet
+    ? "0x6D82713dE1FBB2bAa0d9d2A81Fca1244b87808eC"
+    : "0x01f6549BeF494C8b0B00C2790577AcC1A3Fa0Bd0";
+  
   const TYPE_HASH = web3.utils.keccak256(
     "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)",
   );
   const NAME_HASH = web3.utils.keccak256("IncognitoDAO");
   const VERSION_HASH = web3.utils.keccak256("1");
-  const CHAIN_ID = global.isMainnet ? "1" : "5";
+  const CHAIN_ID = isMainnet ? "1" : "5";
+
   const temp = web3.utils.keccak256(
     "0x" +
       web3.eth.abi
@@ -200,19 +205,58 @@ const genSignData = (data: any) => {
 };
 
 // generated eth from incKey success
-export const genETHAccFromOTAKey = async (otaKey: any) => {
+export const genETHAccFromOTAKey = async (otaKey: any, payload: any) => {
   try {
     const web3 = new Web3();
-    let index = await Storage.getItem(GEN_PROPOSAL_SIGNATURE_INDEX);
+
+    const proposalID = web3.utils.keccak256(
+        Buffer.from(
+          web3.eth.abi
+            .encodeFunctionCall(
+              {
+                name: "myMethod",
+                type: "function",
+                inputs: [
+                  {
+                    type: "address[]",
+                    name: "targets",
+                  },
+                  {
+                    name: "values",
+                    type: "uint256[]",
+                  },
+                  {
+                    name: "calldatas",
+                    type: "bytes[]",
+                  },
+                  {
+                    name: "descriptionHash",
+                    type: "bytes32",
+                  },
+                ],
+              },
+              [
+                payload.targets,
+                payload.values,
+                payload.calldatas,
+                web3.utils.keccak256(payload.description),
+              ],
+            )
+            .slice(10),
+          "hex",
+        ),
+      );
+    let index = await Storage.getItem(proposalID);
     if (!index) {
       index = 0;
-      await Storage.setItem(GEN_PROPOSAL_SIGNATURE_INDEX, "0");
+      await Storage.setItem(proposalID, "0");
     } else {
       index = parseInt(index) + 1;
-      await Storage.setItem(GEN_PROPOSAL_SIGNATURE_INDEX, index.toString());
+      await Storage.setItem(proposalID, index.toString());
     }
     const indexToHex = bs58.encode(Buffer.from(index.toString(16).slice(2)));
-    let bytes = bs58.decode(otaKey + indexToHex);
+    const proposalIdToHex = bs58.encode(Buffer.from(proposalID.toString(16).slice(2)));
+    let bytes = bs58.decode(otaKey + proposalIdToHex + indexToHex);
     bytes = bytes.slice(1, bytes.length - 4);
     const privHexStr = web3.utils.bytesToHex(bytes);
     let privKey = web3.utils.keccak256(privHexStr);
