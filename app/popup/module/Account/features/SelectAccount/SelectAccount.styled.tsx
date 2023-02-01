@@ -1,4 +1,5 @@
 import styled, { ITheme } from "styled-components";
+import { PrimaryButtonStyled } from "@popup/components/Core/Buttons";
 
 const AccountItemStyled = styled.div`
   width: 100%;
@@ -39,6 +40,19 @@ const AccountItemStyled = styled.div`
   }
 `;
 
-const Container = styled.div``;
+const Container = styled.div`
+  .body {
+    height: 536px;
+  }
 
-export { Container, AccountItemStyled };
+  .list-accounts {
+    position: relative;
+    flex: 1;
+    overflow-x: hidden;
+    overflow-y: scroll !important;
+    padding-bottom: 30px;
+    height: 380px;
+  }
+`;
+
+export { Container, AccountItemStyled, PrimaryButtonStyled };

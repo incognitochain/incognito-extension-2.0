@@ -7,7 +7,7 @@ import { useCallAsync } from "@popup/utils/notifications";
 import { getAccountDefaultNameSelector, getAccountListSelector } from "@redux-sync-storage/account/account.selectors";
 import { trim } from "lodash";
 import { useSnackbar } from "notistack";
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Container } from "./AccountList.styled";
@@ -50,7 +50,6 @@ const AccountList = () => {
     });
   };
 
-  console.log("");
   return (
     <Container className="default-padding-horizontal">
       {listAccount &&

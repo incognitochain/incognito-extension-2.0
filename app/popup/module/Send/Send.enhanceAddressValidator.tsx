@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { validator } from "@components/ReduxForm";
 import { sendDataSelector } from "./Send.selector";
 import { TypeSend } from "@module/Send/Send.types";
+import { useHistory } from "react-router-dom";
 
 export interface TInner {
   validateAddress: () => any;
@@ -11,10 +12,12 @@ export interface TInner {
 
 const enhanceAddressValidation = (WrappedComp: React.FunctionComponent) => (props: any) => {
   const { screen, isIncognitoAddress, inputAddress } = useSelector(sendDataSelector);
-
+  const history = useHistory();
   const [addressValue, setAddressValue] = React.useState("");
   const [addressError, setAddressError] = React.useState<any>(undefined);
   const isFirstTimeRender = React.useRef(true);
+
+  const locationState = (history.location?.state as any) || {};
 
   const onAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAddressValue(event.target.value);
@@ -25,6 +28,10 @@ const enhanceAddressValidation = (WrappedComp: React.FunctionComponent) => (prop
       setAddressError("Required");
     }
   };
+
+  React.useEffect(() => {
+    setAddressValue(locationState?.addressValue || "");
+  }, [locationState]);
 
   React.useEffect(() => {
     let addressErrorTmp = undefined;

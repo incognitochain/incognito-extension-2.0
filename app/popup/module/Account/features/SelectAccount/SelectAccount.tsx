@@ -1,14 +1,15 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 
 import Header from "@components/Header";
 import Body from "@popup/components/layout/Body";
-// import { MenuOption } from "@popup/components/MenuOption/index";
 import KeyChainsTabBar, { TabBarItemType } from "./SelectAccount.KeyChainsTabBar";
 import { MasterKeyLabel } from "./SelectAccount.MasterKeyLabel";
 import { Container } from "./SelectAccount.styled";
 
 import AccountList from "../AccountList/AccountList";
 import Settings from "../Settings/Settings";
+
+import HardwareWalletButton from "../HardwareWallet/HardwareWalletButton";
 
 let cacheActiveTab: TabBarItemType;
 
@@ -19,20 +20,21 @@ const SelectAccount = React.memo(() => {
     setActiveTabType(type);
     cacheActiveTab = type;
   };
-
   useLayoutEffect(() => {
     if (cacheActiveTab) {
       setActiveTabType(cacheActiveTab);
     }
   }, []);
+
   return (
     <Container>
       <Header title="Keychains" rightHeader={<MasterKeyLabel />} />
-      <Body>
+      <Body className="body">
         <KeyChainsTabBar activeTabOnClick={activeTabOnClick} activeTab={activeTabType} />
-        <div className="scroll-view body-container">
+        <div className="list-accounts body-container">
           {activeTabType === "MasterKey" ? <AccountList /> : <Settings />}
         </div>
+        {activeTabType !== "MasterKey" ? undefined : <HardwareWalletButton />}
       </Body>
     </Container>
   );

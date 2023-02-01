@@ -10,6 +10,7 @@ import AccountModel from "@model/account";
 import { STACK_TRACE } from "@services/exception/customError/code/webjsCode";
 import { getAccountNameByAccount, getAccountWallet } from "@services/wallet/wallet.shared";
 import { PRV_ID } from "@constants/common";
+import { HARDWARE_DEVICE_EMULATOR, HARDWARE_DEVICE_ACCOUNT_NAME } from "@constants/config";
 
 const {
   AccountWallet,
@@ -67,6 +68,20 @@ export default class Account {
       }
       return account;
     } catch (error) {
+      throw error;
+    }
+  }
+
+  static async createHardwareWalletAccount(accountName?: string, wallet?: any, emulator = false) {
+    try {
+      new Validator("createHardwareWalletAccount-wallet", wallet).required().object();
+      const account = await wallet.initAccountWithHardwareWallet(HARDWARE_DEVICE_ACCOUNT_NAME, undefined, HARDWARE_DEVICE_EMULATOR);
+      if (account) {
+        await WalletServices.saveWallet(wallet);
+      }
+      return account;
+    } catch (error) {
+      console.log("createHardwareWalletAccount: ERROR: ", error);
       throw error;
     }
   }
