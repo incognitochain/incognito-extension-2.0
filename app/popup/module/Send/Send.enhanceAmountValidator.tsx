@@ -7,6 +7,7 @@ import convert from "@utils/convert";
 import debounce from "lodash/debounce";
 import BigNumber from "bignumber.js";
 import { detectToken } from "@utils/misc";
+import { useHistory } from "react-router-dom";
 
 export interface TInner {
   validateAmount: () => any;
@@ -18,9 +19,12 @@ interface IState {
 }
 
 const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
+  const history = useHistory();
   const sendData: ISendData = useSelector(sendDataSelector);
   const [amountValue, setAmountValue] = React.useState("");
   const [amountError, setAmountError] = React.useState<any>(undefined);
+
+  const locationState = (history.location?.state as any) || {};
 
   let { selectedPrivacy, maxAmountText, isSend, minAmountText, inputAmount } = sendData;
   inputAmount = amountValue;
@@ -91,6 +95,10 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
     val.push(...validator.combinedAmount);
     return [...val];
   };
+
+  React.useEffect(() => {
+    setAmountValue(locationState?.amountValue || "");
+  }, []);
 
   React.useEffect(() => {
     setFormValidator();

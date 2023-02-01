@@ -54,7 +54,10 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IMergePro
   };
 
   const onClickAddressBook = () => {
-    history.push(routeAddressBook);
+    history.push(routeAddressBook, {
+      amountValue,
+      addressValue,
+    });
   };
 
   const onClickScan = () => {};

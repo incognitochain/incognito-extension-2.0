@@ -28,6 +28,8 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IProps & 
   let addressBook: { title: string; data: any[] }[] = [];
   const dispatch: AppThunkDispatch = useDispatch();
   const history = useHistory();
+  const locationState = (history.location?.state as any) || {};
+
   const [listMasterKeyWithKeychains] = useMasterKeyWithKeychains();
   addressBook = [
     ...listMasterKeyWithKeychains.map((item) => ({
@@ -47,6 +49,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: IProps & 
     // history.goBack();
     history.push(sendRoute.path, {
       addressValue: address,
+      amountValue: locationState?.amountValue || "",
     });
   };
 

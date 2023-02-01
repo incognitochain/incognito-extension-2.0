@@ -31,7 +31,7 @@ const enhanceAddressValidation = (WrappedComp: React.FunctionComponent) => (prop
 
   React.useEffect(() => {
     setAddressValue(locationState?.addressValue || "");
-  }, [locationState]);
+  }, []);
 
   React.useEffect(() => {
     let addressErrorTmp = undefined;
