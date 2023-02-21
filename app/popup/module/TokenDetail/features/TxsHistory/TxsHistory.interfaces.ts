@@ -26,7 +26,6 @@ export interface IHistory {
   txID: string;
   txTypeStr: string;
   statusColor: string;
-  toAddressStr?: string;
 }
 
 export interface IRequestHistory {

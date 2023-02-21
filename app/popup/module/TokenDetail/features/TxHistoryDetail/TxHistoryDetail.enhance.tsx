@@ -45,13 +45,6 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
       },
     ];
 
-    if (history.toAddressStr) {
-      result.push({
-        title: "To address:",
-        desc: ellipsisCenter({ limit: 8, str: history.toAddressStr }),
-        copyData: history.toAddressStr,
-      })
-    }
 
     if (history.memo) {
       result.push({
