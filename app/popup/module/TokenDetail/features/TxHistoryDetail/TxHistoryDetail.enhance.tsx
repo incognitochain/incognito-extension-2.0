@@ -8,9 +8,9 @@ import CONSTANT_CONFIGS from "@constants/config";
 const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
   const { state }: { state: any } = useLocation();
   const { history }: { history: IHistory } = state || {};
-
   const factories: IHistoryItem[] = React.useMemo(() => {
-    return [
+    let result = []
+    result =  [
       {
         title: "TxID:",
         desc: ellipsisCenter({ limit: 7, str: history.txID }),
@@ -39,7 +39,29 @@ const enhance = (WrappedComponent: React.FunctionComponent) => (props: any) => {
         title: "Fee:",
         desc: history.feeStr,
       },
+      {
+        title: "Time:",
+        desc: history.timeStr,
+      },
     ];
+
+    if (history.toAddressStr) {
+      result.push({
+        title: "To address:",
+        desc: ellipsisCenter({ limit: 8, str: history.toAddressStr }),
+        copyData: history.toAddressStr,
+      })
+    }
+
+    if (history.memo) {
+      result.push({
+        title: "ID:",
+        desc: history.memo,
+        copyData: history.memo,
+      })
+    }
+
+    return result
   }, [history]);
 
   return <WrappedComponent {...{ ...props, factories }} />;

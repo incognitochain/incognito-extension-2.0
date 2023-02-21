@@ -13,6 +13,7 @@ export interface IHistoryFromSDK {
   txType: number;
   txTypeStr: string;
   versionTx?: number;
+  tokenReceivers?: string[];
 }
 
 export interface IHistory {
@@ -25,6 +26,7 @@ export interface IHistory {
   txID: string;
   txTypeStr: string;
   statusColor: string;
+  toAddressStr?: string;
 }
 
 export interface IRequestHistory {

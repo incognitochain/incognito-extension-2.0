@@ -37,6 +37,15 @@ const getTxsHistoryBuilder = ({
       statusColor = colors.colorP8;
     }
 
+    let receiverAddress = history.receiverAddress
+    let tokenReceivers =  history.tokenReceivers
+
+    let toAddressStr
+
+    if (tokenReceivers && Array.isArray(tokenReceivers)) {
+      toAddressStr = tokenReceivers.find(item => item != receiverAddress)
+    }
+
     return {
       amountStr: `${_formatedAmount} ${selectedPrivacy.symbol}`,
       feeStr: `${_formatedFee} PRV`,
@@ -47,6 +56,7 @@ const getTxsHistoryBuilder = ({
       txID: history.txId,
       txTypeStr: history.txTypeStr,
       statusColor,
+      toAddressStr
     };
   });
 };
