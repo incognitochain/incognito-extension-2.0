@@ -834,7 +834,7 @@ export class PopupController {
   // }
 
   async signTransaction(req: any) {
-    log("Signing transaction request for %O", req);
+    console.log("Signing transaction request for %O", req);
     const {
       actionKey,
       isSignAndSendTransaction,

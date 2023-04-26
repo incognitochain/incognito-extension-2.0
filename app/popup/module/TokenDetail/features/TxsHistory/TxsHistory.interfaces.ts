@@ -13,6 +13,7 @@ export interface IHistoryFromSDK {
   txType: number;
   txTypeStr: string;
   versionTx?: number;
+  tokenReceivers?: string[];
 }
 
 export interface IHistory {
